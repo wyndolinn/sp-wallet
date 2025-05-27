@@ -1,0 +1,68 @@
+package com.wynndie.spwallet.sharedCore.domain.error
+
+typealias RootError = Error
+typealias EmptyOutcome<E> = Outcome<Unit, E>
+
+sealed interface Outcome<out D, out E : RootError> {
+    data class Success<out D>(val data: D) : Outcome<D, Nothing>
+    data class Error<out E : RootError>(val error: E) : Outcome<Nothing, E>
+}
+
+inline fun <D, E : RootError> Outcome<D, E>.onSuccess(action: (D) -> Unit): Outcome<D, E> {
+    return when (this) {
+        is Outcome.Error -> this
+        is Outcome.Success -> {
+            action(data)
+            this
+        }
+    }
+}
+
+inline fun <D, E : RootError> Outcome<D, E>.onError(action: (E) -> Unit): Outcome<D, E> {
+    return when (this) {
+        is Outcome.Success -> this
+        is Outcome.Error -> {
+            action(error)
+            this
+        }
+    }
+}
+
+inline fun <D, E : Error, R> Outcome<D, E>.map(map: (D) -> R): Outcome<R, E> {
+    return when (this) {
+        is Outcome.Success -> Outcome.Success(map(data))
+        is Outcome.Error -> Outcome.Error(error)
+    }
+}
+
+fun <D, E : Error> Outcome<D, E>.asEmptyDataOutcome(): EmptyOutcome<E> {
+    return map { }
+}
+
+fun <D, E : Error> Outcome<D, E>.getOrNull(): D? {
+    return when (this) {
+        is Outcome.Success -> data
+        is Outcome.Error -> null
+    }
+}
+
+fun <D, E : Error> Outcome<D, E>.getOrThrow(): D {
+    return when (this) {
+        is Outcome.Success -> data
+        is Outcome.Error -> throw IllegalStateException(error.toString())
+    }
+}
+
+fun <D, E : Error> Outcome<D, E>.getOrElse(fallback: (E) -> D): D {
+    return when (this) {
+        is Outcome.Success -> data
+        is Outcome.Error -> fallback(error)
+    }
+}
+
+fun <D, E : Error> Outcome<List<D>, E>.findOrNull(predicate: (D) -> Boolean): D? {
+    return when (this) {
+        is Outcome.Success -> data.find(predicate)
+        is Outcome.Error -> null
+    }
+}

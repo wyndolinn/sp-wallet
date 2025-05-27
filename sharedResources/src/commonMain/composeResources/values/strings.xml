@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">СП Кошелёк</string>
+
+    <!--  COMMON ACTIONS  -->
+    <string name="auth">Активировать</string>
+    <string name="transfer">Перевести</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="clear">Очистить</string>
+    <string name="delete">Удалить</string>
+    <string name="deactivate">Деактивировать</string>
+    <string name="edit">Редактировать</string>
+
+    <!--  COMMON NETWORK ERRORS  -->
+    <string name="error_bad_request">Неправильный идентификатор или токен</string>
+    <string name="error_unauthorized">Неправильный идентификатор или токен</string>
+    <string name="error_forbidden">Сервер отклонил запрос</string>
+    <string name="error_not_found">Сервер отклонил запрос</string>
+    <string name="error_request_timeout">Вышло время запроса</string>
+    <string name="error_internal_server_error">Не удалось связаться с сервером</string>
+    <string name="error_no_internet">Проверьте подключение к Интернету</string>
+    <string name="error_serialization">При обработке запроса произошла ошибка</string>
+    <string name="error_unknown">Произошла неизвестная ошибка</string>
+
+    <!--  COMMON LOCAL STORAGE ERRORS  -->
+    <string name="error_empty_table">Нет сохранённых данных</string>
+    <string name="error_no_match_found">Не найдено совпадений</string>
+
+    <!--  COMMON VALIDATION ERRORS  -->
+    <string name="error_empty_field">*обязательно</string>
+    <string name="error_below_minimum_length">Слишком коротко</string>
+    <string name="error_above_maximum_length">Слишком длинно</string>
+    <string name="error_below_minimum_value">Слишком мало</string>
+    <string name="error_above_maximum_value">Слишком много</string>
+    <string name="error_invalid_characters">Недопустимые символы</string>
+
+
+    <!--  APP SPECIFIC ERRORS  -->
+    <string name="error_no_activated_card_found">Требуется регистрация</string>
+    <string name="error_no_unactivated_card_found">Неактивированных карт не обнаружено</string>
+    <string name="error_no_cash_card_found">Наличных карт не обнаружено</string>
+    <string name="error_no_authenticated_user_found">Требуется регистрации</string>
+    <string name="error_not_enough_money">Недостаточно средств на счету</string>
+    <string name="error_cannot_be_zero">Значение не может быть нулевым</string>
+
+    <!--  APP SPECIFIC ACTIONS  -->
+    <string name="make_transfer_by_number">Перевести по номеру</string>
+    <string name="activate_first_card">Активируйте карту</string>
+
+    <string name="auth_card_to_get_benefits">Активируйте любую карту и совершайте переводы</string>
+    <string name="auth_instruction">Получить ID&#160;и&#160;токен карты можно на&#160;сайте во&#160;вкладке «Кошелёк». Выберите карту, нажмите «Поделиться» и&#160;сгенерируйте новый API токен.</string>
+
+    <string name="bank_card_label">%1$s • %2$s</string>
+    <string name="enter_id">Введите ID</string>
+    <string name="id">ID</string>
+    <string name="enter_token">Введите токен</string>
+    <string name="token">Токен</string>
+    <string name="enter_card_number">Введите карту получателя</string>
+    <string name="card_number">Номер</string>
+    <string name="enter_transfer_amount">Введите сумму перевода</string>
+    <string name="transfer_amount">Сумма</string>
+    <string name="enter_comment">Напишите комментарий</string>
+    <string name="comment">Комментарий</string>
+    <string name="enter_card_name">Введите название карты</string>
+    <string name="card_name">Название карты</string>
+    <string name="enter_balance">Укажите баланс карты</string>
+    <string name="balance">Баланс</string>
+
+
+
+    <string name="require_activation">Требуется активация</string>
+    <string name="create_cash_card">Создать наличный счёт</string>
+
+    <string name="transaction_succeed">Перевод прошёл успешно</string>
+    <string name="cash_creation_succeed">Карта успешно сохранена</string>
+
+    <string name="deactivate_card_title">Деактивировать карту?</string>
+    <string name="deactivate_card_description">Карта удалится из приложения, но останется доступной на сайте. При необходимости её можно будет снова активировать</string>
+
+
+    <string name="delete_card_title">Удалить карту?</string>
+    <string name="delete_card_description">Это действие стерёт все данные о карте</string>
+
+
+    <string name="total_balance">Общий баланс</string>
+    <string name="total_of_ore">%1$d АР</string>
+    <string name="amount_of_shulkers">%1$d шлк</string>
+    <string name="amount_of_stacks">%1$d ст</string>
+    <string name="amount_of_ore">%1$d ар</string>
+
+    <string name="no_name">Без названия</string>
+    <string name="no_comment">Без комментария</string>
+    <string name="comment_form">от %1$s</string>
+    <string name="recipient">Получатель</string>
+    <string name="activate_card">Активировать карту</string>
+    <string name="transfer_by_number">Перевод по номеру</string>
+    <string name="cash_cards">Наличные счета (%1$s/%2$s)</string>
+    <string name="bank_cards">Банковские карты</string>
+    <string name="transfer_from">Перевод со счёта</string>
+    <string name="no_cards_to_activate">Нет карт для активации!</string>
+    <string name="create_card_on_site">Создайте карту на сайте</string>
+    <string name="no_authed_cards">Нет активных карт!</string>
+
+    <string name="activate_cards">Активируйте карты</string>
+    <string name="cash_account">Наличный счёт</string>
+    <string name="by_number">По номеру</string>
+
+</resources>

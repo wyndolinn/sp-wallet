@@ -1,0 +1,34 @@
+package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home
+
+import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.model.InputField
+import com.wynndie.spwallet.sharedFeature.wallet.domain.model.AuthedUser
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiCashCard
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiUnauthedCard
+
+data class HomeState(
+    val screenLoadingState: LoadingState = LoadingState.Finished,
+    val authLoadingState: LoadingState = LoadingState.Finished,
+
+    val carouselPage: Int = 0,
+
+    val isAuthCardSheetVisible: Boolean = false,
+    val isAuthedCardSheetVisible: Boolean = false,
+    val isDeactivateCardDialogVisible: Boolean = false,
+
+    val isAuthButtonEnabled: Boolean = false,
+
+    val authedUser: AuthedUser = AuthedUser("", ""),
+    val totalBalance: BlocksDisplayableValue = BlocksDisplayableValue.of(0L),
+
+    val areCashCardsVisible: Boolean = true,
+    val cashCards: List<UiCashCard> = emptyList(),
+    val authedCards: List<UiAuthedCard> = emptyList(),
+    val unauthedCards: List<UiUnauthedCard> = emptyList(),
+
+    val idInputField: InputField = InputField(),
+    val tokenInputField: InputField = InputField()
+)
+
