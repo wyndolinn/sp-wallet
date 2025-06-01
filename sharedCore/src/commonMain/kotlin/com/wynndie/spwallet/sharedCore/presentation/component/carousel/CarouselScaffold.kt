@@ -43,13 +43,13 @@ fun <T> CarouselScaffold(
                 items.forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
-                            .size(MaterialTheme.size.scale(0.5f).extraSmall)
+                            .size(MaterialTheme.size.scale(0.33f).extraSmall)
                             .clip(MaterialTheme.radius.round)
                             .background(
                                 color = if (pagerState.currentPage == index) {
-                                    MaterialTheme.colorScheme.primary
+                                    MaterialTheme.colorScheme.secondary
                                 } else {
-                                    MaterialTheme.colorScheme.surfaceContainer
+                                    MaterialTheme.colorScheme.surfaceContainerHighest
                                 }
                             )
                     )
