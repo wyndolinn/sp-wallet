@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.LargeInfoDisplay
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -31,7 +32,8 @@ internal fun AuthCardOffer(
 
         LargeInfoDisplay(
             title = stringResource(Res.string.no_authed_cards),
-            description = stringResource(Res.string.auth_card_to_get_benefits)
+            description = stringResource(Res.string.auth_card_to_get_benefits),
+            textAlign = TextAlign.Center
         )
 
         Spacer(Modifier.height(MaterialTheme.spacing.medium))
