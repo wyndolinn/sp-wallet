@@ -4,12 +4,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun SmallInfoDisplay(
     label: String?,
     title: String?,
     description: String? = null,
+    textAlign: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier
 ) {
     InfoDisplayScaffold(
@@ -18,7 +20,8 @@ fun SmallInfoDisplay(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = textAlign
                 )
             }
         },
@@ -27,7 +30,8 @@ fun SmallInfoDisplay(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = textAlign
                 )
             }
         },
@@ -36,7 +40,8 @@ fun SmallInfoDisplay(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = textAlign
                 )
             }
         },

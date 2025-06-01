@@ -11,14 +11,21 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @Composable
 fun InfoDisplayScaffold(
+    modifier: Modifier = Modifier,
+    topContent: @Composable (ColumnScope.() -> Unit)? = null,
     label: @Composable (ColumnScope.() -> Unit)? = null,
     title: @Composable (ColumnScope.() -> Unit)? = null,
-    description: @Composable (ColumnScope.() -> Unit)? = null,
-    modifier: Modifier = Modifier
+    description: @Composable (ColumnScope.() -> Unit)? = null
 ) {
     Column(
         modifier = modifier
     ) {
+        topContent?.let {
+            it()
+
+            Spacer(Modifier.height(MaterialTheme.spacing.medium))
+        }
+
         label?.let {
             it()
 
