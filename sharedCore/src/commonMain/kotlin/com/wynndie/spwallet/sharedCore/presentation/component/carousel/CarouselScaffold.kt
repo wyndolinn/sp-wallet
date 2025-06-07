@@ -44,7 +44,7 @@ fun <T> CarouselScaffold(
                     Box(
                         modifier = Modifier
                             .size(MaterialTheme.size.scale(0.33f).extraSmall)
-                            .clip(MaterialTheme.radius.round)
+                            .clip(MaterialTheme.radius.circle)
                             .background(
                                 color = if (pagerState.currentPage == index) {
                                     MaterialTheme.colorScheme.secondary

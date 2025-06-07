@@ -31,7 +31,10 @@ fun UiTonalButton(
             )
         }
 
-        Text(text = text)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge
+        )
 
         trailingIcon?.let {
             Icon(

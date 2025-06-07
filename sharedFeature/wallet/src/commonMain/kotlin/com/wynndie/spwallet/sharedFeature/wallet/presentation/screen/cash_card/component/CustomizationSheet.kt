@@ -1,11 +1,11 @@
-package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.dialog
+package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
 import com.wynndie.spwallet.sharedCore.presentation.model.InputField
@@ -30,6 +31,7 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.CardColor
 import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.apply
 import com.wynndie.spwallet.sharedResources.card_name
 import com.wynndie.spwallet.sharedResources.enter_card_name
 import org.jetbrains.compose.resources.stringResource
@@ -52,18 +54,19 @@ fun CustomizationSheet(
             onNameValueChange = onIdValueChange,
             selectedColorChip = selectedColorChip,
             onColorChipClick = onColorChipClick,
+            onDismiss = onDismiss,
             modifier = modifier
         )
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CustomizationSheetContent(
     nameInputField: InputField,
     onNameValueChange: (TextFieldValue) -> Unit,
     selectedColorChip: Int,
     onColorChipClick: (Int) -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -99,8 +102,7 @@ private fun CustomizationSheetContent(
 
         FlowRow(
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium)
         ) {
             val chips = CardColor.entries
             chips.forEachIndexed { index, chip ->
@@ -130,5 +132,11 @@ private fun CustomizationSheetContent(
                 )
             }
         }
+
+        UiButton(
+            text = stringResource(Res.string.apply),
+            onClick = onDismiss,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

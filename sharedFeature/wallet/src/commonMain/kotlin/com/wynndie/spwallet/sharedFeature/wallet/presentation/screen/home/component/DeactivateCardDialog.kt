@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.dialog
+package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,11 +8,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTextButton
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cancel
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.deactivate_card_description
 import com.wynndie.spwallet.sharedResources.deactivate_card_title
+import com.wynndie.spwallet.sharedResources.delete
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -24,22 +26,22 @@ fun DeactivateCardDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(
-                    text = stringResource(Res.string.deactivate),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+            UiTextButton(
+                text = stringResource(Res.string.deactivate),
+                destructive = true,
+                onClick = onConfirm,
+            )
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(text = stringResource(Res.string.cancel))
-            }
+            UiTextButton(
+                text = stringResource(Res.string.cancel),
+                onClick = onDismiss
+            )
         },
         title = {
             Text(
                 text = stringResource(Res.string.deactivate_card_title),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.fillMaxWidth()
             )
         },

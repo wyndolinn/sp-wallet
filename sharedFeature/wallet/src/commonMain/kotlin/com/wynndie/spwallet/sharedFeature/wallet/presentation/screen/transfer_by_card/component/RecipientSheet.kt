@@ -21,9 +21,9 @@ import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutli
 import com.wynndie.spwallet.sharedCore.presentation.model.InputField
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.apply
 import com.wynndie.spwallet.sharedResources.card_number
 import com.wynndie.spwallet.sharedResources.enter_card_number
-import com.wynndie.spwallet.sharedResources.transfer_by_number
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +85,7 @@ private fun RecipientSheetContent(
         )
 
         UiButton(
-            text = stringResource(Res.string.transfer_by_number),
+            text = stringResource(Res.string.apply),
             onClick = { onClickRecipient(receiverInputField.value.text) },
             modifier = Modifier.fillMaxWidth()
         )

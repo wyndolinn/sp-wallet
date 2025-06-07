@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.formatter
+package com.wynndie.spwallet.sharedCore.presentation.model
 
 import androidx.compose.ui.text.input.TextFieldValue
 

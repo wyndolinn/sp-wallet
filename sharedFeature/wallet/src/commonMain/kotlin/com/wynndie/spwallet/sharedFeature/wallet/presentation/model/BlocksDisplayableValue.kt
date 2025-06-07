@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.model
 
 import com.wynndie.spwallet.sharedCore.presentation.model.DisplayableNumber
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.amount_of_ore
 import com.wynndie.spwallet.sharedResources.amount_of_shulkers
@@ -10,7 +10,7 @@ import com.wynndie.spwallet.sharedResources.amount_of_stacks
 data class BlocksDisplayableValue(
     override val value: Long,
     override val formatted: List<UiText>
-) : DisplayableNumber {
+) : DisplayableNumber<List<UiText>> {
 
     companion object {
         private const val ORE_IN_STACK = 64

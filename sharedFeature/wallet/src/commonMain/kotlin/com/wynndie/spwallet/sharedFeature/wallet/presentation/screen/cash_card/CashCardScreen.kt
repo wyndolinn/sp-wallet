@@ -36,15 +36,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
+import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.MediumInfoDisplay
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.text.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.LargeInfoDisplay
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.CustomizableCard
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.dialog.CustomizationSheet
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.dialog.DeleteCardDialog
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.CustomizationSheet
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.DeleteCardDialog
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.balance
 import com.wynndie.spwallet.sharedResources.cash_account
@@ -102,7 +102,7 @@ fun CashCardScreenRoot(
                 title = {
                     Text(
                         text = stringResource(Res.string.cash_account),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
@@ -177,7 +177,7 @@ private fun CashCardScreen(
         modifier = modifier
     ) {
 
-        LargeInfoDisplay(
+        MediumInfoDisplay(
             label = state.card.name.ifBlank {
                 stringResource(Res.string.no_name)
             },

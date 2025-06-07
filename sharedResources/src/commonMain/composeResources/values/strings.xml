@@ -3,7 +3,8 @@
     <string name="app_name">СП Кошелёк</string>
 
     <!--  COMMON ACTIONS  -->
-    <string name="auth">Активировать</string>
+    <string name="activate">Активировать</string>
+    <string name="apply">Применить</string>
     <string name="transfer">Перевести</string>
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
@@ -76,11 +77,11 @@
     <string name="cash_creation_succeed">Карта успешно сохранена</string>
 
     <string name="deactivate_card_title">Деактивировать карту?</string>
-    <string name="deactivate_card_description">Карта удалится из приложения, но останется доступной на сайте. При необходимости её можно будет снова активировать</string>
+    <string name="deactivate_card_description">Карта удалится из приложения, но останется доступной на сайте. При необходимости, её можно снова активировать</string>
 
 
     <string name="delete_card_title">Удалить карту?</string>
-    <string name="delete_card_description">Это действие стерёт все данные о карте</string>
+    <string name="delete_card_description">Это действие безвозвратно стерёт все данные о карте</string>
 
 
     <string name="total_balance">Общий баланс</string>

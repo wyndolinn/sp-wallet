@@ -1,8 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.model
 
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
-
-interface DisplayableNumber {
+interface DisplayableNumber<T> {
     val value: Number
-    val formatted: List<UiText>
+    val formatted: T
 }

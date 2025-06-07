@@ -7,14 +7,15 @@ import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
-import com.wynndie.spwallet.sharedCore.presentation.formatter.InputFormatter
-import com.wynndie.spwallet.sharedCore.presentation.formatter.StructuredFilter
+import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.model.FilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.model.InputFormatter
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
-import com.wynndie.spwallet.sharedCore.presentation.text.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.AuthCardUseCase
+import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.UuidValidator
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val walletRepository: WalletRepository,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
+    private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val authCardUseCase: AuthCardUseCase,
     private val uuidValidator: UuidValidator,
     private val tokenValidator: TokenValidator
@@ -133,7 +135,7 @@ class HomeViewModel(
                 viewModelScope.launch {
 
                     _state.update {
-                        it.copy(authLoadingState = LoadingState.Loading)
+                        it.copy(screenLoadingState = LoadingState.Loading)
                     }
 
                     val validationResults = listOf(
@@ -147,6 +149,7 @@ class HomeViewModel(
                                 DialogController.send(Dialog.Toast(it.asUiText()))
                             }
                             .onSuccess {
+                                syncWithRemoteUseCase()
                                 _state.update {
                                     it.copy(isAuthCardSheetVisible = false)
                                 }
@@ -154,15 +157,23 @@ class HomeViewModel(
                     }
 
                     _state.update {
-                        it.copy(authLoadingState = LoadingState.Finished)
+                        it.copy(screenLoadingState = LoadingState.Finished)
                     }
                 }
             }
 
             is HomeAction.OnClickDeactivateCard -> {
                 viewModelScope.launch {
-                    walletRepository.deleteAuthedCard(action.card.toDomain())
+                    _state.update {
+                        it.copy(screenLoadingState = LoadingState.Loading)
+                    }
+
+                    deleteAuthedCardUseCase(action.card.toDomain())
                     closeAllDialogs()
+
+                    _state.update {
+                        it.copy(screenLoadingState = LoadingState.Finished)
+                    }
                 }
             }
 
@@ -203,7 +214,7 @@ class HomeViewModel(
 
             is HomeAction.OnChangeCardIdValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(StructuredFilter.UUID.predicate)
+                    .filterBy(FilterOptions.Structured.Uuid.predicate)
                     .cutOffAt(Constants.UUID_LENGTH) ?: return
 
                 _state.update { state ->
@@ -217,7 +228,7 @@ class HomeViewModel(
 
             is HomeAction.OnChangeCardTokenValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(StructuredFilter.BASE64.predicate)
+                    .filterBy(FilterOptions.Structured.Base64.predicate)
                     .cutOffAt(Constants.TOKEN_LENGTH) ?: return
 
                 _state.update { state ->

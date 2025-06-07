@@ -1,7 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.model
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
 
 data class InputField(
     val value: TextFieldValue = TextFieldValue(""),

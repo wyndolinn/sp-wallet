@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.model
 
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.UnauthedCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.bank_card_label

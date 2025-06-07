@@ -26,12 +26,9 @@ class TransferByCardUseCase(
             comment = comment
         )
 
-        val cardBalance = walletRepository.makeTransaction(
-            authKey = card.authKey,
-            transfer = transfer
-        ).onError { error ->
-            return Outcome.Error(error)
-        }.getOrThrow()
+        val cardBalance = walletRepository.makeTransaction(card.authKey, transfer)
+            .onError { error -> return Outcome.Error(error) }
+            .getOrThrow()
 
         walletRepository.insertAuthedCard(
             card = card.copy(balance = cardBalance.value)

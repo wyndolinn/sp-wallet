@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.model
 
 import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.RecipientCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_card_number

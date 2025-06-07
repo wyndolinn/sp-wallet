@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.dialog
+package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTextButton
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.theme.radius
@@ -80,15 +81,11 @@ private fun AuthedCardSheetContent(
             )
         }
 
-        TextButton(
+        UiTextButton(
+            text = stringResource(Res.string.delete),
+            destructive = true,
             onClick = onDeleteButtonClick,
-            shape = MaterialTheme.radius.default,
             modifier = Modifier
-        ) {
-            Text(
-                text = stringResource(Res.string.delete),
-                color = MaterialTheme.colorScheme.error
-            )
-        }
+        )
     }
 }

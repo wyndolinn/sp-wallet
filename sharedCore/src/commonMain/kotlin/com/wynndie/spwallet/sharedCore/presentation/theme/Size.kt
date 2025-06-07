@@ -27,7 +27,6 @@ data class Size(
 }
 
 val LocalSize = compositionLocalOf { Size() }
-
 val MaterialTheme.size: Size
     @Composable
     @ReadOnlyComposable

@@ -10,15 +10,16 @@ import com.wynndie.spwallet.sharedFeature.wallet.data.remote.network.RemoteSpWor
 import com.wynndie.spwallet.sharedFeature.wallet.data.repository.WalletRepositoryImpl
 import com.wynndie.spwallet.sharedFeature.wallet.domain.encoder.AuthKeyEncoder
 import com.wynndie.spwallet.sharedFeature.wallet.domain.repository.WalletRepository
+import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.AuthCardUseCase
+import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.DeleteAuthedCardUseCase
+import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.SyncWithRemoteUseCase
+import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.CardNameValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.CardNumberValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.TransferCommentValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.UuidValidator
-import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.AuthCardUseCase
-import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.SyncWithRemoteUseCase
-import com.wynndie.spwallet.sharedFeature.wallet.domain.usecase.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.CashCardViewModel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.HomeViewModel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.transfer_by_card.TransferByCardViewModel
@@ -44,6 +45,7 @@ val walletSharedModule = module {
     singleOf(::SyncWithRemoteUseCase)
     singleOf(::AuthCardUseCase)
     singleOf(::TransferByCardUseCase)
+    singleOf(::DeleteAuthedCardUseCase)
 
     singleOf(::BalanceValidator)
     singleOf(::CardNameValidator)

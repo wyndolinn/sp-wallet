@@ -39,7 +39,6 @@ kotlin {
             implementation(projects.sharedResources)
             implementation(projects.sharedFeature.wallet)
 
-            implementation(libs.kotlinx.serialization.json)
             implementation(libs.jetbrains.compose.navigation)
         }
 

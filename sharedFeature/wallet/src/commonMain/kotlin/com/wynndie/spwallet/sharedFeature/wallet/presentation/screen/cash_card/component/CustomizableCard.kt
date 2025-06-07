@@ -54,7 +54,7 @@ fun <T : UiCard> CustomizableCard(
         ) {
             Text(
                 text = card.label.asString().ifBlank { stringResource(Res.string.no_name) },
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )
 

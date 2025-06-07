@@ -46,7 +46,7 @@ fun UiTonalIconButton(
         text?.let {
             Text(
                 text = it,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }

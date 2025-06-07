@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.text
+package com.wynndie.spwallet.sharedCore.presentation.model
 
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.StringResource
@@ -20,9 +20,4 @@ sealed interface UiText {
             is StringResourceId -> stringResource(id, *args)
         }
     }
-}
-
-@Composable
-fun List<UiText>.joinAsString(separator: String = ", "): String {
-    return this.map { it.asString() }.joinToString(separator)
 }

@@ -28,39 +28,35 @@ inline fun <D, E : RootError> Outcome<D, E>.onError(action: (E) -> Unit): Outcom
     }
 }
 
-inline fun <D, E : Error, R> Outcome<D, E>.map(map: (D) -> R): Outcome<R, E> {
+inline fun <D, E : RootError, R> Outcome<D, E>.map(map: (D) -> R): Outcome<R, E> {
     return when (this) {
         is Outcome.Success -> Outcome.Success(map(data))
         is Outcome.Error -> Outcome.Error(error)
     }
 }
 
-fun <D, E : Error> Outcome<D, E>.asEmptyDataOutcome(): EmptyOutcome<E> {
-    return map { }
-}
-
-fun <D, E : Error> Outcome<D, E>.getOrNull(): D? {
+fun <D, E : RootError> Outcome<D, E>.getOrNull(): D? {
     return when (this) {
         is Outcome.Success -> data
         is Outcome.Error -> null
     }
 }
 
-fun <D, E : Error> Outcome<D, E>.getOrThrow(): D {
+fun <D, E : RootError> Outcome<D, E>.getOrThrow(): D {
     return when (this) {
         is Outcome.Success -> data
         is Outcome.Error -> throw IllegalStateException(error.toString())
     }
 }
 
-fun <D, E : Error> Outcome<D, E>.getOrElse(fallback: (E) -> D): D {
+fun <D, E : RootError> Outcome<D, E>.getOrElse(fallback: (E) -> D): D {
     return when (this) {
         is Outcome.Success -> data
         is Outcome.Error -> fallback(error)
     }
 }
 
-fun <D, E : Error> Outcome<List<D>, E>.findOrNull(predicate: (D) -> Boolean): D? {
+fun <D, E : RootError> Outcome<List<D>, E>.findOrNull(predicate: (D) -> Boolean): D? {
     return when (this) {
         is Outcome.Success -> data.find(predicate)
         is Outcome.Error -> null

@@ -72,7 +72,7 @@ fun UiOutlinedInputField(
             placeholder = {
                 Text(
                     text = placeholder,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.titleMedium
                 )
             },
             leadingIcon = leadingIcon,
@@ -81,7 +81,7 @@ fun UiOutlinedInputField(
                 {
                     Text(
                         text = prefix,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             },
@@ -89,7 +89,7 @@ fun UiOutlinedInputField(
                 {
                     Text(
                         text = suffix,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             },
@@ -106,6 +106,7 @@ fun UiOutlinedInputField(
             singleLine = singleLine,
             minLines = minLines,
             shape = MaterialTheme.radius.default,
+            textStyle = MaterialTheme.typography.titleMedium,
             colors = TextFieldDefaults.colors(
                 unfocusedSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 focusedSupportingTextColor = MaterialTheme.colorScheme.onSurface,

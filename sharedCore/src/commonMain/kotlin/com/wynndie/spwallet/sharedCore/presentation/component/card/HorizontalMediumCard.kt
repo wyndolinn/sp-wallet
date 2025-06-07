@@ -34,7 +34,7 @@ fun HorizontalMediumCard(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(MaterialTheme.size.medium)
+                    .size(MaterialTheme.size.large)
                     .clip(MaterialTheme.radius.small)
                     .background(leadingContentBackground)
             ) {
@@ -57,7 +57,7 @@ fun HorizontalMediumCard(
             label = label,
             title = title,
             description = description,
-            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.extraSmall)
+            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.large)
         )
     }
 }

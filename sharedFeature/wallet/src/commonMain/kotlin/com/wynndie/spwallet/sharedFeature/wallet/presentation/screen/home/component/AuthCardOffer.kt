@@ -14,7 +14,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.LargeInfoDisplay
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.auth
+import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedResources.no_authed_cards
 import org.jetbrains.compose.resources.stringResource
@@ -33,14 +33,14 @@ internal fun AuthCardOffer(
         LargeInfoDisplay(
             title = stringResource(Res.string.no_authed_cards),
             description = stringResource(Res.string.auth_card_to_get_benefits),
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(Modifier.height(MaterialTheme.spacing.medium))
-
-        UiButton(
-            text = stringResource(Res.string.auth),
-            onClick = onClickAuthCard,
+            action = {
+                UiButton(
+                    text = stringResource(Res.string.activate),
+                    onClick = onClickAuthCard,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
     }

@@ -29,19 +29,20 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiOutlinedButton
-import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.LargeInfoDisplay
+import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.MediumInfoDisplay
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.text.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardList
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.emptyCashCard
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.AppBarContent
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.AuthCardOffer
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.dialog.AuthCardSheet
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.dialog.AuthedCardSheet
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.dialog.DeactivateCardDialog
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.AuthCardSheet
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.AuthedCardSheet
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.DeactivateCardDialog
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_cards
 import com.wynndie.spwallet.sharedResources.app_logo_foreground
@@ -223,7 +224,7 @@ private fun HomeScreenContent(
         item {
             Spacer(Modifier.height(MaterialTheme.spacing.medium))
 
-            LargeInfoDisplay(
+            MediumInfoDisplay(
                 label = stringResource(Res.string.total_balance),
                 title = stringResource(Res.string.total_of_ore, state.totalBalance.value),
                 description = state.totalBalance.formatted.joinAsString(" ")
@@ -283,20 +284,22 @@ private fun HomeScreenContent(
                             )
                         )
                     },
-                    trailingContent = {
-                        UiOutlinedButton(
-                            text = stringResource(Res.string.create_cash_card),
-                            onClick = {
-                                onAction(
-                                    HomeAction.OnClickCashCard(
-                                        card = emptyCashCard,
-                                        navigate = onClickCashCard
+                    trailingContent = if (state.cashCards.size < Constants.MAX_CASH_CARDS_AMOUNT) {
+                        {
+                            UiOutlinedButton(
+                                text = stringResource(Res.string.create_cash_card),
+                                onClick = {
+                                    onAction(
+                                        HomeAction.OnClickCashCard(
+                                            card = emptyCashCard,
+                                            navigate = onClickCashCard
+                                        )
                                     )
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    } else null
                 )
 
                 if (state.unauthedCards.isNotEmpty()) {

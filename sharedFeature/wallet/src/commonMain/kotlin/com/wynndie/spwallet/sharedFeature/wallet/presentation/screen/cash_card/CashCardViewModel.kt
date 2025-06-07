@@ -8,12 +8,11 @@ import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
-import com.wynndie.spwallet.sharedCore.presentation.formatter.DigitsFilter
-import com.wynndie.spwallet.sharedCore.presentation.formatter.InputFormatter
-import com.wynndie.spwallet.sharedCore.presentation.formatter.TextFilter
+import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.model.FilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.model.InputFormatter
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.text.UiText
-import com.wynndie.spwallet.sharedCore.presentation.text.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.BalanceValidator
@@ -95,7 +94,7 @@ class CashCardViewModel(
 
             is CashCardAction.OnChangeNameValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(TextFilter.LETTERS_OR_DIGITS.predicate)
+                    .filterBy(FilterOptions.Text.LettersOrDigits.predicate)
                     .cutOffAt(Constants.MAX_CARD_NAME_LENGTH) ?: return
 
                 _state.update { state ->
@@ -112,7 +111,7 @@ class CashCardViewModel(
 
             is CashCardAction.OnChangeBalanceValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(DigitsFilter.DIGITS_ONLY.predicate)
+                    .filterBy(FilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst("0")
                     .cutOffAt(Constants.MAX_BALANCE_LENGTH) ?: return
 

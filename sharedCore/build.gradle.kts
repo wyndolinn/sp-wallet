@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Core"
+            baseName = "SharedCore"
             isStatic = true
         }
     }
@@ -57,8 +57,6 @@ kotlin {
             api(compose.materialIconsExtended)
             api(libs.androidx.lifecycle.viewmodel)
             api(libs.androidx.lifecycle.runtime.compose)
-
-            api(libs.jetbrains.compose.navigation)
 
             api(libs.koin.compose)
             api(libs.koin.compose.viewmodel)

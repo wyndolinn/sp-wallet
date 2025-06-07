@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component.dialog
+package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.component
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +27,7 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardCarousel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiUnauthedCard
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.auth
+import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction
 import com.wynndie.spwallet.sharedResources.enter_id
 import com.wynndie.spwallet.sharedResources.enter_token
@@ -148,7 +148,7 @@ private fun AuthCardSheetContent(
 
         val cardId = if (cards.isNotEmpty()) cards[page].id else idInputField.value.text
         UiButton(
-            text = stringResource(Res.string.auth),
+            text = stringResource(Res.string.activate),
             onClick = { onClickAuthButton(cardId, tokenInputField.value.text) },
             modifier = Modifier
                 .fillMaxWidth()

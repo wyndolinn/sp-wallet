@@ -7,4 +7,5 @@ internal object Constants {
     const val MAX_CARD_NAME_LENGTH = 12
     const val MAX_BALANCE_LENGTH = 9
     const val MAX_COMMENT_LENGTH = 64
+    const val MAX_CASH_CARDS_AMOUNT = 5
 }

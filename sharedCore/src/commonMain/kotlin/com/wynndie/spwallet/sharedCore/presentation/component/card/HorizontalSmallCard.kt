@@ -57,7 +57,7 @@ fun HorizontalSmallCard(
             label = label,
             title = title,
             description = description,
-            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.extraSmall)
+            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.small)
         )
     }
 }

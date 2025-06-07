@@ -95,7 +95,7 @@ fun TransferByCardScreenRoot(
                 title = {
                     Text(
                         text = stringResource(Res.string.by_number),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },

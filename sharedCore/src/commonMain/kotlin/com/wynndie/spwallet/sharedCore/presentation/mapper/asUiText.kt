@@ -1,8 +1,9 @@
-package com.wynndie.spwallet.sharedCore.presentation.text
+package com.wynndie.spwallet.sharedCore.presentation.mapper
 
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Error
 import com.wynndie.spwallet.sharedCore.domain.error.ValidationError
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.error_above_maximum_value
 import com.wynndie.spwallet.sharedResources.error_bad_request

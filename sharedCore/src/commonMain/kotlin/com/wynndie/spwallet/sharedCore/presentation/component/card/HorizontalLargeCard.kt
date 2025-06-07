@@ -34,7 +34,7 @@ fun HorizontalLargeCard(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(MaterialTheme.size.large)
+                    .size(MaterialTheme.size.scale(2f).medium)
                     .clip(MaterialTheme.radius.small)
                     .background(leadingContentBackground)
             ) {
@@ -57,7 +57,7 @@ fun HorizontalLargeCard(
             label = label,
             title = title,
             description = description,
-            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.extraSmall)
+            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.scale(2f).medium)
         )
     }
 }
