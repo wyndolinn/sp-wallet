@@ -131,10 +131,10 @@ class TransferByCardViewModel(
                             amount = action.transferAmount,
                             comment = action.comment
                         ).onError {
-                            DialogController.send(Dialog.Toast(it.asUiText()))
+                            DialogController.send(Dialog.Snackbar(it.asUiText()))
                         }.onSuccess {
                             DialogController.send(
-                                Dialog.Toast(UiText.StringResourceId(Res.string.transaction_succeed))
+                                Dialog.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
                             )
                             action.navigateBack()
                         }

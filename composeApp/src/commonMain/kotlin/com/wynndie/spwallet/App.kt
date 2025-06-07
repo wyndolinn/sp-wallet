@@ -1,7 +1,10 @@
 package com.wynndie.spwallet
 
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.wynndie.spwallet.navigation.navhost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.component.effect.ObserveAsEvents
@@ -15,6 +18,8 @@ import org.koin.compose.KoinContext
 fun App() {
 
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     ObserveAsEvents(DialogController.event) { dialog ->
         scope.launch {
             when (dialog) {
@@ -29,17 +34,17 @@ fun App() {
                 is Dialog.Snackbar -> {
 
                 }
-
-                is Dialog.Toast -> {
-
-                }
             }
         }
     }
 
     AppTheme {
         KoinContext {
-            Scaffold { _ ->
+            Scaffold(
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
+                }
+            ) { _ ->
                 RootNavHost()
             }
         }

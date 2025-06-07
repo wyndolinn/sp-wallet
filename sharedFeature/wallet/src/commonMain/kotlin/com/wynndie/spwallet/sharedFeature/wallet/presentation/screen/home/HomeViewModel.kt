@@ -146,7 +146,7 @@ class HomeViewModel(
                     if (!validationResults.any { isValid -> !isValid }) {
                         authCardUseCase(id = action.id, token = action.token)
                             .onError {
-                                DialogController.send(Dialog.Toast(it.asUiText()))
+                                DialogController.send(Dialog.Snackbar(it.asUiText()))
                             }
                             .onSuccess {
                                 syncWithRemoteUseCase()
@@ -249,7 +249,7 @@ class HomeViewModel(
 
         syncWithRemoteUseCase()
             .onError { error ->
-                DialogController.send(Dialog.Toast(error.asUiText()))
+                DialogController.send(Dialog.Snackbar(error.asUiText()))
             }
 
         _state.update {

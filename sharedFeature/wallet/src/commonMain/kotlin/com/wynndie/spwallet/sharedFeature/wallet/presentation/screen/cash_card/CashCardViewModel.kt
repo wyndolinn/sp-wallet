@@ -169,7 +169,7 @@ class CashCardViewModel(
                             .onSuccess {
                                 _state.update { it.copy(saveLoadingState = LoadingState.Finished) }
                                 DialogController.send(
-                                    Dialog.Toast(UiText.StringResourceId(Res.string.cash_creation_succeed))
+                                    Dialog.Snackbar(UiText.StringResourceId(Res.string.cash_creation_succeed))
                                 )
                                 action.navigateBack()
                             }
