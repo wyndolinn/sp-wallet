@@ -3,14 +3,14 @@ package com.wynndie.spwallet.sharedFeature.wallet.domain.repository
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.AuthedCard
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.AuthedUser
+import com.wynndie.spwallet.sharedFeature.wallet.domain.model.Transfer
+import com.wynndie.spwallet.sharedFeature.wallet.domain.model.UnauthedUser
+import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.AuthedCard
+import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.CardBalance
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.CashCard
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.RecipientCard
-import com.wynndie.spwallet.sharedFeature.wallet.domain.model.Transfer
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.UnauthedCard
-import com.wynndie.spwallet.sharedFeature.wallet.domain.model.UnauthedUser
-import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.CardBalance
 import kotlinx.coroutines.flow.Flow
 
 interface WalletRepository {

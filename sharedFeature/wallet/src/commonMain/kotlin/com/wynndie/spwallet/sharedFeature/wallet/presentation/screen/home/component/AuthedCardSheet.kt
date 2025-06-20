@@ -8,20 +8,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTextButton
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
-import com.wynndie.spwallet.sharedCore.presentation.theme.radius
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardCarousel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiAuthedCard
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.delete
+import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.transfer_by_number
 import org.jetbrains.compose.resources.stringResource
 
@@ -82,7 +79,7 @@ private fun AuthedCardSheetContent(
         }
 
         UiTextButton(
-            text = stringResource(Res.string.delete),
+            text = stringResource(Res.string.deactivate),
             destructive = true,
             onClick = onDeleteButtonClick,
             modifier = Modifier

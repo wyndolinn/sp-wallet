@@ -6,7 +6,6 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.EncodeDefault
 
 data class Spacing(
     val default: Dp = 16.dp,
@@ -18,7 +17,7 @@ data class Spacing(
 ) {
     fun scale(factor: Float): Spacing {
         return Spacing(
-            extraSmall =  extraSmall * factor,
+            extraSmall = extraSmall * factor,
             small = small * factor,
             medium = medium * factor,
             large = large * factor,

@@ -22,7 +22,7 @@ class SyncWithRemoteUseCase(
         authedCards.forEach { authedCard ->
             updateAuthedCard(authedCard)
                 .onError { error -> return Outcome.Error(error) }
-                .onSuccess { user ->  unAuthedUser = user }
+                .onSuccess { user -> unAuthedUser = user }
         }
 
         clearUserAndUnauthedCardsData()

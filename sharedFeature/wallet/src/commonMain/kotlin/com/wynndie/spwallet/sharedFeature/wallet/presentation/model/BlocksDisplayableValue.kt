@@ -28,7 +28,7 @@ data class BlocksDisplayableValue(
             val stacks = value / ORE_IN_STACK % STACKS_IN_SHULKER
             val ore = value % ORE_IN_STACK
 
-            val formattedValue =  buildList {
+            val formattedValue = buildList {
                 if (shulkers > 0) add(UiText.StringResourceId(Res.string.amount_of_shulkers, shulkers))
                 if (stacks > 0) add(UiText.StringResourceId(Res.string.amount_of_stacks, stacks))
                 if (ore > 0) add(UiText.StringResourceId(Res.string.amount_of_ore, ore))

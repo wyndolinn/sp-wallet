@@ -31,7 +31,11 @@ data class UiUnauthedCard(
         fun of(value: UnauthedCard): UiUnauthedCard {
             return UiUnauthedCard(
                 id = value.id,
-                label = UiText.StringResourceId(Res.string.bank_card_label, value.name, value.number),
+                label = UiText.StringResourceId(
+                    Res.string.bank_card_label,
+                    value.name,
+                    value.number
+                ),
                 title = UiText.StringResourceId(Res.string.require_activation),
                 iconBackground = CardColor.from(value.color),
                 icon = CardIcon.from(value.icon),

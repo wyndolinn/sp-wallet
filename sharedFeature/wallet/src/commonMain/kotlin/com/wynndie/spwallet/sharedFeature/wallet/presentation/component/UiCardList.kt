@@ -7,7 +7,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.titledContent.Vert
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiCard
 
 @Composable
-fun<T: UiCard> UiCardList(
+fun <T : UiCard> UiCardList(
     listTitle: String,
     cards: List<T>,
     onClick: (T) -> Unit,

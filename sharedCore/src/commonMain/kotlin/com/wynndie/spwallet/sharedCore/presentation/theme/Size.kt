@@ -17,7 +17,7 @@ data class Size(
 ) {
     fun scale(factor: Float): Size {
         return Size(
-            extraSmall =  extraSmall * factor,
+            extraSmall = extraSmall * factor,
             small = small * factor,
             medium = medium * factor,
             large = large * factor,

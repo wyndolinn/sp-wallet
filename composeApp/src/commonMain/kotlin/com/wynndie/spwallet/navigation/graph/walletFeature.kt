@@ -6,14 +6,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.wynndie.spwallet.navigation.WalletNavGraph
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.CashCardViewModelArgs
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.CashCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.CashCardViewModel
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.CashCardViewModelArgs
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.HomeScreenRoot
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.HomeViewModel
-import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.transfer_by_card.TransferByCardViewModelArgs
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.transfer_by_card.TransferByCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.transfer_by_card.TransferByCardViewModel
+import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.transfer_by_card.TransferByCardViewModelArgs
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
