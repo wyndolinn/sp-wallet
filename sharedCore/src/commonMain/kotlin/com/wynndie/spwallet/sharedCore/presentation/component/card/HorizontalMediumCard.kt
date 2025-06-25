@@ -29,12 +29,15 @@ fun HorizontalMediumCard(
     leadingContentBackground: Color = MaterialTheme.colorScheme.tertiary,
     onClick: (() -> Unit)? = null,
 ) {
+
+    val minContentHeight = MaterialTheme.size.large
+
     HorizontalCardScaffold(
         leadingContent = {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(MaterialTheme.size.large)
+                    .size(minContentHeight)
                     .clip(MaterialTheme.radius.small)
                     .background(leadingContentBackground)
             ) {
@@ -57,7 +60,7 @@ fun HorizontalMediumCard(
             label = label,
             title = title,
             description = description,
-            modifier = Modifier.sizeIn(minHeight = MaterialTheme.size.large)
+            modifier = Modifier.sizeIn(minHeight = minContentHeight)
         )
     }
 }
