@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutli
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.CustomizableCard
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.component.CustomizationSheet
@@ -53,6 +55,7 @@ import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.no_name
 import com.wynndie.spwallet.sharedResources.save
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -231,6 +234,21 @@ private fun CashCardScreen(
                 )
             },
             modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CashCardScreenPreview() {
+    AppTheme {
+        CashCardScreen(
+            state = CashCardState(),
+            onAction = { _ -> },
+            navigateBack = {  },
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(MaterialTheme.spacing.medium)
         )
     }
 }

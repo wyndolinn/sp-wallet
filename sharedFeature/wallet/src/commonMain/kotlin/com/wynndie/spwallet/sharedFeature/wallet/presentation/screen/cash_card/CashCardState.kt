@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card
 
-import com.wynndie.spwallet.sharedCore.presentation.model.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiCashCard
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.emptyCashCard

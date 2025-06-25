@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
-import com.wynndie.spwallet.sharedCore.presentation.model.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardCarousel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiUnauthedCard

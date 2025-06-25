@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home
 
-import com.wynndie.spwallet.sharedCore.presentation.model.InputField
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.AuthedUser
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiAuthedCard

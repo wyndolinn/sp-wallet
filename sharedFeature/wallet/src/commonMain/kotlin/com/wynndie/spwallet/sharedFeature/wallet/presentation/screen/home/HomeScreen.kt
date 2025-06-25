@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.Medium
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardList
@@ -55,6 +57,7 @@ import com.wynndie.spwallet.sharedResources.total_balance
 import com.wynndie.spwallet.sharedResources.total_of_ore
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -317,5 +320,20 @@ private fun HomeScreenContent(
 
             Spacer(Modifier.height(MaterialTheme.spacing.medium))
         }
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenContentPreview() {
+    AppTheme {
+        HomeScreenContent(
+            state = HomeState(),
+            onAction = { },
+            onClickCashCard = {  },
+            onClickTransferByCard = {  },
+            contentPadding = PaddingValues(MaterialTheme.spacing.medium),
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        )
     }
 }

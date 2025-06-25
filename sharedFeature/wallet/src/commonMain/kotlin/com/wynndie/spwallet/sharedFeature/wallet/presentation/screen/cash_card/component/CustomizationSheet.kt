@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
-import com.wynndie.spwallet.sharedCore.presentation.model.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
 import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.CardColor
