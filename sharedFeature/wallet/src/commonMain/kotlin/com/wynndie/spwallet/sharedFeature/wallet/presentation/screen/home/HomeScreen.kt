@@ -73,6 +73,7 @@ fun HomeScreenRoot(
     if (state.isAuthCardSheetVisible) {
         AuthCardSheet(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet) },
+            loadingState = state.authLoadingState,
             cards = state.unauthedCards,
             initialPage = state.carouselPage,
             idInputField = state.idInputField,

@@ -135,7 +135,7 @@ class HomeViewModel(
                 viewModelScope.launch {
 
                     _state.update {
-                        it.copy(screenLoadingState = LoadingState.Loading)
+                        it.copy(authLoadingState = LoadingState.Loading)
                     }
 
                     val validationResults = listOf(
@@ -157,7 +157,7 @@ class HomeViewModel(
                     }
 
                     _state.update {
-                        it.copy(screenLoadingState = LoadingState.Finished)
+                        it.copy(authLoadingState = LoadingState.Finished)
                     }
                 }
             }
