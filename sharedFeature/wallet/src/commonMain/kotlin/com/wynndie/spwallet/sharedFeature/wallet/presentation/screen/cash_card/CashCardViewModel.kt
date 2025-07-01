@@ -13,7 +13,6 @@ import com.wynndie.spwallet.sharedCore.presentation.model.input.FilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
-import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedFeature.wallet.domain.validator.CardNameValidator
@@ -94,7 +93,7 @@ class CashCardViewModel(
             is CashCardAction.OnChangeNameValue -> {
                 val inputFormatter = InputFormatter(action.value)
                     .filterBy(FilterOptions.Text.LettersOrDigits.predicate)
-                    .cutOffAt(Constants.MAX_CARD_NAME_LENGTH) ?: return
+                    .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
@@ -112,7 +111,7 @@ class CashCardViewModel(
                 val inputFormatter = InputFormatter(action.value)
                     .filterBy(FilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst("0")
-                    .cutOffAt(Constants.MAX_BALANCE_LENGTH) ?: return
+                    .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
                 val balance = if (inputFormatter.value.text == "") {
                     BlocksDisplayableValue.of(0L)

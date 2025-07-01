@@ -31,11 +31,11 @@ fun UiOutlinedInputField(
     onValueChange: (TextFieldValue) -> Unit,
     label: String,
     placeholder: String,
-    supportingText: String,
     isError: Boolean,
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
     modifier: Modifier = Modifier,
+    supportingText: String? = null,
     enabled: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit) = {
@@ -93,11 +93,13 @@ fun UiOutlinedInputField(
                     )
                 }
             },
-            supportingText = {
-                Text(
-                    text = supportingText,
-                    style = MaterialTheme.typography.labelMedium
-                )
+            supportingText = supportingText?.let{
+                {
+                    Text(
+                        text = supportingText,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
             },
             isError = isError,
             visualTransformation = visualTransformation,

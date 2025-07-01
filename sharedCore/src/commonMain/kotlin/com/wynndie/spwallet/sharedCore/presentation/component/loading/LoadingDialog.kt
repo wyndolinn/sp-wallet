@@ -1,11 +1,13 @@
 package com.wynndie.spwallet.sharedCore.presentation.component.loading
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.wynndie.spwallet.sharedCore.presentation.theme.radius
@@ -13,15 +15,18 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogLoadingIndicator() {
+fun LoadingDialog() {
     BasicAlertDialog(
         onDismissRequest = {}
     ) {
-        Surface(
-            modifier = Modifier.clip(MaterialTheme.radius.default)
+        Box(
+            contentAlignment = Alignment.Center
         ) {
             LoadingIndicator(
-                modifier = Modifier.padding(MaterialTheme.spacing.large)
+                modifier = Modifier
+                    .clip(MaterialTheme.radius.extraLarge)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(MaterialTheme.spacing.large)
             )
         }
     }

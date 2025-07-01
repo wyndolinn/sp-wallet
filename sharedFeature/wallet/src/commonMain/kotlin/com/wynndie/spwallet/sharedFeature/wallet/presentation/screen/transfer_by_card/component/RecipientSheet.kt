@@ -70,8 +70,8 @@ private fun RecipientSheetContent(
             onValueChange = { onChangeReceiverValue(it) },
             label = stringResource(Res.string.enter_card_number),
             placeholder = stringResource(Res.string.card_number),
-            supportingText = receiverInputFieldState.supportingText.asString(),
-            isError = receiverInputFieldState.supportingText.asString().isNotBlank(),
+            supportingText = receiverInputFieldState.supportingText?.asString(),
+            isError = receiverInputFieldState.hasError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done

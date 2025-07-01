@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingDialog
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -52,11 +53,14 @@ fun AuthCardSheet(
     modifier: Modifier = Modifier
 ) {
     BottomSheetScaffold(
-        onDismiss = onDismiss,
-        loadingState = loadingState
+        onDismiss = onDismiss
     ) {
+
+        if (loadingState is LoadingState.Loading) {
+            LoadingDialog()
+        }
+
         AuthCardSheetContent(
-            loadingState = loadingState,
             isAuthButtonEnabled = isAuthButtonEnabled,
             cards = cards,
             page = initialPage,
@@ -72,7 +76,6 @@ fun AuthCardSheet(
 
 @Composable
 private fun AuthCardSheetContent(
-    loadingState: LoadingState,
     isAuthButtonEnabled: Boolean,
     cards: List<UiUnauthedCard>,
     page: Int,
@@ -98,7 +101,6 @@ private fun AuthCardSheetContent(
             UiCardCarousel(
                 items = cards,
                 page = page,
-                enabled = loadingState !is LoadingState.Loading,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -114,9 +116,8 @@ private fun AuthCardSheetContent(
                     onValueChange = { onChangeIdValue(it) },
                     label = stringResource(Res.string.enter_id),
                     placeholder = stringResource(Res.string.id),
-                    supportingText = idInputFieldState.supportingText.asString(),
-                    isError = idInputFieldState.supportingText.asString().isNotBlank(),
-                    enabled = loadingState !is LoadingState.Loading,
+                    supportingText = idInputFieldState.supportingText?.asString(),
+                    isError = idInputFieldState.hasError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -134,9 +135,8 @@ private fun AuthCardSheetContent(
                 onValueChange = { onTokenValueChange(it) },
                 label = stringResource(Res.string.enter_token),
                 placeholder = stringResource(Res.string.token),
-                supportingText = tokenInputFieldState.supportingText.asString(),
-                isError = tokenInputFieldState.supportingText.asString().isNotBlank(),
-                enabled = loadingState !is LoadingState.Loading,
+                supportingText = tokenInputFieldState.supportingText?.asString(),
+                isError = tokenInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
@@ -162,7 +162,6 @@ private fun AuthCardSheetContent(
             text = stringResource(Res.string.activate),
             onClick = { onClickAuthButton(cardId, tokenInputFieldState.value.text) },
             enabled = isAuthButtonEnabled,
-            isLoading = loadingState is LoadingState.Loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.spacing.medium)

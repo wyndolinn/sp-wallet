@@ -85,8 +85,8 @@ private fun CustomizationSheetContent(
             onValueChange = { onNameValueChange(it) },
             label = stringResource(Res.string.enter_card_name),
             placeholder = stringResource(Res.string.card_name),
-            supportingText = nameInputFieldState.supportingText.asString(),
-            isError = nameInputFieldState.supportingText.asString().isNotBlank(),
+            supportingText = nameInputFieldState.supportingText?.asString(),
+            isError = nameInputFieldState.hasError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done

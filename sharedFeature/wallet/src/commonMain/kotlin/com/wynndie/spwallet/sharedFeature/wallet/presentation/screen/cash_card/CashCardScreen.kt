@@ -205,8 +205,8 @@ private fun CashCardScreen(
                 onValueChange = { onAction(CashCardAction.OnChangeBalanceValue(it)) },
                 label = stringResource(Res.string.enter_balance),
                 placeholder = stringResource(Res.string.balance),
-                supportingText = state.balanceInputFieldState.supportingText.asString(),
-                isError = state.balanceInputFieldState.supportingText.asString().isNotBlank(),
+                supportingText = state.balanceInputFieldState.supportingText?.asString(),
+                isError = state.balanceInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
