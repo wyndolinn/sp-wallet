@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RecipientSheet(
     onDismiss: () -> Unit,
-    receiverInputField: InputField,
+    receiverInputFieldState: InputFieldState,
     onChangeRecipientValue: (TextFieldValue) -> Unit,
     onClickRecipient: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -39,7 +39,7 @@ fun RecipientSheet(
         onDismiss = onDismiss
     ) {
         RecipientSheetContent(
-            receiverInputField = receiverInputField,
+            receiverInputFieldState = receiverInputFieldState,
             onChangeReceiverValue = onChangeRecipientValue,
             onClickRecipient = onClickRecipient,
             modifier = modifier
@@ -49,7 +49,7 @@ fun RecipientSheet(
 
 @Composable
 private fun RecipientSheetContent(
-    receiverInputField: InputField,
+    receiverInputFieldState: InputFieldState,
     onChangeReceiverValue: (TextFieldValue) -> Unit,
     onClickRecipient: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -66,12 +66,12 @@ private fun RecipientSheetContent(
             }
     ) {
         UiOutlinedInputField(
-            value = receiverInputField.value,
+            value = receiverInputFieldState.value,
             onValueChange = { onChangeReceiverValue(it) },
             label = stringResource(Res.string.enter_card_number),
             placeholder = stringResource(Res.string.card_number),
-            supportingText = receiverInputField.supportingText.asString(),
-            isError = receiverInputField.supportingText.asString().isNotBlank(),
+            supportingText = receiverInputFieldState.supportingText.asString(),
+            isError = receiverInputFieldState.supportingText.asString().isNotBlank(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
@@ -79,14 +79,14 @@ private fun RecipientSheetContent(
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus(true)
-                    onClickRecipient(receiverInputField.value.text)
+                    onClickRecipient(receiverInputFieldState.value.text)
                 }
             )
         )
 
         UiButton(
             text = stringResource(Res.string.apply),
-            onClick = { onClickRecipient(receiverInputField.value.text) },
+            onClick = { onClickRecipient(receiverInputFieldState.value.text) },
             modifier = Modifier.fillMaxWidth()
         )
     }

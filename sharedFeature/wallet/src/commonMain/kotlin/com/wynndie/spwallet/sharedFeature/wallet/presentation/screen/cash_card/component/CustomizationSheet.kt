@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.CardColor
@@ -40,7 +40,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CustomizationSheet(
     onDismiss: () -> Unit,
-    idInputField: InputField,
+    idInputFieldState: InputFieldState,
     onIdValueChange: (TextFieldValue) -> Unit,
     selectedColorChip: Int,
     onColorChipClick: (Int) -> Unit,
@@ -50,7 +50,7 @@ fun CustomizationSheet(
         onDismiss = onDismiss
     ) {
         CustomizationSheetContent(
-            nameInputField = idInputField,
+            nameInputFieldState = idInputFieldState,
             onNameValueChange = onIdValueChange,
             selectedColorChip = selectedColorChip,
             onColorChipClick = onColorChipClick,
@@ -62,7 +62,7 @@ fun CustomizationSheet(
 
 @Composable
 private fun CustomizationSheetContent(
-    nameInputField: InputField,
+    nameInputFieldState: InputFieldState,
     onNameValueChange: (TextFieldValue) -> Unit,
     selectedColorChip: Int,
     onColorChipClick: (Int) -> Unit,
@@ -81,12 +81,12 @@ private fun CustomizationSheetContent(
             }
     ) {
         UiOutlinedInputField(
-            value = nameInputField.value,
+            value = nameInputFieldState.value,
             onValueChange = { onNameValueChange(it) },
             label = stringResource(Res.string.enter_card_name),
             placeholder = stringResource(Res.string.card_name),
-            supportingText = nameInputField.supportingText.asString(),
-            isError = nameInputField.supportingText.asString().isNotBlank(),
+            supportingText = nameInputFieldState.supportingText.asString(),
+            isError = nameInputFieldState.supportingText.asString().isNotBlank(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done

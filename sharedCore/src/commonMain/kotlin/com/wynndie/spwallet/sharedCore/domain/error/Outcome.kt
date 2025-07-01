@@ -35,6 +35,20 @@ inline fun <D, E : RootError, R> Outcome<D, E>.map(map: (D) -> R): Outcome<R, E>
     }
 }
 
+inline fun <D, E : RootError> Outcome<List<D>, E>.findOrNull(predicate: (D) -> Boolean): D? {
+    return when (this) {
+        is Outcome.Success -> data.find(predicate)
+        is Outcome.Error -> null
+    }
+}
+
+inline fun <D, E : RootError> Outcome<D, E>.getOrElse(fallback: (E) -> D): D {
+    return when (this) {
+        is Outcome.Success -> data
+        is Outcome.Error -> fallback(error)
+    }
+}
+
 fun <D, E : RootError> Outcome<D, E>.getOrNull(): D? {
     return when (this) {
         is Outcome.Success -> data
@@ -46,19 +60,5 @@ fun <D, E : RootError> Outcome<D, E>.getOrThrow(): D {
     return when (this) {
         is Outcome.Success -> data
         is Outcome.Error -> throw IllegalStateException(error.toString())
-    }
-}
-
-fun <D, E : RootError> Outcome<D, E>.getOrElse(fallback: (E) -> D): D {
-    return when (this) {
-        is Outcome.Success -> data
-        is Outcome.Error -> fallback(error)
-    }
-}
-
-fun <D, E : RootError> Outcome<List<D>, E>.findOrNull(predicate: (D) -> Boolean): D? {
-    return when (this) {
-        is Outcome.Success -> data.find(predicate)
-        is Outcome.Error -> null
     }
 }

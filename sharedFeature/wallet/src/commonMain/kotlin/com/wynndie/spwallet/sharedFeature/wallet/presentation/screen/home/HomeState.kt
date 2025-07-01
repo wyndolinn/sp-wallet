@@ -1,7 +1,8 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home
 
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
+import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.AuthedUser
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiAuthedCard
@@ -28,7 +29,11 @@ data class HomeState(
     val authedCards: List<UiAuthedCard> = emptyList(),
     val unauthedCards: List<UiUnauthedCard> = emptyList(),
 
-    val idInputField: InputField = InputField(),
-    val tokenInputField: InputField = InputField()
+    val idInputFieldState: InputFieldState = InputFieldState(
+        maxLength = Constants.UUID_LENGTH
+    ),
+    val tokenInputFieldState: InputFieldState = InputFieldState(
+        maxLength = Constants.TOKEN_LENGTH
+    )
 )
 

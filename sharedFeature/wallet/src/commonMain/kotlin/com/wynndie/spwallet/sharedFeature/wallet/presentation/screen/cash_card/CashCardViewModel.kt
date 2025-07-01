@@ -54,11 +54,10 @@ class CashCardViewModel(
                 state.copy(
                     card = UiCashCard.of(card),
                     selectedColorChip = card.color,
-                    nameInputField = state.nameInputField.copy(
-                        value = TextFieldValue(card.name),
-                        suffix = UiText.DynamicString("")
+                    nameInputFieldState = state.nameInputFieldState.copy(
+                        value = TextFieldValue(card.name)
                     ),
-                    balanceInputField = state.balanceInputField.copy(
+                    balanceInputFieldState = state.balanceInputFieldState.copy(
                         value = TextFieldValue(card.balance.toString())
                     )
                 )
@@ -102,7 +101,7 @@ class CashCardViewModel(
                         card = state.card.copy(
                             name = inputFormatter.value.text
                         ),
-                        nameInputField = state.nameInputField.copy(
+                        nameInputFieldState = state.nameInputFieldState.copy(
                             value = inputFormatter.value
                         )
                     )
@@ -127,7 +126,7 @@ class CashCardViewModel(
                             title = UiText.StringResourceId(Res.string.total_of_ore, balance.value),
                             balance = balance
                         ),
-                        balanceInputField = state.balanceInputField.copy(
+                        balanceInputFieldState = state.balanceInputFieldState.copy(
                             value = inputFormatter.value
                         )
                     )
@@ -192,9 +191,9 @@ class CashCardViewModel(
             .onError {
                 _state.update { state ->
                     state.copy(
-                        nameInputField = state.nameInputField.copy(
+                        nameInputFieldState = state.nameInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
@@ -202,9 +201,9 @@ class CashCardViewModel(
             .onSuccess {
                 _state.update { state ->
                     state.copy(
-                        nameInputField = state.nameInputField.copy(
+                        nameInputFieldState = state.nameInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
@@ -217,9 +216,9 @@ class CashCardViewModel(
             .onError {
                 _state.update { state ->
                     state.copy(
-                        balanceInputField = state.balanceInputField.copy(
+                        balanceInputFieldState = state.balanceInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
@@ -227,9 +226,9 @@ class CashCardViewModel(
             .onSuccess {
                 _state.update { state ->
                     state.copy(
-                        balanceInputField = state.balanceInputField.copy(
+                        balanceInputFieldState = state.balanceInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }

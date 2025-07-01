@@ -15,11 +15,13 @@ fun <T : UiCard> UiCardCarousel(
     items: List<T>,
     page: Int,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     onClick: ((T) -> Unit)? = null
 ) {
     CarouselScaffold(
         items = items,
         page = page,
+        enabled = enabled,
         modifier = modifier
     ) { card ->
         Box(

@@ -22,6 +22,7 @@ fun <T> CarouselScaffold(
     items: List<T>,
     page: Int,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable (T) -> Unit
 ) {
 
@@ -32,7 +33,10 @@ fun <T> CarouselScaffold(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        HorizontalPager(state = pagerState) {
+        HorizontalPager(
+            state = pagerState,
+            userScrollEnabled = enabled
+        ) {
             content(items[it])
         }
 

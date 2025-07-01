@@ -23,7 +23,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
 import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardCarousel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiUnauthedCard
@@ -41,11 +41,12 @@ import org.jetbrains.compose.resources.stringResource
 fun AuthCardSheet(
     onDismiss: () -> Unit,
     loadingState: LoadingState,
+    isAuthButtonEnabled: Boolean,
     cards: List<UiUnauthedCard>,
     initialPage: Int,
-    tokenInputField: InputField,
+    tokenInputFieldState: InputFieldState,
     onChangeTokenValue: (TextFieldValue) -> Unit,
-    idInputField: InputField,
+    idInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
@@ -55,11 +56,13 @@ fun AuthCardSheet(
         loadingState = loadingState
     ) {
         AuthCardSheetContent(
+            loadingState = loadingState,
+            isAuthButtonEnabled = isAuthButtonEnabled,
             cards = cards,
             page = initialPage,
-            tokenInputField = tokenInputField,
+            tokenInputFieldState = tokenInputFieldState,
             onTokenValueChange = onChangeTokenValue,
-            idInputField = idInputField,
+            idInputFieldState = idInputFieldState,
             onChangeIdValue = onChangeIdValue,
             onClickAuthButton = onClickAuthButton,
             modifier = modifier
@@ -69,11 +72,13 @@ fun AuthCardSheet(
 
 @Composable
 private fun AuthCardSheetContent(
+    loadingState: LoadingState,
+    isAuthButtonEnabled: Boolean,
     cards: List<UiUnauthedCard>,
     page: Int,
-    tokenInputField: InputField,
+    tokenInputFieldState: InputFieldState,
     onTokenValueChange: (TextFieldValue) -> Unit,
-    idInputField: InputField,
+    idInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
@@ -93,6 +98,7 @@ private fun AuthCardSheetContent(
             UiCardCarousel(
                 items = cards,
                 page = page,
+                enabled = loadingState !is LoadingState.Loading,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -104,12 +110,13 @@ private fun AuthCardSheetContent(
 
             if (cards.isEmpty()) {
                 UiOutlinedInputField(
-                    value = idInputField.value,
+                    value = idInputFieldState.value,
                     onValueChange = { onChangeIdValue(it) },
                     label = stringResource(Res.string.enter_id),
                     placeholder = stringResource(Res.string.id),
-                    supportingText = idInputField.supportingText.asString(),
-                    isError = idInputField.supportingText.asString().isNotBlank(),
+                    supportingText = idInputFieldState.supportingText.asString(),
+                    isError = idInputFieldState.supportingText.asString().isNotBlank(),
+                    enabled = loadingState !is LoadingState.Loading,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -123,12 +130,13 @@ private fun AuthCardSheetContent(
             }
 
             UiOutlinedInputField(
-                value = tokenInputField.value,
+                value = tokenInputFieldState.value,
                 onValueChange = { onTokenValueChange(it) },
                 label = stringResource(Res.string.enter_token),
                 placeholder = stringResource(Res.string.token),
-                supportingText = tokenInputField.supportingText.asString(),
-                isError = tokenInputField.supportingText.asString().isNotBlank(),
+                supportingText = tokenInputFieldState.supportingText.asString(),
+                isError = tokenInputFieldState.supportingText.asString().isNotBlank(),
+                enabled = loadingState !is LoadingState.Loading,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
@@ -136,7 +144,7 @@ private fun AuthCardSheetContent(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                        onClickAuthButton(cards[page].id, tokenInputField.value.text)
+                        onClickAuthButton(cards[page].id, tokenInputFieldState.value.text)
                     }
                 )
             )
@@ -149,10 +157,12 @@ private fun AuthCardSheetContent(
             )
         }
 
-        val cardId = if (cards.isNotEmpty()) cards[page].id else idInputField.value.text
+        val cardId = if (cards.isNotEmpty()) cards[page].id else idInputFieldState.value.text
         UiButton(
             text = stringResource(Res.string.activate),
-            onClick = { onClickAuthButton(cardId, tokenInputField.value.text) },
+            onClick = { onClickAuthButton(cardId, tokenInputFieldState.value.text) },
+            enabled = isAuthButtonEnabled,
+            isLoading = loadingState is LoadingState.Loading,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.spacing.medium)

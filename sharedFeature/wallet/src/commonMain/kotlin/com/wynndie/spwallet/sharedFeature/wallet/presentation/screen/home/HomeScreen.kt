@@ -74,11 +74,12 @@ fun HomeScreenRoot(
         AuthCardSheet(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet) },
             loadingState = state.authLoadingState,
+            isAuthButtonEnabled = state.authLoadingState !is LoadingState.Loading,
             cards = state.unauthedCards,
             initialPage = state.carouselPage,
-            idInputField = state.idInputField,
+            idInputFieldState = state.idInputFieldState,
             onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
-            tokenInputField = state.tokenInputField,
+            tokenInputFieldState = state.tokenInputFieldState,
             onChangeTokenValue = { viewModel.onAction(HomeAction.OnChangeCardTokenValue(it)) },
             onClickAuthButton = { id, token ->
                 viewModel.onAction(

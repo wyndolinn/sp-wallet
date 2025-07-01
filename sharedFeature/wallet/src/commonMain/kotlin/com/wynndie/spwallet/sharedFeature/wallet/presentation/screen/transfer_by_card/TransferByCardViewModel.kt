@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 class TransferByCardViewModel(
     args: TransferByCardViewModelArgs,
-    private val walletRepository: WalletRepository,
+    walletRepository: WalletRepository,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val cardNumberValidator: CardNumberValidator,
     private val transferAmountValidator: BalanceValidator,
@@ -44,43 +44,48 @@ class TransferByCardViewModel(
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            walletRepository.getAuthedUsers().onEach { users ->
-                val user = users.firstOrNull() ?: return@onEach
-                _state.update { it.copy(user = user) }
-            }.launchIn(this)
-        }
 
-        viewModelScope.launch {
-            walletRepository.getAuthedCards().onEach { cards ->
-                val card = cards.find { it.id == args.cardId }
-                    ?: cards.firstOrNull()
-                    ?: return@onEach
-                _state.update { state ->
-                    state.copy(
-                        cards = cards.map { UiAuthedCard.of(it) },
-                        carouselPage = cards.indexOf(card)
+        walletRepository.getAuthedUsers().onEach { users ->
+            val user = users.firstOrNull() ?: return@onEach
+            val prefix = "${user.name}: "
+            _state.update { state ->
+                state.copy(
+                    user = user,
+                    commentInputFieldState = state.commentInputFieldState.copy(
+                        maxLength = state.commentInputFieldState.maxLength - prefix.length,
+                        prefix = prefix
                     )
-                }
-            }.launchIn(this)
-        }
+                )
+            }
+        }.launchIn(viewModelScope)
 
-        viewModelScope.launch {
-            walletRepository.getRecipients().onEach { _ ->
-                val recipient = emptyRecipientCard.toDomain()
-                _state.update { state ->
-                    state.copy(
-                        recipient = UiRecipientCard.of(recipient),
-                        recipientInputField = state.recipientInputField.copy(
-                            value = TextFieldValue(recipient.number)
-                        ),
-                        amountInputField = state.amountInputField.copy(
-                            value = TextFieldValue("0")
-                        )
+        walletRepository.getAuthedCards().onEach { cards ->
+            val card = cards.find { it.id == args.cardId }
+                ?: cards.firstOrNull()
+                ?: return@onEach
+
+            _state.update { state ->
+                state.copy(
+                    cards = cards.map { UiAuthedCard.of(it) },
+                    carouselPage = cards.indexOf(card)
+                )
+            }
+        }.launchIn(viewModelScope)
+
+        walletRepository.getRecipients().onEach { _ ->
+            val recipient = emptyRecipientCard.toDomain()
+            _state.update { state ->
+                state.copy(
+                    recipient = UiRecipientCard.of(recipient),
+                    recipientInputFieldState = state.recipientInputFieldState.copy(
+                        value = TextFieldValue(recipient.number)
+                    ),
+                    amountInputFieldState = state.amountInputFieldState.copy(
+                        value = TextFieldValue("0")
                     )
-                }
-            }.launchIn(this)
-        }
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: TransferByCardAction) {
@@ -152,7 +157,7 @@ class TransferByCardViewModel(
 
                 _state.update { state ->
                     state.copy(
-                        recipientInputField = state.recipientInputField.copy(
+                        recipientInputFieldState = state.recipientInputFieldState.copy(
                             value = inputFormatter.value
                         ),
                         recipient = state.recipient.copy(
@@ -171,7 +176,7 @@ class TransferByCardViewModel(
 
                 _state.update { state ->
                     state.copy(
-                        amountInputField = state.amountInputField.copy(
+                        amountInputFieldState = state.amountInputFieldState.copy(
                             value = inputFormatter.value
                         )
                     )
@@ -185,7 +190,7 @@ class TransferByCardViewModel(
 
                 _state.update { state ->
                     state.copy(
-                        commentInputField = state.commentInputField.copy(
+                        commentInputFieldState = state.commentInputFieldState.copy(
                             value = inputFormatter.value
                         )
                     )
@@ -200,9 +205,9 @@ class TransferByCardViewModel(
             .onError { error ->
                 _state.update {
                     it.copy(
-                        recipientInputField = it.recipientInputField.copy(
+                        recipientInputFieldState = it.recipientInputFieldState.copy(
                             supportingText = error.asUiText(),
-                            isError = true
+                            hasError = true
                         )
                     )
                 }
@@ -210,9 +215,9 @@ class TransferByCardViewModel(
             .onSuccess {
                 _state.update {
                     it.copy(
-                        recipientInputField = it.recipientInputField.copy(
+                        recipientInputFieldState = it.recipientInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
@@ -225,9 +230,9 @@ class TransferByCardViewModel(
             .onError { error ->
                 _state.update {
                     it.copy(
-                        amountInputField = it.amountInputField.copy(
+                        amountInputFieldState = it.amountInputFieldState.copy(
                             supportingText = error.asUiText(),
-                            isError = true
+                            hasError = true
                         )
                     )
                 }
@@ -235,9 +240,9 @@ class TransferByCardViewModel(
             .onSuccess {
                 _state.update {
                     it.copy(
-                        amountInputField = it.amountInputField.copy(
+                        amountInputFieldState = it.amountInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
@@ -250,9 +255,9 @@ class TransferByCardViewModel(
             .onError { error ->
                 _state.update {
                     it.copy(
-                        commentInputField = it.commentInputField.copy(
+                        commentInputFieldState = it.commentInputFieldState.copy(
                             supportingText = error.asUiText(),
-                            isError = true
+                            hasError = true
                         )
                     )
                 }
@@ -260,9 +265,9 @@ class TransferByCardViewModel(
             .onSuccess {
                 _state.update {
                     it.copy(
-                        commentInputField = it.commentInputField.copy(
+                        commentInputFieldState = it.commentInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }

@@ -68,7 +68,7 @@ fun TransferByCardScreenRoot(
                 viewModel.onAction(TransferByCardAction.OnToggleRecipientSheet)
             },
             onClickRecipient = { viewModel.onAction(TransferByCardAction.OnClickRecipient(it)) },
-            receiverInputField = state.recipientInputField,
+            receiverInputFieldState = state.recipientInputFieldState,
             onChangeRecipientValue = {
                 viewModel.onAction(TransferByCardAction.OnChangeRecipientValue(it))
             },
@@ -184,12 +184,12 @@ private fun TransferByNumberScreen(
         ) {
 
             UiOutlinedInputField(
-                value = state.amountInputField.value,
+                value = state.amountInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
                 label = stringResource(Res.string.enter_transfer_amount),
                 placeholder = stringResource(Res.string.transfer_amount),
-                supportingText = state.amountInputField.supportingText.asString(),
-                isError = state.amountInputField.supportingText.asString().isNotBlank(),
+                supportingText = state.amountInputFieldState.supportingText.asString(),
+                isError = state.amountInputFieldState.supportingText.asString().isNotBlank(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -203,13 +203,13 @@ private fun TransferByNumberScreen(
             )
 
             UiOutlinedInputField(
-                value = state.commentInputField.value,
+                value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
                 label = stringResource(Res.string.enter_comment),
                 placeholder = stringResource(Res.string.comment),
-                suffix = state.commentInputField.suffix?.asString(),
-                supportingText = state.commentInputField.supportingText.asString(),
-                isError = state.commentInputField.supportingText.asString().isNotBlank(),
+                suffix = state.commentInputFieldState.suffix?.asString(),
+                supportingText = state.commentInputFieldState.supportingText.asString(),
+                isError = state.commentInputFieldState.supportingText.asString().isNotBlank(),
                 singleLine = false,
                 minLines = 2,
                 keyboardOptions = KeyboardOptions(
@@ -222,8 +222,8 @@ private fun TransferByNumberScreen(
                         onAction(
                             TransferByCardAction.OnClickTransfer(
                                 cardNumber = state.recipient.number,
-                                transferAmount = state.amountInputField.value.text,
-                                comment = state.commentInputField.value.text,
+                                transferAmount = state.amountInputFieldState.value.text,
+                                comment = state.commentInputFieldState.value.text,
                                 navigateBack = navigateBack
                             )
                         )
@@ -242,8 +242,8 @@ private fun TransferByNumberScreen(
                 onAction(
                     TransferByCardAction.OnClickTransfer(
                         cardNumber = state.recipient.number,
-                        transferAmount = state.amountInputField.value.text,
-                        comment = state.commentInputField.value.text,
+                        transferAmount = state.amountInputFieldState.value.text,
+                        comment = state.commentInputFieldState.value.text,
                         navigateBack = navigateBack
                     )
                 )

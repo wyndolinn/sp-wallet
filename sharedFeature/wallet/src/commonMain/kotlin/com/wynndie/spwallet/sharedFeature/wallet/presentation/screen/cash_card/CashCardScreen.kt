@@ -70,7 +70,7 @@ fun CashCardScreenRoot(
     if (state.isCustomizationSheetVisible) {
         CustomizationSheet(
             onDismiss = { viewModel.onAction(CashCardAction.OnToggleCustomizationSheet) },
-            idInputField = state.nameInputField,
+            idInputFieldState = state.nameInputFieldState,
             onIdValueChange = { viewModel.onAction(CashCardAction.OnChangeNameValue(it)) },
             selectedColorChip = state.selectedColorChip,
             onColorChipClick = { viewModel.onAction(CashCardAction.OnClickColorChip(it)) },
@@ -201,12 +201,12 @@ private fun CashCardScreen(
             )
 
             UiOutlinedInputField(
-                value = state.balanceInputField.value,
+                value = state.balanceInputFieldState.value,
                 onValueChange = { onAction(CashCardAction.OnChangeBalanceValue(it)) },
                 label = stringResource(Res.string.enter_balance),
                 placeholder = stringResource(Res.string.balance),
-                supportingText = state.balanceInputField.supportingText.asString(),
-                isError = state.balanceInputField.supportingText.asString().isNotBlank(),
+                supportingText = state.balanceInputFieldState.supportingText.asString(),
+                isError = state.balanceInputFieldState.supportingText.asString().isNotBlank(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -227,8 +227,8 @@ private fun CashCardScreen(
             onClick = {
                 onAction(
                     CashCardAction.OnClickSaveCard(
-                        cardName = state.nameInputField.value.text,
-                        cardBalance = state.balanceInputField.value.text,
+                        cardName = state.nameInputFieldState.value.text,
+                        cardBalance = state.balanceInputFieldState.value.text,
                         navigateBack = navigateBack
                     )
                 )

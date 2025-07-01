@@ -1,7 +1,8 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.transfer_by_card
 
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputField
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedFeature.wallet.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.AuthedUser
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiAuthedCard
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiRecipientCard
@@ -23,7 +24,13 @@ data class TransferByCardState(
     val isCalculatorSheetVisible: Boolean = false,
     val isChangeRecipientSheetVisible: Boolean = false,
 
-    val recipientInputField: InputField = InputField(),
-    val amountInputField: InputField = InputField(),
-    val commentInputField: InputField = InputField()
+    val recipientInputFieldState: InputFieldState = InputFieldState(
+        maxLength = Constants.CARD_NUMBER_LENGTH
+    ),
+    val amountInputFieldState: InputFieldState = InputFieldState(
+        maxLength = Constants.MAX_BALANCE_LENGTH
+    ),
+    val commentInputFieldState: InputFieldState = InputFieldState(
+        maxLength = Constants.MAX_COMMENT_LENGTH
+    )
 )

@@ -44,43 +44,34 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-
             syncWithRemote()
-
-            launch {
-                walletRepository.getAuthedUsers().onEach { users ->
-                    users.firstOrNull()?.let { user ->
-                        _state.update { it.copy(authedUser = user) }
-                    }
-                }.launchIn(this)
-            }
-
-            launch {
-                walletRepository.getAuthedCards().onEach { cards ->
-                    _state.update { state ->
-                        state.copy(authedCards = cards.map { UiAuthedCard.of(it) })
-                    }
-                    updateBalance()
-                }.launchIn(this)
-            }
-
-            launch {
-                walletRepository.getUnauthedCards().onEach { cards ->
-                    _state.update { state ->
-                        state.copy(unauthedCards = cards.map { UiUnauthedCard.of(it) })
-                    }
-                }.launchIn(this)
-            }
-
-            launch {
-                walletRepository.getCashCards().onEach { cards ->
-                    _state.update { state ->
-                        state.copy(cashCards = cards.map { UiCashCard.of(it) })
-                    }
-                    updateBalance()
-                }.launchIn(this)
-            }
         }
+
+        walletRepository.getAuthedUsers().onEach { users ->
+            users.firstOrNull()?.let { user ->
+                _state.update { it.copy(authedUser = user) }
+            }
+        }.launchIn(viewModelScope)
+
+        walletRepository.getAuthedCards().onEach { cards ->
+            _state.update { state ->
+                state.copy(authedCards = cards.map { UiAuthedCard.of(it) })
+            }
+            updateBalance()
+        }.launchIn(viewModelScope)
+
+        walletRepository.getUnauthedCards().onEach { cards ->
+            _state.update { state ->
+                state.copy(unauthedCards = cards.map { UiUnauthedCard.of(it) })
+            }
+        }.launchIn(viewModelScope)
+
+        walletRepository.getCashCards().onEach { cards ->
+            _state.update { state ->
+                state.copy(cashCards = cards.map { UiCashCard.of(it) })
+            }
+            updateBalance()
+        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: HomeAction) {
@@ -113,8 +104,8 @@ class HomeViewModel(
             HomeAction.OnToggleAuthedCardSheet -> {
                 _state.update { state ->
                     state.copy(
-                        isAuthedCardSheetVisible = !state.isAuthedCardSheetVisible,
                         isAuthCardSheetVisible = false,
+                        isAuthedCardSheetVisible = !state.isAuthedCardSheetVisible,
                         isDeactivateCardDialogVisible = false
                     )
                 }
@@ -123,9 +114,9 @@ class HomeViewModel(
             HomeAction.OnToggleDeleteCardDialog -> {
                 _state.update { state ->
                     state.copy(
-                        isDeactivateCardDialogVisible = !state.isDeactivateCardDialogVisible,
                         isAuthCardSheetVisible = false,
-                        isAuthedCardSheetVisible = true
+                        isAuthedCardSheetVisible = true,
+                        isDeactivateCardDialogVisible = !state.isDeactivateCardDialogVisible
                     )
                 }
             }
@@ -215,11 +206,11 @@ class HomeViewModel(
             is HomeAction.OnChangeCardIdValue -> {
                 val inputFormatter = InputFormatter(action.value)
                     .filterBy(FilterOptions.Structured.Uuid.predicate)
-                    .cutOffAt(Constants.UUID_LENGTH) ?: return
+                    .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
-                        idInputField = state.idInputField.copy(
+                        idInputFieldState = state.idInputFieldState.copy(
                             value = inputFormatter.value
                         )
                     )
@@ -229,11 +220,11 @@ class HomeViewModel(
             is HomeAction.OnChangeCardTokenValue -> {
                 val inputFormatter = InputFormatter(action.value)
                     .filterBy(FilterOptions.Structured.Base64.predicate)
-                    .cutOffAt(Constants.TOKEN_LENGTH) ?: return
+                    .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
-                        tokenInputField = state.tokenInputField.copy(
+                        tokenInputFieldState = state.tokenInputFieldState.copy(
                             value = inputFormatter.value
                         )
                     )
@@ -281,9 +272,9 @@ class HomeViewModel(
             .onError { error ->
                 _state.update { state ->
                     state.copy(
-                        tokenInputField = state.tokenInputField.copy(
+                        tokenInputFieldState = state.tokenInputFieldState.copy(
                             supportingText = error.asUiText(),
-                            isError = true
+                            hasError = true
                         )
                     )
                 }
@@ -291,9 +282,9 @@ class HomeViewModel(
             .onSuccess {
                 _state.update { state ->
                     state.copy(
-                        tokenInputField = state.tokenInputField.copy(
+                        tokenInputFieldState = state.tokenInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
@@ -306,9 +297,9 @@ class HomeViewModel(
             .onError { error ->
                 _state.update { state ->
                     state.copy(
-                        idInputField = state.idInputField.copy(
+                        idInputFieldState = state.idInputFieldState.copy(
                             supportingText = error.asUiText(),
-                            isError = true
+                            hasError = true
                         )
                     )
                 }
@@ -316,9 +307,9 @@ class HomeViewModel(
             .onSuccess {
                 _state.update { state ->
                     state.copy(
-                        idInputField = state.idInputField.copy(
+                        idInputFieldState = state.idInputFieldState.copy(
                             supportingText = UiText.DynamicString(""),
-                            isError = false
+                            hasError = false
                         )
                     )
                 }
