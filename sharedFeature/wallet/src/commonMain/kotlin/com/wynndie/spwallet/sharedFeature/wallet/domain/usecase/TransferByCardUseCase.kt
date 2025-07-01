@@ -4,8 +4,6 @@ import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
-import com.wynndie.spwallet.sharedCore.domain.error.getOrThrow
-import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.Transfer
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.card.AuthedCard
 import com.wynndie.spwallet.sharedFeature.wallet.domain.repository.WalletRepository
