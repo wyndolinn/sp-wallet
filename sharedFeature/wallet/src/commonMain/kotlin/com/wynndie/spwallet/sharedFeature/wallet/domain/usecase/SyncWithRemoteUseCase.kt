@@ -3,6 +3,8 @@ package com.wynndie.spwallet.sharedFeature.wallet.domain.usecase
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
+import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
+import com.wynndie.spwallet.sharedCore.domain.error.getOrNull
 import com.wynndie.spwallet.sharedCore.domain.error.getOrThrow
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
@@ -22,7 +24,7 @@ class SyncWithRemoteUseCase(
         authedCards.forEach { authedCard ->
             updateAuthedCard(authedCard)
                 .onError { error -> return Outcome.Error(error) }
-                .onSuccess { user -> unAuthedUser = user }
+                .onSuccess { user -> if (user != null) unAuthedUser = user }
         }
 
         clearUserAndUnauthedCardsData()
@@ -53,25 +55,21 @@ class SyncWithRemoteUseCase(
 
     private suspend fun updateAuthedCard(
         authedCard: AuthedCard
-    ): Outcome<UnauthedUser, DataError.Remote> {
+    ): Outcome<UnauthedUser?, DataError.Remote> {
 
-        val user = walletRepository.getUnauthedUser(authedCard.authKey)
-            .onError { error ->
-                if (error != DataError.Remote.UNAUTHORIZED) return Outcome.Error(error)
-                walletRepository.deleteAuthedCard(authedCard)
-            }
-            .getOrThrow()
+        val user = walletRepository.getUnauthedUser(authedCard.authKey).onError {
+            if (it != DataError.Remote.UNAUTHORIZED) return Outcome.Error(it)
+            walletRepository.deleteAuthedCard(authedCard)
+        }.getOrNull() ?: return Outcome.Success(null)
 
-        walletRepository.getCardBalance(authedCard.authKey)
-            .onError { error ->
-                if (error != DataError.Remote.UNAUTHORIZED) return Outcome.Error(error)
-                walletRepository.deleteAuthedCard(authedCard)
-            }
-            .onSuccess { cardBalance ->
-                walletRepository.insertAuthedCard(
-                    authedCard.copy(balance = cardBalance.value)
-                )
-            }
+        val cardBalance = walletRepository.getCardBalance(authedCard.authKey).onError {
+            if (it != DataError.Remote.UNAUTHORIZED) return Outcome.Error(it)
+            walletRepository.deleteAuthedCard(authedCard)
+        }.getOrNull() ?: return Outcome.Success(null)
+
+        walletRepository.insertAuthedCard(
+            authedCard.copy(balance = cardBalance.value)
+        )
 
         return Outcome.Success(user)
     }

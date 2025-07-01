@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedFeature.wallet.domain.usecase
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
+import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.error.getOrThrow
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedFeature.wallet.domain.model.Transfer
@@ -27,8 +28,7 @@ class TransferByCardUseCase(
         )
 
         val cardBalance = walletRepository.makeTransaction(card.authKey, transfer)
-            .onError { error -> return Outcome.Error(error) }
-            .getOrThrow()
+            .getOrElse { return Outcome.Error(it) }
 
         walletRepository.insertAuthedCard(
             card = card.copy(balance = cardBalance.value)

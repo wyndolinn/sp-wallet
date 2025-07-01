@@ -55,10 +55,3 @@ fun <D, E : RootError> Outcome<D, E>.getOrNull(): D? {
         is Outcome.Error -> null
     }
 }
-
-fun <D, E : RootError> Outcome<D, E>.getOrThrow(): D {
-    return when (this) {
-        is Outcome.Success -> data
-        is Outcome.Error -> throw IllegalStateException(error.toString())
-    }
-}

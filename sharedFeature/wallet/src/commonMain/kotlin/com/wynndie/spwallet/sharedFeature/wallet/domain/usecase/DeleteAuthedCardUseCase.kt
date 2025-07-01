@@ -8,15 +8,13 @@ class DeleteAuthedCardUseCase(
     private val walletRepository: WalletRepository
 ) {
 
-    operator suspend fun invoke(card: AuthedCard) {
+    suspend operator fun invoke(card: AuthedCard) {
         walletRepository.deleteAuthedCard(card)
 
         val authedCards = walletRepository.getAuthedCards().first()
         if (authedCards.isNotEmpty()) return
 
         val unauthedCards = walletRepository.getUnauthedCards().first()
-        unauthedCards.forEach {
-            walletRepository.deleteUnauthedCard(it)
-        }
+        unauthedCards.forEach { walletRepository.deleteUnauthedCard(it) }
     }
 }
