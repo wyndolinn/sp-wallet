@@ -98,6 +98,7 @@ class CashCardViewModel(
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
+                            label = UiText.DynamicString(inputFormatter.value.text),
                             name = inputFormatter.value.text
                         ),
                         nameInputFieldState = state.nameInputFieldState.copy(
