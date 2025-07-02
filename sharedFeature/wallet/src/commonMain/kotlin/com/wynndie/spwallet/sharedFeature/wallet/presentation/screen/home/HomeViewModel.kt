@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.getOrNull
@@ -140,8 +141,16 @@ class HomeViewModel(
                             }
                             .onSuccess {
                                 syncWithRemoteUseCase()
-                                _state.update {
-                                    it.copy(isAuthCardSheetVisible = false)
+                                _state.update { state ->
+                                    state.copy(
+                                        idInputFieldState = state.idInputFieldState.copy(
+                                            value = TextFieldValue("")
+                                        ),
+                                        tokenInputFieldState = state.tokenInputFieldState.copy(
+                                            value = TextFieldValue("")
+                                        ),
+                                        isAuthCardSheetVisible = false
+                                    )
                                 }
                             }
                     }
