@@ -4,6 +4,8 @@
 
     <!--  COMMON ACTIONS  -->
     <string name="activate">Активировать</string>
+    <string name="add">Добавить</string>
+    <string name="create">Создать</string>
     <string name="apply">Применить</string>
     <string name="transfer">Перевести</string>
     <string name="save">Сохранить</string>
@@ -70,7 +72,6 @@
 
 
     <string name="require_activation">Требуется активация</string>
-    <string name="create_cash_card">Создать наличный счёт</string>
 
     <string name="transaction_succeed">Перевод прошёл успешно</string>
     <string name="cash_creation_succeed">Карта успешно сохранена</string>

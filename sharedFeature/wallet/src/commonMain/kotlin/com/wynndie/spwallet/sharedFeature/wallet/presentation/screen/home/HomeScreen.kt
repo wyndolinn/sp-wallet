@@ -52,7 +52,7 @@ import com.wynndie.spwallet.sharedResources.app_logo_foreground
 import com.wynndie.spwallet.sharedResources.app_name
 import com.wynndie.spwallet.sharedResources.bank_cards
 import com.wynndie.spwallet.sharedResources.cash_cards
-import com.wynndie.spwallet.sharedResources.create_cash_card
+import com.wynndie.spwallet.sharedResources.create
 import com.wynndie.spwallet.sharedResources.total_balance
 import com.wynndie.spwallet.sharedResources.total_of_ore
 import org.jetbrains.compose.resources.painterResource
@@ -294,7 +294,7 @@ private fun HomeScreenContent(
                     trailingContent = if (state.cashCards.size < Constants.MAX_CASH_CARDS_AMOUNT) {
                         {
                             UiOutlinedButton(
-                                text = stringResource(Res.string.create_cash_card),
+                                text = stringResource(Res.string.create),
                                 onClick = {
                                     onAction(
                                         HomeAction.OnClickCashCard(
