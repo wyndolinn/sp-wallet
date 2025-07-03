@@ -19,9 +19,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
-import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingDialog
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState

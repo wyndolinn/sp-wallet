@@ -35,8 +35,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing

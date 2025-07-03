@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedCore.presentation.component.card.HorizontalMediumCard
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.horizontalCard.HorizontalMediumCard
 import com.wynndie.spwallet.sharedCore.presentation.theme.radius
 
 @Composable

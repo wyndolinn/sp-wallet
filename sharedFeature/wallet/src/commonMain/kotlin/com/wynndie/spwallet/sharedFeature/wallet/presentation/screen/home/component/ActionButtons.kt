@@ -8,7 +8,7 @@ import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTonalIconButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_card

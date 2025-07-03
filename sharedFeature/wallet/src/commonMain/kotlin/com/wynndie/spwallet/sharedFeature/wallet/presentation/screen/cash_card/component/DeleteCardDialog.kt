@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.cash_card.
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.dialog.AlertDialogScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.AlertDialogScaffold
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.delete_card_description

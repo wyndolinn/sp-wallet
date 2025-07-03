@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.LargeInfoDisplay
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.infoDisplay.LargeInfoDisplay
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits

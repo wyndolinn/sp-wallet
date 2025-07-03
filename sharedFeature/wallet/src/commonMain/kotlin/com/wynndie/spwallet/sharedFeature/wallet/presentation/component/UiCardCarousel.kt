@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.carousel.CarouselScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.carousel.CarouselScaffold
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiCard
 

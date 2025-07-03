@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedFeature.wallet.presentation.component
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.titledContent.VerticalTitledList
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.list.VerticalTitledList
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiCard
 
 @Composable

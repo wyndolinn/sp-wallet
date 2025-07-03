@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedFeature.wallet.presentation.screen.home.compo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.dialog.AlertDialogScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.AlertDialogScaffold
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.deactivate_card_description

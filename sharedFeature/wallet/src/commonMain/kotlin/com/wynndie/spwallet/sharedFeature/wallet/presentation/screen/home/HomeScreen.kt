@@ -30,8 +30,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiOutlinedButton
-import com.wynndie.spwallet.sharedCore.presentation.component.infoDisplay.MediumInfoDisplay
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiOutlinedButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.infoDisplay.MediumInfoDisplay
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState

@@ -11,9 +11,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTextButton
-import com.wynndie.spwallet.sharedCore.presentation.component.button.UiTonalIconButton
-import com.wynndie.spwallet.sharedCore.presentation.component.dialog.BottomSheetScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTextButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTonalIconButton
+import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.component.UiCardCarousel
 import com.wynndie.spwallet.sharedFeature.wallet.presentation.model.UiAuthedCard
