@@ -276,52 +276,28 @@ class HomeViewModel(
     }
 
     private fun isCardTokenValid(token: String): Boolean {
-        return tokenValidator.validate(token)
-            .onError { error ->
-                _state.update { state ->
-                    state.copy(
-                        tokenInputFieldState = state.tokenInputFieldState.copy(
-                            supportingText = error.asUiText(),
-                            hasError = true
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update { state ->
-                    state.copy(
-                        tokenInputFieldState = state.tokenInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = tokenValidator.validate(token)
+        _state.update { state ->
+            state.copy(
+                tokenInputFieldState = state.tokenInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 
     private fun isCardIdValid(id: String): Boolean {
-        return uuidValidator.validate(id)
-            .onError { error ->
-                _state.update { state ->
-                    state.copy(
-                        idInputFieldState = state.idInputFieldState.copy(
-                            supportingText = error.asUiText(),
-                            hasError = true
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update { state ->
-                    state.copy(
-                        idInputFieldState = state.idInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = uuidValidator.validate(id)
+        _state.update { state ->
+            state.copy(
+                idInputFieldState = state.idInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 }

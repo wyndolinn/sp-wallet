@@ -187,52 +187,28 @@ class CashCardViewModel(
     }
 
     private fun isCardNameValid(value: String): Boolean {
-        return cardNameValidator.validate(value)
-            .onError {
-                _state.update { state ->
-                    state.copy(
-                        nameInputFieldState = state.nameInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update { state ->
-                    state.copy(
-                        nameInputFieldState = state.nameInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = cardNameValidator.validate(value)
+        _state.update { state ->
+            state.copy(
+                nameInputFieldState = state.nameInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 
     private fun isCardBalanceValid(value: String): Boolean {
-        return balanceValidator.validate(value)
-            .onError {
-                _state.update { state ->
-                    state.copy(
-                        balanceInputFieldState = state.balanceInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update { state ->
-                    state.copy(
-                        balanceInputFieldState = state.balanceInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = balanceValidator.validate(value)
+        _state.update { state ->
+            state.copy(
+                balanceInputFieldState = state.balanceInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 }

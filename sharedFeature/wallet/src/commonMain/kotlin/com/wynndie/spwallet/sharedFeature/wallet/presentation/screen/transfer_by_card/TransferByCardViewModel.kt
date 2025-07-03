@@ -44,7 +44,6 @@ class TransferByCardViewModel(
     val state = _state.asStateFlow()
 
     init {
-
         walletRepository.getAuthedUsers().onEach { users ->
             val user = users.firstOrNull() ?: return@onEach
             val prefix = "${user.name}: "
@@ -201,77 +200,41 @@ class TransferByCardViewModel(
 
 
     private fun isCardNumberValid(value: String): Boolean {
-        return cardNumberValidator.validate(value)
-            .onError { error ->
-                _state.update {
-                    it.copy(
-                        recipientInputFieldState = it.recipientInputFieldState.copy(
-                            supportingText = error.asUiText(),
-                            hasError = true
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update {
-                    it.copy(
-                        recipientInputFieldState = it.recipientInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = cardNumberValidator.validate(value)
+        _state.update { state ->
+            state.copy(
+                recipientInputFieldState = state.recipientInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 
     private fun isTransferAmountValid(value: String): Boolean {
-        return transferAmountValidator.validate(value)
-            .onError { error ->
-                _state.update {
-                    it.copy(
-                        amountInputFieldState = it.amountInputFieldState.copy(
-                            supportingText = error.asUiText(),
-                            hasError = true
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update {
-                    it.copy(
-                        amountInputFieldState = it.amountInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = transferAmountValidator.validate(value)
+        _state.update { state ->
+            state.copy(
+                amountInputFieldState = state.amountInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 
     private fun isCommentValid(value: String): Boolean {
-        return commentValidator.validate(value)
-            .onError { error ->
-                _state.update {
-                    it.copy(
-                        commentInputFieldState = it.commentInputFieldState.copy(
-                            supportingText = error.asUiText(),
-                            hasError = true
-                        )
-                    )
-                }
-            }
-            .onSuccess {
-                _state.update {
-                    it.copy(
-                        commentInputFieldState = it.commentInputFieldState.copy(
-                            supportingText = UiText.DynamicString(""),
-                            hasError = false
-                        )
-                    )
-                }
-            }
-            .getOrNull() ?: false
+        val (isValid, error) = commentValidator.validate(value)
+        _state.update { state ->
+            state.copy(
+                commentInputFieldState = state.commentInputFieldState.copy(
+                    supportingText = error?.asUiText(),
+                    hasError = !isValid
+                )
+            )
+        }
+        return isValid
     }
 }
