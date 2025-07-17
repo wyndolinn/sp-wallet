@@ -37,28 +37,19 @@ kotlin {
         androidMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-
-            implementation(libs.ktor.client.okhttp)
         }
 
         commonMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
 
-            implementation(libs.kotlinx.serialization.json)
-
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
-
-            implementation(libs.bundles.ktor)
-            implementation(libs.bundles.coil)
         }
 
         iosMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-
-            implementation(libs.ktor.client.darwin)
         }
 
         dependencies {

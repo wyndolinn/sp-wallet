@@ -29,7 +29,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.input
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.CardColor
+import com.wynndie.spwallet.sharedCore.presentation.model.CardColor
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
 import com.wynndie.spwallet.sharedResources.card_name

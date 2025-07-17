@@ -40,8 +40,8 @@ import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.input
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.UiCardCarousel
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.UiCardItem
+import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardCarousel
+import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardItem
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.component.RecipientSheet
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number

@@ -7,7 +7,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.getOrNull
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedFeature.home.domain.model.UnauthedUser
-import com.wynndie.spwallet.sharedFeature.home.domain.model.card.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 import kotlinx.coroutines.flow.first
 

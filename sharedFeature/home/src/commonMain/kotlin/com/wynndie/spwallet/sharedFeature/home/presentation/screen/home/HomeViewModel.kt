@@ -17,10 +17,10 @@ import com.wynndie.spwallet.sharedFeature.home.domain.usecase.DeleteAuthedCardUs
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiAuthedCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiCashCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn

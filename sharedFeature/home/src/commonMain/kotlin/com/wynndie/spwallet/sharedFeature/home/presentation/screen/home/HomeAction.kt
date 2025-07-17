@@ -1,9 +1,9 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screen.home
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiAuthedCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiCashCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
 
 sealed interface HomeAction {
     data object OnRefresh : HomeAction

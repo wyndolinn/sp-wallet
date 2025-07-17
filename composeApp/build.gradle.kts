@@ -5,7 +5,10 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -26,6 +29,10 @@ kotlin {
         }
     }
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
     sourceSets {
 
         androidMain.dependencies {
@@ -44,6 +51,9 @@ kotlin {
             implementation(projects.sharedFeature.edit)
 
             implementation(libs.jetbrains.compose.navigation)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
 
         iosMain.dependencies {
@@ -52,6 +62,10 @@ kotlin {
             implementation(projects.sharedFeature.home)
             implementation(projects.sharedFeature.transfer)
             implementation(projects.sharedFeature.edit)
+        }
+
+        dependencies {
+            ksp(libs.androidx.room.compiler)
         }
     }
 }

@@ -15,8 +15,8 @@ import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.butto
 import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.UiCardCarousel
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardCarousel
+import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.transfer_by_number

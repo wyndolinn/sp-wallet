@@ -43,6 +43,8 @@ kotlin {
 
             api(libs.koin.android)
             api(libs.koin.androidx.compose)
+
+            api(libs.ktor.client.okhttp)
         }
 
         commonMain.dependencies {
@@ -64,10 +66,18 @@ kotlin {
 
             api(libs.kotlinx.serialization.json)
             api(libs.bundles.ktor)
+
+            api(libs.bundles.ktor)
+            api(libs.bundles.coil)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
 
         iosMain.dependencies {
             api(projects.sharedResources)
+
+            api(libs.ktor.client.darwin)
         }
 
         dependencies {

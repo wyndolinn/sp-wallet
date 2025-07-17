@@ -1,6 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.model
 
-import com.wynndie.spwallet.sharedFeature.home.domain.model.card.UnauthedCard
+import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
+import com.wynndie.spwallet.sharedCore.domain.model.UnauthedCard
 
 data class UnauthedUser(
     val id: String,

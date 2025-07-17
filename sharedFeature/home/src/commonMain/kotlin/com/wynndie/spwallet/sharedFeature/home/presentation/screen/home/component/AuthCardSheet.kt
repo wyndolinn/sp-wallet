@@ -26,8 +26,8 @@ import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingDia
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.UiCardCarousel
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardCarousel
+import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction

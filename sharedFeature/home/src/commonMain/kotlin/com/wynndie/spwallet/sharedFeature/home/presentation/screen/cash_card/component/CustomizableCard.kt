@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import com.wynndie.spwallet.sharedCore.presentation.theme.radius
 import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
 import com.wynndie.spwallet.sharedResources.no_name

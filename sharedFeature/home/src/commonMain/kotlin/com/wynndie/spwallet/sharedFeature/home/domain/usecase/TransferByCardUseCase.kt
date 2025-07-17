@@ -5,7 +5,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
 import com.wynndie.spwallet.sharedFeature.home.domain.model.Transfer
-import com.wynndie.spwallet.sharedFeature.home.domain.model.card.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 
 class TransferByCardUseCase(

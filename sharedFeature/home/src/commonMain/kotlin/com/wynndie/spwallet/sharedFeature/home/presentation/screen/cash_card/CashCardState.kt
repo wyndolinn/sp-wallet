@@ -2,9 +2,9 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card
 
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedFeature.home.domain.constants.Constants
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiCashCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.emptyCashCard
+import com.wynndie.spwallet.sharedCore.domain.constants.Constants
+import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
 
 data class CashCardState(
     val screenLoadingState: LoadingState = LoadingState.Finished,

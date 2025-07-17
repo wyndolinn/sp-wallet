@@ -2,11 +2,11 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_
 
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedFeature.home.domain.constants.Constants
-import com.wynndie.spwallet.sharedFeature.home.domain.model.AuthedUser
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiAuthedCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.UiRecipientCard
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.constants.Constants
+import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
+import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipientCard
+import com.wynndie.spwallet.sharedCore.presentation.model.emptyRecipientCard
 
 data class TransferByCardState(
     val loadingState: LoadingState = LoadingState.Finished,

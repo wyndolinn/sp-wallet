@@ -37,9 +37,9 @@ import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.home.domain.constants.Constants
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.UiCardList
-import com.wynndie.spwallet.sharedFeature.home.presentation.model.emptyCashCard
+import com.wynndie.spwallet.sharedCore.domain.constants.Constants
+import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardList
+import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.AppBarContent
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.AuthCardOffer
