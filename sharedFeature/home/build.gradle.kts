@@ -2,10 +2,13 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -21,51 +24,55 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "FeatureHome"
             isStatic = true
         }
     }
 
-    sourceSets {
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 
+    sourceSets {
         androidMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
+
+            implementation(libs.ktor.client.okhttp)
         }
 
         commonMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
 
-            implementation(libs.jetbrains.compose.navigation)
+            implementation(libs.kotlinx.serialization.json)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.coil)
         }
 
         iosMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
+
+            implementation(libs.ktor.client.darwin)
+        }
+
+        dependencies {
+            ksp(libs.androidx.room.compiler)
         }
     }
 }
 
 android {
-    namespace = "com.wynndie.spwallet"
+    namespace = "com.wynndie.spwallet.sharedFeature.home"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.wynndie.spwallet"
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
     }
     packaging {
         resources {

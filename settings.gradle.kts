@@ -31,6 +31,6 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":sharedResources")
 include(":sharedCore")
-include(":sharedFeature:wallet")
+include(":sharedFeature:home")
 include(":sharedFeature:transfer")
 include(":sharedFeature:edit")

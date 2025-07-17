@@ -46,7 +46,6 @@ kotlin {
             implementation(projects.sharedResources)
 
             implementation(libs.kotlinx.serialization.json)
-
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
 
