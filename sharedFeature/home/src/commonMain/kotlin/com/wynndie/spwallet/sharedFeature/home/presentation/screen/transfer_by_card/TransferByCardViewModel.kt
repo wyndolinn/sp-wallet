@@ -10,7 +10,7 @@ import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogCont
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
-import com.wynndie.spwallet.sharedCore.presentation.model.input.FilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
@@ -18,7 +18,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.usecase.TransferByCardUseC
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.CardNumberValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
-import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipientCard
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyRecipientCard
 import com.wynndie.spwallet.sharedResources.Res
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransferByCardViewModel(
-    args: TransferByCardViewModelArgs,
+    private val args: TransferByCardViewModelArgs,
     walletRepository: WalletRepository,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val cardNumberValidator: CardNumberValidator,
@@ -107,6 +107,10 @@ class TransferByCardViewModel(
             }
 
 
+            TransferByCardAction.OnClickBack -> {
+                args.onClickBack()
+            }
+
             is TransferByCardAction.OnClickRecipient -> {
                 _state.update { state ->
                     state.copy(
@@ -139,7 +143,7 @@ class TransferByCardViewModel(
                             DialogController.send(
                                 Dialog.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
                             )
-                            action.navigateBack()
+                            args.onClickBack()
                         }
                     }
 
@@ -150,7 +154,7 @@ class TransferByCardViewModel(
 
             is TransferByCardAction.OnChangeRecipientValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Digits.DigitsOnly.predicate)
+                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .cutOffAt(Constants.CARD_NUMBER_LENGTH) ?: return
 
                 _state.update { state ->
@@ -159,7 +163,6 @@ class TransferByCardViewModel(
                             value = inputFormatter.value
                         ),
                         recipient = state.recipient.copy(
-                            title = UiText.DynamicString(inputFormatter.value.text),
                             number = inputFormatter.value.text
                         )
                     )
@@ -168,7 +171,7 @@ class TransferByCardViewModel(
 
             is TransferByCardAction.OnChangeTransferAmountValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Digits.DigitsOnly.predicate)
+                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst("0")
                     .cutOffAt(Constants.MAX_BALANCE_LENGTH) ?: return
 
@@ -183,7 +186,7 @@ class TransferByCardViewModel(
 
             is TransferByCardAction.OnChangeCommentValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Text.LettersOrDigits.predicate)
+                    .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
                     .cutOffAt(Constants.MAX_COMMENT_LENGTH) ?: return
 
                 _state.update { state ->

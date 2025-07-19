@@ -11,6 +11,7 @@ import com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.Cas
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.CashCardViewModelArgs
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.HomeScreenRoot
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.HomeViewModel
+import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.HomeViewModelArgs
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.TransferByCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.TransferByCardViewModel
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.TransferByCardViewModelArgs
@@ -22,22 +23,27 @@ fun NavGraphBuilder.walletFeature(navController: NavController) {
         startDestination = WalletNavGraph.Home
     ) {
         composable<WalletNavGraph.Home> {
-            val viewModel = koinViewModel<HomeViewModel>()
+            val viewModel = koinViewModel<HomeViewModel>() {
+                parametersOf(
+                    HomeViewModelArgs(
+                        onClickCashCard = { cardId ->
+                            navController.navigate(
+                                route = WalletNavGraph.CashCard(
+                                    cardId = cardId
+                                )
+                            )
+                        },
+                        onClickTransferByCard = { cardId ->
+                            navController.navigate(
+                                route = WalletNavGraph.TransferByCard(cardId = cardId)
+                            )
+                        }
+                    )
+                )
+            }
 
             HomeScreenRoot(
-                viewModel = viewModel,
-                onClickCashCard = { cardId ->
-                    navController.navigate(
-                        route = WalletNavGraph.CashCard(
-                            cardId = cardId
-                        )
-                    )
-                },
-                onClickTransferByCard = { cardId ->
-                    navController.navigate(
-                        route = WalletNavGraph.TransferByCard(cardId = cardId)
-                    )
-                }
+                viewModel = viewModel
             )
         }
 
@@ -46,14 +52,14 @@ fun NavGraphBuilder.walletFeature(navController: NavController) {
             val viewModel = koinViewModel<CashCardViewModel> {
                 parametersOf(
                     CashCardViewModelArgs(
-                        cardId = args.cardId
+                        cardId = args.cardId,
+                        onClickBack = { navController.navigateUp() }
                     )
                 )
             }
 
             CashCardScreenRoot(
-                viewModel = viewModel,
-                navigateBack = { navController.navigateUp() }
+                viewModel = viewModel
             )
         }
 
@@ -62,14 +68,14 @@ fun NavGraphBuilder.walletFeature(navController: NavController) {
             val viewModel = koinViewModel<TransferByCardViewModel> {
                 parametersOf(
                     TransferByCardViewModelArgs(
-                        cardId = args.cardId
+                        cardId = args.cardId,
+                        onClickBack = { navController.navigateUp() }
                     )
                 )
             }
 
             TransferByCardScreenRoot(
-                viewModel = viewModel,
-                navigateBack = { navController.navigateUp() }
+                viewModel = viewModel
             )
         }
     }

@@ -13,8 +13,8 @@ sealed interface WalletNavGraph : Route {
     data object Home : WalletNavGraph
 
     @Serializable
-    data class CashCard(val cardId: String) : WalletNavGraph
+    data class CashCard(val cardId: String?) : WalletNavGraph
 
     @Serializable
-    data class TransferByCard(val cardId: String) : WalletNavGraph
+    data class TransferByCard(val cardId: String?) : WalletNavGraph
 }

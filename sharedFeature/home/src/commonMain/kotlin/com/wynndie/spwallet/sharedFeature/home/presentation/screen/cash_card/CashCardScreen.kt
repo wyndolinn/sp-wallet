@@ -36,11 +36,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.infoDisplay.MediumInfoDisplay
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseButton
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
-import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
+import com.wynndie.spwallet.sharedCore.presentation.mapper.joinToUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -60,8 +60,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CashCardScreenRoot(
-    viewModel: CashCardViewModel,
-    navigateBack: () -> Unit
+    viewModel: CashCardViewModel
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -82,7 +81,7 @@ fun CashCardScreenRoot(
 
     if (state.isDeleteDialogVisible) {
         DeleteCardDialog(
-            onConfirm = { viewModel.onAction(CashCardAction.OnClickDeleteCard(navigateBack)) },
+            onConfirm = { viewModel.onAction(CashCardAction.OnClickDeleteCard) },
             onDismiss = { viewModel.onAction(CashCardAction.OnToggleDeleteDialog) },
             modifier = Modifier
         )
@@ -94,7 +93,7 @@ fun CashCardScreenRoot(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = navigateBack
+                        onClick = { viewModel.onAction(CashCardAction.OnClickBack) }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -155,7 +154,6 @@ fun CashCardScreenRoot(
                     CashCardScreen(
                         state = state,
                         onAction = viewModel::onAction,
-                        navigateBack = navigateBack,
                         modifier = Modifier
                             .fillMaxSize()
                             .imePadding()
@@ -171,21 +169,20 @@ fun CashCardScreenRoot(
 private fun CashCardScreen(
     state: CashCardState,
     onAction: (CashCardAction) -> Unit,
-    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val cashCardTile = state.card.asTile()
     val focusManager = LocalFocusManager.current
 
     Column(
         modifier = modifier
     ) {
 
-        MediumInfoDisplay(
-            label = state.card.name.ifBlank {
-                stringResource(Res.string.no_name)
-            },
-            title = state.card.title.asString(),
-            description = state.card.balance.formatted.joinAsString(" "),
+        BaseInfoPanelMedium(
+            label = cashCardTile.label,
+            title = cashCardTile.title,
+            description = cashCardTile.description,
             modifier = Modifier
         )
 
@@ -200,7 +197,7 @@ private fun CashCardScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            UiOutlinedInputField(
+            BaseInputField(
                 value = state.balanceInputFieldState.value,
                 onValueChange = { onAction(CashCardAction.OnChangeBalanceValue(it)) },
                 label = stringResource(Res.string.enter_balance),
@@ -222,14 +219,13 @@ private fun CashCardScreen(
         Spacer(Modifier.height(MaterialTheme.spacing.large))
         Spacer(Modifier.weight(1f))
 
-        UiButton(
+        BaseButton(
             text = stringResource(Res.string.save),
             onClick = {
                 onAction(
                     CashCardAction.OnClickSaveCard(
                         cardName = state.nameInputFieldState.value.text,
-                        cardBalance = state.balanceInputFieldState.value.text,
-                        navigateBack = navigateBack
+                        cardBalance = state.balanceInputFieldState.value.text
                     )
                 )
             },
@@ -245,7 +241,6 @@ fun CashCardScreenPreview() {
         CashCardScreen(
             state = CashCardState(),
             onAction = { _ -> },
-            navigateBack = {  },
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(MaterialTheme.spacing.medium)

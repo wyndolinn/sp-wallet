@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.compone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.AlertDialogScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseAlertDialogLayout
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.deactivate_card_description
@@ -15,7 +15,7 @@ fun DeactivateCardDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AlertDialogScaffold(
+    BaseAlertDialogLayout(
         onDismiss = onDismiss,
         onConfirm = onConfirm,
         title = stringResource(Res.string.deactivate_card_title),

@@ -8,7 +8,7 @@ import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTonalIconButton
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseTonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_card
@@ -25,14 +25,14 @@ fun ActionButtons(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
     ) {
-        UiTonalIconButton(
+        BaseTonalIconButton(
             icon = Icons.Outlined.AddCard,
             text = stringResource(Res.string.activate_card),
             onClick = { onAuthCardClick() },
             modifier = Modifier.weight(1f)
         )
 
-        UiTonalIconButton(
+        BaseTonalIconButton(
             icon = Icons.Outlined.People,
             text = stringResource(Res.string.transfer_by_number),
             onClick = { onTransferByNumberClick() },

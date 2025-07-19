@@ -35,13 +35,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseButton
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardCarousel
-import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardItem
+import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardCarousel
+import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardTile
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.component.RecipientSheet
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number
@@ -55,8 +55,7 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferByCardScreenRoot(
-    viewModel: TransferByCardViewModel,
-    navigateBack: () -> Unit
+    viewModel: TransferByCardViewModel
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -64,9 +63,7 @@ fun TransferByCardScreenRoot(
 
     if (state.isChangeRecipientSheetVisible) {
         RecipientSheet(
-            onDismiss = {
-                viewModel.onAction(TransferByCardAction.OnToggleRecipientSheet)
-            },
+            onDismiss = { viewModel.onAction(TransferByCardAction.OnToggleRecipientSheet) },
             onClickRecipient = { viewModel.onAction(TransferByCardAction.OnClickRecipient(it)) },
             receiverInputFieldState = state.recipientInputFieldState,
             onChangeRecipientValue = {
@@ -84,7 +81,7 @@ fun TransferByCardScreenRoot(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigateBack() }
+                        onClick = { viewModel.onAction(TransferByCardAction.OnClickBack) }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -130,7 +127,6 @@ fun TransferByCardScreenRoot(
                     TransferByNumberScreen(
                         state = state,
                         onAction = viewModel::onAction,
-                        navigateBack = navigateBack,
                         modifier = Modifier
                             .fillMaxSize()
                             .imePadding()
@@ -147,9 +143,10 @@ fun TransferByCardScreenRoot(
 private fun TransferByNumberScreen(
     state: TransferByCardState,
     onAction: (TransferByCardAction) -> Unit,
-    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val recipientTile = state.recipient.asTile()
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -158,18 +155,17 @@ private fun TransferByNumberScreen(
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
-            UiCardCarousel(
-                items = state.cards,
+            AppCardCarousel(
+                items = state.cards.map { it.asTile() },
                 page = state.carouselPage,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            UiCardItem(
+            AppCardTile(
                 icon = state.recipient.icon.value,
                 iconBackground = state.recipient.iconBackground.value,
-                label = state.recipient.label.asString(),
-                title = state.recipient.formatTitle().title.asString(),
-                description = state.recipient.formatDescription().description?.asString(),
+                label = recipientTile.label,
+                title = recipientTile.title,
                 onClick = { onAction(TransferByCardAction.OnToggleRecipientSheet) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -183,7 +179,7 @@ private fun TransferByNumberScreen(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
         ) {
 
-            UiOutlinedInputField(
+            BaseInputField(
                 value = state.amountInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
                 label = stringResource(Res.string.enter_transfer_amount),
@@ -202,7 +198,7 @@ private fun TransferByNumberScreen(
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             )
 
-            UiOutlinedInputField(
+            BaseInputField(
                 value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
                 label = stringResource(Res.string.enter_comment),
@@ -222,8 +218,7 @@ private fun TransferByNumberScreen(
                             TransferByCardAction.OnClickTransfer(
                                 cardNumber = state.recipient.number,
                                 transferAmount = state.amountInputFieldState.value.text,
-                                comment = state.commentInputFieldState.value.text,
-                                navigateBack = navigateBack
+                                comment = state.commentInputFieldState.value.text
                             )
                         )
                     }
@@ -235,15 +230,14 @@ private fun TransferByNumberScreen(
         Spacer(Modifier.height(MaterialTheme.spacing.large))
         Spacer(Modifier.weight(1f))
 
-        UiButton(
+        BaseButton(
             text = stringResource(Res.string.transfer),
             onClick = {
                 onAction(
                     TransferByCardAction.OnClickTransfer(
                         cardNumber = state.recipient.number,
                         transferAmount = state.amountInputFieldState.value.text,
-                        comment = state.commentInputFieldState.value.text,
-                        navigateBack = navigateBack
+                        comment = state.commentInputFieldState.value.text
                     )
                 )
             },

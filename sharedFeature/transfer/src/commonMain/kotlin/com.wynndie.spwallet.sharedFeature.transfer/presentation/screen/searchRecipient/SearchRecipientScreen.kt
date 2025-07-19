@@ -11,7 +11,7 @@ fun SearchRecipientScreenRoot(
 }
 
 @Composable
-fun SearchRecipientScreenContent(
+private fun SearchRecipientScreenContent(
     modifier: Modifier = Modifier
 ) {
 

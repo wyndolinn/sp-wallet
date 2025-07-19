@@ -7,12 +7,12 @@ sealed interface CashCardAction {
     data object OnToggleCalculatorSheet : CashCardAction
     data object OnToggleDeleteDialog : CashCardAction
 
+    data object OnClickDeleteCard : CashCardAction
+    data object OnClickBack : CashCardAction
     data class OnClickColorChip(val value: Int) : CashCardAction
-    data class OnClickDeleteCard(val navigateBack: () -> Unit) : CashCardAction
     data class OnClickSaveCard(
         val cardName: String,
         val cardBalance: String,
-        val navigateBack: () -> Unit
     ) : CashCardAction
 
     data class OnChangeNameValue(val value: TextFieldValue) : CashCardAction

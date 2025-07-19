@@ -11,12 +11,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTextButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiTonalIconButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseTextButton
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseTonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardCarousel
-import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardCarousel
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
+import com.wynndie.spwallet.sharedCore.presentation.model.Tile
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.transfer_by_number
@@ -26,13 +27,13 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun AuthedCardSheet(
     onDismiss: () -> Unit,
-    cards: List<UiAuthedCard>,
+    cards: List<Tile>,
     page: Int,
     onDeleteButtonClick: () -> Unit,
-    onTransferButtonClick: (UiAuthedCard) -> Unit,
+    onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BottomSheetScaffold(
+    BaseBottomSheetLayout(
         onDismiss = onDismiss
     ) {
         AuthedCardSheetContent(
@@ -47,10 +48,10 @@ fun AuthedCardSheet(
 
 @Composable
 private fun AuthedCardSheetContent(
-    cards: List<UiAuthedCard>,
+    cards: List<Tile>,
     page: Int,
     onDeleteButtonClick: () -> Unit,
-    onTransferButtonClick: (UiAuthedCard) -> Unit,
+    onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -62,23 +63,23 @@ private fun AuthedCardSheetContent(
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
-            UiCardCarousel(
+            AppCardCarousel(
                 items = cards,
                 page = page,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            UiTonalIconButton(
+            BaseTonalIconButton(
                 icon = Icons.Outlined.People,
                 text = stringResource(Res.string.transfer_by_number),
-                onClick = { onTransferButtonClick(cards[page]) },
+                onClick = { onTransferButtonClick(cards[page].id) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.medium)
             )
         }
 
-        UiTextButton(
+        BaseTextButton(
             text = stringResource(Res.string.deactivate),
             destructive = true,
             onClick = onDeleteButtonClick,

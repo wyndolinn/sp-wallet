@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.co
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.AlertDialogScaffold
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseAlertDialogLayout
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.delete_card_description
@@ -15,7 +15,7 @@ fun DeleteCardDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AlertDialogScaffold(
+    BaseAlertDialogLayout(
         onDismiss = onDismiss,
         onConfirm = onConfirm,
         title = stringResource(Res.string.delete_card_title),

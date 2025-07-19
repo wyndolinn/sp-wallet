@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseButton
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
@@ -35,7 +35,7 @@ fun RecipientSheet(
     onClickRecipient: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BottomSheetScaffold(
+    BaseBottomSheetLayout(
         onDismiss = onDismiss
     ) {
         RecipientSheetContent(
@@ -65,7 +65,7 @@ private fun RecipientSheetContent(
                 )
             }
     ) {
-        UiOutlinedInputField(
+        BaseInputField(
             value = receiverInputFieldState.value,
             onValueChange = { onChangeReceiverValue(it) },
             label = stringResource(Res.string.enter_card_number),
@@ -84,7 +84,7 @@ private fun RecipientSheetContent(
             )
         )
 
-        UiButton(
+        BaseButton(
             text = stringResource(Res.string.apply),
             onClick = { onClickRecipient(receiverInputFieldState.value.text) },
             modifier = Modifier.fillMaxWidth()

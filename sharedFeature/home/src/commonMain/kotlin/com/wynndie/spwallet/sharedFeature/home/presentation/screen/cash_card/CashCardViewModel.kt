@@ -8,7 +8,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.model.input.FilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
@@ -16,8 +16,8 @@ import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepositor
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.CardNameValidator
 import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.model.CardColor
-import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cash_creation_succeed
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CashCardViewModel(
-    args: CashCardViewModelArgs,
+    private val args: CashCardViewModelArgs,
     private val walletRepository: WalletRepository,
     private val cardNameValidator: CardNameValidator,
     private val balanceValidator: BalanceValidator
@@ -89,15 +89,19 @@ class CashCardViewModel(
             }
 
 
+            CashCardAction.OnClickBack -> {
+                args.onClickBack()
+            }
+
+
             is CashCardAction.OnChangeNameValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Text.LettersOrDigits.predicate)
+                    .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
                     .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
-                            label = UiText.DynamicString(inputFormatter.value.text),
                             name = inputFormatter.value.text
                         ),
                         nameInputFieldState = state.nameInputFieldState.copy(
@@ -109,7 +113,7 @@ class CashCardViewModel(
 
             is CashCardAction.OnChangeBalanceValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Digits.DigitsOnly.predicate)
+                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst("0")
                     .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
@@ -122,7 +126,6 @@ class CashCardViewModel(
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
-                            title = UiText.StringResourceId(Res.string.total_of_ore, balance.value),
                             balance = balance
                         ),
                         balanceInputFieldState = state.balanceInputFieldState.copy(
@@ -169,7 +172,7 @@ class CashCardViewModel(
                                 DialogController.send(
                                     Dialog.Snackbar(UiText.StringResourceId(Res.string.cash_creation_succeed))
                                 )
-                                action.navigateBack()
+                                args.onClickBack()
                             }
                     }
                 }
@@ -179,7 +182,7 @@ class CashCardViewModel(
                 viewModelScope.launch {
                     _state.update { it.copy(isDeleteDialogVisible = false) }
                     walletRepository.deleteCashCard(_state.value.card.toDomain())
-                    action.navigateBack()
+                    args.onClickBack()
                 }
             }
         }

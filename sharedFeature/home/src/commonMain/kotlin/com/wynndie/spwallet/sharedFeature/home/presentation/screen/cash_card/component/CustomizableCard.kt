@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import com.wynndie.spwallet.sharedCore.presentation.theme.radius
 import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.presentation.model.UiCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
 import com.wynndie.spwallet.sharedResources.no_name
@@ -50,10 +50,11 @@ fun <T : UiCard> CustomizableCard(
         Spacer(Modifier.weight(1f))
 
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
         ) {
             Text(
-                text = card.label.asString().ifBlank { stringResource(Res.string.no_name) },
+                text = stringResource(Res.string.edit),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )

@@ -23,13 +23,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseButton
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.presentation.model.CardColor
+import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
 import com.wynndie.spwallet.sharedResources.card_name
@@ -46,7 +46,7 @@ fun CustomizationSheet(
     onColorChipClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BottomSheetScaffold(
+    BaseBottomSheetLayout(
         onDismiss = onDismiss
     ) {
         CustomizationSheetContent(
@@ -80,7 +80,7 @@ private fun CustomizationSheetContent(
                 )
             }
     ) {
-        UiOutlinedInputField(
+        BaseInputField(
             value = nameInputFieldState.value,
             onValueChange = { onNameValueChange(it) },
             label = stringResource(Res.string.enter_card_name),
@@ -133,7 +133,7 @@ private fun CustomizationSheetContent(
             }
         }
 
-        UiButton(
+        BaseButton(
             text = stringResource(Res.string.apply),
             onClick = onDismiss,
             modifier = Modifier.fillMaxWidth()

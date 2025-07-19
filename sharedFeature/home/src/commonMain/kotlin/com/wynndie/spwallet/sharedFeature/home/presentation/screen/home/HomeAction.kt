@@ -1,9 +1,9 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screen.home
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
 
 sealed interface HomeAction {
     data object OnRefresh : HomeAction
@@ -16,17 +16,11 @@ sealed interface HomeAction {
 
     data class OnClickAuthCard(val id: String, val token: String) : HomeAction
     data class OnClickDeactivateCard(val card: UiAuthedCard) : HomeAction
-    data class OnClickTransferByCard(
-        val card: UiAuthedCard,
-        val navigate: (String) -> Unit
-    ) : HomeAction
+    data class OnClickTransferByCard(val cardId: String?) : HomeAction
 
-    data class OnClickAuthedCard(val card: UiAuthedCard) : HomeAction
-    data class OnClickUnauthedCard(val card: UiUnauthedCard) : HomeAction
-    data class OnClickCashCard(
-        val card: UiCashCard,
-        val navigate: (String) -> Unit
-    ) : HomeAction
+    data class OnClickAuthedCard(val cardId: String) : HomeAction
+    data class OnClickUnauthedCard(val cardId: String) : HomeAction
+    data class OnClickCashCard(val cardId: String?) : HomeAction
 
     data class OnChangeCardIdValue(val value: TextFieldValue) : HomeAction
     data class OnChangeCardTokenValue(val value: TextFieldValue) : HomeAction

@@ -8,12 +8,12 @@ sealed interface TransferByCardAction {
     data object OnToggleCalculatorSheet : TransferByCardAction
     data object OnToggleRecipientSheet : TransferByCardAction
 
+    data object OnClickBack : TransferByCardAction
     data class OnClickRecipient(val recipient: String) : TransferByCardAction
     data class OnClickTransfer(
         val cardNumber: String,
         val transferAmount: String,
-        val comment: String,
-        val navigateBack: () -> Unit
+        val comment: String
     ) : TransferByCardAction
 
     data class OnChangeRecipientValue(val value: TextFieldValue) : TransferByCardAction

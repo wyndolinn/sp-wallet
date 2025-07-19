@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedCore.presentation.component.keyboard.button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedCore.presentation.model.input.KeyboardAction
+import com.wynndie.spwallet.sharedCore.presentation.model.KeyboardAction
 
 @Composable
 fun KeyboardImageButton(

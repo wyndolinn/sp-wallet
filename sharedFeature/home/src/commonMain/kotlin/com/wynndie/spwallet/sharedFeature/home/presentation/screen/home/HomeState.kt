@@ -5,9 +5,9 @@ import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
 import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
 
 data class HomeState(
     val screenLoadingState: LoadingState = LoadingState.Finished,

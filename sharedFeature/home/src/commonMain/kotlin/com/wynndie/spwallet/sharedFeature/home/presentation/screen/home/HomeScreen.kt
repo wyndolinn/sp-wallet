@@ -30,16 +30,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiOutlinedButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.infoDisplay.MediumInfoDisplay
+import com.wynndie.spwallet.sharedCore.domain.constants.Constants
+import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardTileList
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseOutlinedButton
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
-import com.wynndie.spwallet.sharedCore.presentation.mapper.joinAsString
+import com.wynndie.spwallet.sharedCore.presentation.mapper.joinToUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.domain.constants.Constants
-import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardList
-import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.AppBarContent
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.AuthCardOffer
@@ -62,9 +61,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenRoot(
-    viewModel: HomeViewModel,
-    onClickCashCard: (String) -> Unit,
-    onClickTransferByCard: (String) -> Unit
+    viewModel: HomeViewModel
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -75,7 +72,7 @@ fun HomeScreenRoot(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet) },
             loadingState = state.authLoadingState,
             isAuthButtonEnabled = state.authLoadingState !is LoadingState.Loading,
-            cards = state.unauthedCards,
+            cards = state.unauthedCards.map { it.asTile() },
             initialPage = state.carouselPage,
             idInputFieldState = state.idInputFieldState,
             onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
@@ -98,19 +95,10 @@ fun HomeScreenRoot(
     if (state.isAuthedCardSheetVisible) {
         AuthedCardSheet(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet) },
-            cards = state.authedCards.map {
-                it.formatDescription()
-            },
+            cards = state.authedCards.map { it.asTile() },
             page = state.carouselPage,
             onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog) },
-            onTransferButtonClick = { card ->
-                viewModel.onAction(
-                    HomeAction.OnClickTransferByCard(
-                        card = card,
-                        navigate = onClickTransferByCard
-                    )
-                )
-            },
+            onTransferButtonClick = { viewModel.onAction(HomeAction.OnClickTransferByCard(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.medium)
@@ -199,8 +187,6 @@ fun HomeScreenRoot(
                     HomeScreenContent(
                         state = state,
                         onAction = viewModel::onAction,
-                        onClickCashCard = onClickCashCard,
-                        onClickTransferByCard = onClickTransferByCard,
                         contentPadding = innerPadding,
                         modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
                     )
@@ -214,8 +200,6 @@ fun HomeScreenRoot(
 private fun HomeScreenContent(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
-    onClickCashCard: (String) -> Unit,
-    onClickTransferByCard: (String) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
@@ -231,10 +215,10 @@ private fun HomeScreenContent(
         item {
             Spacer(Modifier.height(MaterialTheme.spacing.medium))
 
-            MediumInfoDisplay(
+            BaseInfoPanelMedium(
                 label = stringResource(Res.string.total_balance),
                 title = stringResource(Res.string.total_of_ore, state.totalBalance.value),
-                description = state.totalBalance.formatted.joinAsString(" ")
+                description = state.totalBalance.formatted.joinToUiText(" ").asString()
             )
         }
 
@@ -242,14 +226,7 @@ private fun HomeScreenContent(
             if (isUserAuthed) {
                 ActionButtons(
                     onAuthCardClick = { onAction(HomeAction.OnToggleAuthCardSheet) },
-                    onTransferByNumberClick = {
-                        onAction(
-                            HomeAction.OnClickTransferByCard(
-                                card = state.authedCards.first(),
-                                navigate = onClickTransferByCard
-                            )
-                        )
-                    },
+                    onTransferByNumberClick = { onAction(HomeAction.OnClickTransferByCard(null)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             } else {
@@ -267,42 +244,22 @@ private fun HomeScreenContent(
             ) {
 
                 if (state.authedCards.isNotEmpty()) {
-                    UiCardList(
-                        listTitle = stringResource(Res.string.bank_cards),
-                        cards = state.authedCards.map {
-                            it.formatDescription()
-                        },
-                        onClick = {
-                            onAction(HomeAction.OnClickAuthedCard(it))
-                        }
+                    AppCardTileList(
+                        title = stringResource(Res.string.bank_cards),
+                        tiles = state.authedCards.map { it.asTile() },
+                        onClickTile = { onAction(HomeAction.OnClickAuthedCard(it.id)) }
                     )
                 }
 
-                UiCardList(
-                    listTitle = stringResource(Res.string.cash_cards, state.cashCards.size, 5),
-                    cards = state.cashCards.map {
-                        it.formatDescription()
-                    },
-                    onClick = {
-                        onAction(
-                            HomeAction.OnClickCashCard(
-                                card = it,
-                                navigate = onClickCashCard
-                            )
-                        )
-                    },
+                AppCardTileList(
+                    title = stringResource(Res.string.cash_cards, state.cashCards.size, 5),
+                    tiles = state.cashCards.map { it.asTile() },
+                    onClickTile = { onAction(HomeAction.OnClickCashCard(it.id)) },
                     trailingContent = if (state.cashCards.size < Constants.MAX_CASH_CARDS_AMOUNT) {
                         {
-                            UiOutlinedButton(
+                            BaseOutlinedButton(
                                 text = stringResource(Res.string.create),
-                                onClick = {
-                                    onAction(
-                                        HomeAction.OnClickCashCard(
-                                            card = emptyCashCard,
-                                            navigate = onClickCashCard
-                                        )
-                                    )
-                                },
+                                onClick = { onAction(HomeAction.OnClickCashCard(null)) },
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -310,12 +267,10 @@ private fun HomeScreenContent(
                 )
 
                 if (state.unauthedCards.isNotEmpty()) {
-                    UiCardList(
-                        listTitle = stringResource(Res.string.activate_cards),
-                        cards = state.unauthedCards,
-                        onClick = {
-                            onAction(HomeAction.OnClickUnauthedCard(it))
-                        }
+                    AppCardTileList(
+                        title = stringResource(Res.string.activate_cards),
+                        tiles = state.unauthedCards.map { it.asTile() },
+                        onClickTile = { onAction(HomeAction.OnClickUnauthedCard(it.id)) }
                     )
                 }
             }
@@ -332,8 +287,6 @@ fun HomeScreenContentPreview() {
         HomeScreenContent(
             state = HomeState(),
             onAction = { },
-            onClickCashCard = {  },
-            onClickTransferByCard = {  },
             contentPadding = PaddingValues(MaterialTheme.spacing.medium),
             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         )

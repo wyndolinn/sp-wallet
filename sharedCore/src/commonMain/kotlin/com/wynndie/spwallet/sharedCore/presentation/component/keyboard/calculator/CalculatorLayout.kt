@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.model.input.KeyboardAction
+import com.wynndie.spwallet.sharedCore.presentation.model.KeyboardAction
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @Composable

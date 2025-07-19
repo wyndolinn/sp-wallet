@@ -19,15 +19,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.button.UiButton
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.dialog.BottomSheetScaffold
-import com.wynndie.spwallet.sharedCore.presentation.component.designSystem.inputField.UiOutlinedInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseButton
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingDialog
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.presentation.component.tile.UiCardCarousel
-import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardCarousel
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.model.Tile
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction
@@ -43,7 +44,7 @@ fun AuthCardSheet(
     onDismiss: () -> Unit,
     loadingState: LoadingState,
     isAuthButtonEnabled: Boolean,
-    cards: List<UiUnauthedCard>,
+    cards: List<Tile>,
     initialPage: Int,
     tokenInputFieldState: InputFieldState,
     onChangeTokenValue: (TextFieldValue) -> Unit,
@@ -52,7 +53,7 @@ fun AuthCardSheet(
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BottomSheetScaffold(
+    BaseBottomSheetLayout(
         onDismiss = onDismiss
     ) {
 
@@ -77,7 +78,7 @@ fun AuthCardSheet(
 @Composable
 private fun AuthCardSheetContent(
     isAuthButtonEnabled: Boolean,
-    cards: List<UiUnauthedCard>,
+    cards: List<Tile>,
     page: Int,
     tokenInputFieldState: InputFieldState,
     onTokenValueChange: (TextFieldValue) -> Unit,
@@ -98,7 +99,7 @@ private fun AuthCardSheetContent(
             }
     ) {
         if (cards.isNotEmpty()) {
-            UiCardCarousel(
+            AppCardCarousel(
                 items = cards,
                 page = page,
                 modifier = Modifier.fillMaxWidth()
@@ -111,7 +112,7 @@ private fun AuthCardSheetContent(
         ) {
 
             if (cards.isEmpty()) {
-                UiOutlinedInputField(
+                BaseInputField(
                     value = idInputFieldState.value,
                     onValueChange = { onChangeIdValue(it) },
                     label = stringResource(Res.string.enter_id),
@@ -130,7 +131,7 @@ private fun AuthCardSheetContent(
                 )
             }
 
-            UiOutlinedInputField(
+            BaseInputField(
                 value = tokenInputFieldState.value,
                 onValueChange = { onTokenValueChange(it) },
                 label = stringResource(Res.string.enter_token),
@@ -158,7 +159,7 @@ private fun AuthCardSheetContent(
         }
 
         val cardId = if (cards.isNotEmpty()) cards[page].id else idInputFieldState.value.text
-        UiButton(
+        BaseButton(
             text = stringResource(Res.string.activate),
             onClick = { onClickAuthButton(cardId, tokenInputFieldState.value.text) },
             enabled = isAuthButtonEnabled,

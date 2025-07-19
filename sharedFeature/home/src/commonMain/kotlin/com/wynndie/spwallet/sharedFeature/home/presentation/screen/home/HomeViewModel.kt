@@ -9,7 +9,7 @@ import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.model.input.FilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.AuthCardUseCase
@@ -18,9 +18,9 @@ import com.wynndie.spwallet.sharedFeature.home.domain.usecase.SyncWithRemoteUseC
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
 import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.model.UiAuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiCashCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    private val args: HomeViewModelArgs,
     walletRepository: WalletRepository,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
@@ -175,19 +176,19 @@ class HomeViewModel(
             }
 
             is HomeAction.OnClickTransferByCard -> {
+                args.onClickTransferByCard(action.cardId)
                 closeAllDialogs()
-                action.navigate(action.card.id)
             }
 
 
             is HomeAction.OnClickCashCard -> {
+                args.onClickCashCard(action.cardId)
                 closeAllDialogs()
-                action.navigate(action.card.id)
             }
 
             is HomeAction.OnClickAuthedCard -> {
                 closeAllDialogs()
-                val card = state.value.authedCards.find { it.id == action.card.id } ?: return
+                val card = state.value.authedCards.find { it.id == action.cardId } ?: return
                 val cardIndex = state.value.authedCards.indexOf(card)
                 _state.update { state ->
                     state.copy(
@@ -199,7 +200,7 @@ class HomeViewModel(
 
             is HomeAction.OnClickUnauthedCard -> {
                 closeAllDialogs()
-                val cardIndex = state.value.unauthedCards.indexOf(action.card)
+                val cardIndex = state.value.unauthedCards.indexOfFirst { it.id == action.cardId }
                 _state.update { state ->
                     state.copy(
                         isAuthCardSheetVisible = true,
@@ -211,7 +212,7 @@ class HomeViewModel(
 
             is HomeAction.OnChangeCardIdValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Structured.Uuid.predicate)
+                    .filterBy(InputFilterOptions.Structured.Uuid.predicate)
                     .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
@@ -225,7 +226,7 @@ class HomeViewModel(
 
             is HomeAction.OnChangeCardTokenValue -> {
                 val inputFormatter = InputFormatter(action.value)
-                    .filterBy(FilterOptions.Structured.Base64.predicate)
+                    .filterBy(InputFilterOptions.Structured.Base64.predicate)
                     .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
