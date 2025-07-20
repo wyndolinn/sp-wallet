@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.data.remote.model
+package com.wynndie.spwallet.sharedCore.data.remote.model
 
 import com.wynndie.spwallet.sharedCore.domain.model.UnauthedCard
 import kotlinx.serialization.Serializable
