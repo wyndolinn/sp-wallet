@@ -11,7 +11,6 @@ import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.TransferByCardUseCase
@@ -21,6 +20,9 @@ import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.model.input.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -153,24 +155,24 @@ class TransferByCardViewModel(
 
 
             is TransferByCardAction.OnChangeRecipientValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .cutOffAt(Constants.CARD_NUMBER_LENGTH) ?: return
 
                 _state.update { state ->
                     state.copy(
                         recipientInputFieldState = state.recipientInputFieldState.copy(
-                            value = inputFormatter.value
+                            value = value
                         ),
                         recipient = state.recipient.copy(
-                            number = inputFormatter.value.text
+                            number = value.text
                         )
                     )
                 }
             }
 
             is TransferByCardAction.OnChangeTransferAmountValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst("0")
                     .cutOffAt(Constants.MAX_BALANCE_LENGTH) ?: return
@@ -178,21 +180,21 @@ class TransferByCardViewModel(
                 _state.update { state ->
                     state.copy(
                         amountInputFieldState = state.amountInputFieldState.copy(
-                            value = inputFormatter.value
+                            value = value
                         )
                     )
                 }
             }
 
             is TransferByCardAction.OnChangeCommentValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
                     .cutOffAt(Constants.MAX_COMMENT_LENGTH) ?: return
 
                 _state.update { state ->
                     state.copy(
                         commentInputFieldState = state.commentInputFieldState.copy(
-                            value = inputFormatter.value
+                            value = value
                         )
                     )
                 }

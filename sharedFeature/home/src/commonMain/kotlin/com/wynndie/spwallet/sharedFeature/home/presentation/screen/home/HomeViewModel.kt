@@ -10,7 +10,6 @@ import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogCont
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.DeleteAuthedCardUseCase
@@ -21,6 +20,8 @@ import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -211,28 +212,28 @@ class HomeViewModel(
 
 
             is HomeAction.OnChangeCardIdValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Structured.Uuid.predicate)
                     .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
                         idInputFieldState = state.idInputFieldState.copy(
-                            value = inputFormatter.value
+                            value = value
                         )
                     )
                 }
             }
 
             is HomeAction.OnChangeCardTokenValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Structured.Base64.predicate)
                     .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
                         tokenInputFieldState = state.tokenInputFieldState.copy(
-                            value = inputFormatter.value
+                            value = value
                         )
                     )
                 }

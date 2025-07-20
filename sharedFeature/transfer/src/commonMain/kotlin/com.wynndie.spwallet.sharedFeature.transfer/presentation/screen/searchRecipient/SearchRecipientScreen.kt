@@ -3,7 +3,6 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.searchRe
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
 
 @Composable
 fun SearchRecipientScreenRoot(
@@ -19,8 +18,8 @@ private fun SearchRecipientScreenContent(
     modifier: Modifier = Modifier
 ) {
     Column {
-        BaseInputField(
-
-        )
+//        BaseInputField(
+//
+//        )
     }
 }

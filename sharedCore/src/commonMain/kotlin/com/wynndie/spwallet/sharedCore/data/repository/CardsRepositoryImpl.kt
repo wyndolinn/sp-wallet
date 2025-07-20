@@ -2,15 +2,14 @@ package com.wynndie.spwallet.sharedCore.data.repository
 
 import androidx.sqlite.SQLiteException
 import com.wynndie.spwallet.sharedCore.data.local.database.CardsDao
+import com.wynndie.spwallet.sharedCore.data.local.model.AuthedCardEntity
+import com.wynndie.spwallet.sharedCore.data.local.model.CashCardEntity
+import com.wynndie.spwallet.sharedCore.data.local.model.UnauthedCardEntity
+import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsCardsDataSource
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.map
-import com.wynndie.spwallet.sharedCore.data.local.database.WalletDao
-import com.wynndie.spwallet.sharedCore.data.local.model.AuthedCardEntity
-import com.wynndie.spwallet.sharedCore.data.local.model.CashCardEntity
-import com.wynndie.spwallet.sharedCore.data.local.model.UnauthedCardEntity
-import com.wynndie.spwallet.sharedFeature.home.data.remote.network.RemoteSpWorldsDataSource
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.model.CardBalance
 import com.wynndie.spwallet.sharedCore.domain.model.CashCard
@@ -20,14 +19,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CardsRepositoryImpl(
-    private val remoteSpWorldsDataSource: RemoteSpWorldsDataSource,
+    private val remoteSpWorldsCardsDataSource: RemoteSpWorldsCardsDataSource,
     private val cardsDao: CardsDao
 ) : CardsRepository {
 
     override suspend fun getCardBalance(
         authKey: String
     ): Outcome<CardBalance, DataError.Remote> {
-        return remoteSpWorldsDataSource
+        return remoteSpWorldsCardsDataSource
             .getCardBalance(authKey = authKey)
             .map { it.toCardBalance() }
     }

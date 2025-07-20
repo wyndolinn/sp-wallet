@@ -9,7 +9,6 @@ import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFormatter
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
@@ -19,9 +18,11 @@ import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.model.input.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cash_creation_succeed
-import com.wynndie.spwallet.sharedResources.total_of_ore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -95,41 +96,31 @@ class CashCardViewModel(
 
 
             is CashCardAction.OnChangeNameValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
                     .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
-                        card = state.card.copy(
-                            name = inputFormatter.value.text
-                        ),
-                        nameInputFieldState = state.nameInputFieldState.copy(
-                            value = inputFormatter.value
-                        )
+                        card = state.card.copy(name = value.text),
+                        nameInputFieldState = state.nameInputFieldState.copy(value = value)
                     )
                 }
             }
 
             is CashCardAction.OnChangeBalanceValue -> {
-                val inputFormatter = InputFormatter(action.value)
+                val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst("0")
                     .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
-                val balance = if (inputFormatter.value.text == "") {
-                    BlocksDisplayableValue.of(0L)
-                } else {
-                    BlocksDisplayableValue.of(inputFormatter.value.text.toLong())
-                }
-
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
-                            balance = balance
+                            balance = BlocksDisplayableValue.of(value.text.ifBlank { "0" }.toLong())
                         ),
                         balanceInputFieldState = state.balanceInputFieldState.copy(
-                            value = inputFormatter.value
+                            value = value
                         )
                     )
                 }
