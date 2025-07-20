@@ -1,30 +1,17 @@
-package com.wynndie.spwallet.sharedFeature.home.domain.repository
+package com.wynndie.spwallet.sharedCore.domain.repository
 
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
-import com.wynndie.spwallet.sharedFeature.home.domain.model.Transfer
-import com.wynndie.spwallet.sharedCore.domain.model.UnauthedUser
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.model.CardBalance
 import com.wynndie.spwallet.sharedCore.domain.model.CashCard
-import com.wynndie.spwallet.sharedCore.domain.model.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.model.UnauthedCard
 import kotlinx.coroutines.flow.Flow
 
-interface WalletRepository {
+interface CardsRepository {
 
-    suspend fun getUnauthedUser(authKey: String): Outcome<UnauthedUser, DataError.Remote>
     suspend fun getCardBalance(authKey: String): Outcome<CardBalance, DataError.Remote>
-    suspend fun makeTransaction(
-        authKey: String,
-        transfer: Transfer
-    ): Outcome<CardBalance, DataError.Remote>
-
-    suspend fun insertAuthedUser(user: AuthedUser): EmptyOutcome<DataError.Local>
-    fun getAuthedUsers(): Flow<List<AuthedUser>>
-    suspend fun deleteAuthedUser(user: AuthedUser)
 
     suspend fun insertCashCard(card: CashCard): EmptyOutcome<DataError.Local>
     fun getCashCards(): Flow<List<CashCard>>
@@ -37,8 +24,4 @@ interface WalletRepository {
     suspend fun insertUnauthedCard(card: UnauthedCard): EmptyOutcome<DataError.Local>
     fun getUnauthedCards(): Flow<List<UnauthedCard>>
     suspend fun deleteUnauthedCard(card: UnauthedCard)
-
-    suspend fun insertRecipient(recipientCard: RecipientCard): EmptyOutcome<DataError.Local>
-    fun getRecipients(): Flow<List<RecipientCard>>
-    suspend fun deleteRecipient(recipientCard: RecipientCard)
 }

@@ -9,7 +9,7 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_card_number
 import com.wynndie.spwallet.sharedResources.recipient
 
-data class UiRecipientCard(
+data class UiRecipient(
     override val id: String,
     override val icon: CardIcon,
     override val iconBackground: CardColor,
@@ -43,8 +43,8 @@ data class UiRecipientCard(
     }
 
     companion object {
-        fun of(value: RecipientCard): UiRecipientCard {
-            return UiRecipientCard(
+        fun of(value: RecipientCard): UiRecipient {
+            return UiRecipient(
                 id = value.id,
                 name = value.name,
                 iconBackground = CardColor.from(value.color),

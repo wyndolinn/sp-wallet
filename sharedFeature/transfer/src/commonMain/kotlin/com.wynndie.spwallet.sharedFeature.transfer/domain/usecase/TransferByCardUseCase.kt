@@ -5,11 +5,13 @@ import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.model.Transfer
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repository.TransferRepository
 
 class TransferByCardUseCase(
     private val transferRepository: TransferRepository,
+    private val cardsRepository: CardsRepository
 ) {
 
     suspend operator fun invoke(
@@ -28,9 +30,9 @@ class TransferByCardUseCase(
         val cardBalance = transferRepository.makeTransaction(card.authKey, transfer)
             .getOrElse { return Outcome.Error(it) }
 
-//        transferRepository.insertAuthedCard(
-//            card = card.copy(balance = cardBalance.value)
-//        )
+        cardsRepository.insertAuthedCard(
+            card = card.copy(balance = cardBalance.value)
+        )
 
         return Outcome.Success(Unit)
     }

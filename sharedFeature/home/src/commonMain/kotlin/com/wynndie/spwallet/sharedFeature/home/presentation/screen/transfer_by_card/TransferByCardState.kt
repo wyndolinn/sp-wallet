@@ -5,7 +5,7 @@ import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipientCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyRecipientCard
 
 data class TransferByCardState(
@@ -16,7 +16,7 @@ data class TransferByCardState(
         name = ""
     ),
 
-    val recipient: UiRecipientCard = emptyRecipientCard,
+    val recipient: UiRecipient = emptyRecipientCard,
 
     val cards: List<UiAuthedCard> = emptyList(),
 

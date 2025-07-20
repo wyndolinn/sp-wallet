@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.data.repository
+package com.wynndie.spwallet.sharedCore.data.repository
 
 import androidx.sqlite.SQLiteException
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
@@ -25,7 +25,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepositor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class WalletRepositoryImpl(
+class UserRepositoryImpl(
     private val remoteSpWorldsDataSource: RemoteSpWorldsDataSource,
     private val walletDao: WalletDao
 ) : WalletRepository {

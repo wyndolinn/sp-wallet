@@ -19,7 +19,7 @@ import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.CardNumberValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipientCard
+import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyRecipientCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
@@ -74,7 +74,7 @@ class TransferByCardViewModel(
             val recipient = emptyRecipientCard.toDomain()
             _state.update { state ->
                 state.copy(
-                    recipient = UiRecipientCard.of(recipient),
+                    recipient = UiRecipient.of(recipient),
                     recipientInputFieldState = state.recipientInputFieldState.copy(
                         value = TextFieldValue(recipient.number)
                     ),

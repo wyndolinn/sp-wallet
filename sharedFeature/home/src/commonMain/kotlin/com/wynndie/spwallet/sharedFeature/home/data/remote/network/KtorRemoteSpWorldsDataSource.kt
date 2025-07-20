@@ -5,7 +5,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.data.remote.model.CardBalanceDto
 import com.wynndie.spwallet.sharedFeature.home.data.remote.model.TransferDto
-import com.wynndie.spwallet.sharedFeature.home.data.remote.model.UnauthedUserDto
+import com.wynndie.spwallet.sharedCore.data.remote.model.UnauthedUserDto
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
