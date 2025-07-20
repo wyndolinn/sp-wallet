@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem
+package com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -26,16 +26,16 @@ import com.wynndie.spwallet.sharedResources.clear
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun BaseInputField(
+fun TitledInputField(
+    label: String,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
-    label: String,
-    placeholder: String,
-    isError: Boolean,
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
     modifier: Modifier = Modifier,
+    placeholder: String? = null,
     supportingText: String? = null,
+    isError: Boolean = false,
     enabled: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit) = {
@@ -69,11 +69,13 @@ fun BaseInputField(
             onValueChange = { onValueChange(it) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    style = MaterialTheme.typography.titleMedium
-                )
+            placeholder = placeholder?.let {
+                {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             },
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,

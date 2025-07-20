@@ -41,7 +41,7 @@ import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardCarousel
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardTile
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.TitledInputField
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.component.RecipientSheet
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number
@@ -179,7 +179,7 @@ private fun TransferByNumberScreen(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
         ) {
 
-            BaseInputField(
+            TitledInputField(
                 value = state.amountInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
                 label = stringResource(Res.string.enter_transfer_amount),
@@ -198,7 +198,7 @@ private fun TransferByNumberScreen(
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             )
 
-            BaseInputField(
+            TitledInputField(
                 value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
                 label = stringResource(Res.string.enter_comment),

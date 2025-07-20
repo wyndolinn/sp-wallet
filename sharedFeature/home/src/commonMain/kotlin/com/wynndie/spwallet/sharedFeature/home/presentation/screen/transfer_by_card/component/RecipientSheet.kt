@@ -16,7 +16,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.TitledInputField
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseButton
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -65,7 +65,7 @@ private fun RecipientSheetContent(
                 )
             }
     ) {
-        BaseInputField(
+        TitledInputField(
             value = receiverInputFieldState.value,
             onValueChange = { onChangeReceiverValue(it) },
             label = stringResource(Res.string.enter_card_number),

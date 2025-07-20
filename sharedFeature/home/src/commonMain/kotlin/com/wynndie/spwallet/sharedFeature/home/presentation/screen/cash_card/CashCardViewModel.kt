@@ -17,7 +17,7 @@ import com.wynndie.spwallet.sharedCore.domain.validator.CardNameValidator
 import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
-import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.emptyUiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.model.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
@@ -47,7 +47,7 @@ class CashCardViewModel(
 
             val card = walletRepository.getCashCards().first()
                 .find { it.id == args.cardId }
-                ?: emptyCashCard.toDomain()
+                ?: emptyUiCashCard.toDomain()
 
             _state.update { state ->
                 state.copy(

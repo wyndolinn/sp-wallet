@@ -26,9 +26,8 @@ import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardCarousel
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseInputField
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.TitledInputField
 import com.wynndie.spwallet.sharedCore.presentation.model.Tile
-import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction
@@ -112,7 +111,7 @@ private fun AuthCardSheetContent(
         ) {
 
             if (cards.isEmpty()) {
-                BaseInputField(
+                TitledInputField(
                     value = idInputFieldState.value,
                     onValueChange = { onChangeIdValue(it) },
                     label = stringResource(Res.string.enter_id),
@@ -131,7 +130,7 @@ private fun AuthCardSheetContent(
                 )
             }
 
-            BaseInputField(
+            TitledInputField(
                 value = tokenInputFieldState.value,
                 onValueChange = { onTokenValueChange(it) },
                 label = stringResource(Res.string.enter_token),

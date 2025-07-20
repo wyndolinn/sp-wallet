@@ -4,13 +4,13 @@ import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
-import com.wynndie.spwallet.sharedCore.presentation.model.emptyCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.emptyUiCashCard
 
 data class CashCardState(
     val screenLoadingState: LoadingState = LoadingState.Finished,
     val saveLoadingState: LoadingState = LoadingState.Finished,
 
-    val card: UiCashCard = emptyCashCard,
+    val card: UiCashCard = emptyUiCashCard,
 
     val isCustomizationSheetVisible: Boolean = false,
     val isCalculatorSheetVisible: Boolean = false,

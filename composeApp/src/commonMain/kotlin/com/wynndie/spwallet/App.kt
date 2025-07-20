@@ -50,14 +50,12 @@ fun App() {
     }
 
     AppTheme {
-        KoinContext {
-            Scaffold(
-                snackbarHost = {
-                    SnackbarHost(hostState = snackbarHostState)
-                }
-            ) { _ ->
-                RootNavHost()
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
             }
+        ) { _ ->
+            RootNavHost()
         }
     }
 }

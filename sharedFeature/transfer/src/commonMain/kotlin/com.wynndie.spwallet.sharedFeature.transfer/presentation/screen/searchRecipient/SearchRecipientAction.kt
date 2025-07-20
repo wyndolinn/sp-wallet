@@ -4,10 +4,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 
 sealed interface SearchRecipientAction {
 
+    data object OnClickBack : SearchRecipientAction
     data class OnChangeRecipientValue(val value: TextFieldValue) : SearchRecipientAction
     data class OnClickEditRecipient(val recipientId: String) : SearchRecipientAction
     data class OnClickRecipient(
-        val id: String?,
-        val cardNumber: String?
+        val id: String? = null,
+        val cardNumber: String? = null
     ) : SearchRecipientAction
 }

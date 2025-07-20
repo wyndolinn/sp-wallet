@@ -31,6 +31,10 @@ class SearchRecipientViewModel(
 
     fun onAction(action: SearchRecipientAction) {
         when (action) {
+            SearchRecipientAction.OnClickBack -> {
+                args.onClickBack()
+            }
+
             is SearchRecipientAction.OnClickRecipient -> {
                 args.onClickRecipient(action.id, action.cardNumber)
             }
@@ -52,6 +56,7 @@ class SearchRecipientViewModel(
                     )
                 }
             }
+
         }
     }
 }

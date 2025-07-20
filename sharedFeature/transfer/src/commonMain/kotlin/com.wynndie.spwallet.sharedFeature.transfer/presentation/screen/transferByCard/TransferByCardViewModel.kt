@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card
+package com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.transferByCard
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -12,10 +12,10 @@ import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
-import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
-import com.wynndie.spwallet.sharedFeature.home.domain.usecase.TransferByCardUseCase
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.RecipientRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
-import com.wynndie.spwallet.sharedCore.domain.validator.CardNumberValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient
@@ -23,6 +23,7 @@ import com.wynndie.spwallet.sharedCore.presentation.model.emptyUiRecipient
 import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.model.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
+import com.wynndie.spwallet.sharedFeature.transfer.domain.usecase.TransferByCardUseCase
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,10 +34,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransferByCardViewModel(
+    userRepository: UserRepository,
+    cardsRepository: CardsRepository,
+    recipientRepository: RecipientRepository,
     private val args: TransferByCardViewModelArgs,
-    walletRepository: WalletRepository,
     private val transferByCardUseCase: TransferByCardUseCase,
-    private val cardNumberValidator: CardNumberValidator,
     private val transferAmountValidator: BalanceValidator,
     private val commentValidator: TransferCommentValidator,
 ) : ViewModel() {
@@ -45,7 +47,7 @@ class TransferByCardViewModel(
     val state = _state.asStateFlow()
 
     init {
-        walletRepository.getAuthedUsers().onEach { users ->
+        userRepository.getAuthedUsers().onEach { users ->
             val user = users.firstOrNull() ?: return@onEach
             val prefix = "${user.name}: "
             _state.update { state ->
@@ -59,7 +61,7 @@ class TransferByCardViewModel(
             }
         }.launchIn(viewModelScope)
 
-        walletRepository.getAuthedCards().onEach { cards ->
+        cardsRepository.getAuthedCards().onEach { cards ->
             val card = cards.find { it.id == args.cardId }
                 ?: cards.firstOrNull()
                 ?: return@onEach
@@ -72,14 +74,11 @@ class TransferByCardViewModel(
             }
         }.launchIn(viewModelScope)
 
-        walletRepository.getRecipients().onEach { _ ->
+        recipientRepository.getRecipients().onEach { _ ->
             val recipient = emptyUiRecipient.toDomain()
             _state.update { state ->
                 state.copy(
                     recipient = UiRecipient.of(recipient),
-                    recipientInputFieldState = state.recipientInputFieldState.copy(
-                        value = TextFieldValue(recipient.number)
-                    ),
                     amountInputFieldState = state.amountInputFieldState.copy(
                         value = TextFieldValue("0")
                     )
@@ -102,23 +101,13 @@ class TransferByCardViewModel(
                 }
             }
 
-            TransferByCardAction.OnToggleRecipientSheet -> {
-                _state.update { state ->
-                    state.copy(isChangeRecipientSheetVisible = !state.isChangeRecipientSheetVisible)
-                }
-            }
-
 
             TransferByCardAction.OnClickBack -> {
                 args.onClickBack()
             }
 
             is TransferByCardAction.OnClickRecipient -> {
-                _state.update { state ->
-                    state.copy(
-                        isChangeRecipientSheetVisible = false,
-                    )
-                }
+                args.onClickRecipient()
             }
 
             is TransferByCardAction.OnClickTransfer -> {
@@ -128,7 +117,6 @@ class TransferByCardViewModel(
                     val selectedCard = state.value.cards[state.value.carouselPage]
 
                     val validationResults = listOf(
-                        isCardNumberValid(action.cardNumber),
                         isTransferAmountValid(action.transferAmount),
                         isCommentValid(action.comment)
                     )
@@ -153,23 +141,6 @@ class TransferByCardViewModel(
                 }
             }
 
-
-            is TransferByCardAction.OnChangeRecipientValue -> {
-                val value = action.value
-                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
-                    .cutOffAt(Constants.CARD_NUMBER_LENGTH) ?: return
-
-                _state.update { state ->
-                    state.copy(
-                        recipientInputFieldState = state.recipientInputFieldState.copy(
-                            value = value
-                        ),
-                        recipient = state.recipient.copy(
-                            number = value.text
-                        )
-                    )
-                }
-            }
 
             is TransferByCardAction.OnChangeTransferAmountValue -> {
                 val value = action.value
@@ -202,19 +173,6 @@ class TransferByCardViewModel(
         }
     }
 
-
-    private fun isCardNumberValid(value: String): Boolean {
-        val (isValid, error) = cardNumberValidator.validate(value)
-        _state.update { state ->
-            state.copy(
-                recipientInputFieldState = state.recipientInputFieldState.copy(
-                    supportingText = error?.asUiText(),
-                    hasError = !isValid
-                )
-            )
-        }
-        return isValid
-    }
 
     private fun isTransferAmountValid(value: String): Boolean {
         val (isValid, error) = transferAmountValidator.validate(value)
