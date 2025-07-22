@@ -10,6 +10,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,10 +28,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppMenuTile
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelLarge
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.BaseInputField
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
+import com.wynndie.spwallet.sharedCore.presentation.model.card.CardIcon
 import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.empty_history
+import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
+import com.wynndie.spwallet.sharedResources.recipient_card
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,18 +107,72 @@ private fun SearchRecipientScreenContent(
             modifier = Modifier.fillMaxWidth()
         )
 
-        LazyColumn {
-            items(state.recipients) { recipient ->
-                val recipientTile = recipient.asTile()
+        when {
+            state.recipients.isNotEmpty() -> {
+                LazyColumn {
+                    items(state.recipients) { recipient ->
+                        val recipientTile = recipient.asTile()
+                        AppMenuTile(
+                            icon = recipientTile.icon.value,
+                            title = recipientTile.title,
+                            description = recipientTile.description,
+                            iconBackground = recipientTile.iconBackground.value,
+                            trailingContent = {
+                                IconButton(
+                                    onClick = {
+                                        onAction(
+                                            SearchRecipientAction.OnClickEditRecipient(
+                                                id = recipient.id
+                                            )
+                                        )
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Edit,
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            onClick = {
+                                onAction(SearchRecipientAction.OnClickRecipient(recipientTile.id))
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+
+            state.isNewRecipient -> {
                 AppMenuTile(
-                    icon = recipientTile.icon.value,
-                    title = recipientTile.title,
-                    description = recipientTile.description,
-                    iconBackground = recipientTile.iconBackground.value,
-                    onClick = {
-                        onAction(SearchRecipientAction.OnClickRecipient(recipientTile.id))
+                    icon = CardIcon.Person.value,
+                    title = stringResource(Res.string.recipient_card),
+                    description = state.recipientInputFieldState.value.text,
+                    iconBackground = CardColor.Blue.value,
+                    trailingContent = {
+                        IconButton(
+                            onClick = {
+                                onAction(
+                                    SearchRecipientAction.OnClickEditRecipient(
+                                        cardNumber = state.recipientInputFieldState.value.text
+                                    )
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Add,
+                                contentDescription = null
+                            )
+                        }
                     },
+                    onClick = { onAction(SearchRecipientAction.OnClickRecipient()) },
                     modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            else -> {
+                BaseInfoPanelLarge(
+                    title = stringResource(Res.string.empty_history),
+                    description = stringResource(Res.string.enter_recipient_card_number)
                 )
             }
         }

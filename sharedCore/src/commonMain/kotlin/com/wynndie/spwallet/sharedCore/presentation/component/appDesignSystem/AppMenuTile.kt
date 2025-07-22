@@ -1,6 +1,7 @@
 package com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ fun AppMenuTile(
     label: String? = null,
     description: String? = null,
     iconBackground: Color = Color.Transparent,
+    trailingContent: @Composable (BoxScope.() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     BaseHorizontalTileSmall(
@@ -30,6 +32,7 @@ fun AppMenuTile(
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         },
+        trailingContent = trailingContent,
         label = label,
         title = title,
         description = description,

@@ -11,7 +11,7 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 @Composable
 fun BaseHorizontalTileLayout(
     leadingContent: @Composable () -> Unit = {},
-    trailingContent: @Composable () -> Unit = {},
+    trailingContent: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
@@ -24,6 +24,6 @@ fun BaseHorizontalTileLayout(
 
         content()
 
-        trailingContent()
+        trailingContent?.let { it() }
     }
 }

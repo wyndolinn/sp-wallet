@@ -23,7 +23,7 @@ fun BaseHorizontalTileSmall(
     leadingContent: @Composable BoxScope.() -> Unit,
     title: String,
     modifier: Modifier = Modifier,
-    trailingContent: @Composable BoxScope.() -> Unit = {},
+    trailingContent: @Composable (BoxScope.() -> Unit)? = null,
     label: String? = null,
     description: String? = null,
     leadingContentBackground: Color = MaterialTheme.colorScheme.secondary,
@@ -44,12 +44,14 @@ fun BaseHorizontalTileSmall(
                 leadingContent()
             }
         },
-        trailingContent = {
-            Box(
-                contentAlignment = Alignment.Center,
-                propagateMinConstraints = true
-            ) {
-                trailingContent()
+        trailingContent = trailingContent?.let {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    propagateMinConstraints = true
+                ) {
+                    it()
+                }
             }
         },
         modifier = modifier

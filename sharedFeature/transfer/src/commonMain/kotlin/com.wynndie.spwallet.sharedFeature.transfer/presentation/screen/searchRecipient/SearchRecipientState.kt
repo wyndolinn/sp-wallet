@@ -8,5 +8,6 @@ data class SearchRecipientState(
     val recipientInputFieldState: InputFieldState  = InputFieldState(
         maxLength = Constants.MAX_RECIPIENT_NAME_LENGTH
     ),
-    val recipients: List<UiRecipient> = emptyList()
+    val recipients: List<UiRecipient> = emptyList(),
+    val isNewRecipient: Boolean = false
 )
