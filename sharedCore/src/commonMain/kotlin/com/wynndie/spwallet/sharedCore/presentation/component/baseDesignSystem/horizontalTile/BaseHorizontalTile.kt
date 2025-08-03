@@ -13,12 +13,13 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 fun BaseHorizontalTile(
     leadingContent: @Composable () -> Unit = {},
     trailingContent: @Composable (() -> Unit)? = null,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-        verticalAlignment = Alignment.Top,
+        verticalAlignment = verticalAlignment,
         modifier = modifier
     ) {
         leadingContent()

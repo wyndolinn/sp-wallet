@@ -52,6 +52,7 @@ fun BaseHorizontalTileSmall(
                 )
             }
         },
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .then(onClick?.let { Modifier.clickable(onClick = onClick) } ?: Modifier)
             .padding(MaterialTheme.spacing.medium)
