@@ -13,7 +13,6 @@ import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -21,8 +20,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 class SearchRecipientViewModel(
-    private val args: SearchRecipientViewModelArgs,
-    private val recipientRepository: RecipientRepository
+    recipientRepository: RecipientRepository,
+    private val args: SearchRecipientViewModelArgs
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchRecipientState())
@@ -52,7 +51,7 @@ class SearchRecipientViewModel(
                         _state.update { state ->
                             state.copy(
                                 recipients = cachedRecipients.filter { recipient ->
-                                    recipient.number.contains(query) || recipient.name.contains(query)
+                                    recipient.cardNumber.contains(query) || recipient.name.contains(query)
                                 }
                             )
                         }

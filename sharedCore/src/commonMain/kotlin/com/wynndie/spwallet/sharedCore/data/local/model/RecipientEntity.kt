@@ -19,7 +19,7 @@ data class RecipientEntity(
             name = name,
             color = color,
             icon = icon,
-            number = number
+            cardNumber = number
         )
     }
 
@@ -30,7 +30,7 @@ data class RecipientEntity(
                 name = recipientCard.name,
                 color = recipientCard.color,
                 icon = recipientCard.icon,
-                number = recipientCard.number
+                number = recipientCard.cardNumber
             )
         }
     }

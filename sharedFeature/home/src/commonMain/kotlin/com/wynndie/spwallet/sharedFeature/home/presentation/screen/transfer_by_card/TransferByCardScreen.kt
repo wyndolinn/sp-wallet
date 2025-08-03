@@ -216,7 +216,7 @@ private fun TransferByNumberScreen(
                         focusManager.clearFocus(true)
                         onAction(
                             TransferByCardAction.OnClickTransfer(
-                                cardNumber = state.recipient.number,
+                                cardNumber = state.recipient.cardNumber,
                                 transferAmount = state.amountInputFieldState.value.text,
                                 comment = state.commentInputFieldState.value.text
                             )
@@ -235,7 +235,7 @@ private fun TransferByNumberScreen(
             onClick = {
                 onAction(
                     TransferByCardAction.OnClickTransfer(
-                        cardNumber = state.recipient.number,
+                        cardNumber = state.recipient.cardNumber,
                         transferAmount = state.amountInputFieldState.value.text,
                         comment = state.commentInputFieldState.value.text
                     )

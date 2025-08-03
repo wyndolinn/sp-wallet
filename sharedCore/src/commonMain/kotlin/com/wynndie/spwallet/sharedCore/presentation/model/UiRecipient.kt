@@ -14,7 +14,7 @@ data class UiRecipient(
     override val icon: CardIcon,
     override val iconBackground: CardColor,
     override val name: String,
-    val number: String
+    val cardNumber: String
 ) : UiCard {
 
     fun toDomain(): RecipientCard {
@@ -23,7 +23,7 @@ data class UiRecipient(
             name = name,
             color = iconBackground.ordinal,
             icon = icon.ordinal,
-            number = number
+            cardNumber = cardNumber
         )
     }
 
@@ -33,7 +33,7 @@ data class UiRecipient(
             id = id,
             icon = icon,
             iconBackground = iconBackground,
-            title = UiText.DynamicString(number).asString().ifBlank {
+            title = UiText.DynamicString(cardNumber).asString().ifBlank {
                 UiText.StringResourceId(Res.string.enter_card_number).asString()
             },
             label = UiText.DynamicString(name).asString().ifBlank {
@@ -49,7 +49,7 @@ data class UiRecipient(
                 name = value.name,
                 iconBackground = CardColor.from(value.color),
                 icon = CardIcon.from(value.icon),
-                number = value.number
+                cardNumber = value.cardNumber
             )
         }
     }

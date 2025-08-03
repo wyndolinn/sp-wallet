@@ -1,25 +1,24 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.transferByCard
 
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
-import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.model.UiText
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repository.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
-import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
+import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
+import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyUiRecipient
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.model.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
@@ -28,6 +27,7 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 class TransferByCardViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
-    recipientRepository: RecipientRepository,
+    private val recipientRepository: RecipientRepository,
     private val args: TransferByCardViewModelArgs,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: BalanceValidator,
@@ -74,14 +74,15 @@ class TransferByCardViewModel(
             }
         }.launchIn(viewModelScope)
 
-        recipientRepository.getRecipients().onEach { _ ->
-            val recipient = emptyUiRecipient.toDomain()
+        recipientRepository.getRecipients().onEach { recipients ->
+            val recipient = recipients.find { it.id == _state.value.recipient.id }
+                ?: emptyUiRecipient.copy(
+                    cardNumber = _state.value.recipient.cardNumber
+                ).toDomain()
+
             _state.update { state ->
                 state.copy(
-                    recipient = UiRecipient.of(recipient),
-                    amountInputFieldState = state.amountInputFieldState.copy(
-                        value = TextFieldValue("0")
-                    )
+                    recipient = UiRecipient.of(recipient)
                 )
             }
         }.launchIn(viewModelScope)
@@ -169,6 +170,41 @@ class TransferByCardViewModel(
                         )
                     )
                 }
+            }
+        }
+    }
+
+    fun updateRecipient(id: String?, cardNumber: String) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(loadingState = LoadingState.Loading)
+            }
+
+            if (id != _state.value.recipient.id) {
+                val recipients = recipientRepository.getRecipients().first()
+                val recipient = recipients.find { it.id == _state.value.recipient.id }
+                    ?: emptyUiRecipient.copy(
+                        cardNumber = _state.value.recipient.cardNumber
+                    ).toDomain()
+
+                _state.update { state ->
+                    state.copy(
+                        recipient = UiRecipient.of(recipient)
+                    )
+                }
+            }
+
+            _state.update { state ->
+                state.copy(
+                    recipient = state.recipient.copy(
+                        id = id ?: "",
+                        cardNumber = cardNumber
+                    )
+                )
+            }
+
+            _state.update {
+                it.copy(loadingState = LoadingState.Finished)
             }
         }
     }

@@ -78,7 +78,7 @@ class TransferByCardViewModel(
                 state.copy(
                     recipient = UiRecipient.of(recipient),
                     recipientInputFieldState = state.recipientInputFieldState.copy(
-                        value = TextFieldValue(recipient.number)
+                        value = TextFieldValue(recipient.cardNumber)
                     ),
                     amountInputFieldState = state.amountInputFieldState.copy(
                         value = TextFieldValue("0")
@@ -165,7 +165,7 @@ class TransferByCardViewModel(
                             value = value
                         ),
                         recipient = state.recipient.copy(
-                            number = value.text
+                            cardNumber = value.text
                         )
                     )
                 }

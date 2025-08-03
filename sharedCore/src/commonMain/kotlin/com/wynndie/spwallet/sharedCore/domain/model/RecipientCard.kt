@@ -5,5 +5,5 @@ data class RecipientCard(
     override val name: String,
     override val color: Int,
     override val icon: Int,
-    val number: String
+    val cardNumber: String
 ) : Card

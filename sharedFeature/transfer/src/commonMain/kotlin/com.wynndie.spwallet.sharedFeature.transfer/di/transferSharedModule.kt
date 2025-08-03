@@ -5,6 +5,7 @@ import com.wynndie.spwallet.sharedFeature.transfer.data.remote.network.RemoteSpW
 import com.wynndie.spwallet.sharedFeature.transfer.data.repository.TransferRepositoryImpl
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repository.TransferRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.usecase.TransferByCardUseCase
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.RecipientViewModel
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.searchRecipient.SearchRecipientViewModel
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.transferByCard.TransferByCardViewModel
 import org.koin.core.module.dsl.singleOf
@@ -18,6 +19,7 @@ val transferSharedModule = module {
 
     singleOf(::TransferByCardUseCase)
 
+    viewModelOf(::RecipientViewModel)
     viewModelOf(::SearchRecipientViewModel)
     viewModelOf(::TransferByCardViewModel)
 }

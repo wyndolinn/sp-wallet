@@ -62,6 +62,14 @@ fun TransferByCardScreenRoot(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
+        modifier = Modifier
+            .imePadding()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { focusManager.clearFocus(true) }
+                )
+            },
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -83,14 +91,7 @@ fun TransferByCardScreenRoot(
                 },
                 scrollBehavior = scrollBehavior
             )
-        },
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
-                )
-            }
+        }
     ) { innerPadding ->
 
         Crossfade(
@@ -114,7 +115,6 @@ fun TransferByCardScreenRoot(
                         onAction = viewModel::onAction,
                         modifier = Modifier
                             .fillMaxSize()
-                            .imePadding()
                             .verticalScroll(rememberScrollState())
                     )
                 }
@@ -201,7 +201,7 @@ private fun TransferByNumberScreen(
                         focusManager.clearFocus(true)
                         onAction(
                             TransferByCardAction.OnClickTransfer(
-                                cardNumber = state.recipient.number,
+                                cardNumber = state.recipient.cardNumber,
                                 transferAmount = state.amountInputFieldState.value.text,
                                 comment = state.commentInputFieldState.value.text
                             )
@@ -220,7 +220,7 @@ private fun TransferByNumberScreen(
             onClick = {
                 onAction(
                     TransferByCardAction.OnClickTransfer(
-                        cardNumber = state.recipient.number,
+                        cardNumber = state.recipient.cardNumber,
                         transferAmount = state.amountInputFieldState.value.text,
                         comment = state.commentInputFieldState.value.text
                     )

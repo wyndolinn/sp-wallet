@@ -33,10 +33,11 @@ sealed interface TransferNavGraphRoutes : Route {
     ) : TransferNavGraphRoutes
 
     @Serializable
+    data object EditSearchRecipient : TransferNavGraphRoutes
+
+    @Serializable
     data class TransferByCardNumber(
-        val cardId: String? = null,
-        val recipientId: String? = null,
-        val recipientCardNumber: String? = null
+        val cardId: String?
     ) : TransferNavGraphRoutes
 
     @Serializable

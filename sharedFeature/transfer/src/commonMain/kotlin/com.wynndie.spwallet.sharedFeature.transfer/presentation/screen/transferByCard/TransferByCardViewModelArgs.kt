@@ -2,8 +2,6 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.transfer
 
 data class TransferByCardViewModelArgs(
     val cardId: String?,
-    val recipientId: String?,
-    val recipientCardNumber: String?,
     val onClickBack: () -> Unit,
     val onClickRecipient: () -> Unit,
     val onClickEditRecipient: (String) -> Unit

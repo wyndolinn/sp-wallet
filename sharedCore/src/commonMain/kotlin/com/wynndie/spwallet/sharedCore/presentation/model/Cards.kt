@@ -25,5 +25,5 @@ val emptyUiRecipient = UiRecipient(
     name = "",
     icon = CardIcon.Person,
     iconBackground = CardColor.Blue,
-    number = ""
+    cardNumber = ""
 )

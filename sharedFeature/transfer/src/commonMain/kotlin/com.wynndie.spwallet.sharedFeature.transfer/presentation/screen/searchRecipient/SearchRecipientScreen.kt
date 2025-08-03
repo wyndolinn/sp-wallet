@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,6 +24,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -37,10 +39,10 @@ import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardIcon
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.recipient_history_empty
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_card
+import com.wynndie.spwallet.sharedResources.recipient_history_empty
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,6 +77,7 @@ fun SearchRecipientScreenRoot(
             )
         },
         modifier = Modifier
+            .systemBarsPadding()
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { focusManager.clearFocus(true) }
@@ -84,6 +87,7 @@ fun SearchRecipientScreenRoot(
         SearchRecipientScreenContent(
             state = state,
             onAction = viewModel::onAction,
+            focusManager = focusManager,
             modifier = Modifier
                 .padding(innerPadding)
                 .imePadding()
@@ -95,6 +99,7 @@ fun SearchRecipientScreenRoot(
 private fun SearchRecipientScreenContent(
     state: SearchRecipientState,
     onAction: (SearchRecipientAction) -> Unit,
+    focusManager: FocusManager,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -108,7 +113,7 @@ private fun SearchRecipientScreenContent(
                 imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
-                onNext = { onAction(SearchRecipientAction.OnClickRecipient(null, null)) }
+                onDone = { focusManager.clearFocus(true) }
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,7 +167,9 @@ private fun SearchRecipientScreenContent(
                             }
                         )
                     },
-                    onClick = { onAction(SearchRecipientAction.OnClickRecipient()) },
+                    onClick = { onAction(SearchRecipientAction.OnClickRecipient(
+                        cardNumber = state.recipientInputFieldState.value.text
+                    )) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = MaterialTheme.spacing.medium)

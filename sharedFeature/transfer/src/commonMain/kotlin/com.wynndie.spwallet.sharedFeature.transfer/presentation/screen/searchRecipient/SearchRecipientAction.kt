@@ -16,7 +16,7 @@ sealed interface SearchRecipientAction {
     ) : SearchRecipientAction
 
     data class OnClickRecipient(
-        val id: String? = null,
-        val cardNumber: String? = null
+        val cardNumber: String,
+        val id: String? = null
     ) : SearchRecipientAction
 }
