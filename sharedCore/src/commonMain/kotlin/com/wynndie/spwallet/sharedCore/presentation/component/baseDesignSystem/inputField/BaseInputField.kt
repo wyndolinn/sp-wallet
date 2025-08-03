@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import com.wynndie.spwallet.sharedCore.presentation.theme.radius
+import com.wynndie.spwallet.sharedCore.presentation.theme.size
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.clear
 import org.jetbrains.compose.resources.stringResource
@@ -30,7 +32,6 @@ fun BaseInputField(
     keyboardOptions: KeyboardOptions,
     keyboardActions: KeyboardActions,
     modifier: Modifier = Modifier,
-    label: String? = null,
     placeholder: String? = null,
     supportingText: String? = null,
     isError: Boolean = false,

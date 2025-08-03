@@ -108,7 +108,7 @@
     <string name="by_number">По номеру</string>
 
     <string name="recipient_card">Карта получателя</string>
-    <string name="empty_history">История пуста</string>
+    <string name="recipient_history_empty">Не нашли сохранённых получателей</string>
     <string name="enter_recipient_card_number">Введите номер карты получателя</string>
 
 </resources>

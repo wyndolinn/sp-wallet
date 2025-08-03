@@ -64,62 +64,23 @@ fun TitledInputField(
         title = label,
         modifier = modifier
     ) {
-        OutlinedTextField(
+        BaseInputField(
             value = value,
-            onValueChange = { onValueChange(it) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            placeholder = placeholder?.let {
-                {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-            },
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            prefix = prefix?.let {
-                {
-                    Text(
-                        text = prefix,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-            },
-            suffix = suffix?.let {
-                {
-                    Text(
-                        text = suffix,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-            },
-            supportingText = supportingText?.let{
-                {
-                    Text(
-                        text = supportingText,
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                }
-            },
-            isError = isError,
-            visualTransformation = visualTransformation,
+            onValueChange = onValueChange,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
+            placeholder = placeholder,
+            supportingText = supportingText,
+            isError = isError,
+            enabled = enabled,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            prefix = prefix,
+            suffix = suffix ,
+            visualTransformation = visualTransformation,
             singleLine = singleLine,
             minLines = minLines,
-            shape = MaterialTheme.radius.default,
-            textStyle = MaterialTheme.typography.titleMedium,
-            colors = TextFieldDefaults.colors(
-                unfocusedSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                focusedSupportingTextColor = MaterialTheme.colorScheme.onSurface,
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                errorContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -32,6 +30,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardTileList
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseIconButton
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseOutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
@@ -132,14 +131,11 @@ fun HomeScreenRoot(
                         )
                     },
                     actions = {
-                        IconButton(
-                            onClick = { viewModel.onAction(HomeAction.OnRefresh) }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Refresh,
-                                contentDescription = null
-                            )
-                        }
+                        BaseIconButton(
+                            icon = Icons.Outlined.Refresh,
+                            onClick = { viewModel.onAction(HomeAction.OnRefresh) },
+                            loading = state.screenLoadingState == LoadingState.Loading
+                        )
                     },
                     scrollBehavior = scrollBehavior
                 )

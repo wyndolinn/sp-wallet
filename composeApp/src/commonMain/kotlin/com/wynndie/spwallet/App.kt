@@ -1,19 +1,22 @@
 package com.wynndie.spwallet
 
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.window.Popup
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.navigation.navhost.RootNavHost
+import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
+import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
+import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.component.effect.ObserveAsEvents
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
-import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -52,10 +55,16 @@ fun App() {
     AppTheme {
         Scaffold(
             snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
+                SnackbarHost(hostState = snackbarHostState) {
+                    Popup {
+                        Snackbar(snackbarData = it)
+                    }
+                }
             }
         ) { _ ->
-            RootNavHost()
+            RootNavHost(
+                startDestination = HomeNavGraphRoutes.HomeNavGraph
+            )
         }
     }
 }

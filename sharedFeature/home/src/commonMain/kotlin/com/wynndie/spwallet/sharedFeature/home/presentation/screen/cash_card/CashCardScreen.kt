@@ -48,9 +48,11 @@ import com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.com
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.component.DeleteCardDialog
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.balance
+import com.wynndie.spwallet.sharedResources.card_name
 import com.wynndie.spwallet.sharedResources.cash_account
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.enter_balance
+import com.wynndie.spwallet.sharedResources.enter_card_name
 import com.wynndie.spwallet.sharedResources.save
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -67,8 +69,6 @@ fun CashCardScreenRoot(
     if (state.isCustomizationSheetVisible) {
         CustomizationSheet(
             onDismiss = { viewModel.onAction(CashCardAction.OnToggleCustomizationSheet) },
-            idInputFieldState = state.nameInputFieldState,
-            onIdValueChange = { viewModel.onAction(CashCardAction.OnChangeNameValue(it)) },
             selectedColorChip = state.selectedColorChip,
             onColorChipClick = { viewModel.onAction(CashCardAction.OnClickColorChip(it)) },
             modifier = Modifier
@@ -193,6 +193,24 @@ private fun CashCardScreen(
                 card = state.card,
                 onClick = { onAction(CashCardAction.OnToggleCustomizationSheet) },
                 modifier = Modifier.fillMaxWidth()
+            )
+
+            TitledInputField(
+                value = state.nameInputFieldState.value,
+                onValueChange = { onAction(CashCardAction.OnChangeNameValue(it)) },
+                label = stringResource(Res.string.enter_card_name),
+                placeholder = stringResource(Res.string.card_name),
+                supportingText = state.nameInputFieldState.supportingText?.asString(),
+                isError = state.nameInputFieldState.hasError,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus(true)
+                    }
+                )
             )
 
             TitledInputField(

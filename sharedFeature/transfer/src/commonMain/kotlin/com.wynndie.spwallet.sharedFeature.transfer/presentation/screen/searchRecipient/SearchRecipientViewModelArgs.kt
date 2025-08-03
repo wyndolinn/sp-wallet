@@ -3,5 +3,5 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screen.searchRe
 data class SearchRecipientViewModelArgs(
     val onClickBack: () -> Unit,
     val onClickRecipient: (id: String?, cardNumber: String?) -> Unit,
-    val onClickEditRecipient: (id: String) -> Unit
+    val onClickEditRecipient: (id: String?) -> Unit
 )

@@ -26,14 +26,17 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppMenuTile
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelLarge
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseIconButton
+import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelSmall
 import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.BaseInputField
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardIcon
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.empty_history
+import com.wynndie.spwallet.sharedResources.recipient_history_empty
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_card
@@ -104,7 +107,9 @@ private fun SearchRecipientScreenContent(
             keyboardActions = KeyboardActions(
                 onNext = { onAction(SearchRecipientAction.OnClickRecipient(null, null)) }
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
         )
 
         when {
@@ -118,20 +123,14 @@ private fun SearchRecipientScreenContent(
                             description = recipientTile.description,
                             iconBackground = recipientTile.iconBackground.value,
                             trailingContent = {
-                                IconButton(
+                                BaseIconButton(
+                                    icon = Icons.Outlined.Edit,
                                     onClick = {
                                         onAction(
-                                            SearchRecipientAction.OnClickEditRecipient(
-                                                id = recipient.id
-                                            )
+                                            SearchRecipientAction.OnClickEditRecipient(recipient.id)
                                         )
                                     }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Edit,
-                                        contentDescription = null
-                                    )
-                                }
+                                )
                             },
                             onClick = {
                                 onAction(SearchRecipientAction.OnClickRecipient(recipientTile.id))
@@ -149,7 +148,8 @@ private fun SearchRecipientScreenContent(
                     description = state.recipientInputFieldState.value.text,
                     iconBackground = CardColor.Blue.value,
                     trailingContent = {
-                        IconButton(
+                        BaseIconButton(
+                            icon = Icons.Outlined.Add,
                             onClick = {
                                 onAction(
                                     SearchRecipientAction.OnClickEditRecipient(
@@ -157,22 +157,23 @@ private fun SearchRecipientScreenContent(
                                     )
                                 )
                             }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Add,
-                                contentDescription = null
-                            )
-                        }
+                        )
                     },
                     onClick = { onAction(SearchRecipientAction.OnClickRecipient()) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = MaterialTheme.spacing.medium)
                 )
             }
 
             else -> {
-                BaseInfoPanelLarge(
-                    title = stringResource(Res.string.empty_history),
-                    description = stringResource(Res.string.enter_recipient_card_number)
+                BaseInfoPanelSmall(
+                    title = stringResource(Res.string.recipient_history_empty),
+                    description = stringResource(Res.string.enter_recipient_card_number),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.spacing.medium)
                 )
             }
         }

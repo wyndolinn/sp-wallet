@@ -40,8 +40,6 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CustomizationSheet(
     onDismiss: () -> Unit,
-    idInputFieldState: InputFieldState,
-    onIdValueChange: (TextFieldValue) -> Unit,
     selectedColorChip: Int,
     onColorChipClick: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -50,8 +48,6 @@ fun CustomizationSheet(
         onDismiss = onDismiss
     ) {
         CustomizationSheetContent(
-            nameInputFieldState = idInputFieldState,
-            onNameValueChange = onIdValueChange,
             selectedColorChip = selectedColorChip,
             onColorChipClick = onColorChipClick,
             onDismiss = onDismiss,
@@ -62,8 +58,6 @@ fun CustomizationSheet(
 
 @Composable
 private fun CustomizationSheetContent(
-    nameInputFieldState: InputFieldState,
-    onNameValueChange: (TextFieldValue) -> Unit,
     selectedColorChip: Int,
     onColorChipClick: (Int) -> Unit,
     onDismiss: () -> Unit,
@@ -80,26 +74,6 @@ private fun CustomizationSheetContent(
                 )
             }
     ) {
-        TitledInputField(
-            value = nameInputFieldState.value,
-            onValueChange = { onNameValueChange(it) },
-            label = stringResource(Res.string.enter_card_name),
-            placeholder = stringResource(Res.string.card_name),
-            supportingText = nameInputFieldState.supportingText?.asString(),
-            isError = nameInputFieldState.hasError,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus(true)
-                }
-            )
-        )
-
-        HorizontalDivider(Modifier.padding(vertical = MaterialTheme.spacing.medium))
-
         FlowRow(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.padding(MaterialTheme.spacing.medium)

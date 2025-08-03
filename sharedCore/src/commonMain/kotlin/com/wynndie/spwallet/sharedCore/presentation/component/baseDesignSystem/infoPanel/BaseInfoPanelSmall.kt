@@ -12,8 +12,8 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @Composable
 fun BaseInfoPanelSmall(
-    label: String?,
-    title: String?,
+    label: String? = null,
+    title: String? = null,
     description: String? = null,
     textAlign: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier
