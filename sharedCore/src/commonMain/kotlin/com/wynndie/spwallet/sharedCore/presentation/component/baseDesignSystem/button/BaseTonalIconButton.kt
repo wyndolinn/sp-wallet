@@ -31,7 +31,9 @@ fun BaseTonalIconButton(
         FilledTonalButton(
             onClick = onClick,
             shape = MaterialTheme.radius.medium,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(MaterialTheme.size.large)
         ) {
             Icon(
                 imageVector = icon,

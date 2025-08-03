@@ -57,6 +57,7 @@ kotlin {
             api(compose.components.resources)
             api(compose.components.uiToolingPreview)
             api(compose.materialIconsExtended)
+
             api(libs.androidx.lifecycle.viewmodel)
             api(libs.androidx.lifecycle.runtime.compose)
 

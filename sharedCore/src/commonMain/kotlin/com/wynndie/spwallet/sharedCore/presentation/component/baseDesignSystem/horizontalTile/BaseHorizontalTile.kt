@@ -1,6 +1,7 @@
 package com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.horizontalTile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -9,7 +10,7 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @Composable
-fun BaseHorizontalTileLayout(
+fun BaseHorizontalTile(
     leadingContent: @Composable () -> Unit = {},
     trailingContent: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
@@ -22,7 +23,10 @@ fun BaseHorizontalTileLayout(
     ) {
         leadingContent()
 
-        content()
+        Box(
+            content = { content() },
+            modifier = Modifier.weight(1f)
+        )
 
         trailingContent?.let { it() }
     }

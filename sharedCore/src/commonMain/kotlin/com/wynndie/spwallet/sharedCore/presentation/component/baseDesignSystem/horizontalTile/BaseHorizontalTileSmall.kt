@@ -32,34 +32,29 @@ fun BaseHorizontalTileSmall(
 
     val minContentHeight = MaterialTheme.size.small
 
-    BaseHorizontalTileLayout(
+    BaseHorizontalTile(
         leadingContent = {
             Box(
                 contentAlignment = Alignment.Center,
+                content = leadingContent,
                 modifier = Modifier
                     .size(minContentHeight)
                     .clip(MaterialTheme.radius.small)
                     .background(leadingContentBackground)
-            ) {
-                leadingContent()
-            }
+            )
         },
         trailingContent = trailingContent?.let {
             {
                 Box(
                     contentAlignment = Alignment.Center,
-                    propagateMinConstraints = true
-                ) {
-                    it()
-                }
+                    content = it,
+                    modifier = Modifier.size(minContentHeight)
+                )
             }
         },
         modifier = modifier
             .then(onClick?.let { Modifier.clickable(onClick = onClick) } ?: Modifier)
-            .padding(
-                horizontal = MaterialTheme.spacing.medium,
-                vertical = MaterialTheme.spacing.small
-            )
+            .padding(MaterialTheme.spacing.medium)
     ) {
         BaseInfoPanelSmall(
             label = label,

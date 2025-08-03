@@ -22,7 +22,7 @@ fun BaseTonalButton(
     FilledTonalButton(
         onClick = onClick,
         shape = MaterialTheme.radius.medium,
-        modifier = modifier.height(MaterialTheme.size.default)
+        modifier = modifier.height(MaterialTheme.size.large)
     ) {
         leadingIcon?.let {
             Icon(

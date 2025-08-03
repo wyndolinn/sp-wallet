@@ -37,7 +37,7 @@ fun NavGraphBuilder.homeNavGraph(
                             }
                         },
                         onClickTransferByCard = { cardId ->
-                            navController.navigate(HomeNavGraphRoutes.TransferByCard(cardId)) {
+                            navController.navigate(TransferNavGraphRoutes.SearchRecipient(cardId)) {
                                 launchSingleTop = true
                             }
                         }
@@ -66,20 +66,20 @@ fun NavGraphBuilder.homeNavGraph(
             )
         }
 
-        composable<HomeNavGraphRoutes.TransferByCard> { navBackStackEntry ->
-            val args = navBackStackEntry.toRoute<HomeNavGraphRoutes.TransferByCard>()
-            val viewModel = koinViewModel<TransferByCardViewModel> {
-                parametersOf(
-                    TransferByCardViewModelArgs(
-                        cardId = args.cardId,
-                        onClickBack = { navController.navigateUp() }
-                    )
-                )
-            }
-
-            TransferByCardScreenRoot(
-                viewModel = viewModel
-            )
-        }
+//        composable<HomeNavGraphRoutes.TransferByCard> { navBackStackEntry ->
+//            val args = navBackStackEntry.toRoute<HomeNavGraphRoutes.TransferByCard>()
+//            val viewModel = koinViewModel<TransferByCardViewModel> {
+//                parametersOf(
+//                    TransferByCardViewModelArgs(
+//                        cardId = args.cardId,
+//                        onClickBack = { navController.navigateUp() }
+//                    )
+//                )
+//            }
+//
+//            TransferByCardScreenRoot(
+//                viewModel = viewModel
+//            )
+//        }
     }
 }

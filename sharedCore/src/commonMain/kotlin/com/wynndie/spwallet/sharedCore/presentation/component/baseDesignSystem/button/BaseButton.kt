@@ -28,7 +28,7 @@ fun BaseButton(
         onClick = onClick,
         shape = MaterialTheme.radius.medium,
         enabled = enabled,
-        modifier = modifier.height(MaterialTheme.size.default)
+        modifier = modifier.height(MaterialTheme.size.large)
     ) {
 
         Crossfade(

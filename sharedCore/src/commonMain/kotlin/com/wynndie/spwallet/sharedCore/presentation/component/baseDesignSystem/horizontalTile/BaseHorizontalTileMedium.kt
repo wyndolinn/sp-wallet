@@ -23,7 +23,7 @@ fun BaseHorizontalTileMedium(
     leadingContent: @Composable BoxScope.() -> Unit,
     title: String,
     modifier: Modifier = Modifier,
-    trailingContent: @Composable BoxScope.() -> Unit = {},
+    trailingContent: @Composable (BoxScope.() -> Unit)? = null,
     label: String? = null,
     description: String? = null,
     leadingContentBackground: Color = MaterialTheme.colorScheme.secondary,
@@ -32,7 +32,7 @@ fun BaseHorizontalTileMedium(
 
     val minContentHeight = MaterialTheme.size.large
 
-    BaseHorizontalTileLayout(
+    BaseHorizontalTile(
         leadingContent = {
             Box(
                 contentAlignment = Alignment.Center,
@@ -44,12 +44,13 @@ fun BaseHorizontalTileMedium(
                 leadingContent()
             }
         },
-        trailingContent = {
-            Box(
-                contentAlignment = Alignment.Center,
-                propagateMinConstraints = true
-            ) {
-                trailingContent()
+        trailingContent = trailingContent?.let {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    content = it,
+                    modifier = Modifier.size(minContentHeight)
+                )
             }
         },
         modifier = modifier

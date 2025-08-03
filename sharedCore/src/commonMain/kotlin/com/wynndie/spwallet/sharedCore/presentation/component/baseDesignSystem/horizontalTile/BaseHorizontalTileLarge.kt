@@ -32,7 +32,7 @@ fun BaseHorizontalTileLarge(
 
     val minContentHeight = MaterialTheme.size.scale(2f).medium
 
-    BaseHorizontalTileLayout(
+    BaseHorizontalTile(
         leadingContent = {
             Box(
                 contentAlignment = Alignment.Center,
