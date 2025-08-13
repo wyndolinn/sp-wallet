@@ -2,9 +2,11 @@ package com.wynndie.spwallet.sharedCore.presentation.model
 
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 sealed interface UiText {
+
     data class DynamicString(val value: String) : UiText
     class StringResourceId(
         val id: StringResource,
@@ -17,7 +19,34 @@ sealed interface UiText {
     fun asString(): String {
         return when (this) {
             is DynamicString -> value
-            is StringResourceId -> stringResource(id, *args)
+            is StringResourceId -> {
+
+                val newArgs = args.map {
+                    when(it){
+                        is StringResource -> stringResource(it)
+                        else -> it.toString()
+                    }
+                }.toTypedArray()
+
+                stringResource(id, *newArgs)
+            }
+        }
+    }
+
+    suspend fun convertAsString(): String {
+        return when (this) {
+            is DynamicString -> value
+            is StringResourceId -> {
+
+                val newArgs = args.map {
+                    when (it) {
+                        is StringResource -> getString(it)
+                        else -> it.toString()
+                    }
+                }.toTypedArray()
+
+                return getString(id, *newArgs)
+            }
         }
     }
 }
