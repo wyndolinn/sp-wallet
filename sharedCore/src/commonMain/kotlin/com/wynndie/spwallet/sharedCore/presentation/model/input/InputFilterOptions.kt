@@ -2,7 +2,10 @@ package com.wynndie.spwallet.sharedCore.presentation.model.input
 
 sealed class InputFilterOptions(val predicate: (Char) -> Boolean) {
 
-    sealed class Text(predicate: (Char) -> Boolean) : InputFilterOptions(predicate = predicate) {
+    sealed class Text(
+        predicate: (Char) -> Boolean
+    ) : InputFilterOptions(predicate = predicate) {
+
         data object LettersOnly : Text(predicate = {
             it.isLetter()
         })
@@ -16,13 +19,19 @@ sealed class InputFilterOptions(val predicate: (Char) -> Boolean) {
         })
     }
 
-    sealed class Digits(predicate: (Char) -> Boolean) : InputFilterOptions(predicate = predicate) {
+    sealed class Digits(
+        predicate: (Char) -> Boolean
+    ) : InputFilterOptions(predicate = predicate) {
+
         data object DigitsOnly : Digits(predicate = {
             it.isDigit()
         })
     }
 
-    sealed class Structured(predicate: (Char) -> Boolean) : InputFilterOptions(predicate = predicate) {
+    sealed class Structured(
+        predicate: (Char) -> Boolean
+    ) : InputFilterOptions(predicate = predicate) {
+
         data object Uuid : Structured(predicate = {
             it.isDigit() || it in 'a'..'f' || it in 'A'..'F' || it == '-'
         })

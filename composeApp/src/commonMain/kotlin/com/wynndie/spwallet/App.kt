@@ -2,6 +2,7 @@ package com.wynndie.spwallet
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -28,28 +29,27 @@ fun App() {
     val snackbarHostState = remember { SnackbarHostState() }
 
     ObserveAsEvents(DialogController.event) { dialog ->
-        viewModel.sendDialogEvent(dialog)
-    }
+        when (dialog) {
+            is Dialog.AlertDialog -> {
 
-    when (val dialog = viewModel.dialogEvent.collectAsStateWithLifecycle().value) {
-        is Dialog.AlertDialog -> {
-            viewModel.sendDialogEvent(null)
-        }
+            }
 
-        is Dialog.BottomSheet -> {
-            viewModel.sendDialogEvent(null)
-        }
+            is Dialog.BottomSheet -> {
 
-        is Dialog.Snackbar -> {
-            val message = dialog.message.asString()
+            }
 
-            scope.launch {
-                snackbarHostState.showSnackbar(message = message)
-                viewModel.sendDialogEvent(null)
+            is Dialog.Snackbar -> {
+                scope.launch {
+                    val currentSnackbarData = snackbarHostState.currentSnackbarData
+                    currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(
+                        message = dialog.message.convertAsString(),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
+                }
             }
         }
-
-        null -> Unit
     }
 
     AppTheme {
