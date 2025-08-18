@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
@@ -137,7 +137,7 @@ class HomeViewModel(
                     if (!validationResults.any { isValid -> !isValid }) {
                         authCardUseCase(id = action.id, token = action.token)
                             .onError {
-                                DialogController.send(Dialog.Snackbar(it.asUiText()))
+                                OverlayController.sendOverlay(OverlayType.Snackbar(it.asUiText()))
                             }
                             .onSuccess {
                                 syncWithRemoteUseCase()
@@ -248,7 +248,7 @@ class HomeViewModel(
 
         syncWithRemoteUseCase()
             .onError { error ->
-                DialogController.send(Dialog.Snackbar(error.asUiText()))
+                OverlayController.sendOverlay(OverlayType.Snackbar(error.asUiText()))
             }
 
         _state.update {

@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
@@ -160,8 +160,8 @@ class CashCardViewModel(
                             }
                             .onSuccess {
                                 _state.update { it.copy(saveLoadingState = LoadingState.Finished) }
-                                DialogController.send(
-                                    Dialog.Snackbar(UiText.StringResourceId(Res.string.cash_creation_succeed))
+                                OverlayController.sendOverlay(
+                                    OverlayType.Snackbar(UiText.StringResourceId(Res.string.cash_creation_succeed))
                                 )
                                 args.onClickBack()
                             }

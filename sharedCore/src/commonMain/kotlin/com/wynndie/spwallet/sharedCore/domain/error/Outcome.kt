@@ -42,10 +42,10 @@ inline fun <D, E : RootError> Outcome<List<D>, E>.findOrNull(predicate: (D) -> B
     }
 }
 
-inline fun <D, E : RootError> Outcome<D, E>.getOrElse(fallback: (E) -> D): D {
+inline fun <D, E : RootError> Outcome<D, E>.getOrElse(action: (E) -> D): D {
     return when (this) {
         is Outcome.Success -> data
-        is Outcome.Error -> fallback(error)
+        is Outcome.Error -> action(error)
     }
 }
 

@@ -10,8 +10,8 @@ import com.wynndie.spwallet.sharedCore.domain.repository.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient
@@ -129,10 +129,10 @@ class TransferByCardViewModel(
                             amount = action.transferAmount,
                             comment = action.comment
                         ).onError {
-                            DialogController.send(Dialog.Snackbar(it.asUiText()))
+                            OverlayController.sendOverlay(OverlayType.Snackbar(it.asUiText()))
                         }.onSuccess {
-                            DialogController.send(
-                                Dialog.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
+                            OverlayController.sendOverlay(
+                                OverlayType.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
                             )
                             args.onClickBack()
                         }

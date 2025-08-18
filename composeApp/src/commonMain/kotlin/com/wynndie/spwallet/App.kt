@@ -8,14 +8,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.window.Popup
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
-import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
 import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.component.effect.ObserveAsEvents
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.Dialog
-import com.wynndie.spwallet.sharedCore.presentation.controller.dialog.DialogController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -28,24 +25,25 @@ fun App() {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    ObserveAsEvents(DialogController.event) { dialog ->
-        when (dialog) {
-            is Dialog.AlertDialog -> {
+    ObserveAsEvents(OverlayController.overlay) { overlay ->
+        when (overlay) {
+            is OverlayType.AlertDialog -> {
 
             }
 
-            is Dialog.BottomSheet -> {
+            is OverlayType.BottomSheet -> {
 
             }
 
-            is Dialog.Snackbar -> {
+            is OverlayType.Snackbar -> {
                 scope.launch {
                     val currentSnackbarData = snackbarHostState.currentSnackbarData
                     currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(
-                        message = dialog.message.convertAsString(),
-                        withDismissAction = true,
-                        duration = SnackbarDuration.Short
+                        message = overlay.message.convertAsString(),
+                        actionLabel = overlay.actionLabel?.convertAsString(),
+                        withDismissAction = overlay.withDismissAction,
+                        duration = overlay.duration
                     )
                 }
             }
@@ -56,9 +54,7 @@ fun App() {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState) {
-                    Popup {
-                        Snackbar(snackbarData = it)
-                    }
+                    Snackbar(snackbarData = it)
                 }
             }
         ) { _ ->
