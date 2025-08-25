@@ -14,7 +14,7 @@ import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.CardNameValidator
-import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyUiCashCard

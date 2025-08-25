@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedCore.presentation.model.card
 import androidx.compose.runtime.Composable
 import com.wynndie.spwallet.sharedCore.presentation.mapper.joinToUiText
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.Tile
 import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedResources.Res

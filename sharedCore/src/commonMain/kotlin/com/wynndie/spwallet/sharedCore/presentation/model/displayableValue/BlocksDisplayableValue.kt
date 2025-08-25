@@ -1,5 +1,6 @@
-package com.wynndie.spwallet.sharedCore.presentation.model
+package com.wynndie.spwallet.sharedCore.presentation.model.displayableValue
 
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.amount_of_ore
 import com.wynndie.spwallet.sharedResources.amount_of_shulkers

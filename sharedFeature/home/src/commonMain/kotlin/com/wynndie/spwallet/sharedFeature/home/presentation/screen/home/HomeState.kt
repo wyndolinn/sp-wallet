@@ -4,7 +4,7 @@ import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
-import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard

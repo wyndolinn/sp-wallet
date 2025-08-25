@@ -4,6 +4,7 @@ import com.wynndie.spwallet.sharedCore.domain.model.AuthedUser
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardIcon
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 
 val emptyBalance = BlocksDisplayableValue.of(0)
 

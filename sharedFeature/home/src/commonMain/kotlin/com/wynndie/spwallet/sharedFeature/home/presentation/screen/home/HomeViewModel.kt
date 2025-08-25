@@ -16,7 +16,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.usecase.DeleteAuthedCardUs
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
-import com.wynndie.spwallet.sharedCore.presentation.model.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
