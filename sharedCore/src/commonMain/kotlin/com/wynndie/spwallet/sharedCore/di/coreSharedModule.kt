@@ -1,14 +1,16 @@
 package com.wynndie.spwallet.sharedCore.di
 
-import com.wynndie.spwallet.sharedCore.data.HttpClientFactory
+import com.wynndie.spwallet.sharedCore.data.remote.HttpClientFactory
 import com.wynndie.spwallet.sharedCore.data.remote.network.KtorRemoteSpWorldsCardsDataSource
 import com.wynndie.spwallet.sharedCore.data.remote.network.KtorRemoteSpWorldsUserDataSource
 import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsCardsDataSource
 import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsUserDataSource
 import com.wynndie.spwallet.sharedCore.data.repository.CardsRepositoryImpl
+import com.wynndie.spwallet.sharedCore.data.repository.DataStoreRepositoryImpl
 import com.wynndie.spwallet.sharedCore.data.repository.RecipientRepositoryImpl
 import com.wynndie.spwallet.sharedCore.data.repository.UserRepositoryImpl
 import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.DataStoreRepository
 import com.wynndie.spwallet.sharedCore.domain.repository.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
@@ -28,6 +30,7 @@ val coreSharedModule = module {
     singleOf(::CardsRepositoryImpl).bind<CardsRepository>()
     singleOf(::UserRepositoryImpl).bind<UserRepository>()
     singleOf(::RecipientRepositoryImpl).bind<RecipientRepository>()
+    singleOf(::DataStoreRepositoryImpl).bind<DataStoreRepository>()
 
     singleOf(::BalanceValidator)
     singleOf(::CardNameValidator)

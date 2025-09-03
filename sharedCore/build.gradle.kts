@@ -66,7 +66,9 @@ kotlin {
             api(libs.koin.core)
 
             api(libs.kotlinx.serialization.json)
-            api(libs.bundles.ktor)
+
+            api(libs.datastore.preferences)
+            api(libs.datastore)
 
             api(libs.bundles.ktor)
             api(libs.bundles.coil)

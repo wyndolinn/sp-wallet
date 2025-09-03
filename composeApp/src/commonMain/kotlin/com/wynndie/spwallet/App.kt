@@ -20,8 +20,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun App() {
 
-    val viewModel: AppViewModel = koinViewModel()
-
+    val viewModel: AppViewModel = koinViewModel<AppViewModel>()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 

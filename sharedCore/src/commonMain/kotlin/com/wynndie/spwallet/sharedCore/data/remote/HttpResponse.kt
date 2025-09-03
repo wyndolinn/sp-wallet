@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.data
+package com.wynndie.spwallet.sharedCore.data.remote
 
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome

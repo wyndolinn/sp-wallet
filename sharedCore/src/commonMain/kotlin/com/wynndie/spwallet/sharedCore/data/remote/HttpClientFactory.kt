@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.data
+package com.wynndie.spwallet.sharedCore.data.remote
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine

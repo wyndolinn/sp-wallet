@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedFeature.profile.domain.model
 
 import platform.Foundation.NSUserDefaults
 
-class IosLocalization() : Localization {
+class IosLocalizationController() : LocalizationController {
     
     override fun applyLanguage(iso: String) {
         NSUserDefaults.standardUserDefaults.setObject(

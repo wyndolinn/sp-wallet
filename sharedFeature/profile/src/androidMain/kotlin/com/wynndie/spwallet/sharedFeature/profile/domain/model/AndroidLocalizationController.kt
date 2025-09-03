@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.LocaleList
 import java.util.Locale
 
-class AndroidLocalization(val context: Context) : Localization {
+class AndroidLocalizationController(val context: Context) : LocalizationController {
 
     override fun applyLanguage(iso: String) {
         val locale = Locale(iso)

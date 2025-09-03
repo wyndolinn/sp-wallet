@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedCore.data.remote.network
 
 import com.wynndie.spwallet.sharedCore.data.remote.model.UnauthedUserDto
-import com.wynndie.spwallet.sharedCore.data.safeCall
+import com.wynndie.spwallet.sharedCore.data.remote.safeCall
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import io.ktor.client.HttpClient

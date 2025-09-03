@@ -1,14 +1,21 @@
 package com.wynndie.spwallet.sharedFeature.profile.presentation.screen.localization
 
 import androidx.lifecycle.ViewModel
-import com.wynndie.spwallet.sharedFeature.profile.domain.model.Localization
+import androidx.lifecycle.viewModelScope
+import com.wynndie.spwallet.sharedCore.domain.repository.DataStoreRepository
+import com.wynndie.spwallet.sharedFeature.profile.domain.model.LocalizationController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.koin.core.option.viewModelScopeFactory
 
 class ThemeViewModel(
+    private val dataStoreRepository: DataStoreRepository,
     private val args: ThemeViewModelArgs,
-    private val localization: Localization
+    private val localizationController: LocalizationController
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ThemeState())
@@ -16,9 +23,12 @@ class ThemeViewModel(
 
 
     init {
-        _state.update {
-            it.copy(selectedLanguageIso = localization.getLanguageIso())
-        }
+        dataStoreRepository.getLocalization().onEach { languageIso ->
+            localizationController.applyLanguage(languageIso)
+            _state.update {
+                it.copy(selectedLanguageIso = localizationController.getLanguageIso())
+            }
+        }.launchIn(viewModelScope)
     }
 
 
@@ -29,9 +39,8 @@ class ThemeViewModel(
             }
 
             is ThemeAction.OnClickLanguage -> {
-                localization.applyLanguage(action.languageIso)
-                _state.update {
-                    it.copy(selectedLanguageIso = localization.getLanguageIso())
+                viewModelScope.launch {
+                    dataStoreRepository.setLocalization(action.languageIso)
                 }
             }
         }
