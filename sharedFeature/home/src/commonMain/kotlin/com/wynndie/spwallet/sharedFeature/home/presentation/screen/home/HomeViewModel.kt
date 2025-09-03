@@ -122,6 +122,11 @@ class HomeViewModel(
             }
 
 
+            HomeAction.OnClickTopAppBar -> {
+                args.onClickTopAppBar()
+            }
+
+
             is HomeAction.OnClickAuthCard -> {
                 viewModelScope.launch {
 

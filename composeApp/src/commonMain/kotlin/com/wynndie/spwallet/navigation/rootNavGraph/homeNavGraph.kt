@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
+import com.wynndie.spwallet.navigation.ProfileNavGraphRoutes
 import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.CashCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.CashCardViewModel
@@ -31,6 +32,11 @@ fun NavGraphBuilder.homeNavGraph(
             val viewModel = koinViewModel<HomeViewModel> {
                 parametersOf(
                     HomeViewModelArgs(
+                        onClickTopAppBar = {
+                            navController.navigate(ProfileNavGraphRoutes.ProfileNavGraph) {
+                                launchSingleTop = true
+                            }
+                        },
                         onClickCashCard = { cardId ->
                             navController.navigate(HomeNavGraphRoutes.CashCard(cardId)) {
                                 launchSingleTop = true

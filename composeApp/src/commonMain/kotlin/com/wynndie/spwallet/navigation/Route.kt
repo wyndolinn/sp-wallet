@@ -46,3 +46,15 @@ sealed interface TransferNavGraphRoutes : Route {
     @Serializable
     data object TransferResult : TransferNavGraphRoutes
 }
+
+sealed interface ProfileNavGraphRoutes : Route {
+
+    @Serializable
+    data object ProfileNavGraph : ProfileNavGraphRoutes
+
+    @Serializable
+    data object Menu : ProfileNavGraphRoutes
+
+    @Serializable
+    data object Theme : ProfileNavGraphRoutes
+}

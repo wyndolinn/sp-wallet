@@ -14,6 +14,8 @@ sealed interface HomeAction {
     data object OnToggleAuthedCardSheet : HomeAction
     data object OnToggleDeleteCardDialog : HomeAction
 
+    data object OnClickTopAppBar : HomeAction
+
     data class OnClickAuthCard(val id: String, val token: String) : HomeAction
     data class OnClickDeactivateCard(val card: UiAuthedCard) : HomeAction
     data class OnClickTransferByCard(val cardId: String?) : HomeAction

@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 
@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "FeatureProfile"
             isStatic = true
         }
     }
@@ -34,25 +34,14 @@ kotlin {
     }
 
     sourceSets {
-
         androidMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
-            implementation(projects.sharedFeature.profile)
         }
 
         commonMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
-            implementation(projects.sharedFeature.profile)
-
-            implementation(libs.jetbrains.compose.navigation)
 
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
@@ -61,10 +50,6 @@ kotlin {
         iosMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
-            implementation(projects.sharedFeature.profile)
         }
 
         dependencies {
@@ -74,15 +59,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.wynndie.spwallet"
+    namespace = "com.wynndie.spwallet.sharedFeature.profile"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.wynndie.spwallet"
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
     }
     packaging {
         resources {

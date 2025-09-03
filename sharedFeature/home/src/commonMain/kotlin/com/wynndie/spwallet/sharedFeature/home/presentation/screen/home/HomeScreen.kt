@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screen.home
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -137,7 +138,8 @@ fun HomeScreenRoot(
                             loading = state.screenLoadingState == LoadingState.Loading
                         )
                     },
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
+                    modifier = Modifier.clickable { viewModel.onAction(HomeAction.OnClickTopAppBar) }
                 )
             } else {
                 TopAppBar(
@@ -147,7 +149,8 @@ fun HomeScreenRoot(
                             title = stringResource(Res.string.app_name)
                         )
                     },
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
+                    modifier = Modifier.clickable { viewModel.onAction(HomeAction.OnClickTopAppBar) }
                 )
             }
         },
