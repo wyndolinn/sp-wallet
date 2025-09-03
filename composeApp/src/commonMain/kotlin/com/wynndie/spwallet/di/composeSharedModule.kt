@@ -7,7 +7,7 @@ import com.wynndie.spwallet.database.WalletDatabaseFactory
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-val appSharedModule = module {
+val composeSharedModule = module {
     single {
         get<WalletDatabaseFactory>()
             .create()

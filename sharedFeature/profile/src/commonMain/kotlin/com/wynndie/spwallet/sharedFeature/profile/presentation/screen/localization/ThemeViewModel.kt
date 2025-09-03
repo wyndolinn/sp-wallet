@@ -33,7 +33,6 @@ class ThemeViewModel(
                 _state.update {
                     it.copy(selectedLanguageIso = localization.getLanguageIso())
                 }
-//                args.onClickBack()
             }
         }
     }

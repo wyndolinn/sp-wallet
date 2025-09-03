@@ -31,7 +31,7 @@ import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScr
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedFeature.profile.presentation.model.Languages
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.profile
+import com.wynndie.spwallet.sharedResources.theme_and_language
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +61,7 @@ fun ThemeScreenRoot(
                 },
                 title = {
                     Text(
-                        text = stringResource(Res.string.profile),
+                        text = stringResource(Res.string.theme_and_language),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )

@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 val platformModule = module {
     includes(
-        appPlatformModule,
+        composePlatformModule,
         corePlatformModule,
         profilePlatformModule
     )
