@@ -121,8 +121,8 @@ private fun ThemeScreenContent(
             AppMenuTile(
                 icon = Icons.Outlined.Flag,
                 title = language.title,
-                onClick = { onAction(ThemeAction.OnClickLanguage(language.code)) },
-                trailingContent = if (language.code == state.selectedLanguageCode) {
+                onClick = { onAction(ThemeAction.OnClickLanguage(language.iso)) },
+                trailingContent = if (language.iso == state.selectedLanguageIso) {
                     {
                         Icon(
                             imageVector = Icons.Outlined.Check,

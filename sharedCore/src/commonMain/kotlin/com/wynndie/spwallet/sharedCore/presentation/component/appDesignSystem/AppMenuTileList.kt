@@ -23,7 +23,6 @@ fun AppMenuTileList(
     ) { tile ->
         AppMenuTile(
             icon = tile.icon.value,
-            iconBackground = tile.iconBackground.value,
             label = tile.label,
             title = tile.title,
             description = tile.description,

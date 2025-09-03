@@ -17,6 +17,7 @@ fun AppMenuTile(
     label: String? = null,
     description: String? = null,
     iconBackground: Color = Color.Transparent,
+    iconColor: Color = MaterialTheme.colorScheme.onSurface,
     trailingContent: @Composable (BoxScope.() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
@@ -25,7 +26,7 @@ fun AppMenuTile(
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = iconColor
             )
         },
         trailingContent = trailingContent,

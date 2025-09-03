@@ -129,7 +129,6 @@ private fun SearchRecipientScreenContent(
                             icon = recipientTile.icon.value,
                             title = recipientTile.title,
                             description = recipientTile.description,
-                            iconBackground = recipientTile.iconBackground.value,
                             trailingContent = {
                                 BaseIconButton(
                                     icon = Icons.Outlined.Edit,
