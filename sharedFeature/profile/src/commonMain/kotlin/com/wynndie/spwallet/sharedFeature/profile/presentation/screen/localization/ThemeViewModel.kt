@@ -15,6 +15,13 @@ class ThemeViewModel(
     val state = _state.asStateFlow()
 
 
+    init {
+        _state.update {
+            it.copy(selectedLanguageIso = localization.getLanguageIso())
+        }
+    }
+
+
     fun onAction(action: ThemeAction) {
         when (action) {
             ThemeAction.OnClickBack -> {
@@ -24,7 +31,7 @@ class ThemeViewModel(
             is ThemeAction.OnClickLanguage -> {
                 localization.applyLanguage(action.languageIso)
                 _state.update {
-                    it.copy(selectedLanguageIso = action.languageIso)
+                    it.copy(selectedLanguageIso = localization.getLanguageIso())
                 }
 //                args.onClickBack()
             }

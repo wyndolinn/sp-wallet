@@ -12,4 +12,8 @@ class AndroidLocalization(val context: Context) : Localization {
         val config = context.resources.configuration
         config.setLocales(LocaleList(locale))
     }
+
+    override fun getLanguageIso(): String {
+        return Locale.getDefault().language
+    }
 }
