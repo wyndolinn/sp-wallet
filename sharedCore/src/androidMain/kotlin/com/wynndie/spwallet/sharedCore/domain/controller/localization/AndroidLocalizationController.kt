@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.profile.domain.model
+package com.wynndie.spwallet.sharedCore.domain.controller.localization
 
 import android.content.Context
 import android.os.LocaleList

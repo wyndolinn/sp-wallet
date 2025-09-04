@@ -2,7 +2,6 @@ package com.wynndie.spwallet
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -11,8 +10,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
 import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.component.effect.ObserveAsEvents
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
+import com.wynndie.spwallet.sharedCore.domain.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.domain.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel

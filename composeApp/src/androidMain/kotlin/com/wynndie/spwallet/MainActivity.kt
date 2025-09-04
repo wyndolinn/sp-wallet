@@ -9,7 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.wynndie.spwallet.sharedCore.domain.repository.DataStoreRepository
-import com.wynndie.spwallet.sharedFeature.profile.domain.model.LocalizationController
+import com.wynndie.spwallet.sharedCore.domain.controller.localization.LocalizationController
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -28,8 +28,6 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        println("PRINTLINE: ON CREATE")
-
         lifecycleScope.launch {
             val storedLanguageIso = dataStoreRepository.getLocalization().first()
             localizationController.applyLanguage(storedLanguageIso)
@@ -42,8 +40,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        println("PRINTLINE: CONFIG CHANGE")
 
         lifecycleScope.launch {
             val storedLanguageIso = dataStoreRepository.getLocalization().first()

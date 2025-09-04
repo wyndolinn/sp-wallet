@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedFeature.profile.presentation.screen.localizat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.repository.DataStoreRepository
-import com.wynndie.spwallet.sharedFeature.profile.domain.model.LocalizationController
+import com.wynndie.spwallet.sharedCore.domain.controller.localization.LocalizationController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
