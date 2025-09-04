@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedCore.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.wynndie.spwallet.sharedCore.data.local.DataStoreFactory
-import com.wynndie.spwallet.sharedCore.domain.controller.localization.IosLocalizationController
-import com.wynndie.spwallet.sharedCore.domain.controller.localization.LocalizationController
+import com.wynndie.spwallet.sharedCore.presentation.controller.localization.IosLocalizationController
+import com.wynndie.spwallet.sharedCore.presentation.controller.localization.LocalizationController
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import org.koin.core.module.Module

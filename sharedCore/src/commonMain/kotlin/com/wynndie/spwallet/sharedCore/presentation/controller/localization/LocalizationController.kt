@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.domain.controller.localization
+package com.wynndie.spwallet.sharedCore.presentation.controller.localization
 
 interface LocalizationController {
 

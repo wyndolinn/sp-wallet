@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppMenuTile
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedFeature.profile.presentation.model.Languages
+import com.wynndie.spwallet.sharedCore.presentation.controller.localization.Languages
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.theme_and_language
 import org.jetbrains.compose.resources.stringResource

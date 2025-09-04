@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.domain.controller.overlay
+package com.wynndie.spwallet.sharedCore.presentation.controller.overlay
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

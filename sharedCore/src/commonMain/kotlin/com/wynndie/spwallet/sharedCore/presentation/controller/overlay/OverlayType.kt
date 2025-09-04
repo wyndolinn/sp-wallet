@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.domain.controller.overlay
+package com.wynndie.spwallet.sharedCore.presentation.controller.overlay
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.ui.Alignment

@@ -10,8 +10,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
 import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.component.effect.ObserveAsEvents
-import com.wynndie.spwallet.sharedCore.domain.controller.overlay.OverlayType
-import com.wynndie.spwallet.sharedCore.domain.controller.overlay.OverlayController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -19,7 +19,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun App() {
 
-    val viewModel: AppViewModel = koinViewModel<AppViewModel>()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 

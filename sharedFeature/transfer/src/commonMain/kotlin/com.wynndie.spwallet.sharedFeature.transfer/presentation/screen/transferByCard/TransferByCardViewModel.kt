@@ -10,8 +10,8 @@ import com.wynndie.spwallet.sharedCore.domain.repository.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.TransferCommentValidator
-import com.wynndie.spwallet.sharedCore.domain.controller.overlay.OverlayType
-import com.wynndie.spwallet.sharedCore.domain.controller.overlay.OverlayController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.model.UiRecipient

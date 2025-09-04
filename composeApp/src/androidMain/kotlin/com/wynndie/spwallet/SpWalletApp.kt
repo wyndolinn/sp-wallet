@@ -9,8 +9,6 @@ class SpWalletApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        initKoin {
-            androidContext(this@SpWalletApp)
-        }
+        initKoin { androidContext(this@SpWalletApp) }
     }
 }
