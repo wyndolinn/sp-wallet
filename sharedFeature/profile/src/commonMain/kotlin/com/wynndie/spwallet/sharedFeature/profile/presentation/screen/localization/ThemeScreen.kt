@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppMenuTile
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
@@ -46,62 +48,64 @@ fun ThemeScreenRoot(
     val focusManager = LocalFocusManager.current
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        onClick = { viewModel.onAction(ThemeAction.OnClickBack) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
+    Crossfade(targetState = state.selectedLanguageIso) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { viewModel.onAction(ThemeAction.OnClickBack) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(Res.string.theme_and_language),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                },
-                title = {
-                    Text(
-                        text = stringResource(Res.string.theme_and_language),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            )
-        },
-        modifier = Modifier
-            .imePadding()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
                 )
-            }
-    ) { innerPadding ->
-
-        Crossfade(
-            targetState = state.loadingState,
-            animationSpec = tween(500)
-        ) { screenState ->
-
-            when (screenState) {
-                LoadingState.Loading -> {
-                    LoadingScreen(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
+            },
+            modifier = Modifier
+                .imePadding()
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { focusManager.clearFocus(true) }
                     )
                 }
+        ) { innerPadding ->
 
-                is LoadingState.Failed -> {
+            Crossfade(
+                targetState = state.loadingState,
+                animationSpec = tween(500)
+            ) { screenState ->
 
-                }
+                when (screenState) {
+                    LoadingState.Loading -> {
+                        LoadingScreen(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                        )
+                    }
 
-                LoadingState.Finished -> {
-                    ThemeScreenContent(
-                        state = state,
-                        onAction = viewModel::onAction,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    is LoadingState.Failed -> {
+
+                    }
+
+                    LoadingState.Finished -> {
+                        ThemeScreenContent(
+                            state = state,
+                            onAction = viewModel::onAction,
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }
@@ -134,5 +138,11 @@ private fun ThemeScreenContent(
                 }
             )
         }
+
+        Text(
+            text = stringResource(Res.string.theme_and_language),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
