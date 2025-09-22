@@ -28,7 +28,7 @@ data class UiRecipient(
     }
 
     @Composable
-    fun asTile(): Tile {
+    override fun asTile(): Tile {
         return Tile(
             id = id,
             icon = icon,

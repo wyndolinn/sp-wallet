@@ -140,9 +140,9 @@ class TransferByCardViewModel(
                             amount = action.transferAmount,
                             comment = action.comment
                         ).onError {
-                            OverlayController.sendOverlay(OverlayType.Snackbar(it.asUiText()))
+                            OverlayController.send(OverlayType.Snackbar(it.asUiText()))
                         }.onSuccess {
-                            OverlayController.sendOverlay(
+                            OverlayController.send(
                                 OverlayType.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
                             )
                             args.onClickBack()

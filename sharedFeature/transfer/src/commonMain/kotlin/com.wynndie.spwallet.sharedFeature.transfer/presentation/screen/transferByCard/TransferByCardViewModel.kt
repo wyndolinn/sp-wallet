@@ -122,16 +122,16 @@ class TransferByCardViewModel(
                         isCommentValid(action.comment)
                     )
 
-                    if (!validationResults.any { isValid -> !isValid }) {
+                    if (validationResults.all { it }) {
                         transferByCardUseCase(
                             card = selectedCard.toDomain(),
                             receiverCardNumber = action.cardNumber,
                             amount = action.transferAmount,
                             comment = action.comment
                         ).onError {
-                            OverlayController.sendOverlay(OverlayType.Snackbar(it.asUiText()))
+                            OverlayController.send(OverlayType.Snackbar(it.asUiText()))
                         }.onSuccess {
-                            OverlayController.sendOverlay(
+                            OverlayController.send(
                                 OverlayType.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
                             )
                             args.onClickBack()

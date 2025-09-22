@@ -8,7 +8,7 @@ object OverlayController {
     private val _overlay = Channel<OverlayType>()
     val overlay = _overlay.receiveAsFlow()
 
-    suspend fun sendOverlay(overlayType: OverlayType) {
+    suspend fun send(overlayType: OverlayType) {
         _overlay.send(overlayType)
     }
 }

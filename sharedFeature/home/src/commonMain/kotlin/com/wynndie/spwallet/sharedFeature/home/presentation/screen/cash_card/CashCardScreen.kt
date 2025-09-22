@@ -123,6 +123,7 @@ fun CashCardScreenRoot(
             )
         },
         modifier = Modifier
+            .imePadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -154,7 +155,6 @@ fun CashCardScreenRoot(
                         onAction = viewModel::onAction,
                         modifier = Modifier
                             .fillMaxSize()
-                            .imePadding()
                             .verticalScroll(rememberScrollState())
                     )
                 }

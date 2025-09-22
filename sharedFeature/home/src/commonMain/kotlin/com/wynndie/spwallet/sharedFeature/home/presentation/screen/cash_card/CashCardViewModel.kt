@@ -160,7 +160,7 @@ class CashCardViewModel(
                             }
                             .onSuccess {
                                 _state.update { it.copy(saveLoadingState = LoadingState.Finished) }
-                                OverlayController.sendOverlay(
+                                OverlayController.send(
                                     OverlayType.Snackbar(UiText.StringResourceId(Res.string.cash_creation_succeed))
                                 )
                                 args.onClickBack()

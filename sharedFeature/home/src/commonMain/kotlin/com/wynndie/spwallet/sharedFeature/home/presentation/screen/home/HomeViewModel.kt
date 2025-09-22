@@ -137,7 +137,7 @@ class HomeViewModel(
                     if (!validationResults.any { isValid -> !isValid }) {
                         authCardUseCase(id = action.id, token = action.token)
                             .onError {
-                                OverlayController.sendOverlay(OverlayType.Snackbar(it.asUiText()))
+                                OverlayController.send(OverlayType.Snackbar(it.asUiText()))
                             }
                             .onSuccess {
                                 syncWithRemoteUseCase()
@@ -248,7 +248,7 @@ class HomeViewModel(
 
         syncWithRemoteUseCase()
             .onError { error ->
-                OverlayController.sendOverlay(OverlayType.Snackbar(error.asUiText()))
+                OverlayController.send(OverlayType.Snackbar(error.asUiText()))
             }
 
         _state.update {
