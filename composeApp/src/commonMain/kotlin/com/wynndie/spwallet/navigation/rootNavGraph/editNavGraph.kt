@@ -6,10 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.wynndie.spwallet.navigation.EditNavGraphRoutes
-import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.CashCardScreenRoot
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.CashCardViewModel
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.CashCardViewModelArgs
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardScreenRoot
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModel
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModelArgs
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -23,16 +22,16 @@ fun NavGraphBuilder.editNavGraph(
 
         composable<EditNavGraphRoutes.CustomCard> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<EditNavGraphRoutes.CustomCard>()
-            val viewModel = koinViewModel<CashCardViewModel> {
+            val viewModel = koinViewModel<CustomCardViewModel> {
                 parametersOf(
-                    CashCardViewModelArgs(
+                    CustomCardViewModelArgs(
                         cardId = args.cardId,
                         onClickBack = { navController.navigateUp() }
                     )
                 )
             }
 
-            CashCardScreenRoot(
+            CustomCardScreenRoot(
                 viewModel = viewModel
             )
         }

@@ -7,9 +7,9 @@ import androidx.navigation.compose.navigation
 import com.wynndie.spwallet.navigation.EditNavGraphRoutes
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
 import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
-import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.HomeScreenRoot
-import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.HomeViewModel
-import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.HomeViewModelArgs
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeScreenRoot
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeViewModel
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeViewModelArgs
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,7 +25,7 @@ fun NavGraphBuilder.homeNavGraph(
             val viewModel = koinViewModel<HomeViewModel> {
                 parametersOf(
                     HomeViewModelArgs(
-                        onClickCashCard = { cardId ->
+                        onClickCustomCard = { cardId ->
                             navController.navigate(EditNavGraphRoutes.CustomCard(cardId)) {
                                 launchSingleTop = true
                             }

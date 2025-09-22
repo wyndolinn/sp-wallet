@@ -15,7 +15,6 @@ val appSharedModule = module {
             .build()
     }
 
-    single { get<WalletDatabase>().walletDao }
     single { get<WalletDatabase>().userDao }
     single { get<WalletDatabase>().cardsDao }
     single { get<WalletDatabase>().recipientDao }

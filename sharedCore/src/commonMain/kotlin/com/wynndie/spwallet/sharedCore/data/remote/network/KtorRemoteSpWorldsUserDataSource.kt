@@ -1,7 +1,8 @@
 package com.wynndie.spwallet.sharedCore.data.remote.network
 
-import com.wynndie.spwallet.sharedCore.data.remote.model.UnauthedUserDto
-import com.wynndie.spwallet.sharedCore.data.safeCall
+import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
+import com.wynndie.spwallet.sharedCore.data.remote.dto.UnauthedUserDto
+import com.wynndie.spwallet.sharedCore.data.remote.safeCall
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import io.ktor.client.HttpClient
@@ -17,13 +18,9 @@ class KtorRemoteSpWorldsUserDataSource(
         authKey: String
     ): Outcome<UnauthedUserDto, DataError.Remote> {
         return safeCall<UnauthedUserDto> {
-            httpClient.get(urlString = "$BASE_URL/accounts/me") {
+            httpClient.get(urlString = "$SP_WORLDS_URL/accounts/me") {
                 header(HttpHeaders.Authorization, authKey)
             }
         }
-    }
-
-    companion object {
-        private const val BASE_URL = "https://spworlds.ru/api/public"
     }
 }

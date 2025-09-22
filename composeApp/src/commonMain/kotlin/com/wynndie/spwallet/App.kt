@@ -9,9 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
 import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
-import com.wynndie.spwallet.sharedCore.presentation.component.effect.ObserveAsEvents
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.components.effects.ObserveAsEvents
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -26,21 +26,13 @@ fun App() {
 
     ObserveAsEvents(OverlayController.overlay) { overlay ->
         when (overlay) {
-            is OverlayType.AlertDialog -> {
-
-            }
-
-            is OverlayType.BottomSheet -> {
-
-            }
-
             is OverlayType.Snackbar -> {
                 scope.launch {
                     val currentSnackbarData = snackbarHostState.currentSnackbarData
                     currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(
-                        message = overlay.message.convertAsString(),
-                        actionLabel = overlay.actionLabel?.convertAsString(),
+                        message = overlay.message.asAsyncString(),
+                        actionLabel = overlay.actionLabel?.asAsyncString(),
                         withDismissAction = overlay.withDismissAction,
                         duration = overlay.duration
                     )
