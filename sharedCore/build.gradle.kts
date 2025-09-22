@@ -34,21 +34,9 @@ kotlin {
     }
 
     sourceSets {
-
-        androidMain.dependencies {
-            api(projects.sharedResources)
-
-            api(compose.preview)
-            api(libs.androidx.activity.compose)
-
-            api(libs.koin.android)
-            api(libs.koin.androidx.compose)
-
-            api(libs.ktor.client.okhttp)
-        }
-
         commonMain.dependencies {
             api(projects.sharedResources)
+            api(projects.sharedTheme)
 
             api(compose.runtime)
             api(compose.foundation)
@@ -75,8 +63,22 @@ kotlin {
             implementation(libs.sqlite.bundled)
         }
 
+        androidMain.dependencies {
+            api(projects.sharedResources)
+            api(projects.sharedTheme)
+
+            api(compose.preview)
+            api(libs.androidx.activity.compose)
+
+            api(libs.koin.android)
+            api(libs.koin.androidx.compose)
+
+            api(libs.ktor.client.okhttp)
+        }
+
         iosMain.dependencies {
             api(projects.sharedResources)
+            api(projects.sharedTheme)
 
             api(libs.ktor.client.darwin)
         }

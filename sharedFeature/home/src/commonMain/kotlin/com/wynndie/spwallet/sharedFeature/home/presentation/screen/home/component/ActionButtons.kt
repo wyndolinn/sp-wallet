@@ -8,11 +8,11 @@ import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseTonalIconButton
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_card
 import com.wynndie.spwallet.sharedResources.transfer_by_number
+import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseTonalIconButton
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.horizontalTile.BaseHorizontalTileSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile.BaseHorizontalTileSmall
 
 @Composable
 fun AppMenuTile(

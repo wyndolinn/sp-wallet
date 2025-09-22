@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.horizontalTile.BaseHorizontalTileMedium
-import com.wynndie.spwallet.sharedCore.presentation.theme.radius
+import com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile.BaseHorizontalTileMedium
+import com.wynndie.spwallet.sharedtheme.theme.radius
 
 @Composable
 fun AppCardTile(

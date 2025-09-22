@@ -30,6 +30,7 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":sharedResources")
+include(":sharedTheme")
 include(":sharedCore")
 include(":sharedFeature:home")
 include(":sharedFeature:transfer")

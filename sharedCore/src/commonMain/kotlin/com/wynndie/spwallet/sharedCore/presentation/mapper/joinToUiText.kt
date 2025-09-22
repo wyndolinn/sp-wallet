@@ -5,5 +5,6 @@ import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 
 @Composable
 fun List<UiText>.joinToUiText(separator: String = ", "): UiText.DynamicString {
+    @Suppress("SimplifiableCallChain")
     return UiText.DynamicString(this.map { it.asString() }.joinToString(separator))
 }

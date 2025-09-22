@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseBottomSheetLayout
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.model.KeyboardAction
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
+import com.wynndie.spwallet.sharedtheme.designSystem.BaseBottomSheetLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

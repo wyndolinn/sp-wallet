@@ -30,14 +30,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.Constants
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardTileList
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseIconButton
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseOutlinedButton
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.mapper.joinToUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.AppBarContent
 import com.wynndie.spwallet.sharedFeature.home.presentation.screen.home.component.AuthCardOffer
@@ -53,6 +48,11 @@ import com.wynndie.spwallet.sharedResources.cash_cards
 import com.wynndie.spwallet.sharedResources.create
 import com.wynndie.spwallet.sharedResources.total_balance
 import com.wynndie.spwallet.sharedResources.total_of_ore
+import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseOutlinedButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelMedium
+import com.wynndie.spwallet.sharedtheme.theme.AppTheme
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

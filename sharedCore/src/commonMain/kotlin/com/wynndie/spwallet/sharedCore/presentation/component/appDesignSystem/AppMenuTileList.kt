@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseVerticalList
 import com.wynndie.spwallet.sharedCore.presentation.model.Tile
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedtheme.designSystem.BaseVerticalList
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
 fun AppMenuTileList(

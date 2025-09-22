@@ -16,13 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.wynndie.spwallet.sharedCore.presentation.theme.radius
-import com.wynndie.spwallet.sharedCore.presentation.theme.size
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCard
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
-import com.wynndie.spwallet.sharedResources.no_name
+import com.wynndie.spwallet.sharedtheme.theme.radius
+import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -1,0 +1,34 @@
+package com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedtheme.theme.spacing
+
+@Composable
+fun BaseHorizontalTile(
+    leadingContent: @Composable () -> Unit = {},
+    trailingContent: @Composable (() -> Unit)? = null,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+        verticalAlignment = verticalAlignment,
+        modifier = modifier
+    ) {
+        leadingContent()
+
+        Box(
+            content = { content() },
+            modifier = Modifier.weight(1f)
+        )
+
+        trailingContent?.let { it() }
+    }
+}

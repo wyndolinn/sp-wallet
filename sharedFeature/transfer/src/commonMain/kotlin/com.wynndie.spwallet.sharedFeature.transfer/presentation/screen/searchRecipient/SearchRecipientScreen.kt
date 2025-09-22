@@ -32,17 +32,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppMenuTile
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.button.BaseIconButton
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.infoPanel.BaseInfoPanelSmall
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.inputField.BaseInputField
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardIcon
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_card
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
+import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.inputField.BaseInputField
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)

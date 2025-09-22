@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.model.Tile
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedtheme.designSystem.BaseCarousel
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
 fun AppCardCarousel(

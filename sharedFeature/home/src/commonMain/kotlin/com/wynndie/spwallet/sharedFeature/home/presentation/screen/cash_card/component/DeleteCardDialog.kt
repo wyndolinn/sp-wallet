@@ -2,11 +2,11 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.co
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseAlertDialogLayout
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.delete_card_description
 import com.wynndie.spwallet.sharedResources.delete_card_title
+import com.wynndie.spwallet.sharedtheme.designSystem.BaseAlertDialogLayout
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

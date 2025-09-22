@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedCore.presentation.component.baseDesignSystem.BaseVerticalList
 import com.wynndie.spwallet.sharedCore.presentation.model.Tile
+import com.wynndie.spwallet.sharedtheme.designSystem.BaseVerticalList
 
 @Composable
 fun AppCardTileList(
