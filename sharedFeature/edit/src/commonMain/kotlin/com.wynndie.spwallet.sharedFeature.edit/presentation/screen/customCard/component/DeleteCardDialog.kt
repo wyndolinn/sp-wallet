@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card.component
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

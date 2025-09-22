@@ -1,20 +1,20 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.usecase
 
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
-import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
 import kotlinx.coroutines.flow.first
 
 class DeleteAuthedCardUseCase(
-    private val walletRepository: WalletRepository
+    private val cardsRepository: CardsRepository
 ) {
 
     suspend operator fun invoke(card: AuthedCard) {
-        walletRepository.deleteAuthedCard(card)
+        cardsRepository.deleteAuthedCard(card)
 
-        val authedCards = walletRepository.getAuthedCards().first()
+        val authedCards = cardsRepository.getAuthedCards().first()
         if (authedCards.isNotEmpty()) return
 
-        val unauthedCards = walletRepository.getUnauthedCards().first()
-        unauthedCards.forEach { walletRepository.deleteUnauthedCard(it) }
+        val unauthedCards = cardsRepository.getUnauthedCards().first()
+        unauthedCards.forEach { cardsRepository.deleteUnauthedCard(it) }
     }
 }

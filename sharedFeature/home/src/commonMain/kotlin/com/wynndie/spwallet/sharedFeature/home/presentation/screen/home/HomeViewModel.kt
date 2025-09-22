@@ -5,23 +5,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
-import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
+import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.usecase.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
-import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.model.card.UiAuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
-import com.wynndie.spwallet.sharedCore.presentation.model.card.UiUnauthedCard
-import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -30,8 +31,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    userRepository: UserRepository,
+    cardsRepository: CardsRepository,
     private val args: HomeViewModelArgs,
-    walletRepository: WalletRepository,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val authCardUseCase: AuthCardUseCase,
@@ -47,26 +49,26 @@ class HomeViewModel(
             syncWithRemote()
         }
 
-        walletRepository.getAuthedUsers().onEach { users ->
+        userRepository.getAuthedUsers().onEach { users ->
             users.firstOrNull()?.let { user ->
                 _state.update { it.copy(authedUser = user) }
             }
         }.launchIn(viewModelScope)
 
-        walletRepository.getAuthedCards().onEach { cards ->
+        cardsRepository.getAuthedCards().onEach { cards ->
             _state.update { state ->
                 state.copy(authedCards = cards.map { UiAuthedCard.of(it) })
             }
             updateBalance()
         }.launchIn(viewModelScope)
 
-        walletRepository.getUnauthedCards().onEach { cards ->
+        cardsRepository.getUnauthedCards().onEach { cards ->
             _state.update { state ->
                 state.copy(unauthedCards = cards.map { UiUnauthedCard.of(it) })
             }
         }.launchIn(viewModelScope)
 
-        walletRepository.getCashCards().onEach { cards ->
+        cardsRepository.getCashCards().onEach { cards ->
             _state.update { state ->
                 state.copy(cashCards = cards.map { UiCashCard.of(it) })
             }

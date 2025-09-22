@@ -6,17 +6,19 @@ import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrNull
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.domain.model.UnauthedUser
 import com.wynndie.spwallet.sharedCore.domain.model.AuthedCard
-import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
+import com.wynndie.spwallet.sharedCore.domain.model.UnauthedUser
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 
 class SyncWithRemoteUseCase(
-    private val walletRepository: WalletRepository
+    private val userRepository: UserRepository,
+    private val cardsRepository: CardsRepository
 ) {
 
     suspend operator fun invoke(): EmptyOutcome<DataError> {
-        var authedCards = walletRepository.getAuthedCards().first()
+        var authedCards = cardsRepository.getAuthedCards().first()
         var unAuthedUser: UnauthedUser? = null
 
         authedCards.forEach { authedCard ->
@@ -28,12 +30,12 @@ class SyncWithRemoteUseCase(
         clearUserAndUnauthedCardsData()
 
         unAuthedUser?.let { user ->
-            walletRepository.insertAuthedUser(user.toAuthedUser())
+            userRepository.insertAuthedUser(user.toAuthedUser())
 
-            authedCards = walletRepository.getAuthedCards().first()
+            authedCards = cardsRepository.getAuthedCards().first()
             user.cards.forEach { card ->
                 val isCardAuthed = authedCards.any { it.id == card.id }
-                if (!isCardAuthed) walletRepository.insertUnauthedCard(card)
+                if (!isCardAuthed) cardsRepository.insertUnauthedCard(card)
             }
         } ?: return Outcome.Error(DataError.Remote.UNAUTHORIZED)
 
@@ -42,12 +44,12 @@ class SyncWithRemoteUseCase(
 
 
     private suspend fun clearUserAndUnauthedCardsData() {
-        walletRepository.getAuthedUsers().first().forEach { user ->
-            walletRepository.deleteAuthedUser(user)
+        userRepository.getAuthedUsers().first().forEach { user ->
+            userRepository.deleteAuthedUser(user)
         }
 
-        walletRepository.getUnauthedCards().first().forEach { card ->
-            walletRepository.deleteUnauthedCard(card)
+        cardsRepository.getUnauthedCards().first().forEach { card ->
+            cardsRepository.deleteUnauthedCard(card)
         }
     }
 
@@ -55,17 +57,17 @@ class SyncWithRemoteUseCase(
         authedCard: AuthedCard
     ): Outcome<UnauthedUser?, DataError.Remote> {
 
-        val user = walletRepository.getUnauthedUser(authedCard.authKey).onError {
+        val user = userRepository.getUnauthedUser(authedCard.authKey).onError {
             if (it != DataError.Remote.UNAUTHORIZED) return Outcome.Error(it)
-            walletRepository.deleteAuthedCard(authedCard)
+            cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 
-        val cardBalance = walletRepository.getCardBalance(authedCard.authKey).onError {
+        val cardBalance = cardsRepository.getCardBalance(authedCard.authKey).onError {
             if (it != DataError.Remote.UNAUTHORIZED) return Outcome.Error(it)
-            walletRepository.deleteAuthedCard(authedCard)
+            cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 
-        walletRepository.insertAuthedCard(
+        cardsRepository.insertAuthedCard(
             authedCard.copy(balance = cardBalance.value)
         )
 

@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard
 
 import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState

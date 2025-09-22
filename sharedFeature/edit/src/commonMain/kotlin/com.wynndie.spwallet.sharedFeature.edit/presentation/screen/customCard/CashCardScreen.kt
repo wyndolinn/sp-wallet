@@ -1,7 +1,8 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,50 +30,58 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardCarousel
-import com.wynndie.spwallet.sharedCore.presentation.component.appDesignSystem.AppCardTile
 import com.wynndie.spwallet.sharedCore.presentation.component.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedFeature.home.presentation.screen.transfer_by_card.component.RecipientSheet
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.component.CustomizableCard
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.component.CustomizationSheet
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard.component.DeleteCardDialog
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.by_number
-import com.wynndie.spwallet.sharedResources.comment
-import com.wynndie.spwallet.sharedResources.enter_comment
-import com.wynndie.spwallet.sharedResources.enter_transfer_amount
-import com.wynndie.spwallet.sharedResources.transfer
-import com.wynndie.spwallet.sharedResources.transfer_amount
+import com.wynndie.spwallet.sharedResources.balance
+import com.wynndie.spwallet.sharedResources.card_name
+import com.wynndie.spwallet.sharedResources.cash_account
+import com.wynndie.spwallet.sharedResources.delete
+import com.wynndie.spwallet.sharedResources.enter_balance
+import com.wynndie.spwallet.sharedResources.enter_card_name
+import com.wynndie.spwallet.sharedResources.save
 import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransferByCardScreenRoot(
-    viewModel: TransferByCardViewModel
+fun CashCardScreenRoot(
+    viewModel: CashCardViewModel
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
 
-    if (state.isChangeRecipientSheetVisible) {
-        RecipientSheet(
-            onDismiss = { viewModel.onAction(TransferByCardAction.OnToggleRecipientSheet) },
-            onClickRecipient = { viewModel.onAction(TransferByCardAction.OnClickRecipient(it)) },
-            receiverInputFieldState = state.recipientInputFieldState,
-            onChangeRecipientValue = {
-                viewModel.onAction(TransferByCardAction.OnChangeRecipientValue(it))
-            },
+    if (state.isCustomizationSheetVisible) {
+        CustomizationSheet(
+            onDismiss = { viewModel.onAction(CashCardAction.OnToggleCustomizationSheet) },
+            selectedColorChip = state.selectedColorChip,
+            onColorChipClick = { viewModel.onAction(CashCardAction.OnClickColorChip(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium)
+        )
+    }
+
+    if (state.isDeleteDialogVisible) {
+        DeleteCardDialog(
+            onConfirm = { viewModel.onAction(CashCardAction.OnClickDeleteCard) },
+            onDismiss = { viewModel.onAction(CashCardAction.OnToggleDeleteDialog) },
+            modifier = Modifier
         )
     }
 
@@ -81,7 +91,7 @@ fun TransferByCardScreenRoot(
             TopAppBar(
                 navigationIcon = {
                     IconButton(
-                        onClick = { viewModel.onAction(TransferByCardAction.OnClickBack) }
+                        onClick = { viewModel.onAction(CashCardAction.OnClickBack) }
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -91,15 +101,29 @@ fun TransferByCardScreenRoot(
                 },
                 title = {
                     Text(
-                        text = stringResource(Res.string.by_number),
+                        text = stringResource(Res.string.cash_account),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
+                },
+                actions = {
+                    if (state.card.id.isNotBlank()) {
+                        IconButton(
+                            onClick = { viewModel.onAction(CashCardAction.OnToggleDeleteDialog) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = stringResource(Res.string.delete),
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 },
                 scrollBehavior = scrollBehavior
             )
         },
         modifier = Modifier
+            .imePadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -109,9 +133,11 @@ fun TransferByCardScreenRoot(
     ) { innerPadding ->
 
         Crossfade(
-            targetState = state.loadingState,
+            targetState = state.screenLoadingState,
             animationSpec = tween(500),
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(MaterialTheme.spacing.medium)
         ) { screenState ->
 
             when (screenState) {
@@ -124,106 +150,85 @@ fun TransferByCardScreenRoot(
                 }
 
                 LoadingState.Finished -> {
-                    TransferByNumberScreen(
+                    CashCardScreen(
                         state = state,
                         onAction = viewModel::onAction,
                         modifier = Modifier
                             .fillMaxSize()
-                            .imePadding()
                             .verticalScroll(rememberScrollState())
                     )
                 }
             }
         }
     }
-
 }
 
 @Composable
-private fun TransferByNumberScreen(
-    state: TransferByCardState,
-    onAction: (TransferByCardAction) -> Unit,
+private fun CashCardScreen(
+    state: CashCardState,
+    onAction: (CashCardAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    val recipientTile = state.recipient.asTile()
+    val cashCardTile = state.card.asTile()
     val focusManager = LocalFocusManager.current
 
     Column(
         modifier = modifier
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
-        ) {
-            AppCardCarousel(
-                items = state.cards.map { it.asTile() },
-                page = state.carouselPage,
-                modifier = Modifier.fillMaxWidth()
-            )
 
-            AppCardTile(
-                icon = state.recipient.icon.value,
-                iconBackground = state.recipient.iconBackground.value,
-                label = recipientTile.label,
-                title = recipientTile.title,
-                onClick = { onAction(TransferByCardAction.OnToggleRecipientSheet) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
-            )
-        }
+        BaseInfoPanelMedium(
+            label = cashCardTile.label,
+            title = cashCardTile.title,
+            description = cashCardTile.description,
+            modifier = Modifier
+        )
 
         Spacer(Modifier.height(MaterialTheme.spacing.large))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
-
-            TitledInputField(
-                value = state.amountInputFieldState.value,
-                onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
-                label = stringResource(Res.string.enter_transfer_amount),
-                placeholder = stringResource(Res.string.transfer_amount),
-                supportingText = state.amountInputFieldState.supportingText?.asString(),
-                isError = state.amountInputFieldState.hasError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }
-                ),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            CustomizableCard(
+                card = state.card,
+                onClick = { onAction(CashCardAction.OnToggleCustomizationSheet) },
+                modifier = Modifier.fillMaxWidth()
             )
 
             TitledInputField(
-                value = state.commentInputFieldState.value,
-                onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
-                label = stringResource(Res.string.enter_comment),
-                placeholder = stringResource(Res.string.comment),
-                supportingText = state.commentInputFieldState.supportingText?.asString(),
-                isError = state.commentInputFieldState.hasError,
-                singleLine = false,
-                minLines = 3,
+                value = state.nameInputFieldState.value,
+                onValueChange = { onAction(CashCardAction.OnChangeNameValue(it)) },
+                label = stringResource(Res.string.enter_card_name),
+                placeholder = stringResource(Res.string.card_name),
+                supportingText = state.nameInputFieldState.supportingText?.asString(),
+                isError = state.nameInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = {
+                    onDone = {
                         focusManager.clearFocus(true)
-                        onAction(
-                            TransferByCardAction.OnClickTransfer(
-                                cardNumber = state.recipient.cardNumber,
-                                transferAmount = state.amountInputFieldState.value.text,
-                                comment = state.commentInputFieldState.value.text
-                            )
-                        )
                     }
+                )
+            )
+
+            TitledInputField(
+                value = state.balanceInputFieldState.value,
+                onValueChange = { onAction(CashCardAction.OnChangeBalanceValue(it)) },
+                label = stringResource(Res.string.enter_balance),
+                placeholder = stringResource(Res.string.balance),
+                supportingText = state.balanceInputFieldState.supportingText?.asString(),
+                isError = state.balanceInputFieldState.hasError,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus(true)
+                    }
+                )
             )
         }
 
@@ -231,19 +236,30 @@ private fun TransferByNumberScreen(
         Spacer(Modifier.weight(1f))
 
         BaseButton(
-            text = stringResource(Res.string.transfer),
+            text = stringResource(Res.string.save),
             onClick = {
                 onAction(
-                    TransferByCardAction.OnClickTransfer(
-                        cardNumber = state.recipient.cardNumber,
-                        transferAmount = state.amountInputFieldState.value.text,
-                        comment = state.commentInputFieldState.value.text
+                    CashCardAction.OnClickSaveCard(
+                        cardName = state.nameInputFieldState.value.text,
+                        cardBalance = state.balanceInputFieldState.value.text
                     )
                 )
             },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CashCardScreenPreview() {
+    AppTheme {
+        CashCardScreen(
+            state = CashCardState(),
+            onAction = { _ -> },
             modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(MaterialTheme.spacing.medium)
-                .fillMaxWidth()
         )
     }
 }

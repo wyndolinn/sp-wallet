@@ -1,23 +1,23 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.screen.cash_card
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screen.customCard
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
-import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.model.UiText
-import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.validator.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validator.CardNameValidator
-import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayController
+import com.wynndie.spwallet.sharedCore.presentation.controller.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.mapper.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.model.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.model.UiText
 import com.wynndie.spwallet.sharedCore.presentation.model.card.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.model.card.UiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.model.emptyUiCashCard
+import com.wynndie.spwallet.sharedCore.presentation.model.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.model.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.model.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.model.input.filterBy
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 
 class CashCardViewModel(
     private val args: CashCardViewModelArgs,
-    private val walletRepository: WalletRepository,
+    private val cardsRepository: CardsRepository,
     private val cardNameValidator: CardNameValidator,
     private val balanceValidator: BalanceValidator
 ) : ViewModel() {
@@ -45,7 +45,7 @@ class CashCardViewModel(
                 it.copy(screenLoadingState = LoadingState.Loading)
             }
 
-            val card = walletRepository.getCashCards().first()
+            val card = cardsRepository.getCashCards().first()
                 .find { it.id == args.cardId }
                 ?: emptyUiCashCard.toDomain()
 
@@ -149,7 +149,7 @@ class CashCardViewModel(
                     )
 
                     if (!validationResults.any { isValid -> !isValid }) {
-                        walletRepository.insertCashCard(state.value.card.toDomain())
+                        cardsRepository.insertCashCard(state.value.card.toDomain())
                             .onError { error ->
                                 _state.update {
                                     it.copy(
@@ -172,7 +172,7 @@ class CashCardViewModel(
             is CashCardAction.OnClickDeleteCard -> {
                 viewModelScope.launch {
                     _state.update { it.copy(isDeleteDialogVisible = false) }
-                    walletRepository.deleteCashCard(_state.value.card.toDomain())
+                    cardsRepository.deleteCashCard(_state.value.card.toDomain())
                     args.onClickBack()
                 }
             }

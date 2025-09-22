@@ -4,11 +4,13 @@ import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
+import com.wynndie.spwallet.sharedCore.domain.repository.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repository.UserRepository
 import com.wynndie.spwallet.sharedFeature.home.domain.encoder.AuthKeyEncoder
-import com.wynndie.spwallet.sharedFeature.home.domain.repository.WalletRepository
 
 class AuthCardUseCase(
-    private val walletRepository: WalletRepository,
+    private val userRepository: UserRepository,
+    private val cardsRepository: CardsRepository,
     private val authKeyEncoder: AuthKeyEncoder,
 ) {
 
@@ -16,16 +18,16 @@ class AuthCardUseCase(
 
         val authKey = authKeyEncoder.encode(id, token)
 
-        val user = walletRepository.getUnauthedUser(authKey)
+        val user = userRepository.getUnauthedUser(authKey)
             .getOrElse { return Outcome.Error(it) }
 
-        val cardBalance = walletRepository.getCardBalance(authKey)
+        val cardBalance = cardsRepository.getCardBalance(authKey)
             .getOrElse { return Outcome.Error(it) }
 
         // Так как для получения данных о пользователе нужна карта,
         // мы точно знаем, что список не может быть пустым
         val card = user.cards.find { it.id == id }!!
-        walletRepository.insertAuthedCard(
+        cardsRepository.insertAuthedCard(
             card.asAuthedCard(authKey, cardBalance.value)
         )
 
