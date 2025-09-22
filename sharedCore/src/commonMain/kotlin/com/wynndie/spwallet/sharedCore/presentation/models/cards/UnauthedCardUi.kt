@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedCore.presentation.models.cards
 import androidx.compose.runtime.Composable
 import com.wynndie.spwallet.sharedCore.domain.models.UnauthedCard
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedCore.presentation.models.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.bank_card_label
 import com.wynndie.spwallet.sharedResources.require_activation
@@ -32,8 +32,8 @@ data class UnauthedCardUi(
             id = id,
             icon = icon,
             iconBackground = iconBackground,
-            title = UiText.StringResourceId(Res.string.require_activation).asString(),
-            label = UiText.StringResourceId(Res.string.bank_card_label, name, number).asString()
+            title = UiText.ResourceString(Res.string.require_activation).asString(),
+            label = UiText.ResourceString(Res.string.bank_card_label, name, number).asString()
         )
     }
 

@@ -31,8 +31,8 @@ fun App() {
                     val currentSnackbarData = snackbarHostState.currentSnackbarData
                     currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(
-                        message = overlay.message.asAsyncString(),
-                        actionLabel = overlay.actionLabel?.asAsyncString(),
+                        message = overlay.message.asStringAsync(),
+                        actionLabel = overlay.actionLabel?.asStringAsync(),
                         withDismissAction = overlay.withDismissAction,
                         duration = overlay.duration
                     )

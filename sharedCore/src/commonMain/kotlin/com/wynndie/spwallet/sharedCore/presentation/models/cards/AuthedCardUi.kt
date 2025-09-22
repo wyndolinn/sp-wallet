@@ -5,7 +5,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedCore.presentation.models.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.bank_card_label
 import com.wynndie.spwallet.sharedResources.total_of_ore
@@ -38,8 +38,8 @@ data class AuthedCardUi(
             id = id,
             icon = icon,
             iconBackground = iconBackground,
-            title = UiText.StringResourceId(Res.string.total_of_ore, balance.value).asString(),
-            label = UiText.StringResourceId(Res.string.bank_card_label, name, number).asString(),
+            title = UiText.ResourceString(Res.string.total_of_ore, balance.value).asString(),
+            label = UiText.ResourceString(Res.string.bank_card_label, name, number).asString(),
             description = balance.formatted.joinToUiText(" ").asString()
         )
     }

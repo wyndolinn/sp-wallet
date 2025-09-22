@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedCore.presentation.models.cards
 import androidx.compose.runtime.Composable
 import com.wynndie.spwallet.sharedCore.domain.models.RecipientCard
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedCore.presentation.models.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_card_number
 import com.wynndie.spwallet.sharedResources.recipient
@@ -33,10 +33,10 @@ data class RecipientCardUi(
             icon = icon,
             iconBackground = iconBackground,
             title = UiText.DynamicString(cardNumber).asString().ifBlank {
-                UiText.StringResourceId(Res.string.enter_card_number).asString()
+                UiText.ResourceString(Res.string.enter_card_number).asString()
             },
             label = UiText.DynamicString(name).asString().ifBlank {
-                UiText.StringResourceId(Res.string.recipient).asString()
+                UiText.ResourceString(Res.string.recipient).asString()
             }
         )
     }

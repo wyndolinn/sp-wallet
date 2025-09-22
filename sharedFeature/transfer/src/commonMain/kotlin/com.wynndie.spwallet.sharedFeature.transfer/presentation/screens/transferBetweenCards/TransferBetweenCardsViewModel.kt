@@ -11,7 +11,7 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayC
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.models.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
@@ -94,7 +94,7 @@ class TransferBetweenCardsViewModel(
                             OverlayController.send(OverlayType.Snackbar(it.asUiText()))
                         }.onSuccess {
                             OverlayController.send(
-                                OverlayType.Snackbar(UiText.StringResourceId(Res.string.transaction_succeed))
+                                OverlayType.Snackbar(UiText.ResourceString(Res.string.transaction_succeed))
                             )
                             args.onClickBack()
                         }

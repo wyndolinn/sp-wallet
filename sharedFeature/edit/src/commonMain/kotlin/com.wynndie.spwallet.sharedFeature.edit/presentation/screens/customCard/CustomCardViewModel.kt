@@ -17,7 +17,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filterBy
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.models.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -161,7 +161,7 @@ class CustomCardViewModel(
                             .onSuccess {
                                 _state.update { it.copy(saveLoadingState = LoadingState.Finished) }
                                 OverlayController.send(
-                                    OverlayType.Snackbar(UiText.StringResourceId(Res.string.cash_creation_succeed))
+                                    OverlayType.Snackbar(UiText.ResourceString(Res.string.cash_creation_succeed))
                                 )
                                 args.onClickBack()
                             }
