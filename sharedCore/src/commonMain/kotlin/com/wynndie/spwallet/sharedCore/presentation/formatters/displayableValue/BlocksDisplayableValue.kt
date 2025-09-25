@@ -2,9 +2,9 @@ package com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue
 
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.amount_of_ore
-import com.wynndie.spwallet.sharedResources.amount_of_shulkers
-import com.wynndie.spwallet.sharedResources.amount_of_stacks
+import com.wynndie.spwallet.sharedResources.x_of_ore
+import com.wynndie.spwallet.sharedResources.x_of_shulkers
+import com.wynndie.spwallet.sharedResources.x_of_stacks
 
 data class BlocksDisplayableValue(
     override val value: Long,
@@ -19,7 +19,7 @@ data class BlocksDisplayableValue(
             if (value == 0L) {
                 return BlocksDisplayableValue(
                     value = value,
-                    formatted = listOf(UiText.ResourceString(Res.string.amount_of_ore, value))
+                    formatted = listOf(UiText.ResourceString(Res.string.x_of_ore, value))
                 )
             }
 
@@ -28,9 +28,9 @@ data class BlocksDisplayableValue(
             val ore = value % ORE_IN_STACK
 
             val formattedValue = buildList {
-                if (shulkers > 0) add(UiText.ResourceString(Res.string.amount_of_shulkers, shulkers))
-                if (stacks > 0) add(UiText.ResourceString(Res.string.amount_of_stacks, stacks))
-                if (ore > 0) add(UiText.ResourceString(Res.string.amount_of_ore, ore))
+                if (shulkers > 0) add(UiText.ResourceString(Res.string.x_of_shulkers, shulkers))
+                if (stacks > 0) add(UiText.ResourceString(Res.string.x_of_stacks, stacks))
+                if (ore > 0) add(UiText.ResourceString(Res.string.x_of_ore, ore))
             }
 
             return BlocksDisplayableValue(

@@ -86,9 +86,9 @@
 
     <string name="total_balance">Общий баланс</string>
     <string name="total_of_ore">%1$d АР</string>
-    <string name="amount_of_shulkers">%1$d шлк</string>
-    <string name="amount_of_stacks">%1$d ст</string>
-    <string name="amount_of_ore">%1$d ар</string>
+    <string name="x_of_shulkers">%1$d шлк</string>
+    <string name="x_of_stacks">%1$d ст</string>
+    <string name="x_of_ore">%1$d ар</string>
 
     <string name="no_name">Без названия</string>
     <string name="no_comment">Без комментария</string>

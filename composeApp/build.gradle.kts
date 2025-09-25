@@ -34,21 +34,12 @@ kotlin {
     }
 
     sourceSets {
-
-        androidMain.dependencies {
-            implementation(projects.sharedCore)
-            implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
-        }
-
         commonMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
+            implementation(projects.sharedFeatures.home)
+            implementation(projects.sharedFeatures.transfer)
+            implementation(projects.sharedFeatures.edit)
 
             implementation(libs.jetbrains.compose.navigation)
 
@@ -56,12 +47,20 @@ kotlin {
             implementation(libs.sqlite.bundled)
         }
 
+        androidMain.dependencies {
+            implementation(projects.sharedCore)
+            implementation(projects.sharedResources)
+            implementation(projects.sharedFeatures.home)
+            implementation(projects.sharedFeatures.transfer)
+            implementation(projects.sharedFeatures.edit)
+        }
+
         iosMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
-            implementation(projects.sharedFeature.home)
-            implementation(projects.sharedFeature.transfer)
-            implementation(projects.sharedFeature.edit)
+            implementation(projects.sharedFeatures.home)
+            implementation(projects.sharedFeatures.transfer)
+            implementation(projects.sharedFeatures.edit)
         }
 
         dependencies {

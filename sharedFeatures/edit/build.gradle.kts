@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "FeatureTransfer"
+            baseName = "EditFeature"
             isStatic = true
         }
     }
@@ -34,22 +34,30 @@ kotlin {
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(projects.sharedCore)
-            implementation(projects.sharedResources)
-        }
-
         commonMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
 
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.coil)
+        }
+
+        androidMain.dependencies {
+            implementation(projects.sharedCore)
+            implementation(projects.sharedResources)
+
+            implementation(libs.ktor.client.okhttp)
         }
 
         iosMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
+
+            implementation(libs.ktor.client.darwin)
         }
 
         dependencies {
@@ -59,7 +67,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.wynndie.spwallet.sharedFeature.transfer"
+    namespace = "com.wynndie.spwallet.sharedFeatures.edit"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

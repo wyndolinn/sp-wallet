@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "FeatureHome"
+            baseName = "TransferFeature"
             isStatic = true
         }
     }
@@ -34,17 +34,17 @@ kotlin {
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(projects.sharedCore)
-            implementation(projects.sharedResources)
-        }
-
         commonMain.dependencies {
             implementation(projects.sharedCore)
             implementation(projects.sharedResources)
 
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
+        }
+
+        androidMain.dependencies {
+            implementation(projects.sharedCore)
+            implementation(projects.sharedResources)
         }
 
         iosMain.dependencies {
@@ -59,7 +59,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.wynndie.spwallet.sharedFeature.home"
+    namespace = "com.wynndie.spwallet.sharedFeatures.transfer"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
