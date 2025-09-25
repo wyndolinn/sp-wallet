@@ -6,10 +6,23 @@ fun TextFieldValue.filterBy(predicate: (Char) -> Boolean): TextFieldValue {
     return this.copy(text = this.text.filter(predicate = predicate))
 }
 
-fun TextFieldValue.dropFirst(predicate: String): TextFieldValue {
-    if (this.text.length <= predicate.length) return this
-    if (!this.text.startsWith(predicate)) return this
-    return this.copy(text = this.text.drop(predicate.length))
+internal fun TextFieldValue.replace(oldChar: String, newChar: String): TextFieldValue {
+    return this.copy(text = this.text.replace(oldChar, newChar))
+}
+
+fun TextFieldValue.dropFirst(char: Char): TextFieldValue {
+    if (!this.text.startsWith(char)) return this
+    return this.copy(text = this.text.dropWhile { it == char })
+}
+
+fun TextFieldValue.replaceBeginning(oldValue: String, newValue: String): TextFieldValue {
+    if (!this.text.startsWith(oldValue)) return this
+    return this.copy(text = this.text.replaceFirst(oldValue, newValue))
+}
+
+fun TextFieldValue.replaceBeginning(oldValue: Char, newValue: Char): TextFieldValue {
+    if (!this.text.startsWith(oldValue)) return this
+    return this.copy(text = this.text.replaceFirst(oldValue, newValue))
 }
 
 fun TextFieldValue.cutOffAt(maxLength: Int): TextFieldValue? {
