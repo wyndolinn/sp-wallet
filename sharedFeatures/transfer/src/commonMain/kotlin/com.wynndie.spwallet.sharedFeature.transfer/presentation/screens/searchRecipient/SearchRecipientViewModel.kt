@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.extensions.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.formatters
+package com.wynndie.spwallet.sharedCore.presentation.formatters.input
 
 sealed class InputFilterOptions(val predicate: (Char) -> Boolean) {
 

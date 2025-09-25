@@ -11,10 +11,10 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavCo
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
-import com.wynndie.spwallet.sharedCore.presentation.extensions.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
