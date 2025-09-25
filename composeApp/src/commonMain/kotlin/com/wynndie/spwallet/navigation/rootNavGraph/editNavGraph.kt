@@ -6,11 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.wynndie.spwallet.navigation.EditNavGraphRoutes
+import com.wynndie.spwallet.navigation.ObserveNavEvent
+import com.wynndie.spwallet.navigation.koinViewModelWithArgs
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardNavEvent
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModel
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModelArgs
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.editNavGraph(
     navController: NavController
@@ -21,14 +22,19 @@ fun NavGraphBuilder.editNavGraph(
     ) {
 
         composable<EditNavGraphRoutes.CustomCard> { navBackStackEntry ->
+
             val args = navBackStackEntry.toRoute<EditNavGraphRoutes.CustomCard>()
-            val viewModel = koinViewModel<CustomCardViewModel> {
-                parametersOf(
-                    CustomCardViewModelArgs(
-                        cardId = args.cardId,
-                        onClickBack = { navController.navigateUp() }
-                    )
-                )
+
+            val viewModel = koinViewModelWithArgs<CustomCardViewModel>(
+                CustomCardViewModelArgs(cardId = args.cardId)
+            )
+
+            ObserveNavEvent<CustomCardNavEvent> { navEvent ->
+                when (navEvent) {
+                    CustomCardNavEvent.OnClickBack -> {
+                        navController.navigateUp()
+                    }
+                }
             }
 
             CustomCardScreenRoot(

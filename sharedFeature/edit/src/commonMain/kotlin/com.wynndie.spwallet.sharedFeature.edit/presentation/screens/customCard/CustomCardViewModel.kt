@@ -9,6 +9,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
@@ -91,7 +92,9 @@ class CustomCardViewModel(
 
 
             CustomCardAction.OnClickBack -> {
-                args.onClickBack()
+                viewModelScope.launch {
+                    NavController.navigate(CustomCardNavEvent.OnClickBack)
+                }
             }
 
 
@@ -111,7 +114,7 @@ class CustomCardViewModel(
             is CustomCardAction.OnChangeBalanceValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
-                    .dropFirst("0")
+                    .dropFirst('0')
                     .cutOffAt(_state.value.balanceInputField.maxLength) ?: return
 
                 _state.update { state ->
@@ -163,7 +166,7 @@ class CustomCardViewModel(
                                 OverlayController.send(
                                     OverlayType.Snackbar(UiText.ResourceString(Res.string.cash_creation_succeed))
                                 )
-                                args.onClickBack()
+                                NavController.navigate(CustomCardNavEvent.OnClickBack)
                             }
                     }
                 }
@@ -173,7 +176,7 @@ class CustomCardViewModel(
                 viewModelScope.launch {
                     _state.update { it.copy(isDeleteDialogVisible = false) }
                     cardsRepository.deleteCustomCard(_state.value.card.toDomain())
-                    args.onClickBack()
+                    NavController.navigate(CustomCardNavEvent.OnClickBack)
                 }
             }
         }

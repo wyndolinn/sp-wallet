@@ -8,17 +8,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.wynndie.spwallet.navigation.ObserveNavEvent
 import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
+import com.wynndie.spwallet.navigation.koinViewModelWithArgs
 import com.wynndie.spwallet.navigation.sharedKoinViewModel
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.RecipientViewModel
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientNavEvent
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientScreenRoot
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientViewModel
-import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientViewModelArgs
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardNavEvent
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardViewModel
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardViewModelArgs
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.transferNavGraph(
     navController: NavController
@@ -35,28 +37,31 @@ fun NavGraphBuilder.transferNavGraph(
             val recipientViewModel =
                 navBackStackEntry.sharedKoinViewModel<RecipientViewModel>(navController)
 
+            val viewModel = koinViewModel<SearchRecipientViewModel>()
 
-            val viewModel = koinViewModel<SearchRecipientViewModel> {
-                parametersOf(
-                    SearchRecipientViewModelArgs(
-                        onClickBack = { navController.navigateUp() },
-                        onClickRecipient = { recipientId, cardNumber ->
-                            recipientViewModel.setRecipientId(recipientId)
-                            recipientViewModel.setRecipientCardNumber(cardNumber)
+            ObserveNavEvent<SearchRecipientNavEvent> { navEvent ->
+                when (navEvent) {
+                    SearchRecipientNavEvent.OnClickBack -> {
+                        navController.navigateUp()
+                    }
 
-                            navController.navigate(
-                                TransferNavGraphRoutes.TransferByCardNumber(
-                                    cardId = args.cardId,
-                                )
-                            ) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onClickEditRecipient = {
+                    is SearchRecipientNavEvent.OnClickRecipient -> {
+                        recipientViewModel.setRecipientId(navEvent.id)
+                        recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
 
+                        navController.navigate(
+                            TransferNavGraphRoutes.TransferByCardNumber(
+                                cardId = args.cardId,
+                            )
+                        ) {
+                            launchSingleTop = true
                         }
-                    )
-                )
+                    }
+
+                    is SearchRecipientNavEvent.OnClickEditRecipient -> {
+
+                    }
+                }
             }
 
             SearchRecipientScreenRoot(
@@ -66,26 +71,28 @@ fun NavGraphBuilder.transferNavGraph(
 
         composable<TransferNavGraphRoutes.EditSearchRecipient> { navBackStackEntry ->
 
-            val args = navBackStackEntry.toRoute<TransferNavGraphRoutes.SearchRecipient>()
-
             val recipientViewModel =
                 navBackStackEntry.sharedKoinViewModel<RecipientViewModel>(navController)
 
-            val viewModel = koinViewModel<SearchRecipientViewModel> {
-                parametersOf(
-                    SearchRecipientViewModelArgs(
-                        onClickBack = { navController.navigateUp() },
-                        onClickRecipient = { recipientId, cardNumber ->
-                            recipientViewModel.setRecipientId(recipientId)
-                            recipientViewModel.setRecipientCardNumber(cardNumber)
+            val viewModel = koinViewModel<SearchRecipientViewModel>()
 
-                            navController.navigateUp()
-                        },
-                        onClickEditRecipient = {
+            ObserveNavEvent<SearchRecipientNavEvent> { navEvent ->
+                when (navEvent) {
+                    SearchRecipientNavEvent.OnClickBack -> {
+                        navController.navigateUp()
+                    }
 
-                        }
-                    )
-                )
+                    is SearchRecipientNavEvent.OnClickRecipient -> {
+                        recipientViewModel.setRecipientId(navEvent.id)
+                        recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
+
+                        navController.navigateUp()
+                    }
+
+                    is SearchRecipientNavEvent.OnClickEditRecipient -> {
+
+                    }
+                }
             }
 
             SearchRecipientScreenRoot(
@@ -100,27 +107,30 @@ fun NavGraphBuilder.transferNavGraph(
             val recipientViewModel =
                 navBackStackEntry.sharedKoinViewModel<RecipientViewModel>(navController)
 
-            val viewModel = koinViewModel<TransferByCardViewModel> {
-                parametersOf(
-                    TransferByCardViewModelArgs(
-                        cardId = args.cardId,
-                        onClickBack = { navController.navigateUp() },
-                        onClickRecipient = {
-                            navController.navigate(TransferNavGraphRoutes.EditSearchRecipient) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onClickEditRecipient = {
-
-                        }
-                    )
+            val viewModel = koinViewModelWithArgs<TransferByCardViewModel>(
+                TransferByCardViewModelArgs(
+                    cardId = args.cardId
                 )
-            }
+            )
 
             val recipientId by recipientViewModel.recipientId.collectAsStateWithLifecycle()
             val recipientCardNumber by recipientViewModel.recipientCardNumber.collectAsStateWithLifecycle()
             LaunchedEffect(recipientId, recipientCardNumber) {
                 viewModel.updateRecipient(recipientId, recipientCardNumber)
+            }
+
+            ObserveNavEvent<TransferByCardNavEvent> { navEvent ->
+                when (navEvent) {
+                    TransferByCardNavEvent.OnClickBack -> {
+                        navController.navigateUp()
+                    }
+
+                    TransferByCardNavEvent.OnClickRecipient -> {
+                        navController.navigate(TransferNavGraphRoutes.EditSearchRecipient) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
             }
 
             TransferByCardScreenRoot(

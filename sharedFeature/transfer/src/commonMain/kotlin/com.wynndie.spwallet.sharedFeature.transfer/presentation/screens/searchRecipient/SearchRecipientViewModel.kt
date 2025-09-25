@@ -1,16 +1,14 @@
-@file:OptIn(FlowPreview::class)
-
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filterBy
-import kotlinx.coroutines.FlowPreview
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -18,10 +16,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class SearchRecipientViewModel(
-    recipientRepository: RecipientRepository,
-    private val args: SearchRecipientViewModelArgs
+    recipientRepository: RecipientRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchRecipientState())
@@ -51,7 +49,9 @@ class SearchRecipientViewModel(
                         _state.update { state ->
                             state.copy(
                                 recipients = cachedRecipients.filter { recipient ->
-                                    recipient.cardNumber.contains(query) || recipient.name.contains(query)
+                                    recipient.cardNumber.contains(query) || recipient.name.contains(
+                                        query
+                                    )
                                 }
                             )
                         }
@@ -70,15 +70,28 @@ class SearchRecipientViewModel(
     fun onAction(action: SearchRecipientAction) {
         when (action) {
             SearchRecipientAction.OnClickBack -> {
-                args.onClickBack()
+                viewModelScope.launch {
+                    NavController.navigate(SearchRecipientNavEvent.OnClickBack)
+                }
             }
 
             is SearchRecipientAction.OnClickRecipient -> {
-                args.onClickRecipient(action.id, action.cardNumber)
+                viewModelScope.launch {
+                    NavController.navigate(
+                        SearchRecipientNavEvent.OnClickRecipient(
+                            id = action.id,
+                            cardNumber = action.cardNumber
+                        )
+                    )
+                }
             }
 
             is SearchRecipientAction.OnClickEditRecipient -> {
-                args.onClickEditRecipient(action.id)
+                viewModelScope.launch {
+                    NavController.navigate(
+                        SearchRecipientNavEvent.OnClickEditRecipient(id = action.id)
+                    )
+                }
             }
 
             is SearchRecipientAction.OnChangeRecipientValue -> {

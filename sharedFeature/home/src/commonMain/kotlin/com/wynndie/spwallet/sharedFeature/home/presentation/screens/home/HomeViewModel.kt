@@ -7,6 +7,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
@@ -33,7 +34,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
-    private val args: HomeViewModelArgs,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val authCardUseCase: AuthCardUseCase,
@@ -179,14 +179,18 @@ class HomeViewModel(
             }
 
             is HomeAction.OnClickTransferByCard -> {
-                args.onClickTransferByCard(action.cardId)
-                closeAllDialogs()
+                viewModelScope.launch {
+                    NavController.navigate(HomeNavEvent.OnClickTransferByCard(action.cardId))
+                    closeAllDialogs()
+                }
             }
 
 
             is HomeAction.OnClickCustomCard -> {
-                args.onClickCustomCard(action.cardId)
-                closeAllDialogs()
+                viewModelScope.launch {
+                    NavController.navigate(HomeNavEvent.OnClickCustomCard(action.cardId))
+                    closeAllDialogs()
+                }
             }
 
             is HomeAction.OnClickAuthedCard -> {

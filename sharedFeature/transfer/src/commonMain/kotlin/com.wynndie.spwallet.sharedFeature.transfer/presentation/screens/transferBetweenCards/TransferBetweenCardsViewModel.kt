@@ -7,17 +7,18 @@ import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
@@ -74,7 +75,9 @@ class TransferBetweenCardsViewModel(
 
 
             TransferBetweenCardsAction.OnClickBack -> {
-                args.onClickBack()
+                viewModelScope.launch {
+                    NavController.navigate(TransferBetweenCardsNavEvent.OnClickBack)
+                }
             }
 
             is TransferBetweenCardsAction.OnClickTransferAction -> {
@@ -96,7 +99,7 @@ class TransferBetweenCardsViewModel(
                             OverlayController.send(
                                 OverlayType.Snackbar(UiText.ResourceString(Res.string.transaction_succeed))
                             )
-                            args.onClickBack()
+                            NavController.navigate(TransferBetweenCardsNavEvent.OnClickBack)
                         }
                     }
 
@@ -108,7 +111,7 @@ class TransferBetweenCardsViewModel(
             is TransferBetweenCardsAction.OnChangeTransferAmountValueAction -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
-                    .dropFirst("0")
+                    .dropFirst('0')
                     .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
                 _state.update { state ->

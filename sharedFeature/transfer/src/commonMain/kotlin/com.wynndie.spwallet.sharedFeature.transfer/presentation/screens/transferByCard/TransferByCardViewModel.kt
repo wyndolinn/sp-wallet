@@ -11,6 +11,7 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.TransferCommentValidator
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
@@ -102,11 +103,15 @@ class TransferByCardViewModel(
 
 
             TransferByCardAction.OnClickBack -> {
-                args.onClickBack()
+                viewModelScope.launch {
+                    NavController.navigate(TransferByCardNavEvent.OnClickBack)
+                }
             }
 
             is TransferByCardAction.OnClickRecipient -> {
-                args.onClickRecipient()
+                viewModelScope.launch {
+                    NavController.navigate(TransferByCardNavEvent.OnClickRecipient)
+                }
             }
 
             is TransferByCardAction.OnClickTransfer -> {
@@ -132,7 +137,7 @@ class TransferByCardViewModel(
                             OverlayController.send(
                                 OverlayType.Snackbar(UiText.ResourceString(Res.string.transaction_succeed))
                             )
-                            args.onClickBack()
+                            NavController.navigate(TransferByCardNavEvent.OnClickBack)
                         }
                     }
 
@@ -144,7 +149,7 @@ class TransferByCardViewModel(
             is TransferByCardAction.OnChangeTransferAmountValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
-                    .dropFirst("0")
+                    .dropFirst('0')
                     .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
                 _state.update { state ->
