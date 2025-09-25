@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedCore.presentation.models
 
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardColor
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardIcon
+import com.wynndie.spwallet.sharedCore.domain.models.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
 
 data class Tile(
     val id: String,

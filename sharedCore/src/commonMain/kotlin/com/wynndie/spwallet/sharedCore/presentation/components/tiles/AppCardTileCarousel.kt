@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
 import com.wynndie.spwallet.sharedtheme.designSystem.BaseCarousel
 import com.wynndie.spwallet.sharedtheme.theme.spacing
@@ -28,8 +30,8 @@ fun AppCardCarousel(
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         ) {
             AppCardTile(
-                icon = tile.icon.value,
-                iconBackground = tile.iconBackground.value,
+                icon = tile.icon.asImage(),
+                iconBackground = tile.iconBackground.asColor(),
                 label = tile.label,
                 title = tile.title,
                 description = tile.description,

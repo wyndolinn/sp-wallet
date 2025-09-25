@@ -19,7 +19,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.filterBy
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res

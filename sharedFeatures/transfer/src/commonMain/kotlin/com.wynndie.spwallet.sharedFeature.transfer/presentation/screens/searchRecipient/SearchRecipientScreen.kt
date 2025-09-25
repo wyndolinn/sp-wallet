@@ -32,8 +32,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppMenuTile
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardColor
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardIcon
+import com.wynndie.spwallet.sharedCore.domain.models.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
@@ -126,10 +128,10 @@ private fun SearchRecipientScreenContent(
                     items(state.recipients) { recipient ->
                         val recipientTile = recipient.asTile()
                         AppMenuTile(
-                            icon = recipientTile.icon.value,
+                            icon = recipientTile.icon.asImage(),
                             title = recipientTile.title,
                             description = recipientTile.description,
-                            iconBackground = recipientTile.iconBackground.value,
+                            iconBackground = recipientTile.iconBackground.asColor(),
                             trailingContent = {
                                 BaseIconButton(
                                     icon = Icons.Outlined.Edit,
@@ -151,10 +153,10 @@ private fun SearchRecipientScreenContent(
 
             state.isNewRecipient -> {
                 AppMenuTile(
-                    icon = CardIcon.Person.value,
+                    icon = CardIcon.PERSON.asImage(),
                     title = stringResource(Res.string.recipient_card),
                     description = state.recipientInputField.value.text,
-                    iconBackground = CardColor.Blue.value,
+                    iconBackground = CardColor.BLUE.asColor(),
                     trailingContent = {
                         BaseIconButton(
                             icon = Icons.Outlined.Add,

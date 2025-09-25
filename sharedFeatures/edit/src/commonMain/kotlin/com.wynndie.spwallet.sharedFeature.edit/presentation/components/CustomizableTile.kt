@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardUi
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
@@ -34,15 +38,15 @@ fun <T : CardUi> CustomizableTile(
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
             .clip(MaterialTheme.radius.default)
-            .background(card.iconBackground.value)
+            .background(card.iconBackground.asColor())
             .clickable(onClick = onClick)
             .padding(MaterialTheme.spacing.small)
             .then(modifier)
     ) {
-        Icon(
-            imageVector = card.icon.value,
+        Image(
+            painter = card.icon.asImage(),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimary,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier.size(MaterialTheme.size.extraLarge)
         )
 

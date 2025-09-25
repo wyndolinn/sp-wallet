@@ -3,6 +3,8 @@ package com.wynndie.spwallet.sharedCore.presentation.components.tiles
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
 import com.wynndie.spwallet.sharedtheme.designSystem.BaseVerticalList
 
@@ -21,8 +23,8 @@ fun AppCardTileList(
         modifier = modifier
     ) { tile ->
         AppCardTile(
-            icon = tile.icon.value,
-            iconBackground = tile.iconBackground.value,
+            icon = tile.icon.asImage(),
+            iconBackground = tile.iconBackground.asColor(),
             label = tile.label,
             title = tile.title,
             description = tile.description,

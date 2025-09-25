@@ -12,30 +12,22 @@ import org.jetbrains.compose.resources.painterResource
 
 sealed interface UiImage {
 
+    data class ResourceImage(val id: DrawableResource) : UiImage {
+        @Composable
+        override fun asPainter(): Painter = painterResource(id)
+    }
+
+    data class VectorImage(val vector: ImageVector) : UiImage {
+        @Composable
+        override fun asPainter(): VectorPainter = rememberVectorPainter(vector)
+
+    }
+
+    data class UrlImage(val value: String) : UiImage {
+        @Composable
+        override fun asPainter(): AsyncImagePainter = rememberAsyncImagePainter(value)
+    }
+
     @Composable
     fun asPainter(): Painter
-
-    data class Drawable(val id: DrawableResource) : UiImage {
-
-        @Composable
-        override fun asPainter(): Painter {
-            return painterResource(id)
-        }
-    }
-
-    data class Vector(val vector: ImageVector) : UiImage {
-
-        @Composable
-        override fun asPainter(): VectorPainter {
-            return rememberVectorPainter(vector)
-        }
-    }
-
-    data class Url(val value: String) : UiImage {
-
-        @Composable
-        override fun asPainter(): AsyncImagePainter {
-            return rememberAsyncImagePainter(value)
-        }
-    }
 }

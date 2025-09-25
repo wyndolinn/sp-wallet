@@ -1,17 +1,20 @@
 package com.wynndie.spwallet.sharedCore.presentation.components.tiles
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile.BaseHorizontalTileSmall
 
 @Composable
 fun AppMenuTile(
-    icon: ImageVector,
+    icon: Painter,
     title: String,
     modifier: Modifier = Modifier,
     label: String? = null,
@@ -22,10 +25,10 @@ fun AppMenuTile(
 ) {
     BaseHorizontalTileSmall(
         leadingContent = {
-            Icon(
-                imageVector = icon,
+            Image(
+                painter = icon,
                 contentDescription = label,
-                tint = MaterialTheme.colorScheme.onPrimary
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
             )
         },
         trailingContent = trailingContent,

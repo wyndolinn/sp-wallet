@@ -38,6 +38,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number
@@ -147,8 +149,8 @@ private fun TransferByNumberScreen(
             )
 
             AppCardTile(
-                icon = state.recipient.icon.value,
-                iconBackground = state.recipient.iconBackground.value,
+                icon = state.recipient.icon.asImage(),
+                iconBackground = state.recipient.iconBackground.asColor(),
                 label = recipientTile.label,
                 title = recipientTile.title,
                 onClick = { onAction(TransferByCardAction.OnClickRecipient) },

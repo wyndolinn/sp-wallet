@@ -17,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.CardColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
 import com.wynndie.spwallet.sharedtheme.designSystem.BaseBottomSheetLayout
@@ -76,8 +77,8 @@ private fun CustomizationSheetContent(
                     selected = selectedColorChip == index,
                     shape = CircleShape,
                     colors = FilterChipDefaults.filterChipColors().copy(
-                        selectedContainerColor = chip.value,
-                        containerColor = chip.value
+                        selectedContainerColor = chip.asColor(),
+                        containerColor = chip.asColor()
                     ),
                     border = FilterChipDefaults.filterChipBorder(
                         enabled = true,
@@ -90,7 +91,7 @@ private fun CustomizationSheetContent(
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.small)
                         .background(
-                            color = if (selectedColorChip == index) chip.value else Color.Transparent,
+                            color = if (selectedColorChip == index) chip.asColor() else Color.Transparent,
                             shape = MaterialTheme.shapes.extraLarge
                         )
                 )

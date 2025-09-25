@@ -3,6 +3,8 @@ package com.wynndie.spwallet.sharedCore.presentation.models.cards
 import androidx.compose.runtime.Composable
 import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
