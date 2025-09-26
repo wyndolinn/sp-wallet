@@ -10,22 +10,22 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(600),
-        fontSize = 36.sp,
-        lineHeight = 42.sp,
+        fontSize = 30.sp,
+        lineHeight = 36.sp,
         letterSpacing = 0.0.sp
     ),
     displayMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(400),
-        fontSize = 36.sp,
-        lineHeight = 42.sp,
+        fontSize = 30.sp,
+        lineHeight = 36.sp,
         letterSpacing = 0.0.sp
     ),
     displaySmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(300),
-        fontSize = 36.sp,
-        lineHeight = 42.sp,
+        fontSize = 30.sp,
+        lineHeight = 36.sp,
         letterSpacing = 0.0.sp
     ),
 
@@ -56,22 +56,22 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(600),
-        fontSize = 16.sp,
-        lineHeight = 19.sp,
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
         letterSpacing = 0.0.sp
     ),
     titleMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(400),
-        fontSize = 16.sp,
-        lineHeight = 19.sp,
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
         letterSpacing = 0.0.sp
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(300),
-        fontSize = 16.sp,
-        lineHeight = 19.sp,
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
         letterSpacing = 0.0.sp
     ),
 
@@ -79,22 +79,22 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(600),
-        fontSize = 14.sp,
-        lineHeight = 16.sp,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
         letterSpacing = 0.0.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(400),
-        fontSize = 14.sp,
-        lineHeight = 16.sp,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
         letterSpacing = 0.0.sp
     ),
     bodySmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(300),
-        fontSize = 14.sp,
-        lineHeight = 16.sp,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
         letterSpacing = 0.0.sp
     ),
 
