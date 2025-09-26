@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.wynndie.spwallet.sharedtheme.theme.radius
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +23,7 @@ fun LoadingDialog() {
         ) {
             LoadingIndicator(
                 modifier = Modifier
-                    .clip(MaterialTheme.radius.extraLarge)
+                    .clip(MaterialTheme.shapes.extraLarge)
                     .background(MaterialTheme.colorScheme.surface)
                     .padding(MaterialTheme.spacing.large)
             )

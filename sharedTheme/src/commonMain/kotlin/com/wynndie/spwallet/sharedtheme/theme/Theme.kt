@@ -97,12 +97,12 @@ fun AppTheme(
     CompositionLocalProvider(
         values = arrayOf(
             LocalSpacing provides Spacing(),
-            LocalRadius provides Radius(),
-            LocalSize provides Size()
+            LocalSizing provides Sizing()
         )
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
+            shapes = Shapes,
             typography = Typography,
             content = content
         )

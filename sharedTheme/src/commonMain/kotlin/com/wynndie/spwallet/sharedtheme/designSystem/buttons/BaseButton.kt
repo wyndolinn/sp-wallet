@@ -11,8 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingIndicator
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 
 @Composable
 fun BaseButton(
@@ -26,9 +25,9 @@ fun BaseButton(
 ) {
     Button(
         onClick = onClick,
-        shape = MaterialTheme.radius.medium,
+        shape = MaterialTheme.shapes.medium,
         enabled = enabled,
-        modifier = modifier.height(MaterialTheme.size.large)
+        modifier = modifier.height(MaterialTheme.sizing.medium)
     ) {
 
         Crossfade(

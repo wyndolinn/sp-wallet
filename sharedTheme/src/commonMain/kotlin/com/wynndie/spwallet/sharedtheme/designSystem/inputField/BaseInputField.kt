@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.clear
-import com.wynndie.spwallet.sharedtheme.theme.radius
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -101,7 +100,7 @@ fun BaseInputField(
         keyboardActions = keyboardActions,
         singleLine = singleLine,
         minLines = minLines,
-        shape = MaterialTheme.radius.default,
+        shape = MaterialTheme.shapes.medium,
         textStyle = MaterialTheme.typography.titleMedium,
         colors = TextFieldDefaults.colors(
             unfocusedSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,

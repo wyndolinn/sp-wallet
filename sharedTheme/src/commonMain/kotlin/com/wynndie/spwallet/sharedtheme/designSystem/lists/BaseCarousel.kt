@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.extensions.factor
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -47,8 +48,8 @@ fun <T> BaseCarousel(
                 items.forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
-                            .size(MaterialTheme.size.scale(0.33f).extraSmall)
-                            .clip(MaterialTheme.radius.circle)
+                            .size(MaterialTheme.sizing.extraExtraSmall.factor(1/3f))
+                            .clip(CircleShape)
                             .background(
                                 color = if (pagerState.currentPage == index) {
                                     MaterialTheme.colorScheme.secondary

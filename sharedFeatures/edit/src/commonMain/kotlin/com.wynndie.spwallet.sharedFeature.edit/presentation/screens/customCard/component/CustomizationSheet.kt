@@ -23,7 +23,8 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
 import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.extensions.factor
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -83,9 +84,9 @@ private fun CustomizationSheetContent(
                     border = FilterChipDefaults.filterChipBorder(
                         enabled = true,
                         selected = selectedColorChip == index,
-                        borderWidth = MaterialTheme.size.scale(0.5f).extraSmall,
+                        borderWidth = MaterialTheme.sizing.extraExtraSmall.factor(1/2f),
                         borderColor = MaterialTheme.colorScheme.surface,
-                        selectedBorderWidth = MaterialTheme.size.scale(0.5f).extraSmall,
+                        selectedBorderWidth = MaterialTheme.sizing.extraExtraSmall.factor(1/2f),
                         selectedBorderColor = MaterialTheme.colorScheme.surface
                     ),
                     modifier = Modifier

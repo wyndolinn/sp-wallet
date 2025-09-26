@@ -14,8 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelSmall
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -30,7 +29,7 @@ fun BaseHorizontalTileMedium(
     onClick: (() -> Unit)? = null,
 ) {
 
-    val minContentHeight = MaterialTheme.size.large
+    val minContentHeight = MaterialTheme.sizing.medium
 
     BaseHorizontalTile(
         leadingContent = {
@@ -38,7 +37,7 @@ fun BaseHorizontalTileMedium(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(minContentHeight)
-                    .clip(MaterialTheme.radius.small)
+                    .clip(MaterialTheme.shapes.small)
                     .background(leadingContentBackground)
             ) {
                 leadingContent()

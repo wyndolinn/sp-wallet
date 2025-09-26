@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.app_name
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -30,7 +30,7 @@ fun AppBarContent(
         Image(
             painter = image,
             contentDescription = stringResource(Res.string.app_name),
-            modifier = Modifier.size(MaterialTheme.size.small)
+            modifier = Modifier.size(MaterialTheme.sizing.extraSmall)
         )
 
         Text(

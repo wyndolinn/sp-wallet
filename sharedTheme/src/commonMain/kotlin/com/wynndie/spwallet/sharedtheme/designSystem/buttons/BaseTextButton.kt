@@ -8,8 +8,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 
 @Composable
 fun BaseTextButton(
@@ -22,8 +21,8 @@ fun BaseTextButton(
 ) {
     TextButton(
         onClick = onClick,
-        shape = MaterialTheme.radius.medium,
-        modifier = modifier.height(MaterialTheme.size.medium)
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.height(MaterialTheme.sizing.small)
     ) {
         leadingIcon?.let {
             Icon(

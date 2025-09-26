@@ -8,8 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 
 @Composable
 fun BaseOutlinedButton(
@@ -21,8 +20,8 @@ fun BaseOutlinedButton(
 ) {
     OutlinedButton(
         onClick = onClick,
-        shape = MaterialTheme.radius.medium,
-        modifier = modifier.height(MaterialTheme.size.large)
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.height(MaterialTheme.sizing.medium)
     ) {
         leadingIcon?.let {
             Icon(

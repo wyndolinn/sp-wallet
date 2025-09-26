@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cancel
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTextButton
-import com.wynndie.spwallet.sharedtheme.theme.radius
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -54,7 +53,7 @@ fun BaseDialogLayout(
                 )
             }
         },
-        shape = MaterialTheme.radius.default,
+        shape = MaterialTheme.shapes.medium,
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         modifier = modifier
     )

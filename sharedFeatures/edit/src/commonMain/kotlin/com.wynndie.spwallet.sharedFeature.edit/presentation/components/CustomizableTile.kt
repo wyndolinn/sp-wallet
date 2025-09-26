@@ -23,8 +23,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardUi
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -37,7 +36,7 @@ fun <T : CardUi> CustomizableTile(
     Row(
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
-            .clip(MaterialTheme.radius.default)
+            .clip(MaterialTheme.shapes.medium)
             .background(card.iconBackground.asColor())
             .clickable(onClick = onClick)
             .padding(MaterialTheme.spacing.small)
@@ -47,7 +46,7 @@ fun <T : CardUi> CustomizableTile(
             painter = card.icon.asImage(),
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier.size(MaterialTheme.size.extraLarge)
+            modifier = Modifier.size(MaterialTheme.sizing.large)
         )
 
         Spacer(Modifier.weight(1f))

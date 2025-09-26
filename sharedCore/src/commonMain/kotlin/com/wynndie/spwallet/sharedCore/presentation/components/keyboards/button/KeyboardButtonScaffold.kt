@@ -10,14 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.wynndie.spwallet.sharedtheme.theme.radius
 
 @Composable
 fun KeyboardButton(
     symbol: @Composable BoxScope.() -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: CornerBasedShape = MaterialTheme.radius.default
+    shape: CornerBasedShape = MaterialTheme.shapes.medium
 ) {
     Box(
         contentAlignment = Alignment.Center,

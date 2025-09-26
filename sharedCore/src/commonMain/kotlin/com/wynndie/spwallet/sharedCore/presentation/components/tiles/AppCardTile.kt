@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.BaseHorizontalTileMedium
-import com.wynndie.spwallet.sharedtheme.theme.radius
 
 @Composable
 fun AppCardTile(
@@ -34,7 +33,7 @@ fun AppCardTile(
         title = title,
         description = description,
         modifier = modifier
-            .clip(MaterialTheme.radius.default)
+            .clip(MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer),
         leadingContentBackground = iconBackground,
         onClick = onClick

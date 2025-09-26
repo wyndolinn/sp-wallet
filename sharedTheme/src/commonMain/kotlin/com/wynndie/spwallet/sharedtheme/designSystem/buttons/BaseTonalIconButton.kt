@@ -12,8 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedtheme.theme.radius
-import com.wynndie.spwallet.sharedtheme.theme.size
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -30,16 +29,16 @@ fun BaseTonalIconButton(
     ) {
         FilledTonalButton(
             onClick = onClick,
-            shape = MaterialTheme.radius.medium,
+            shape = MaterialTheme.shapes.medium,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(MaterialTheme.size.large)
+                .height(MaterialTheme.sizing.medium)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = text,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.height(MaterialTheme.size.medium)
+                modifier = Modifier.height(MaterialTheme.sizing.small)
             )
         }
 

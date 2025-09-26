@@ -5,14 +5,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedtheme.theme.radius
 
 @Composable
 fun KeyboardTextButton(
     symbol: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: CornerBasedShape = MaterialTheme.radius.default
+    shape: CornerBasedShape = MaterialTheme.shapes.medium
 ) {
     KeyboardButton(
         symbol = {

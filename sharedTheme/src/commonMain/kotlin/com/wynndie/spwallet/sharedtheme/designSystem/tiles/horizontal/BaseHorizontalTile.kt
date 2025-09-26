@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedtheme.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -26,7 +27,7 @@ fun BaseHorizontalTile(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         verticalAlignment = verticalAlignment,
         modifier = modifier
-            .doIfNotNull(onClick) { then(Modifier.clickable(onClick = it)) }
+            .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(contentPadding)
     ) {
         leadingContent?.let { it() }
