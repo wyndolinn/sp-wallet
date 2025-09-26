@@ -48,7 +48,7 @@ import com.wynndie.spwallet.sharedResources.enter_comment
 import com.wynndie.spwallet.sharedResources.enter_transfer_amount
 import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_amount
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource

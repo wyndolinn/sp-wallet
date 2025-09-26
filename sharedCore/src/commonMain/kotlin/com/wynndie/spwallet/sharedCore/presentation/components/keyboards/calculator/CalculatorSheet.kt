@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.models.KeyboardAction
 import com.wynndie.spwallet.sharedCore.presentation.models.InputField
-import com.wynndie.spwallet.sharedtheme.designSystem.BaseBottomSheetLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -16,7 +16,7 @@ fun CalculatorSheet(
     onAction: (KeyboardAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseBottomSheetLayout(
+    BaseSheetLayout(
         onDismiss = onDismiss
     ) {
         CalculatorSheetContent(

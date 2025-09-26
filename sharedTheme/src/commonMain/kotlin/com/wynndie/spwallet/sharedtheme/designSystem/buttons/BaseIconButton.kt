@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.button
+package com.wynndie.spwallet.sharedtheme.designSystem.buttons
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

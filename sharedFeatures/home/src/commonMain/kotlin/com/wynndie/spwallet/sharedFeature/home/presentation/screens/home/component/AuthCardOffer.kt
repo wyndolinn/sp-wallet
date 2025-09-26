@@ -11,8 +11,8 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedResources.no_authed_cards
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelLarge
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelLarge
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

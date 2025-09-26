@@ -2,15 +2,13 @@ package com.wynndie.spwallet.sharedCore.presentation.components.tiles
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
-import com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile.BaseHorizontalTileSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.BaseHorizontalTileSmall
 
 @Composable
 fun AppMenuTile(

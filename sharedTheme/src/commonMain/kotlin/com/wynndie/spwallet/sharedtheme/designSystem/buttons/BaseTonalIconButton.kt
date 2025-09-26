@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.button
+package com.wynndie.spwallet.sharedtheme.designSystem.buttons
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.infoPanel
+package com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun BaseInfoPanel(
+fun BaseInfoLayout(
     modifier: Modifier = Modifier,
     image: @Composable (ColumnScope.() -> Unit)? = null,
     label: @Composable (ColumnScope.() -> Unit)? = null,

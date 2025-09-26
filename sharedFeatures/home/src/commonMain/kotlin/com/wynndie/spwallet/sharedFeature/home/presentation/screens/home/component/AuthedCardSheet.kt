@@ -16,9 +16,9 @@ import com.wynndie.spwallet.sharedCore.presentation.models.Tile
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.transfer_by_number
-import com.wynndie.spwallet.sharedtheme.designSystem.BaseBottomSheetLayout
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseTextButton
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseTonalIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTextButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTonalIconButton
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -32,7 +32,7 @@ fun AuthedCardSheet(
     onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseBottomSheetLayout(
+    BaseSheetLayout(
         onDismiss = onDismiss
     ) {
         AuthedCardSheetContent(

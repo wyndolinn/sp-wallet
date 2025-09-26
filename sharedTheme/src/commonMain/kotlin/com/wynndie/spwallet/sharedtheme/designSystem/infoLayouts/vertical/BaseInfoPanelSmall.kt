@@ -1,6 +1,5 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.infoPanel
+package com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,42 +11,20 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseInfoPanelLarge(
-    image: @Composable (ColumnScope.() -> Unit)? = null,
+fun BaseInfoPanelSmall(
     label: String? = null,
     title: String? = null,
     description: String? = null,
-    action: @Composable (ColumnScope.() -> Unit)? = null,
     textAlign: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier
 ) {
-    BaseInfoPanel(
-        image = image?.let {
-            {
-                it()
-
-                Spacer(Modifier.height(MaterialTheme.spacing.small))
-            }
-        },
+    BaseInfoLayout(
         label = label?.let {
             {
                 Text(
-                    text = label,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = textAlign,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(Modifier.height(MaterialTheme.spacing.medium))
-            }
-        },
-        title = title?.let {
-            {
-                Text(
                     text = it,
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -55,20 +32,28 @@ fun BaseInfoPanelLarge(
                 Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
             }
         },
-        description = description?.let {
+        title = title?.let {
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
-
-                if (action != null) Spacer(Modifier.height(MaterialTheme.spacing.medium))
             }
         },
-        action = action,
+        description = description?.let {
+            {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = textAlign,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
         modifier = modifier
     )
 }

@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem
+package com.wynndie.spwallet.sharedtheme.designSystem.lists
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

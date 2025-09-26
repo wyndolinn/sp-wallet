@@ -41,8 +41,8 @@ import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_card
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseIconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelSmall
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.BaseInputField
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource

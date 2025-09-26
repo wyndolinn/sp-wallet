@@ -49,8 +49,8 @@ import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.enter_card_name
 import com.wynndie.spwallet.sharedResources.save
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing

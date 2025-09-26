@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_card
 import com.wynndie.spwallet.sharedResources.transfer_by_number
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseTonalIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTonalIconButton
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 

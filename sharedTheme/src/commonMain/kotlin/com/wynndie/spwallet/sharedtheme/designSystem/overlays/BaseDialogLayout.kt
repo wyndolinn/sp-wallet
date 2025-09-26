@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem
+package com.wynndie.spwallet.sharedtheme.designSystem.overlays
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,12 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cancel
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseTextButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTextButton
 import com.wynndie.spwallet.sharedtheme.theme.radius
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun BaseAlertDialogLayout(
+fun BaseDialogLayout(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     title: String,

@@ -48,9 +48,9 @@ import com.wynndie.spwallet.sharedResources.cash_cards
 import com.wynndie.spwallet.sharedResources.create
 import com.wynndie.spwallet.sharedResources.total_balance
 import com.wynndie.spwallet.sharedResources.total_of_ore
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseIconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseOutlinedButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseOutlinedButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource

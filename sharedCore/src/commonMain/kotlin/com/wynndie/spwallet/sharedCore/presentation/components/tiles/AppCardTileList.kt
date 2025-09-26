@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedtheme.designSystem.BaseVerticalList
+import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseVerticalList
 
 @Composable
 fun AppCardTileList(

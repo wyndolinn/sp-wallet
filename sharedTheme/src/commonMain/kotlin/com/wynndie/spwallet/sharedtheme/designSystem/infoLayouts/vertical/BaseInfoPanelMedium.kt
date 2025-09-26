@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.infoPanel
+package com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,20 +11,20 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseInfoPanelSmall(
+fun BaseInfoPanelMedium(
     label: String? = null,
     title: String? = null,
     description: String? = null,
     textAlign: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier
 ) {
-    BaseInfoPanel(
+    BaseInfoLayout(
         label = label?.let {
             {
                 Text(
-                    text = it,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = label,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -36,7 +36,7 @@ fun BaseInfoPanelSmall(
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
@@ -47,7 +47,7 @@ fun BaseInfoPanelSmall(
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()

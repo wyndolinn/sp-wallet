@@ -1,8 +1,11 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile
+package com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,18 +14,22 @@ import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
 fun BaseHorizontalTile(
-    leadingContent: @Composable () -> Unit = {},
-    trailingContent: @Composable (() -> Unit)? = null,
-    verticalAlignment: Alignment.Vertical = Alignment.Top,
     modifier: Modifier = Modifier,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
+    contentPadding: PaddingValues = PaddingValues(MaterialTheme.spacing.medium),
+    onClick: (() -> Unit)? = null,
+    leadingContent: @Composable (() -> Unit)? = null,
+    trailingContent: @Composable (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         verticalAlignment = verticalAlignment,
         modifier = modifier
+            .doIfNotNull(onClick) { then(Modifier.clickable(onClick = it)) }
+            .padding(contentPadding)
     ) {
-        leadingContent()
+        leadingContent?.let { it() }
 
         Box(
             content = { content() },

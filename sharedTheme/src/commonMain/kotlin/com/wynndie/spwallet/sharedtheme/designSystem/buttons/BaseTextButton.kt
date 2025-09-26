@@ -1,10 +1,10 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.button
+package com.wynndie.spwallet.sharedtheme.designSystem.buttons
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -12,17 +12,18 @@ import com.wynndie.spwallet.sharedtheme.theme.radius
 import com.wynndie.spwallet.sharedtheme.theme.size
 
 @Composable
-fun BaseOutlinedButton(
+fun BaseTextButton(
     text: String,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
+    destructive: Boolean = false,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    OutlinedButton(
+    TextButton(
         onClick = onClick,
         shape = MaterialTheme.radius.medium,
-        modifier = modifier.height(MaterialTheme.size.large)
+        modifier = modifier.height(MaterialTheme.size.medium)
     ) {
         leadingIcon?.let {
             Icon(
@@ -33,7 +34,12 @@ fun BaseOutlinedButton(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            color = if (destructive) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.primary
+            }
         )
 
         trailingIcon?.let {

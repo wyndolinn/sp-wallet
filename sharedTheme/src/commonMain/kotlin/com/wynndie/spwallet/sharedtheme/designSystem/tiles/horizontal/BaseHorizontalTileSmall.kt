@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.horizontalTile
+package com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import com.wynndie.spwallet.sharedtheme.designSystem.infoPanel.BaseInfoPanelSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelSmall
 import com.wynndie.spwallet.sharedtheme.theme.radius
 import com.wynndie.spwallet.sharedtheme.theme.size
 import com.wynndie.spwallet.sharedtheme.theme.spacing

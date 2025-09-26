@@ -21,8 +21,8 @@ import com.wynndie.spwallet.sharedCore.domain.models.CardColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
-import com.wynndie.spwallet.sharedtheme.designSystem.BaseBottomSheetLayout
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseButton
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.theme.size
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
@@ -35,7 +35,7 @@ fun CustomizationSheet(
     onColorChipClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseBottomSheetLayout(
+    BaseSheetLayout(
         onDismiss = onDismiss
     ) {
         CustomizationSheetContent(

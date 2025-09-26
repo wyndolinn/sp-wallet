@@ -1,5 +1,6 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.infoPanel
+package com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,14 +12,23 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseInfoPanelMedium(
+fun BaseInfoPanelLarge(
+    image: @Composable (ColumnScope.() -> Unit)? = null,
     label: String? = null,
     title: String? = null,
     description: String? = null,
+    action: @Composable (ColumnScope.() -> Unit)? = null,
     textAlign: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier
 ) {
-    BaseInfoPanel(
+    BaseInfoLayout(
+        image = image?.let {
+            {
+                it()
+
+                Spacer(Modifier.height(MaterialTheme.spacing.small))
+            }
+        },
         label = label?.let {
             {
                 Text(
@@ -29,7 +39,7 @@ fun BaseInfoPanelMedium(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
+                Spacer(Modifier.height(MaterialTheme.spacing.medium))
             }
         },
         title = title?.let {
@@ -41,6 +51,8 @@ fun BaseInfoPanelMedium(
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
             }
         },
         description = description?.let {
@@ -52,8 +64,11 @@ fun BaseInfoPanelMedium(
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                if (action != null) Spacer(Modifier.height(MaterialTheme.spacing.medium))
             }
         },
+        action = action,
         modifier = modifier
     )
 }

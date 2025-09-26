@@ -30,8 +30,8 @@ import com.wynndie.spwallet.sharedResources.enter_id
 import com.wynndie.spwallet.sharedResources.enter_token
 import com.wynndie.spwallet.sharedResources.id
 import com.wynndie.spwallet.sharedResources.token
-import com.wynndie.spwallet.sharedtheme.designSystem.BaseBottomSheetLayout
-import com.wynndie.spwallet.sharedtheme.designSystem.button.BaseButton
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingDialog
 import com.wynndie.spwallet.sharedtheme.theme.spacing
@@ -52,7 +52,7 @@ fun AuthCardSheet(
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseBottomSheetLayout(
+    BaseSheetLayout(
         onDismiss = onDismiss
     ) {
 
