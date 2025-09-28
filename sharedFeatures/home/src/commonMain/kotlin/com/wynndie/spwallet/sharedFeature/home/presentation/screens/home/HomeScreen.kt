@@ -74,7 +74,7 @@ fun HomeScreenRoot(
 
     if (state.isAuthCardSheetVisible) {
         AuthCardSheet(
-            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet) },
+            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet(false)) },
             loadingState = state.authLoadingState,
             isAuthButtonEnabled = state.authLoadingState !is LoadingState.Loading,
             cards = state.unauthedCards,
@@ -99,10 +99,10 @@ fun HomeScreenRoot(
 
     if (state.isAuthedCardSheetVisible) {
         AuthedCardSheet(
-            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet) },
+            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet(false)) },
             cards = state.authedCards,
             page = state.carouselPage,
-            onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog) },
+            onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(false)) },
             onTransferButtonClick = { viewModel.onAction(HomeAction.OnClickTransferByCard(it)) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -119,7 +119,7 @@ fun HomeScreenRoot(
                     )
                 )
             },
-            onDismiss = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog) },
+            onDismiss = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(false)) },
             modifier = Modifier
         )
     }
@@ -229,7 +229,7 @@ private fun HomeScreenContent(
         item {
             if (isUserAuthed) {
                 ActionButtons(
-                    onAuthCardClick = { onAction(HomeAction.OnToggleAuthCardSheet) },
+                    onAuthCardClick = { onAction(HomeAction.OnToggleAuthCardSheet(true)) },
                     onTransferBetweenCardsClick = {  },
                     onTransferByNumberClick = { onAction(HomeAction.OnClickTransferByCard(null)) },
                     modifier = Modifier.fillMaxWidth()
@@ -237,7 +237,7 @@ private fun HomeScreenContent(
             } else {
                 AuthCardOffer(
                     onClickAuthCard = {
-                        onAction(HomeAction.OnToggleAuthCardSheet)
+                        onAction(HomeAction.OnToggleAuthCardSheet(true))
                     }
                 )
             }

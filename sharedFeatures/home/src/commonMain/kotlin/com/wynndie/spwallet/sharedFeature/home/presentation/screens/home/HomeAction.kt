@@ -8,9 +8,9 @@ sealed interface HomeAction {
 
     data class OnSwipeCarousel(val index: Int) : HomeAction
 
-    data object OnToggleAuthCardSheet : HomeAction
-    data object OnToggleAuthedCardSheet : HomeAction
-    data object OnToggleDeleteCardDialog : HomeAction
+    data class OnToggleAuthCardSheet(val isOpen: Boolean) : HomeAction
+    data class OnToggleAuthedCardSheet(val isOpen: Boolean) : HomeAction
+    data class OnToggleDeleteCardDialog(val isOpen: Boolean) : HomeAction
 
     data class OnClickAuthCard(val id: String, val token: String) : HomeAction
     data class OnClickDeactivateCard(val card: AuthedCardUi) : HomeAction

@@ -93,32 +93,32 @@ class HomeViewModel(
             }
 
 
-            HomeAction.OnToggleAuthCardSheet -> {
+            is HomeAction.OnToggleAuthCardSheet -> {
                 _state.update { state ->
                     state.copy(
-                        isAuthCardSheetVisible = !state.isAuthCardSheetVisible,
+                        isAuthCardSheetVisible = action.isOpen,
                         isAuthedCardSheetVisible = false,
                         isDeactivateCardDialogVisible = false
                     )
                 }
             }
 
-            HomeAction.OnToggleAuthedCardSheet -> {
+            is HomeAction.OnToggleAuthedCardSheet -> {
                 _state.update { state ->
                     state.copy(
                         isAuthCardSheetVisible = false,
-                        isAuthedCardSheetVisible = !state.isAuthedCardSheetVisible,
+                        isAuthedCardSheetVisible = action.isOpen,
                         isDeactivateCardDialogVisible = false
                     )
                 }
             }
 
-            HomeAction.OnToggleDeleteCardDialog -> {
+            is HomeAction.OnToggleDeleteCardDialog -> {
                 _state.update { state ->
                     state.copy(
                         isAuthCardSheetVisible = false,
                         isAuthedCardSheetVisible = true,
-                        isDeactivateCardDialogVisible = !state.isDeactivateCardDialogVisible
+                        isDeactivateCardDialogVisible = action.isOpen
                     )
                 }
             }
