@@ -9,16 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.BaseTitledContent
-import com.wynndie.spwallet.sharedtheme.extensions.ComponentState
+import com.wynndie.spwallet.sharedtheme.extensions.ContentState
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
 fun TitledContent(
     title: String,
     modifier: Modifier = Modifier,
-    state: ComponentState = ComponentState.Neutral,
+    state: ContentState = ContentState.Neutral,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(MaterialTheme.spacing.small),
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     titlePadding: PaddingValues = PaddingValues(),
@@ -28,10 +27,10 @@ fun TitledContent(
 
     val titleColor by animateColorAsState(
         targetValue = when (state) {
-            ComponentState.Neutral -> MaterialTheme.colorScheme.onSurface
-            ComponentState.Disabled -> MaterialTheme.colorScheme.outline
-            ComponentState.Selected -> MaterialTheme.colorScheme.primary
-            ComponentState.Alerted -> MaterialTheme.colorScheme.error
+            ContentState.Neutral -> MaterialTheme.colorScheme.onSurface
+            ContentState.Disabled -> MaterialTheme.colorScheme.outline
+            ContentState.Selected -> MaterialTheme.colorScheme.primary
+            ContentState.Alerted -> MaterialTheme.colorScheme.error
         }
     )
 

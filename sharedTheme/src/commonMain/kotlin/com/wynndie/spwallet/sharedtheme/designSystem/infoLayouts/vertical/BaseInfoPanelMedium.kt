@@ -22,13 +22,7 @@ fun BaseInfoPanelMedium(
     modifier: Modifier = Modifier
 ) {
     BaseInfoLayout(
-        image = image?.let {
-            {
-                it()
-
-                Spacer(Modifier.height(MaterialTheme.spacing.small))
-            }
-        },
+        image = image,
         label = label?.let {
             {
                 Text(
@@ -38,8 +32,6 @@ fun BaseInfoPanelMedium(
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
-
-                Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
             }
         },
         title = title?.let {
@@ -62,8 +54,6 @@ fun BaseInfoPanelMedium(
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
-
-                Spacer(Modifier.height(MaterialTheme.spacing.small))
             }
         },
         action = action,

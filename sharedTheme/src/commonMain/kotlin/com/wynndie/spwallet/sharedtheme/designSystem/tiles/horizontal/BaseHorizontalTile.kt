@@ -27,7 +27,7 @@ fun BaseHorizontalTile(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         verticalAlignment = verticalAlignment,
         modifier = modifier
-            .thenIfNotNull(onClick) { then(Modifier.clickable(onClick = it)) }
+            .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(contentPadding)
     ) {
         leadingContent?.let { it() }

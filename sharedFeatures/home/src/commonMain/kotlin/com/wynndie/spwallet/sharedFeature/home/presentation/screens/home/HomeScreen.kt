@@ -230,6 +230,7 @@ private fun HomeScreenContent(
             if (isUserAuthed) {
                 ActionButtons(
                     onAuthCardClick = { onAction(HomeAction.OnToggleAuthCardSheet) },
+                    onTransferBetweenCardsClick = {  },
                     onTransferByNumberClick = { onAction(HomeAction.OnClickTransferByCard(null)) },
                     modifier = Modifier.fillMaxWidth()
                 )

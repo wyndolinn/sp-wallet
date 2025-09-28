@@ -27,6 +27,7 @@ fun BaseHorizontalTileLarge(
     modifier: Modifier = Modifier,
     label: String? = null,
     description: String? = null,
+    action: @Composable (() -> Unit)? = null,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     contentPadding: PaddingValues = PaddingValues(MaterialTheme.spacing.medium),
     leadingContent: @Composable (BoxScope.() -> Unit)? = null,

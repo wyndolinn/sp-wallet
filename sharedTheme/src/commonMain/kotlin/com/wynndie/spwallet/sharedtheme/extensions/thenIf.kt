@@ -3,13 +3,13 @@ package com.wynndie.spwallet.sharedtheme.extensions
 import androidx.compose.ui.Modifier
 
 inline fun Modifier.thenIf(condition: Boolean, block: Modifier.() -> Modifier): Modifier {
-    return if (condition) this.block() else this
+    return if (condition) then(this.block()) else then(this)
 }
 
 inline fun <T> Modifier.thenIfNull(value: T?, block: Modifier.() -> Modifier): Modifier {
-    return if (value == null) this.block() else this
+    return if (value == null) then(this.block()) else then(this)
 }
 
 inline fun <T> Modifier.thenIfNotNull(value: T?, block: Modifier.(T) -> Modifier): Modifier {
-    return if (value != null) this.block(value) else this
+    return if (value != null) then(this.block(value)) else then(this)
 }
