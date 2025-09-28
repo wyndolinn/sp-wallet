@@ -6,7 +6,7 @@ import com.wynndie.spwallet.sharedResources.x_of_ore
 import com.wynndie.spwallet.sharedResources.x_of_shulkers
 import com.wynndie.spwallet.sharedResources.x_of_stacks
 
-data class BlocksDisplayableValue(
+data class OreDisplayableValue(
     override val value: Long,
     override val formatted: List<UiText>
 ) : DisplayableValue<List<UiText>> {
@@ -15,9 +15,9 @@ data class BlocksDisplayableValue(
         private const val ORE_IN_STACK = 64
         private const val STACKS_IN_SHULKER = 27
 
-        fun of(value: Long): BlocksDisplayableValue {
+        fun of(value: Long): OreDisplayableValue {
             if (value == 0L) {
-                return BlocksDisplayableValue(
+                return OreDisplayableValue(
                     value = value,
                     formatted = listOf(UiText.ResourceString(Res.string.x_of_ore, value))
                 )
@@ -33,7 +33,7 @@ data class BlocksDisplayableValue(
                 if (ore > 0) add(UiText.ResourceString(Res.string.x_of_ore, ore))
             }
 
-            return BlocksDisplayableValue(
+            return OreDisplayableValue(
                 value = value,
                 formatted = formattedValue
             )

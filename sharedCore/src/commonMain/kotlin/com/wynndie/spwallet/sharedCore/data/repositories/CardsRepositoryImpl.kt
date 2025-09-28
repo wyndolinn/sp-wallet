@@ -10,10 +10,9 @@ import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.map
-import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
-import com.wynndie.spwallet.sharedCore.domain.models.CardBalance
-import com.wynndie.spwallet.sharedCore.domain.models.CustomCard
-import com.wynndie.spwallet.sharedCore.domain.models.UnauthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,10 +24,10 @@ class CardsRepositoryImpl(
 
     override suspend fun getCardBalance(
         authKey: String
-    ): Outcome<CardBalance, DataError.Remote> {
+    ): Outcome<Long, DataError.Remote> {
         return remoteSpWorldsCardsDataSource
             .getCardBalance(authKey = authKey)
-            .map { it.toCardBalance() }
+            .map { it.balance }
     }
 
 
@@ -36,7 +35,7 @@ class CardsRepositoryImpl(
         card: CustomCard
     ): EmptyOutcome<DataError.Local> {
         return try {
-            cardsDao.insertCustomCard(CustomCardEntity.from(card))
+            cardsDao.insertCustomCard(CustomCardEntity.of(card))
             Outcome.Success(Unit)
         } catch (_: SQLiteException) {
             Outcome.Error(DataError.Local.DISK_FULL)
@@ -52,7 +51,7 @@ class CardsRepositoryImpl(
     }
 
     override suspend fun deleteCustomCard(card: CustomCard) {
-        cardsDao.deleteCustomCard(CustomCardEntity.from(card))
+        cardsDao.deleteCustomCard(CustomCardEntity.of(card))
     }
 
 
@@ -60,7 +59,7 @@ class CardsRepositoryImpl(
         card: AuthedCard
     ): EmptyOutcome<DataError.Local> {
         return try {
-            cardsDao.insertAuthedCard(AuthedCardEntity.from(card))
+            cardsDao.insertAuthedCard(AuthedCardEntity.of(card))
             Outcome.Success(Unit)
         } catch (_: SQLiteException) {
             Outcome.Error(DataError.Local.DISK_FULL)
@@ -76,7 +75,7 @@ class CardsRepositoryImpl(
     }
 
     override suspend fun deleteAuthedCard(card: AuthedCard) {
-        cardsDao.deleteAuthedCard(AuthedCardEntity.from(card))
+        cardsDao.deleteAuthedCard(AuthedCardEntity.of(card))
     }
 
 

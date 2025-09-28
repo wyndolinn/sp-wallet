@@ -2,32 +2,37 @@ package com.wynndie.spwallet.sharedCore.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.wynndie.spwallet.sharedCore.domain.models.UnauthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 
 @Entity
 data class UnauthedCardEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey
+    val id: String,
     val name: String,
-    val color: Int,
     val number: String,
+    val color: Int,
+    val icon: Int
 ) {
     fun toDomain(): UnauthedCard {
         return UnauthedCard(
             id = id,
             name = name,
-            color = color,
-            icon = 2,
             number = number,
+            color = CardColors.of(color),
+            icon = CardIcons.of(icon)
         )
     }
 
     companion object {
-        fun from(card: UnauthedCard): UnauthedCardEntity {
+        fun from(value: UnauthedCard): UnauthedCardEntity {
             return UnauthedCardEntity(
-                id = card.id,
-                name = card.name,
-                number = card.number,
-                color = card.color
+                id = value.id,
+                name = value.name,
+                number = value.number,
+                color = value.color.id,
+                icon = value.icon.id
             )
         }
     }

@@ -6,8 +6,8 @@ import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrNull
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
-import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.UnauthedUser
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.first
@@ -67,9 +67,7 @@ class SyncWithRemoteUseCase(
             cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 
-        cardsRepository.insertAuthedCard(
-            authedCard.copy(balance = cardBalance.value)
-        )
+        cardsRepository.insertAuthedCard(authedCard.copy(balance = cardBalance))
 
         return Outcome.Success(user)
     }

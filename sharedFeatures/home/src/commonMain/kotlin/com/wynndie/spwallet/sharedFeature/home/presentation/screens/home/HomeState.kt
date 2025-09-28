@@ -4,7 +4,7 @@ import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.models.InputField
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
@@ -22,7 +22,7 @@ data class HomeState(
     val isAuthButtonEnabled: Boolean = false,
 
     val authedUser: AuthedUser = AuthedUser("", ""),
-    val totalBalance: BlocksDisplayableValue = BlocksDisplayableValue.of(0L),
+    val totalBalance: OreDisplayableValue = OreDisplayableValue.of(0L),
 
     val areCustomCardsVisible: Boolean = true,
     val customCards: List<CustomCardUi> = emptyList(),

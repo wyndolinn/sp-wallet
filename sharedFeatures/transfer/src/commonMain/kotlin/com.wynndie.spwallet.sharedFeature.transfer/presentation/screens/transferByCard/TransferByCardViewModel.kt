@@ -15,11 +15,11 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavCo
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -77,7 +77,7 @@ class TransferByCardViewModel(
 
         recipientRepository.getRecipients().onEach { recipients ->
             val recipient = recipients.find { it.id == _state.value.recipient.id }
-                ?: emptyRecipientCard.copy(cardNumber = _state.value.recipient.cardNumber)
+                ?: emptyRecipientCard.copy(number = _state.value.recipient.number)
 
             _state.update { state ->
                 state.copy(
@@ -186,7 +186,7 @@ class TransferByCardViewModel(
             if (id != _state.value.recipient.id) {
                 val recipients = recipientRepository.getRecipients().first()
                 val recipient = recipients.find { it.id == _state.value.recipient.id }
-                    ?: emptyRecipientCard.copy(cardNumber = _state.value.recipient.cardNumber)
+                    ?: emptyRecipientCard.copy(number = _state.value.recipient.number)
 
                 _state.update { state ->
                     state.copy(
@@ -199,7 +199,7 @@ class TransferByCardViewModel(
                 state.copy(
                     recipient = state.recipient.copy(
                         id = id ?: "",
-                        cardNumber = cardNumber
+                        number = cardNumber
                     )
                 )
             }

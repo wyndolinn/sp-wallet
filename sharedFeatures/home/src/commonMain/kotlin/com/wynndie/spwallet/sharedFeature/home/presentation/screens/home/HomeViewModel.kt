@@ -15,7 +15,7 @@ import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
@@ -267,7 +267,7 @@ class HomeViewModel(
         val customCardsBalance = state.value.customCards.sumOf { it.balance.value }
         val totalBalance = authedCardsBalance + customCardsBalance
         _state.update {
-            it.copy(totalBalance = BlocksDisplayableValue.of(totalBalance))
+            it.copy(totalBalance = OreDisplayableValue.of(totalBalance))
         }
     }
 

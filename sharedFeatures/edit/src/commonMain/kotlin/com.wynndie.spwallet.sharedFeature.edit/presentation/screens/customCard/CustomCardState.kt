@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.presentation.models.InputField
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -22,5 +23,5 @@ data class CustomCardState(
     val balanceInputField: InputField = InputField(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH
     ),
-    val selectedColorChip: Int = 0
+    val selectedColorChip: CardColors = CardColors.BLUE
 )

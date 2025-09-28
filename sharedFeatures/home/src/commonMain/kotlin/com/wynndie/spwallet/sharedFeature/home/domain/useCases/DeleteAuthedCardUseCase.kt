@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.usecase
 
-import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import kotlinx.coroutines.flow.first
 

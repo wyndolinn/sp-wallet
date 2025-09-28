@@ -37,6 +37,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsAmount
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.component.CustomizationSheet
@@ -48,7 +52,9 @@ import com.wynndie.spwallet.sharedResources.cash_account
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.enter_card_name
+import com.wynndie.spwallet.sharedResources.no_name
 import com.wynndie.spwallet.sharedResources.save
+import com.wynndie.spwallet.sharedResources.x_of_ore
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
@@ -170,7 +176,6 @@ private fun CustomCardScreen(
     modifier: Modifier = Modifier
 ) {
 
-    val cashCardTile = state.card.asTile()
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -178,9 +183,12 @@ private fun CustomCardScreen(
     ) {
 
         BaseInfoPanelMedium(
-            label = cashCardTile.label,
-            title = cashCardTile.title,
-            description = cashCardTile.description,
+            label = state.card.name.ifBlank { stringResource(Res.string.no_name) },
+            title = stringResource(
+                Res.string.x_of_ore,
+                state.card.balance.value.toString().formatAsAmount()
+            ).uppercase(),
+            description = state.card.balance.formatted.joinToUiText(" ").asString(),
             modifier = Modifier
         )
 
@@ -190,7 +198,8 @@ private fun CustomCardScreen(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
             CustomizableTile(
-                card = state.card,
+                color = state.card.color.asColor(),
+                icon = state.card.icon.asImage(),
                 onClick = { onAction(CustomCardAction.OnToggleCustomizationSheet) },
                 modifier = Modifier.fillMaxWidth()
             )

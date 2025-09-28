@@ -7,15 +7,15 @@ import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiImage
 
 @Composable
-fun CardIcon.asImage(): Painter {
+fun CardIcons.asImage(): Painter {
     return when (this) {
-        CardIcon.CASH -> UiImage.VectorImage(Icons.Outlined.AccountBalanceWallet).asPainter()
-        CardIcon.BANK_CARD -> UiImage.VectorImage(Icons.Outlined.CreditCard).asPainter()
-        CardIcon.ADD_CARD -> UiImage.VectorImage(Icons.Outlined.AddCard).asPainter()
-        CardIcon.PERSON -> UiImage.VectorImage(Icons.Outlined.Person).asPainter()
+        CardIcons.CASH -> UiImage.VectorImage(Icons.Outlined.AccountBalanceWallet).asPainter()
+        CardIcons.BANK_CARD -> UiImage.VectorImage(Icons.Outlined.CreditCard).asPainter()
+        CardIcons.ADD_CARD -> UiImage.VectorImage(Icons.Outlined.AddCard).asPainter()
+        CardIcons.PERSON -> UiImage.VectorImage(Icons.Outlined.Person).asPainter()
     }
 }

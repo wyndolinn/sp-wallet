@@ -13,12 +13,12 @@ import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
 fun BaseInfoPanelLarge(
-    image: @Composable (ColumnScope.() -> Unit)? = null,
     label: String? = null,
     title: String? = null,
     description: String? = null,
-    action: @Composable (ColumnScope.() -> Unit)? = null,
     textAlign: TextAlign = TextAlign.Start,
+    image: @Composable (ColumnScope.() -> Unit)? = null,
+    action: @Composable (ColumnScope.() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     BaseInfoLayout(
@@ -32,9 +32,9 @@ fun BaseInfoPanelLarge(
         label = label?.let {
             {
                 Text(
-                    text = label,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    text = it,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -46,7 +46,7 @@ fun BaseInfoPanelLarge(
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
@@ -65,7 +65,7 @@ fun BaseInfoPanelLarge(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                if (action != null) Spacer(Modifier.height(MaterialTheme.spacing.medium))
+                Spacer(Modifier.height(MaterialTheme.spacing.medium))
             }
         },
         action = action,

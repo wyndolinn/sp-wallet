@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.compon
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,10 +20,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardCarousel
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.models.Tile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.InputField
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction
@@ -30,10 +33,11 @@ import com.wynndie.spwallet.sharedResources.enter_id
 import com.wynndie.spwallet.sharedResources.enter_token
 import com.wynndie.spwallet.sharedResources.id
 import com.wynndie.spwallet.sharedResources.token
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingDialog
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,7 +47,7 @@ fun AuthCardSheet(
     onDismiss: () -> Unit,
     loadingState: LoadingState,
     isAuthButtonEnabled: Boolean,
-    cards: List<Tile>,
+    cards: List<UnauthedCardUi>,
     initialPage: Int,
     tokenInputField: InputField,
     onChangeTokenValue: (TextFieldValue) -> Unit,
@@ -77,7 +81,7 @@ fun AuthCardSheet(
 @Composable
 private fun AuthCardSheetContent(
     isAuthButtonEnabled: Boolean,
-    cards: List<Tile>,
+    cards: List<UnauthedCardUi>,
     page: Int,
     tokenInputField: InputField,
     onTokenValueChange: (TextFieldValue) -> Unit,
@@ -98,6 +102,35 @@ private fun AuthCardSheetContent(
             }
     ) {
         if (cards.isNotEmpty()) {
+            @Composable
+            fun AppCardCarousel(
+                items: List<UnauthedCardUi>,
+                page: Int,
+                modifier: Modifier = Modifier,
+                enabled: Boolean = true,
+                onClick: ((UnauthedCardUi) -> Unit)? = null
+            ) {
+                BaseCarousel(
+                    items = items,
+                    page = page,
+                    enabled = enabled,
+                    modifier = Modifier
+                ) { card ->
+                    Box(
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                    ) {
+                        UnauthedCardTile(
+                            icon = card.icon.asImage(),
+                            iconBackground = card.color.asColor(),
+                            cardName = card.name,
+                            cardNumber = card.number,
+                            onClick = onClick?.let { { it(card) } },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+
             AppCardCarousel(
                 items = cards,
                 page = page,

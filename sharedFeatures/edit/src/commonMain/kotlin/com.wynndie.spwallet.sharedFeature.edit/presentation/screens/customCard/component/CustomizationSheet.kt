@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
@@ -32,7 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CustomizationSheet(
     onDismiss: () -> Unit,
-    selectedColorChip: Int,
+    selectedColorChip: CardColors,
     onColorChipClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -50,7 +50,7 @@ fun CustomizationSheet(
 
 @Composable
 private fun CustomizationSheetContent(
-    selectedColorChip: Int,
+    selectedColorChip: CardColors,
     onColorChipClick: (Int) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
@@ -70,12 +70,11 @@ private fun CustomizationSheetContent(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         ) {
-            val chips = CardColor.entries
-            chips.forEachIndexed { index, chip ->
+            CardColors.entries.forEach { chip ->
                 FilterChip(
                     label = { },
                     onClick = { onColorChipClick(chip.ordinal) },
-                    selected = selectedColorChip == index,
+                    selected = selectedColorChip == chip,
                     shape = CircleShape,
                     colors = FilterChipDefaults.filterChipColors().copy(
                         selectedContainerColor = chip.asColor(),
@@ -83,7 +82,7 @@ private fun CustomizationSheetContent(
                     ),
                     border = FilterChipDefaults.filterChipBorder(
                         enabled = true,
-                        selected = selectedColorChip == index,
+                        selected = selectedColorChip == chip,
                         borderWidth = MaterialTheme.sizing.extraExtraSmall.factor(1/2f),
                         borderColor = MaterialTheme.colorScheme.surface,
                         selectedBorderWidth = MaterialTheme.sizing.extraExtraSmall.factor(1/2f),
@@ -92,7 +91,7 @@ private fun CustomizationSheetContent(
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.small)
                         .background(
-                            color = if (selectedColorChip == index) chip.asColor() else Color.Transparent,
+                            color = if (selectedColorChip == chip) chip.asColor() else Color.Transparent,
                             shape = MaterialTheme.shapes.extraLarge
                         )
                 )

@@ -4,7 +4,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
-import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.Transfer
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
@@ -30,9 +30,7 @@ class TransferByCardUseCase(
         val cardBalance = transferRepository.makeTransaction(card.authKey, transfer)
             .getOrElse { return Outcome.Error(it) }
 
-        cardsRepository.insertAuthedCard(
-            card = card.copy(balance = cardBalance.value)
-        )
+        cardsRepository.insertAuthedCard(card.copy(balance = cardBalance))
 
         return Outcome.Success(Unit)
     }

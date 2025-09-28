@@ -1,46 +1,27 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
-import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
-import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
-import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
-import com.wynndie.spwallet.sharedCore.domain.models.CustomCard
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.no_name
-import com.wynndie.spwallet.sharedResources.total_of_ore
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 
 data class CustomCardUi(
     override val id: String,
     override val name: String,
-    override val icon: CardIcon,
-    override val iconBackground: CardColor,
-    val balance: BlocksDisplayableValue
+    override val balance: OreDisplayableValue,
+    override val color: CardColors,
+    override val icon: CardIcons,
+    override val authKey: String? = null,
+    override val number: String? = null
 ) : CardUi {
 
     fun toDomain(): CustomCard {
         return CustomCard(
-            id = id,
-            name = name,
-            color = iconBackground.ordinal,
-            icon = icon.ordinal,
-            balance = balance.value
-        )
-    }
-
-    @Composable
-    override fun asTile(): Tile {
-        return Tile(
-            id = id,
-            icon = icon,
-            iconBackground = iconBackground,
-            title = UiText.ResourceString(Res.string.total_of_ore, balance.value).asString(),
-            label = UiText.DynamicString(name).asString().ifBlank {
-                UiText.ResourceString(Res.string.no_name).asString()
-            },
-            description = balance.formatted.joinToUiText(" ").asString()
+            id = this.id,
+            name = this.name,
+            balance = this.balance.value,
+            color = this.color,
+            icon = this.icon
         )
     }
 
@@ -49,9 +30,9 @@ data class CustomCardUi(
             return CustomCardUi(
                 id = value.id,
                 name = value.name,
-                iconBackground = CardColor.from(value.color),
-                icon = CardIcon.from(value.icon),
-                balance = BlocksDisplayableValue.Companion.of(value.balance)
+                balance = OreDisplayableValue.of(value.balance),
+                color = value.color,
+                icon = value.icon
             )
         }
     }

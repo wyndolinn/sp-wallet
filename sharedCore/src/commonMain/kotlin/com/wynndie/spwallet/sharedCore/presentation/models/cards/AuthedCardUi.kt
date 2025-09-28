@@ -1,48 +1,29 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
-import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
-import com.wynndie.spwallet.sharedCore.domain.models.AuthedCard
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
-import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.bank_card_label
-import com.wynndie.spwallet.sharedResources.total_of_ore
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 
 data class AuthedCardUi(
     override val id: String,
+    override val authKey: String,
     override val name: String,
-    override val icon: CardIcon,
-    override val iconBackground: CardColor,
-    val authKey: String,
-    val number: String,
-    val balance: BlocksDisplayableValue
+    override val number: String,
+    override val balance: OreDisplayableValue,
+    override val color: CardColors,
+    override val icon: CardIcons
 ) : CardUi {
 
     fun toDomain(): AuthedCard {
         return AuthedCard(
-            id = id,
-            name = name,
-            color = iconBackground.ordinal,
-            icon = icon.ordinal,
-            number = number,
-            authKey = authKey,
-            balance = balance.value
-        )
-    }
-
-    @Composable
-    override fun asTile(): Tile {
-        return Tile(
-            id = id,
-            icon = icon,
-            iconBackground = iconBackground,
-            title = UiText.ResourceString(Res.string.total_of_ore, balance.value).asString(),
-            label = UiText.ResourceString(Res.string.bank_card_label, name, number).asString(),
-            description = balance.formatted.joinToUiText(" ").asString()
+            id = this.id,
+            authKey = this.authKey,
+            name = this.name,
+            number = this.number,
+            balance = this.balance.value,
+            color = this.color,
+            icon = this.icon
         )
     }
 
@@ -50,12 +31,12 @@ data class AuthedCardUi(
         fun of(value: AuthedCard): AuthedCardUi {
             return AuthedCardUi(
                 id = value.id,
-                name = value.name,
-                icon = CardIcon.from(value.icon),
-                iconBackground = CardColor.from(value.color),
-                number = value.number,
                 authKey = value.authKey,
-                balance = BlocksDisplayableValue.Companion.of(value.balance)
+                name = value.name,
+                number = value.number,
+                balance = OreDisplayableValue.of(value.balance),
+                color = value.color,
+                icon = value.icon
             )
         }
     }

@@ -31,9 +31,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppMenuTile
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
-import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransparentTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedResources.Res
@@ -126,12 +126,11 @@ private fun SearchRecipientScreenContent(
             state.recipients.isNotEmpty() -> {
                 LazyColumn {
                     items(state.recipients) { recipient ->
-                        val recipientTile = recipient.asTile()
-                        AppMenuTile(
-                            icon = recipientTile.icon.asImage(),
-                            title = recipientTile.title,
-                            description = recipientTile.description,
-                            iconBackground = recipientTile.iconBackground.asColor(),
+                        TransparentTile(
+                            icon = recipient.icon.asImage(),
+                            title = recipient.name,
+                            description = recipient.number,
+                            iconBackground = recipient.color.asColor(),
                             trailingContent = {
                                 BaseIconButton(
                                     icon = Icons.Outlined.Edit,
@@ -143,7 +142,7 @@ private fun SearchRecipientScreenContent(
                                 )
                             },
                             onClick = {
-                                onAction(SearchRecipientAction.OnClickRecipient(recipientTile.id))
+                                onAction(SearchRecipientAction.OnClickRecipient(recipient.id))
                             },
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -152,11 +151,11 @@ private fun SearchRecipientScreenContent(
             }
 
             state.isNewRecipient -> {
-                AppMenuTile(
-                    icon = CardIcon.PERSON.asImage(),
+                TransparentTile(
+                    icon = CardIcons.PERSON.asImage(),
                     title = stringResource(Res.string.recipient_card),
                     description = state.recipientInputField.value.text,
-                    iconBackground = CardColor.BLUE.asColor(),
+                    iconBackground = CardColors.BLUE.asColor(),
                     trailingContent = {
                         BaseIconButton(
                             icon = Icons.Outlined.Add,
@@ -169,9 +168,13 @@ private fun SearchRecipientScreenContent(
                             }
                         )
                     },
-                    onClick = { onAction(SearchRecipientAction.OnClickRecipient(
-                        cardNumber = state.recipientInputField.value.text
-                    )) },
+                    onClick = {
+                        onAction(
+                            SearchRecipientAction.OnClickRecipient(
+                                cardNumber = state.recipientInputField.value.text
+                            )
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = MaterialTheme.spacing.medium)

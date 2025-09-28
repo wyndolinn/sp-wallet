@@ -12,7 +12,7 @@ import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedResources.no_authed_cards
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelLarge
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,7 +26,7 @@ internal fun AuthCardOffer(
         modifier = modifier
     ) {
 
-        BaseInfoPanelLarge(
+        BaseInfoPanelMedium(
             title = stringResource(Res.string.no_authed_cards),
             description = stringResource(Res.string.auth_card_to_get_benefits),
             action = {

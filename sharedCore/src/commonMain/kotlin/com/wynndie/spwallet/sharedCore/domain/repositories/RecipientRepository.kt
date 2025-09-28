@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedCore.domain.repositories
 
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.models.RecipientCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import kotlinx.coroutines.flow.Flow
 
 interface RecipientRepository {

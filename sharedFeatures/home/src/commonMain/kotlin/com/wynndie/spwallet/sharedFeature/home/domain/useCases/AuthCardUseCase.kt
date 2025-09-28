@@ -15,7 +15,6 @@ class AuthCardUseCase(
 ) {
 
     suspend operator fun invoke(id: String, token: String): EmptyOutcome<DataError> {
-
         val authKey = authKeyEncoder.encode(id, token)
 
         val user = userRepository.getUnauthedUser(authKey)
@@ -27,9 +26,7 @@ class AuthCardUseCase(
         // Так как для получения данных о пользователе нужна карта,
         // мы точно знаем, что список не может быть пустым
         val card = user.cards.find { it.id == id }!!
-        cardsRepository.insertAuthedCard(
-            card.asAuthedCard(authKey, cardBalance.value)
-        )
+        cardsRepository.insertAuthedCard(card.asAuthedCard(authKey, cardBalance))
 
         return Outcome.Success(Unit)
     }

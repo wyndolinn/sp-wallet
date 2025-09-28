@@ -55,19 +55,19 @@
     <string name="auth_instruction">Получить ID&#160;и&#160;токен карты можно на&#160;сайте во&#160;вкладке «Кошелёк». Выберите карту, нажмите «Поделиться» и&#160;сгенерируйте новый API токен.</string>
 
     <string name="bank_card_label">%1$s • %2$s</string>
-    <string name="enter_id">Введите ID</string>
+    <string name="enter_id">ID карты</string>
     <string name="id">ID</string>
-    <string name="enter_token">Введите токен</string>
+    <string name="enter_token">Токен карты</string>
     <string name="token">Токен</string>
-    <string name="enter_card_number">Введите карту получателя</string>
+    <string name="enter_card_number">Карта получателя</string>
     <string name="card_number">Номер</string>
-    <string name="enter_transfer_amount">Введите сумму перевода</string>
+    <string name="enter_transfer_amount">Сумма перевода</string>
     <string name="transfer_amount">Сумма</string>
-    <string name="enter_comment">Напишите комментарий</string>
+    <string name="enter_comment">Комментарий</string>
     <string name="comment">Комментарий</string>
-    <string name="enter_card_name">Введите название карты</string>
+    <string name="enter_card_name">Название карты</string>
     <string name="card_name">Название карты</string>
-    <string name="enter_balance">Укажите баланс карты</string>
+    <string name="enter_balance">Баланс карты</string>
     <string name="balance">Баланс</string>
 
 
@@ -85,10 +85,9 @@
 
 
     <string name="total_balance">Общий баланс</string>
-    <string name="total_of_ore">%1$d АР</string>
-    <string name="x_of_shulkers">%1$d шлк</string>
-    <string name="x_of_stacks">%1$d ст</string>
-    <string name="x_of_ore">%1$d ар</string>
+    <string name="x_of_shulkers">%1$s шлк</string>
+    <string name="x_of_stacks">%1$s ст</string>
+    <string name="x_of_ore">%1$s ар</string>
 
     <string name="no_name">Без названия</string>
     <string name="no_comment">Без комментария</string>
@@ -96,7 +95,7 @@
     <string name="recipient">Получатель</string>
     <string name="activate_card">Активировать карту</string>
     <string name="transfer_by_number">Перевод по номеру</string>
-    <string name="cash_cards">Наличные счета (%1$s/%2$s)</string>
+    <string name="custom_cards">Пользовательские карты (%1$s/%2$s)</string>
     <string name="bank_cards">Банковские карты</string>
     <string name="transfer_from">Перевод со счёта</string>
     <string name="no_cards_to_activate">Нет карт для активации!</string>

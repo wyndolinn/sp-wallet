@@ -1,16 +1,15 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
-import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
-import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
-import com.wynndie.spwallet.sharedCore.presentation.models.Tile
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 
 interface CardUi {
     val id: String
+    val authKey: String?
     val name: String
-    val icon: CardIcon
-    val iconBackground: CardColor
-
-    @Composable
-    fun asTile(): Tile
+    val number: String?
+    val balance: OreDisplayableValue?
+    val color: CardColors
+    val icon: CardIcons
 }

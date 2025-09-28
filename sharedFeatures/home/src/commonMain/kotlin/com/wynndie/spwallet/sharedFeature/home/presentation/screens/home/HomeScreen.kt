@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -29,8 +30,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardTileList
+import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
@@ -44,10 +50,10 @@ import com.wynndie.spwallet.sharedResources.activate_cards
 import com.wynndie.spwallet.sharedResources.app_logo_foreground
 import com.wynndie.spwallet.sharedResources.app_name
 import com.wynndie.spwallet.sharedResources.bank_cards
-import com.wynndie.spwallet.sharedResources.cash_cards
 import com.wynndie.spwallet.sharedResources.create
+import com.wynndie.spwallet.sharedResources.custom_cards
 import com.wynndie.spwallet.sharedResources.total_balance
-import com.wynndie.spwallet.sharedResources.total_of_ore
+import com.wynndie.spwallet.sharedResources.x_of_ore
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseIconButton
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseOutlinedButton
 import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
@@ -71,7 +77,7 @@ fun HomeScreenRoot(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet) },
             loadingState = state.authLoadingState,
             isAuthButtonEnabled = state.authLoadingState !is LoadingState.Loading,
-            cards = state.unauthedCards.map { it.asTile() },
+            cards = state.unauthedCards,
             initialPage = state.carouselPage,
             idInputField = state.idInputField,
             onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
@@ -94,7 +100,7 @@ fun HomeScreenRoot(
     if (state.isAuthedCardSheetVisible) {
         AuthedCardSheet(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet) },
-            cards = state.authedCards.map { it.asTile() },
+            cards = state.authedCards,
             page = state.carouselPage,
             onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog) },
             onTransferButtonClick = { viewModel.onAction(HomeAction.OnClickTransferByCard(it)) },
@@ -213,8 +219,10 @@ private fun HomeScreenContent(
 
             BaseInfoPanelMedium(
                 label = stringResource(Res.string.total_balance),
-                title = stringResource(Res.string.total_of_ore, state.totalBalance.value),
-                description = state.totalBalance.formatted.joinToUiText(" ").asString()
+                title = stringResource(Res.string.x_of_ore, state.totalBalance.value).uppercase(),
+                description = if (state.totalBalance.value != 0L) {
+                    state.totalBalance.formatted.joinToUiText(" ").asString()
+                } else null
             )
         }
 
@@ -240,34 +248,67 @@ private fun HomeScreenContent(
             ) {
 
                 if (state.authedCards.isNotEmpty()) {
-                    AppCardTileList(
-                        title = stringResource(Res.string.bank_cards),
-                        tiles = state.authedCards.map { it.asTile() },
-                        onClickTile = { onAction(HomeAction.OnClickAuthedCard(it.id)) }
-                    )
-                }
-
-                AppCardTileList(
-                    title = stringResource(Res.string.cash_cards, state.customCards.size, 5),
-                    tiles = state.customCards.map { it.asTile() },
-                    onClickTile = { onAction(HomeAction.OnClickCustomCard(it.id)) },
-                    trailingContent = if (state.customCards.size < CoreConstants.MAX_CASH_CARDS_AMOUNT) {
-                        {
-                            BaseOutlinedButton(
-                                text = stringResource(Res.string.create),
-                                onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                    TitledContent(
+                        title = stringResource(Res.string.bank_cards)
+                    ) {
+                        state.authedCards.forEach { card ->
+                            AuthedCardTile(
+                                icon = card.icon.asImage(),
+                                iconBackground = card.color.asColor(),
+                                cardName = card.name,
+                                cardNumber = card.number,
+                                balance = card.balance,
+                                onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
-                    } else null
-                )
+                    }
+                }
+
+                TitledContent(
+                    title = stringResource(
+                        Res.string.custom_cards,
+                        state.customCards.size,
+                        CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
+                    )
+                ) {
+                    state.customCards.forEach { card ->
+                        CustomCardTile(
+                            icon = card.icon.asImage(),
+                            iconBackground = card.color.asColor(),
+                            cardName = card.name,
+                            balance = card.balance,
+                            onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    AnimatedVisibility(
+                        visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
+                    ) {
+                        BaseOutlinedButton(
+                            text = stringResource(Res.string.create),
+                            onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
 
                 if (state.unauthedCards.isNotEmpty()) {
-                    AppCardTileList(
-                        title = stringResource(Res.string.activate_cards),
-                        tiles = state.unauthedCards.map { it.asTile() },
-                        onClickTile = { onAction(HomeAction.OnClickUnauthedCard(it.id)) }
-                    )
+                    TitledContent(
+                        title = stringResource(Res.string.activate_cards)
+                    ) {
+                        state.unauthedCards.forEach { card ->
+                            UnauthedCardTile(
+                                icon = card.icon.asImage(),
+                                iconBackground = card.color.asColor(),
+                                cardName = card.name,
+                                cardNumber = card.number,
+                                onClick = { onAction(HomeAction.OnClickUnauthedCard(card.id)) },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
                 }
             }
 

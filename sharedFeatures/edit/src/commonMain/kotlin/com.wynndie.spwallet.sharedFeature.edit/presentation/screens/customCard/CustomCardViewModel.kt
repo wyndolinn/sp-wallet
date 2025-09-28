@@ -17,9 +17,9 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.BlocksDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
@@ -120,7 +120,7 @@ class CustomCardViewModel(
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
-                            balance = BlocksDisplayableValue.of(value.text.ifBlank { "0" }.toLong())
+                            balance = OreDisplayableValue.of(value.text.ifBlank { "0" }.toLong())
                         ),
                         balanceInputField = state.balanceInputField.copy(
                             value = value
@@ -133,8 +133,8 @@ class CustomCardViewModel(
             is CustomCardAction.OnClickColorChip -> {
                 _state.update { state ->
                     state.copy(
-                        card = state.card.copy(iconBackground = CardColor.from(action.value)),
-                        selectedColorChip = action.value
+                        card = state.card.copy(color = CardColors.of(action.value)),
+                        selectedColorChip = CardColors.of(action.value)
                     )
                 }
             }

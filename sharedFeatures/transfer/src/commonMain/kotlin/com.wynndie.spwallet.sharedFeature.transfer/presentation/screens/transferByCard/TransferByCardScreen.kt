@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,9 +36,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardCarousel
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.RecipientCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -50,6 +51,7 @@ import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_amount
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -133,7 +135,6 @@ private fun TransferByNumberScreen(
     modifier: Modifier = Modifier
 ) {
 
-    val recipientTile = state.recipient.asTile()
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -142,17 +143,30 @@ private fun TransferByNumberScreen(
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
-            AppCardCarousel(
-                items = state.cards.map { it.asTile() },
+            BaseCarousel(
+                items = state.cards,
                 page = state.carouselPage,
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier
+            ) { card ->
+                Box(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                ) {
+                    AuthedCardTile(
+                        icon = card.icon.asImage(),
+                        iconBackground = card.color.asColor(),
+                        cardName = card.name,
+                        cardNumber = card.number,
+                        balance = card.balance,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
 
-            AppCardTile(
+            RecipientCardTile(
                 icon = state.recipient.icon.asImage(),
-                iconBackground = state.recipient.iconBackground.asColor(),
-                label = recipientTile.label,
-                title = recipientTile.title,
+                iconBackground = state.recipient.color.asColor(),
+                cardName = state.recipient.name,
+                cardNumber = state.recipient.number,
                 onClick = { onAction(TransferByCardAction.OnClickRecipient) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -203,7 +217,7 @@ private fun TransferByNumberScreen(
                         focusManager.clearFocus(true)
                         onAction(
                             TransferByCardAction.OnClickTransfer(
-                                cardNumber = state.recipient.cardNumber,
+                                cardNumber = state.recipient.number,
                                 transferAmount = state.amountInputField.value.text,
                                 comment = state.commentInputField.value.text
                             )
@@ -222,7 +236,7 @@ private fun TransferByNumberScreen(
             onClick = {
                 onAction(
                     TransferByCardAction.OnClickTransfer(
-                        cardNumber = state.recipient.cardNumber,
+                        cardNumber = state.recipient.number,
                         transferAmount = state.amountInputField.value.text,
                         comment = state.commentInputField.value.text
                     )

@@ -17,10 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardUi
+import androidx.compose.ui.graphics.painter.Painter
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
 import com.wynndie.spwallet.sharedtheme.theme.sizing
@@ -28,8 +27,9 @@ import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun <T : CardUi> CustomizableTile(
-    card: T,
+fun CustomizableTile(
+    color: Color,
+    icon: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -37,13 +37,13 @@ fun <T : CardUi> CustomizableTile(
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
-            .background(card.iconBackground.asColor())
+            .background(color)
             .clickable(onClick = onClick)
             .padding(MaterialTheme.spacing.small)
             .then(modifier)
     ) {
         Image(
-            painter = card.icon.asImage(),
+            painter = icon,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
             modifier = Modifier.size(MaterialTheme.sizing.large)

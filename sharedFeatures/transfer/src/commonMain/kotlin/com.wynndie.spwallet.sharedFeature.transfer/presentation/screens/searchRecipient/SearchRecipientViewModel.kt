@@ -49,9 +49,7 @@ class SearchRecipientViewModel(
                         _state.update { state ->
                             state.copy(
                                 recipients = cachedRecipients.filter { recipient ->
-                                    recipient.cardNumber.contains(query) || recipient.name.contains(
-                                        query
-                                    )
+                                    recipient.number.contains(query) || recipient.name.contains(query)
                                 }
                             )
                         }

@@ -3,7 +3,6 @@ package com.wynndie.spwallet.sharedFeature.transfer.data.repositories
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.map
-import com.wynndie.spwallet.sharedCore.domain.models.CardBalance
 import com.wynndie.spwallet.sharedFeature.transfer.data.remote.dto.TransferDto
 import com.wynndie.spwallet.sharedFeature.transfer.data.remote.network.RemoteSpWorldsTransferDataSource
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.Transfer
@@ -16,11 +15,11 @@ class TransferRepositoryImpl(
     override suspend fun makeTransaction(
         authKey: String,
         transfer: Transfer
-    ): Outcome<CardBalance, DataError.Remote> {
+    ): Outcome<Long, DataError.Remote> {
         return remoteSpWorldsTransferDataSource
             .makeTransaction(
                 authKey = authKey,
                 transaction = TransferDto.from(transfer)
-            ).map { it.toCardBalance() }
+            ).map { it.balance }
     }
 }

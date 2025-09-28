@@ -6,7 +6,7 @@ import com.wynndie.spwallet.sharedCore.data.local.entities.RecipientEntity
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.models.RecipientCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,7 +19,7 @@ class RecipientRepositoryImpl(
         recipientCard: RecipientCard
     ): EmptyOutcome<DataError.Local> {
         return try {
-            recipientDao.insertRecipient(RecipientEntity.from(recipientCard))
+            recipientDao.insertRecipient(RecipientEntity.of(recipientCard))
             Outcome.Success(Unit)
         } catch (_: SQLiteException) {
             Outcome.Error(DataError.Local.DISK_FULL)
@@ -35,6 +35,6 @@ class RecipientRepositoryImpl(
     }
 
     override suspend fun deleteRecipient(recipientCard: RecipientCard) {
-        recipientDao.deleteRecipient(RecipientEntity.from(recipientCard))
+        recipientDao.deleteRecipient(RecipientEntity.of(recipientCard))
     }
 }

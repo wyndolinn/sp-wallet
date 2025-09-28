@@ -2,35 +2,37 @@ package com.wynndie.spwallet.sharedCore.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.wynndie.spwallet.sharedCore.domain.models.RecipientCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 
 @Entity
 data class RecipientEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
+    val number: String,
     val color: Int,
-    val icon: Int,
-    val number: String
+    val icon: Int
 ) {
     fun toDomain(): RecipientCard {
         return RecipientCard(
             id = id.toString(),
             name = name,
-            color = color,
-            icon = icon,
-            cardNumber = number
+            number = number,
+            color = CardColors.of(color),
+            icon = CardIcons.of(icon)
         )
     }
 
     companion object {
-        fun from(recipientCard: RecipientCard): RecipientEntity {
+        fun of(value: RecipientCard): RecipientEntity {
             return RecipientEntity(
-                id = if (recipientCard.id == "") 0 else recipientCard.id.toInt(),
-                name = recipientCard.name,
-                color = recipientCard.color,
-                icon = recipientCard.icon,
-                number = recipientCard.cardNumber
+                id = if (value.id.isBlank()) 0 else value.id.toInt(),
+                name = value.name,
+                number = value.number,
+                color = value.color.id,
+                icon = value.icon.id
             )
         }
     }

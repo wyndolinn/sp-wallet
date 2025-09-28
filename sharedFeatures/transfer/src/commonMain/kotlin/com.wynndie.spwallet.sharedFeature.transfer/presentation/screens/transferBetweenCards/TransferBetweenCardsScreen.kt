@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,8 +36,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AppCardCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.RecipientCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number
@@ -45,6 +49,7 @@ import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_amount
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -133,17 +138,42 @@ private fun TransferBetweenCardsScreenContent(
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
-            AppCardCarousel(
-                items = state.sourceCards.map { it.asTile() },
+            BaseCarousel(
+                items = state.sourceCards,
                 page = state.sourceCardsCarouselPage,
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier
+            ) { card ->
+                Box(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                ) {
+                    AuthedCardTile(
+                        icon = card.icon.asImage(),
+                        iconBackground = card.color.asColor(),
+                        cardName = card.name,
+                        cardNumber = card.number,
+                        balance = card.balance,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
 
-            AppCardCarousel(
-                items = state.destinationCards.map { it.asTile() },
+            BaseCarousel(
+                items = state.destinationCards,
                 page = state.destinationCardsCarouselPage,
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier
+            ) { card ->
+                Box(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                ) {
+                    RecipientCardTile(
+                        icon = card.icon.asImage(),
+                        iconBackground = card.color.asColor(),
+                        cardName = card.name,
+                        cardNumber = card.number ?: "",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
 
         Spacer(Modifier.height(MaterialTheme.spacing.large))
@@ -154,7 +184,11 @@ private fun TransferBetweenCardsScreenContent(
 
             TitledInputField(
                 value = state.amountInputField.value,
-                onValueChange = { onAction(TransferBetweenCardsAction.OnChangeTransferAmountValueAction(it)) },
+                onValueChange = {
+                    onAction(
+                        TransferBetweenCardsAction.OnChangeTransferAmountValueAction(it)
+                    )
+                },
                 label = stringResource(Res.string.enter_transfer_amount),
                 placeholder = stringResource(Res.string.transfer_amount),
                 supportingText = state.amountInputField.supportingText?.asString(),

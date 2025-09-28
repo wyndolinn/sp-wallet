@@ -1,41 +1,27 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
-import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedCore.domain.models.CardColor
-import com.wynndie.spwallet.sharedCore.domain.models.CardIcon
-import com.wynndie.spwallet.sharedCore.domain.models.UnauthedCard
-import com.wynndie.spwallet.sharedCore.presentation.models.Tile
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.bank_card_label
-import com.wynndie.spwallet.sharedResources.require_activation
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 
 data class UnauthedCardUi(
     override val id: String,
     override val name: String,
-    override val icon: CardIcon,
-    override val iconBackground: CardColor,
-    val number: String,
+    override val number: String,
+    override val color: CardColors,
+    override val icon: CardIcons,
+    override val authKey: String? = null,
+    override val balance: OreDisplayableValue? = null
 ) : CardUi {
 
     fun toDomain(): UnauthedCard {
         return UnauthedCard(
-            id = id,
-            name = name,
-            color = iconBackground.ordinal,
-            icon = icon.ordinal,
-            number = number
-        )
-    }
-
-    @Composable
-    override fun asTile(): Tile {
-        return Tile(
-            id = id,
-            icon = icon,
-            iconBackground = iconBackground,
-            title = UiText.ResourceString(Res.string.require_activation).asString(),
-            label = UiText.ResourceString(Res.string.bank_card_label, name, number).asString()
+            id = this.id,
+            name = this.name,
+            number = this.number,
+            color = this.color,
+            icon = this.icon
         )
     }
 
@@ -44,9 +30,9 @@ data class UnauthedCardUi(
             return UnauthedCardUi(
                 id = value.id,
                 name = value.name,
-                icon = CardIcon.from(value.icon),
-                iconBackground = CardColor.from(value.color),
-                number = value.number
+                number = value.number,
+                color = value.color,
+                icon = value.icon
             )
         }
     }
