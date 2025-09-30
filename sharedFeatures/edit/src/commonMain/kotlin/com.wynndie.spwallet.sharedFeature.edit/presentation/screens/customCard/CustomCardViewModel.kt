@@ -54,10 +54,10 @@ class CustomCardViewModel(
                 state.copy(
                     card = CustomCardUi.of(card),
                     selectedColorChip = card.color,
-                    nameInputField = state.nameInputField.copy(
+                    nameInputFieldState = state.nameInputFieldState.copy(
                         value = TextFieldValue(card.name)
                     ),
-                    balanceInputField = state.balanceInputField.copy(
+                    balanceInputFieldState = state.balanceInputFieldState.copy(
                         value = TextFieldValue(card.balance.toString())
                     )
                 )
@@ -101,12 +101,12 @@ class CustomCardViewModel(
             is CustomCardAction.OnChangeNameValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
-                    .cutOffAt(_state.value.nameInputField.maxLength) ?: return
+                    .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(name = value.text),
-                        nameInputField = state.nameInputField.copy(value = value)
+                        nameInputFieldState = state.nameInputFieldState.copy(value = value)
                     )
                 }
             }
@@ -115,14 +115,14 @@ class CustomCardViewModel(
                 val value = action.value
                     .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
                     .dropFirst('0')
-                    .cutOffAt(_state.value.balanceInputField.maxLength) ?: return
+                    .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
                             balance = OreDisplayableValue.of(value.text.ifBlank { "0" }.toLong())
                         ),
-                        balanceInputField = state.balanceInputField.copy(
+                        balanceInputFieldState = state.balanceInputFieldState.copy(
                             value = value
                         )
                     )
@@ -186,7 +186,7 @@ class CustomCardViewModel(
         val (isValid, error) = cardNameValidator.validate(value)
         _state.update { state ->
             state.copy(
-                nameInputField = state.nameInputField.copy(
+                nameInputFieldState = state.nameInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )
@@ -199,7 +199,7 @@ class CustomCardViewModel(
         val (isValid, error) = balanceValidator.validate(value)
         _state.update { state ->
             state.copy(
-                balanceInputField = state.balanceInputField.copy(
+                balanceInputFieldState = state.balanceInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )

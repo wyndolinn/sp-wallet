@@ -1,50 +1,45 @@
 package com.wynndie.spwallet.sharedtheme.designSystem.buttons
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseTonalIconButton(
-    icon: ImageVector,
+fun IconButton(
+    icon: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    text: String? = null
+    label: String? = null,
+    enabled: Boolean = true,
+    loading: Boolean = false
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        FilledTonalButton(
+        IconButton(
             onClick = onClick,
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(MaterialTheme.sizing.medium)
+            enabled = enabled && !loading,
+            modifier = modifier
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = text,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.height(MaterialTheme.sizing.small)
+            Image(
+                painter = icon,
+                contentDescription = null
             )
         }
 
-        text?.let {
+        label?.let {
             Text(
                 text = it,
                 style = MaterialTheme.typography.labelSmall,

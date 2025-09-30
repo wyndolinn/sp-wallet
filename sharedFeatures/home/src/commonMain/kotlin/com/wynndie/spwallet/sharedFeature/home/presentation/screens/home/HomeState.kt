@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.models.InputField
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
@@ -29,10 +29,10 @@ data class HomeState(
     val authedCards: List<AuthedCardUi> = emptyList(),
     val unauthedCards: List<UnauthedCardUi> = emptyList(),
 
-    val idInputField: InputField = InputField(
+    val idInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.UUID_LENGTH
     ),
-    val tokenInputField: InputField = InputField(
+    val tokenInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.TOKEN_LENGTH
     )
 )

@@ -18,14 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.base.BaseHorizontalTile
 import com.wynndie.spwallet.sharedtheme.extensions.ContentState
+import com.wynndie.spwallet.sharedtheme.extensions.asDescriptionColor
+import com.wynndie.spwallet.sharedtheme.extensions.asLabelColor
+import com.wynndie.spwallet.sharedtheme.extensions.asTitleColor
 import com.wynndie.spwallet.sharedtheme.theme.RectangleShape
 import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseHorizontalTileSmall(
+fun HorizontalTileMedium(
     title: String,
     modifier: Modifier = Modifier,
     label: String? = null,
@@ -45,28 +48,7 @@ fun BaseHorizontalTileSmall(
     onClick: (() -> Unit)? = null
 ) {
 
-    val minContentHeight = MaterialTheme.sizing.extraSmall
-
-    val labelColor = when (contentState) {
-        ContentState.Alerted -> MaterialTheme.colorScheme.error
-        ContentState.Disabled -> MaterialTheme.colorScheme.outline
-        ContentState.Neutral -> MaterialTheme.colorScheme.outline
-        ContentState.Selected -> MaterialTheme.colorScheme.outline
-    }
-
-    val titleColor = when (contentState) {
-        ContentState.Alerted -> MaterialTheme.colorScheme.error
-        ContentState.Disabled -> MaterialTheme.colorScheme.outline
-        ContentState.Neutral -> MaterialTheme.colorScheme.onSurface
-        ContentState.Selected -> MaterialTheme.colorScheme.primary
-    }
-
-    val descriptionColor = when (contentState) {
-        ContentState.Alerted -> MaterialTheme.colorScheme.error
-        ContentState.Disabled -> MaterialTheme.colorScheme.outline
-        ContentState.Neutral -> MaterialTheme.colorScheme.outline
-        ContentState.Selected -> MaterialTheme.colorScheme.outline
-    }
+    val minContentHeight = MaterialTheme.sizing.medium
 
     BaseHorizontalTile(
         leadingContent = leadingContent?.let {
@@ -109,8 +91,8 @@ fun BaseHorizontalTileSmall(
                 Text(
                     modifier = Modifier,
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = labelColor
+                    style = MaterialTheme.typography.labelMedium,
+                    color = contentState.asLabelColor()
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
@@ -120,7 +102,7 @@ fun BaseHorizontalTileSmall(
                 modifier = Modifier,
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                color = titleColor
+                color = contentState.asTitleColor()
             )
 
             description?.let {
@@ -128,7 +110,7 @@ fun BaseHorizontalTileSmall(
                     modifier = Modifier,
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = descriptionColor
+                    color = contentState.asDescriptionColor()
                 )
             }
 

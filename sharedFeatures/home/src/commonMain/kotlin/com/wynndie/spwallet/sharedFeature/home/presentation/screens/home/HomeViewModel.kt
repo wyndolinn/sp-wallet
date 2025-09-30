@@ -124,6 +124,12 @@ class HomeViewModel(
             }
 
 
+            is HomeAction.OnClickTransferBetweenCard -> {
+                viewModelScope.launch {
+                    NavController.navigate(HomeNavEvent.OnClickTransferBetweenCards(action.cardId))
+                }
+            }
+
             is HomeAction.OnClickAuthCard -> {
                 viewModelScope.launch {
 
@@ -145,10 +151,10 @@ class HomeViewModel(
                                 syncWithRemoteUseCase()
                                 _state.update { state ->
                                     state.copy(
-                                        idInputField = state.idInputField.copy(
+                                        idInputFieldState = state.idInputFieldState.copy(
                                             value = TextFieldValue("")
                                         ),
-                                        tokenInputField = state.tokenInputField.copy(
+                                        tokenInputFieldState = state.tokenInputFieldState.copy(
                                             value = TextFieldValue("")
                                         ),
                                         isAuthCardSheetVisible = false
@@ -220,11 +226,11 @@ class HomeViewModel(
             is HomeAction.OnChangeCardIdValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Structured.Uuid.predicate)
-                    .cutOffAt(state.value.idInputField.maxLength) ?: return
+                    .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
-                        idInputField = state.idInputField.copy(
+                        idInputFieldState = state.idInputFieldState.copy(
                             value = value
                         )
                     )
@@ -234,11 +240,11 @@ class HomeViewModel(
             is HomeAction.OnChangeCardTokenValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Structured.Base64.predicate)
-                    .cutOffAt(state.value.tokenInputField.maxLength) ?: return
+                    .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
-                        tokenInputField = state.tokenInputField.copy(
+                        tokenInputFieldState = state.tokenInputFieldState.copy(
                             value = value
                         )
                     )
@@ -285,7 +291,7 @@ class HomeViewModel(
         val (isValid, error) = tokenValidator.validate(token)
         _state.update { state ->
             state.copy(
-                tokenInputField = state.tokenInputField.copy(
+                tokenInputFieldState = state.tokenInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )
@@ -298,7 +304,7 @@ class HomeViewModel(
         val (isValid, error) = uuidValidator.validate(id)
         _state.update { state ->
             state.copy(
-                idInputField = state.idInputField.copy(
+                idInputFieldState = state.idInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )

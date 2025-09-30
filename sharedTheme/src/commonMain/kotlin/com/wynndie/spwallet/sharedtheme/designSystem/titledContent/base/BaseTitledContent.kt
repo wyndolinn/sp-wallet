@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.titledContent
+package com.wynndie.spwallet.sharedtheme.designSystem.titledContent.base
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,17 +14,13 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseTitledContent(
+internal fun BaseTitledContent(
     title: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(MaterialTheme.spacing.small),
-    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     titlePadding: PaddingValues = PaddingValues(),
     content: @Composable () -> Unit
 ) {
     Column(
-        verticalArrangement = verticalArrangement,
-        horizontalAlignment = horizontalAlignment,
         modifier = modifier
     ) {
         Row(

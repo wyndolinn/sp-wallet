@@ -4,7 +4,7 @@ import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
-import com.wynndie.spwallet.sharedCore.presentation.models.InputField
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -20,10 +20,10 @@ data class TransferByCardState(
     val carouselPage: Int = 0,
     val isCalculatorSheetVisible: Boolean = false,
 
-    val amountInputField: InputField = InputField(
+    val amountInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH
     ),
-    val commentInputField: InputField = InputField(
+    val commentInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.MAX_COMMENT_LENGTH
     )
 )

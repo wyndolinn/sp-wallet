@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transfe
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
-import com.wynndie.spwallet.sharedCore.presentation.models.InputField
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -20,7 +20,7 @@ data class TransferBetweenCardsState(
 
     val isCalculatorSheetVisible: Boolean = false,
 
-    val amountInputField: InputField = InputField(
+    val amountInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH
     )
 )

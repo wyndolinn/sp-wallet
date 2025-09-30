@@ -13,17 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.transfer_by_number
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTextButton
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTonalIconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TextButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalIconButton
 import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -37,7 +36,7 @@ fun AuthedCardSheet(
     onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseSheetLayout(
+    BottomSheet(
         onDismiss = onDismiss
     ) {
         AuthedCardSheetContent(
@@ -86,7 +85,7 @@ private fun AuthedCardSheetContent(
                 }
             }
 
-            BaseTonalIconButton(
+            TonalIconButton(
                 icon = Icons.Outlined.People,
                 text = stringResource(Res.string.transfer_by_number),
                 onClick = { onTransferButtonClick(cards[page].id) },
@@ -96,9 +95,9 @@ private fun AuthedCardSheetContent(
             )
         }
 
-        BaseTextButton(
+        TextButton(
             text = stringResource(Res.string.deactivate),
-            destructive = true,
+            hasError = true,
             onClick = onDeleteButtonClick,
             modifier = Modifier
         )

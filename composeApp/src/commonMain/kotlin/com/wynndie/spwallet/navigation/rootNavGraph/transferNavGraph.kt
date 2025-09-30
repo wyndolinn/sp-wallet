@@ -16,6 +16,10 @@ import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.Recipien
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientNavEvent
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientScreenRoot
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientViewModel
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferBetweenCards.TransferBetweenCardsArgs
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferBetweenCards.TransferBetweenCardsNavEvent
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferBetweenCards.TransferBetweenCardsScreenRoot
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferBetweenCards.TransferBetweenCardsViewModel
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardNavEvent
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardViewModel
@@ -134,6 +138,27 @@ fun NavGraphBuilder.transferNavGraph(
             }
 
             TransferByCardScreenRoot(
+                viewModel = viewModel
+            )
+        }
+
+        composable<TransferNavGraphRoutes.TransferBetweenCards> { navBackStackEntry ->
+
+            val args = navBackStackEntry.toRoute<TransferNavGraphRoutes.TransferBetweenCards>()
+
+            val viewModel = koinViewModelWithArgs<TransferBetweenCardsViewModel>(
+                TransferBetweenCardsArgs(args.cardId)
+            )
+
+            ObserveNavEvent<TransferBetweenCardsNavEvent> { navEvent ->
+                when (navEvent) {
+                    TransferBetweenCardsNavEvent.OnClickBack -> {
+                        navController.navigateUp()
+                    }
+                }
+            }
+
+            TransferBetweenCardsScreenRoot(
                 viewModel = viewModel
             )
         }

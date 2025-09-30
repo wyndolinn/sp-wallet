@@ -54,8 +54,8 @@ class TransferByCardViewModel(
             _state.update { state ->
                 state.copy(
                     user = user,
-                    commentInputField = state.commentInputField.copy(
-                        maxLength = state.commentInputField.maxLength - prefix.length,
+                    commentInputFieldState = state.commentInputFieldState.copy(
+                        maxLength = state.commentInputFieldState.maxLength - prefix.length,
                         prefix = prefix
                     )
                 )
@@ -154,7 +154,7 @@ class TransferByCardViewModel(
 
                 _state.update { state ->
                     state.copy(
-                        amountInputField = state.amountInputField.copy(
+                        amountInputFieldState = state.amountInputFieldState.copy(
                             value = value
                         )
                     )
@@ -168,7 +168,7 @@ class TransferByCardViewModel(
 
                 _state.update { state ->
                     state.copy(
-                        commentInputField = state.commentInputField.copy(
+                        commentInputFieldState = state.commentInputFieldState.copy(
                             value = value
                         )
                     )
@@ -215,7 +215,7 @@ class TransferByCardViewModel(
         val (isValid, error) = transferAmountValidator.validate(value)
         _state.update { state ->
             state.copy(
-                amountInputField = state.amountInputField.copy(
+                amountInputFieldState = state.amountInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )
@@ -228,7 +228,7 @@ class TransferByCardViewModel(
         val (isValid, error) = commentValidator.validate(value)
         _state.update { state ->
             state.copy(
-                commentInputField = state.commentInputField.copy(
+                commentInputFieldState = state.commentInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )

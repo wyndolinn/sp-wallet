@@ -13,16 +13,24 @@ import com.wynndie.spwallet.sharedCore.presentation.components.effects.ObserveAs
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kotlinx.coroutines.launch
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun App() {
 
-    val viewModel: AppViewModel = koinViewModel()
-
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+
+    val permissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController = remember(permissionsControllerFactory) {
+        permissionsControllerFactory.createPermissionsController()
+    }
+
+    BindEffect(permissionsController = permissionsController)
+
 
     ObserveAsEvents(OverlayController.overlay) { overlay ->
         when (overlay) {
@@ -40,6 +48,7 @@ fun App() {
             }
         }
     }
+
 
     AppTheme {
         Scaffold(

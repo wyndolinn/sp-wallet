@@ -25,25 +25,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransparentTile
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_card
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseIconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelSmall
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.BaseInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutSmall
+import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -107,8 +106,8 @@ private fun SearchRecipientScreenContent(
     Column(
         modifier = modifier
     ) {
-        BaseInputField(
-            value = state.recipientInputField.value,
+        InputField(
+            value = state.recipientInputFieldState.value,
             onValueChange = { onAction(SearchRecipientAction.OnChangeRecipientValue(it)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -130,10 +129,9 @@ private fun SearchRecipientScreenContent(
                             icon = recipient.icon.asImage(),
                             title = recipient.name,
                             description = recipient.number,
-                            iconBackground = recipient.color.asColor(),
                             trailingContent = {
-                                BaseIconButton(
-                                    icon = Icons.Outlined.Edit,
+                                IconButton(
+                                    icon = rememberVectorPainter(Icons.Outlined.Edit),
                                     onClick = {
                                         onAction(
                                             SearchRecipientAction.OnClickEditRecipient(recipient.id)
@@ -154,15 +152,14 @@ private fun SearchRecipientScreenContent(
                 TransparentTile(
                     icon = CardIcons.PERSON.asImage(),
                     title = stringResource(Res.string.recipient_card),
-                    description = state.recipientInputField.value.text,
-                    iconBackground = CardColors.BLUE.asColor(),
+                    description = state.recipientInputFieldState.value.text,
                     trailingContent = {
-                        BaseIconButton(
-                            icon = Icons.Outlined.Add,
+                        IconButton(
+                            icon = rememberVectorPainter(Icons.Outlined.Add),
                             onClick = {
                                 onAction(
                                     SearchRecipientAction.OnClickEditRecipient(
-                                        cardNumber = state.recipientInputField.value.text
+                                        cardNumber = state.recipientInputFieldState.value.text
                                     )
                                 )
                             }
@@ -171,7 +168,7 @@ private fun SearchRecipientScreenContent(
                     onClick = {
                         onAction(
                             SearchRecipientAction.OnClickRecipient(
-                                cardNumber = state.recipientInputField.value.text
+                                cardNumber = state.recipientInputFieldState.value.text
                             )
                         )
                     },
@@ -182,7 +179,7 @@ private fun SearchRecipientScreenContent(
             }
 
             else -> {
-                BaseInfoPanelSmall(
+                InfoLayoutSmall(
                     title = stringResource(Res.string.recipient_history_empty),
                     description = stringResource(Res.string.enter_recipient_card_number),
                     textAlign = TextAlign.Center,

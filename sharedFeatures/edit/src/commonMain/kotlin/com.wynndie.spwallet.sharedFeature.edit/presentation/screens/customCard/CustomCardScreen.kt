@@ -36,7 +36,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
@@ -55,9 +55,9 @@ import com.wynndie.spwallet.sharedResources.enter_card_name
 import com.wynndie.spwallet.sharedResources.no_name
 import com.wynndie.spwallet.sharedResources.save
 import com.wynndie.spwallet.sharedResources.x_of_ore
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
@@ -182,7 +182,7 @@ private fun CustomCardScreen(
         modifier = modifier
     ) {
 
-        BaseInfoPanelMedium(
+        InfoLayoutMedium(
             label = state.card.name.ifBlank { stringResource(Res.string.no_name) },
             title = stringResource(
                 Res.string.x_of_ore,
@@ -204,13 +204,13 @@ private fun CustomCardScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            TitledInputField(
-                value = state.nameInputField.value,
+            InputField(
+                value = state.nameInputFieldState.value,
                 onValueChange = { onAction(CustomCardAction.OnChangeNameValue(it)) },
                 label = stringResource(Res.string.enter_card_name),
                 placeholder = stringResource(Res.string.card_name),
-                supportingText = state.nameInputField.supportingText?.asString(),
-                isError = state.nameInputField.hasError,
+                supportingText = state.nameInputFieldState.supportingText?.asString(),
+                hasError = state.nameInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
@@ -222,13 +222,13 @@ private fun CustomCardScreen(
                 )
             )
 
-            TitledInputField(
-                value = state.balanceInputField.value,
+            InputField(
+                value = state.balanceInputFieldState.value,
                 onValueChange = { onAction(CustomCardAction.OnChangeBalanceValue(it)) },
                 label = stringResource(Res.string.enter_balance),
                 placeholder = stringResource(Res.string.balance),
-                supportingText = state.balanceInputField.supportingText?.asString(),
-                isError = state.balanceInputField.hasError,
+                supportingText = state.balanceInputFieldState.supportingText?.asString(),
+                hasError = state.balanceInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -244,13 +244,13 @@ private fun CustomCardScreen(
         Spacer(Modifier.height(MaterialTheme.spacing.large))
         Spacer(Modifier.weight(1f))
 
-        BaseButton(
+        Button(
             text = stringResource(Res.string.save),
             onClick = {
                 onAction(
                     CustomCardAction.OnClickSaveCard(
-                        cardName = state.nameInputField.value.text,
-                        cardBalance = state.balanceInputField.value.text
+                        cardName = state.nameInputFieldState.value.text,
+                        cardBalance = state.balanceInputFieldState.value.text
                     )
                 )
             },

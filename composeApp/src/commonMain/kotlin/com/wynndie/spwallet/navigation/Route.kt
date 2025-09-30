@@ -35,7 +35,9 @@ sealed interface TransferNavGraphRoutes : Route {
     ) : TransferNavGraphRoutes
 
     @Serializable
-    data object TransferBetweenCards : TransferNavGraphRoutes
+    data class TransferBetweenCards(
+        val cardId: String?
+    ) : TransferNavGraphRoutes
 
     @Serializable
     data object TransferResult : TransferNavGraphRoutes

@@ -9,11 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cancel
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseTextButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TextButton
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun BaseDialogLayout(
+fun Dialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     title: String,
@@ -25,14 +25,14 @@ fun BaseDialogLayout(
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            BaseTextButton(
+            TextButton(
                 text = confirmButtonText,
-                destructive = isDestructive,
+                hasError = isDestructive,
                 onClick = onConfirm,
             )
         },
         dismissButton = {
-            BaseTextButton(
+            TextButton(
                 text = stringResource(Res.string.cancel),
                 onClick = onDismiss
             )

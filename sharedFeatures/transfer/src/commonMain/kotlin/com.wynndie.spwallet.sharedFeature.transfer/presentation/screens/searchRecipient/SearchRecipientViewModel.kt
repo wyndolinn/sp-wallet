@@ -33,7 +33,7 @@ class SearchRecipientViewModel(
         }.launchIn(viewModelScope)
 
         _state
-            .map { it.recipientInputField.value.text }
+            .map { it.recipientInputFieldState.value.text }
             .distinctUntilChanged()
             .onEach { query ->
                 when {
@@ -95,11 +95,11 @@ class SearchRecipientViewModel(
             is SearchRecipientAction.OnChangeRecipientValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
-                    .cutOffAt(state.value.recipientInputField.maxLength) ?: return
+                    .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
                     state.copy(
-                        recipientInputField = state.recipientInputField.copy(
+                        recipientInputFieldState = state.recipientInputFieldState.copy(
                             value = value
                         )
                     )

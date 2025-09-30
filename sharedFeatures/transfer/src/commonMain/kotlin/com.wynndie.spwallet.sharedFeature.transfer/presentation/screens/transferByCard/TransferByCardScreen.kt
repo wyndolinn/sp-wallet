@@ -36,7 +36,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.RecipientCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
@@ -49,9 +48,10 @@ import com.wynndie.spwallet.sharedResources.enter_comment
 import com.wynndie.spwallet.sharedResources.enter_transfer_amount
 import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_amount
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
+import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
+import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -180,13 +180,13 @@ private fun TransferByNumberScreen(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
         ) {
 
-            TitledInputField(
-                value = state.amountInputField.value,
+            InputField(
+                value = state.amountInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
                 label = stringResource(Res.string.enter_transfer_amount),
                 placeholder = stringResource(Res.string.transfer_amount),
-                supportingText = state.amountInputField.supportingText?.asString(),
-                isError = state.amountInputField.hasError,
+                supportingText = state.amountInputFieldState.supportingText?.asString(),
+                hasError = state.amountInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -199,13 +199,13 @@ private fun TransferByNumberScreen(
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             )
 
-            TitledInputField(
-                value = state.commentInputField.value,
+            InputField(
+                value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
                 label = stringResource(Res.string.enter_comment),
                 placeholder = stringResource(Res.string.comment),
-                supportingText = state.commentInputField.supportingText?.asString(),
-                isError = state.commentInputField.hasError,
+                supportingText = state.commentInputFieldState.supportingText?.asString(),
+                hasError = state.commentInputFieldState.hasError,
                 singleLine = false,
                 minLines = 3,
                 keyboardOptions = KeyboardOptions(
@@ -218,8 +218,8 @@ private fun TransferByNumberScreen(
                         onAction(
                             TransferByCardAction.OnClickTransfer(
                                 cardNumber = state.recipient.number,
-                                transferAmount = state.amountInputField.value.text,
-                                comment = state.commentInputField.value.text
+                                transferAmount = state.amountInputFieldState.value.text,
+                                comment = state.commentInputFieldState.value.text
                             )
                         )
                     }
@@ -231,14 +231,14 @@ private fun TransferByNumberScreen(
         Spacer(Modifier.height(MaterialTheme.spacing.large))
         Spacer(Modifier.weight(1f))
 
-        BaseButton(
+        Button(
             text = stringResource(Res.string.transfer),
             onClick = {
                 onAction(
                     TransferByCardAction.OnClickTransfer(
                         cardNumber = state.recipient.number,
-                        transferAmount = state.amountInputField.value.text,
-                        comment = state.commentInputField.value.text
+                        transferAmount = state.amountInputFieldState.value.text,
+                        comment = state.commentInputFieldState.value.text
                     )
                 )
             },

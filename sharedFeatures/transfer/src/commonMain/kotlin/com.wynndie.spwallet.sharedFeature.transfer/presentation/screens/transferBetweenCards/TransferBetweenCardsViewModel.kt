@@ -85,7 +85,7 @@ class TransferBetweenCardsViewModel(
                     _state.update { it.copy(loadingState = LoadingState.Loading) }
 
                     val sourceCard = state.value.sourceCards[state.value.sourceCardsCarouselPage]
-                    val transferAmount = state.value.amountInputField.value.text
+                    val transferAmount = state.value.amountInputFieldState.value.text
 
                     if (isTransferAmountValid(transferAmount)) {
                         transferByCardUseCase(
@@ -116,7 +116,7 @@ class TransferBetweenCardsViewModel(
 
                 _state.update { state ->
                     state.copy(
-                        amountInputField = state.amountInputField.copy(
+                        amountInputFieldState = state.amountInputFieldState.copy(
                             value = value
                         )
                     )
@@ -139,7 +139,7 @@ class TransferBetweenCardsViewModel(
         val (isValid, error) = transferAmountValidator.validate(value)
         _state.update { state ->
             state.copy(
-                amountInputField = state.amountInputField.copy(
+                amountInputFieldState = state.amountInputFieldState.copy(
                     supportingText = error?.asUiText(),
                     hasError = !isValid
                 )

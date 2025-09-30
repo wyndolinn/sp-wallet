@@ -106,6 +106,7 @@
     <string name="activate_cards">Активируйте карты</string>
     <string name="cash_account">Наличный счёт</string>
     <string name="by_number">По номеру</string>
+    <string name="between_cards">Между счетами</string>
 
     <string name="recipient_card">Карта получателя</string>
     <string name="recipient_history_empty">Не нашли сохранённых получателей</string>

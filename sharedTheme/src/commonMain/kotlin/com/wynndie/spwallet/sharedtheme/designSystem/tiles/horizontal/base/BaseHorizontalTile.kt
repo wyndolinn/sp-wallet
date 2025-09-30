@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal
+package com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.base
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,7 @@ import com.wynndie.spwallet.sharedtheme.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
-fun BaseHorizontalTile(
+internal fun BaseHorizontalTile(
     modifier: Modifier = Modifier,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     contentPadding: PaddingValues = PaddingValues(MaterialTheme.spacing.medium),

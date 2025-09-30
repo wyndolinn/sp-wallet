@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.models.InputField
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
@@ -33,11 +33,11 @@ import com.wynndie.spwallet.sharedResources.enter_id
 import com.wynndie.spwallet.sharedResources.enter_token
 import com.wynndie.spwallet.sharedResources.id
 import com.wynndie.spwallet.sharedResources.token
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.TitledInputField
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
+import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingDialog
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseSheetLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
@@ -49,14 +49,14 @@ fun AuthCardSheet(
     isAuthButtonEnabled: Boolean,
     cards: List<UnauthedCardUi>,
     initialPage: Int,
-    tokenInputField: InputField,
+    tokenInputFieldState: InputFieldState,
     onChangeTokenValue: (TextFieldValue) -> Unit,
-    idInputField: InputField,
+    idInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseSheetLayout(
+    BottomSheet(
         onDismiss = onDismiss
     ) {
 
@@ -68,9 +68,9 @@ fun AuthCardSheet(
             isAuthButtonEnabled = isAuthButtonEnabled,
             cards = cards,
             page = initialPage,
-            tokenInputField = tokenInputField,
+            tokenInputFieldState = tokenInputFieldState,
             onTokenValueChange = onChangeTokenValue,
-            idInputField = idInputField,
+            idInputFieldState = idInputFieldState,
             onChangeIdValue = onChangeIdValue,
             onClickAuthButton = onClickAuthButton,
             modifier = modifier
@@ -83,9 +83,9 @@ private fun AuthCardSheetContent(
     isAuthButtonEnabled: Boolean,
     cards: List<UnauthedCardUi>,
     page: Int,
-    tokenInputField: InputField,
+    tokenInputFieldState: InputFieldState,
     onTokenValueChange: (TextFieldValue) -> Unit,
-    idInputField: InputField,
+    idInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
@@ -102,40 +102,23 @@ private fun AuthCardSheetContent(
             }
     ) {
         if (cards.isNotEmpty()) {
-            @Composable
-            fun AppCardCarousel(
-                items: List<UnauthedCardUi>,
-                page: Int,
-                modifier: Modifier = Modifier,
-                enabled: Boolean = true,
-                onClick: ((UnauthedCardUi) -> Unit)? = null
-            ) {
-                BaseCarousel(
-                    items = items,
-                    page = page,
-                    enabled = enabled,
-                    modifier = Modifier
-                ) { card ->
-                    Box(
-                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-                    ) {
-                        UnauthedCardTile(
-                            icon = card.icon.asImage(),
-                            iconBackground = card.color.asColor(),
-                            cardName = card.name,
-                            cardNumber = card.number,
-                            onClick = onClick?.let { { it(card) } },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
-            }
-
-            AppCardCarousel(
+            BaseCarousel(
                 items = cards,
                 page = page,
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier
+            ) { card ->
+                Box(
+                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                ) {
+                    UnauthedCardTile(
+                        icon = card.icon.asImage(),
+                        iconBackground = card.color.asColor(),
+                        cardName = card.name,
+                        cardNumber = card.number,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
 
         Column(
@@ -144,13 +127,13 @@ private fun AuthCardSheetContent(
         ) {
 
             if (cards.isEmpty()) {
-                TitledInputField(
-                    value = idInputField.value,
+                InputField(
+                    value = idInputFieldState.value,
                     onValueChange = { onChangeIdValue(it) },
                     label = stringResource(Res.string.enter_id),
                     placeholder = stringResource(Res.string.id),
-                    supportingText = idInputField.supportingText?.asString(),
-                    isError = idInputField.hasError,
+                    supportingText = idInputFieldState.supportingText?.asString(),
+                    hasError = idInputFieldState.hasError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -163,13 +146,13 @@ private fun AuthCardSheetContent(
                 )
             }
 
-            TitledInputField(
-                value = tokenInputField.value,
+            InputField(
+                value = tokenInputFieldState.value,
                 onValueChange = { onTokenValueChange(it) },
                 label = stringResource(Res.string.enter_token),
                 placeholder = stringResource(Res.string.token),
-                supportingText = tokenInputField.supportingText?.asString(),
-                isError = tokenInputField.hasError,
+                supportingText = tokenInputFieldState.supportingText?.asString(),
+                hasError = tokenInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
@@ -177,7 +160,7 @@ private fun AuthCardSheetContent(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                        onClickAuthButton(cards[page].id, tokenInputField.value.text)
+                        onClickAuthButton(cards[page].id, tokenInputFieldState.value.text)
                     }
                 )
             )
@@ -190,10 +173,10 @@ private fun AuthCardSheetContent(
             )
         }
 
-        val cardId = if (cards.isNotEmpty()) cards[page].id else idInputField.value.text
-        BaseButton(
+        val cardId = if (cards.isNotEmpty()) cards[page].id else idInputFieldState.value.text
+        Button(
             text = stringResource(Res.string.activate),
-            onClick = { onClickAuthButton(cardId, tokenInputField.value.text) },
+            onClick = { onClickAuthButton(cardId, tokenInputFieldState.value.text) },
             enabled = isAuthButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()

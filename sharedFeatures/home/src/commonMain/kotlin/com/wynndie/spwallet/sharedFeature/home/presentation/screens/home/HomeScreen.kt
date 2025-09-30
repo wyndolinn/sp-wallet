@@ -25,13 +25,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
@@ -54,9 +53,11 @@ import com.wynndie.spwallet.sharedResources.create
 import com.wynndie.spwallet.sharedResources.custom_cards
 import com.wynndie.spwallet.sharedResources.total_balance
 import com.wynndie.spwallet.sharedResources.x_of_ore
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseIconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseOutlinedButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.OutlinedButton
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
+import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.TitledContent
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
@@ -79,9 +80,9 @@ fun HomeScreenRoot(
             isAuthButtonEnabled = state.authLoadingState !is LoadingState.Loading,
             cards = state.unauthedCards,
             initialPage = state.carouselPage,
-            idInputField = state.idInputField,
+            idInputFieldState = state.idInputFieldState,
             onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
-            tokenInputField = state.tokenInputField,
+            tokenInputFieldState = state.tokenInputFieldState,
             onChangeTokenValue = { viewModel.onAction(HomeAction.OnChangeCardTokenValue(it)) },
             onClickAuthButton = { id, token ->
                 viewModel.onAction(
@@ -102,7 +103,7 @@ fun HomeScreenRoot(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet(false)) },
             cards = state.authedCards,
             page = state.carouselPage,
-            onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(false)) },
+            onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(true)) },
             onTransferButtonClick = { viewModel.onAction(HomeAction.OnClickTransferByCard(it)) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -137,8 +138,8 @@ fun HomeScreenRoot(
                         )
                     },
                     actions = {
-                        BaseIconButton(
-                            icon = Icons.Outlined.Refresh,
+                        IconButton(
+                            icon = rememberVectorPainter(Icons.Outlined.Refresh),
                             onClick = { viewModel.onAction(HomeAction.OnRefresh) },
                             loading = state.screenLoadingState == LoadingState.Loading
                         )
@@ -217,7 +218,7 @@ private fun HomeScreenContent(
         item {
             Spacer(Modifier.height(MaterialTheme.spacing.medium))
 
-            BaseInfoPanelMedium(
+            InfoLayoutMedium(
                 label = stringResource(Res.string.total_balance),
                 title = stringResource(Res.string.x_of_ore, state.totalBalance.value).uppercase(),
                 description = if (state.totalBalance.value != 0L) {
@@ -229,9 +230,15 @@ private fun HomeScreenContent(
         item {
             if (isUserAuthed) {
                 ActionButtons(
-                    onAuthCardClick = { onAction(HomeAction.OnToggleAuthCardSheet(true)) },
-                    onTransferBetweenCardsClick = {  },
-                    onTransferByNumberClick = { onAction(HomeAction.OnClickTransferByCard(null)) },
+                    onAuthCardClick = {
+                        onAction(HomeAction.OnToggleAuthCardSheet(true))
+                    },
+                    onTransferBetweenCardsClick = {
+                        onAction(HomeAction.OnClickTransferBetweenCard(null))
+                    },
+                    onTransferByNumberClick = {
+                        onAction(HomeAction.OnClickTransferByCard(null))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
             } else {
@@ -287,7 +294,7 @@ private fun HomeScreenContent(
                     AnimatedVisibility(
                         visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
                     ) {
-                        BaseOutlinedButton(
+                        OutlinedButton(
                             text = stringResource(Res.string.create),
                             onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
                             modifier = Modifier.fillMaxWidth()

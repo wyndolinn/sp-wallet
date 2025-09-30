@@ -6,7 +6,7 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.delete_card_description
 import com.wynndie.spwallet.sharedResources.delete_card_title
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BaseDialogLayout
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.Dialog
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -15,7 +15,7 @@ fun DeleteCardDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    BaseDialogLayout(
+    Dialog(
         onDismiss = onDismiss,
         onConfirm = onConfirm,
         title = stringResource(Res.string.delete_card_title),

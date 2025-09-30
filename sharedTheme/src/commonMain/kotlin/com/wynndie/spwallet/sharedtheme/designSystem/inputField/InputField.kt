@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.components.input
+package com.wynndie.spwallet.sharedtheme.designSystem.inputField
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.wynndie.spwallet.sharedtheme.extensions.ContentState
+import com.wynndie.spwallet.sharedtheme.extensions.asDescriptionColor
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -28,7 +30,7 @@ fun InputField(
     modifier: Modifier = Modifier,
     label: String? = null,
     placeholder: String? = null,
-    supportingText: @Composable (() -> Unit)? = null,
+    supportingText: String? = null,
     additionalContent: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (BoxScope.() -> Unit)? = null,
     trailingIcon: @Composable (BoxScope.() -> Unit)? = null,
@@ -43,6 +45,13 @@ fun InputField(
     maxLines: Int = Int.MAX_VALUE,
     enabled: Boolean = true
 ) {
+
+    val contentState = when {
+        hasError -> ContentState.Alerted
+        !enabled -> ContentState.Disabled
+        else -> ContentState.Neutral
+    }
+
     Column(
         modifier = modifier
     ) {
@@ -50,7 +59,7 @@ fun InputField(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = it,
-                style = MaterialTheme.typography.titleSmall.copy(
+                style = MaterialTheme.typography.labelMedium.copy(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold
                 )
@@ -113,7 +122,13 @@ fun InputField(
         AnimatedVisibility(
             visible = supportingText != null
         ) {
-            supportingText?.let { it() }
+            supportingText?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = contentState.asDescriptionColor()
+                )
+            }
         }
 
         AnimatedVisibility(

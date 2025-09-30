@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.components.input
+package com.wynndie.spwallet.sharedtheme.designSystem.inputField
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +20,7 @@ import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BasicInputField(
+internal fun BasicInputField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
@@ -44,7 +44,6 @@ fun BasicInputField(
 ) {
 
     val colors = OutlinedTextFieldDefaults.colors()
-
 
     BasicTextField(
         value = value,

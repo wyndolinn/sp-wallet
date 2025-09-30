@@ -28,13 +28,25 @@ fun NavGraphBuilder.homeNavGraph(
             ObserveNavEvent<HomeNavEvent> { navEvent ->
                 when (navEvent) {
                     is HomeNavEvent.OnClickCustomCard -> {
-                        navController.navigate(EditNavGraphRoutes.CustomCard(navEvent.cardId)) {
+                        navController.navigate(
+                            EditNavGraphRoutes.CustomCard(navEvent.cardId)
+                        ) {
                             launchSingleTop = true
                         }
                     }
 
                     is HomeNavEvent.OnClickTransferByCard -> {
-                        navController.navigate(TransferNavGraphRoutes.SearchRecipient(navEvent.cardId)) {
+                        navController.navigate(
+                            TransferNavGraphRoutes.SearchRecipient(navEvent.cardId)
+                        ) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    is HomeNavEvent.OnClickTransferBetweenCards -> {
+                        navController.navigate(
+                            TransferNavGraphRoutes.TransferBetweenCards(navEvent.cardId)
+                        ) {
                             launchSingleTop = true
                         }
                     }

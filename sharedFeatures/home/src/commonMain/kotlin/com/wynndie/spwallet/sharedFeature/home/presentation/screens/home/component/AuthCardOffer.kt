@@ -11,8 +11,8 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedResources.no_authed_cards
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.BaseButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.BaseInfoPanelMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
+import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutMedium
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,11 +26,11 @@ internal fun AuthCardOffer(
         modifier = modifier
     ) {
 
-        BaseInfoPanelMedium(
+        InfoLayoutMedium(
             title = stringResource(Res.string.no_authed_cards),
             description = stringResource(Res.string.auth_card_to_get_benefits),
             action = {
-                BaseButton(
+                Button(
                     text = stringResource(Res.string.activate),
                     onClick = onClickAuthCard,
                     modifier = Modifier.fillMaxWidth()
