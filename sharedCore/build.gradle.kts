@@ -53,9 +53,10 @@ kotlin {
             api(libs.koin.compose.viewmodel)
             api(libs.koin.core)
 
-            api(libs.kotlinx.serialization.json)
-            api(libs.bundles.ktor)
+            api(libs.moko.permissions.compose)
+            api(libs.moko.permissions.notifications)
 
+            api(libs.kotlinx.serialization.json)
             api(libs.bundles.ktor)
             api(libs.bundles.coil)
 

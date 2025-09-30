@@ -36,6 +36,8 @@ kotlin {
             api(compose.components.resources)
             api(compose.components.uiToolingPreview)
             api(compose.materialIconsExtended)
+
+            implementation(libs.bundles.coil)
         }
 
         androidMain.dependencies {
