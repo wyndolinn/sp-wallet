@@ -190,8 +190,7 @@ fun HomeScreenRoot(
                     HomeScreenContent(
                         state = state,
                         onAction = viewModel::onAction,
-                        contentPadding = innerPadding,
-                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                        contentPadding = innerPadding
                     )
                 }
             }
@@ -223,7 +222,8 @@ private fun HomeScreenContent(
                 title = stringResource(Res.string.x_of_ore, state.totalBalance.value).uppercase(),
                 description = if (state.totalBalance.value != 0L) {
                     state.totalBalance.formatted.joinToUiText(" ").asString()
-                } else null
+                } else null,
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             )
         }
 
@@ -239,13 +239,18 @@ private fun HomeScreenContent(
                     onTransferByNumberClick = {
                         onAction(HomeAction.OnClickTransferByCard(null))
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.medium)
                 )
             } else {
                 AuthCardOffer(
                     onClickAuthCard = {
                         onAction(HomeAction.OnToggleAuthCardSheet(true))
-                    }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.medium)
                 )
             }
         }
@@ -259,16 +264,22 @@ private fun HomeScreenContent(
                     TitledContent(
                         title = stringResource(Res.string.bank_cards)
                     ) {
-                        state.authedCards.forEach { card ->
-                            AuthedCardTile(
-                                icon = card.icon.asImage(),
-                                iconBackground = card.color.asColor(),
-                                cardName = card.name,
-                                cardNumber = card.number,
-                                balance = card.balance,
-                                onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                        ) {
+                            state.authedCards.forEach { card ->
+                                AuthedCardTile(
+                                    icon = card.icon.asImage(),
+                                    iconBackground = card.color.asColor(),
+                                    cardName = card.name,
+                                    cardNumber = card.number,
+                                    balance = card.balance,
+                                    onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                )
+                            }
                         }
                     }
                 }
@@ -280,25 +291,33 @@ private fun HomeScreenContent(
                         CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
                     )
                 ) {
-                    state.customCards.forEach { card ->
-                        CustomCardTile(
-                            icon = card.icon.asImage(),
-                            iconBackground = card.color.asColor(),
-                            cardName = card.name,
-                            balance = card.balance,
-                            onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    AnimatedVisibility(
-                        visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
                     ) {
-                        OutlinedButton(
-                            text = stringResource(Res.string.create),
-                            onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        state.customCards.forEach { card ->
+                            CustomCardTile(
+                                icon = card.icon.asImage(),
+                                iconBackground = card.color.asColor(),
+                                cardName = card.name,
+                                balance = card.balance,
+                                onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                            )
+                        }
+
+                        AnimatedVisibility(
+                            visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
+                        ) {
+                            OutlinedButton(
+                                text = stringResource(Res.string.create),
+                                onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                            )
+                        }
                     }
                 }
 
@@ -306,15 +325,21 @@ private fun HomeScreenContent(
                     TitledContent(
                         title = stringResource(Res.string.activate_cards)
                     ) {
-                        state.unauthedCards.forEach { card ->
-                            UnauthedCardTile(
-                                icon = card.icon.asImage(),
-                                iconBackground = card.color.asColor(),
-                                cardName = card.name,
-                                cardNumber = card.number,
-                                onClick = { onAction(HomeAction.OnClickUnauthedCard(card.id)) },
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                        ) {
+                            state.unauthedCards.forEach { card ->
+                                UnauthedCardTile(
+                                    icon = card.icon.asImage(),
+                                    iconBackground = card.color.asColor(),
+                                    cardName = card.name,
+                                    cardNumber = card.number,
+                                    onClick = { onAction(HomeAction.OnClickUnauthedCard(card.id)) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                )
+                            }
                         }
                     }
                 }

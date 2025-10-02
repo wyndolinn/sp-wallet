@@ -45,6 +45,8 @@ fun UnauthedCardTile(
         title = stringResource(Res.string.activate_card),
         onClick = onClick,
         modifier = modifier
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     )
 }
 
@@ -57,10 +59,7 @@ private fun UnauthedCardTilePreview() {
             iconBackground = CardColors.GREEN.asColor(),
             cardName = "pipipupu",
             cardNumber = "12345",
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.medium)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }
 }

@@ -9,13 +9,20 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.base.BaseTitledContent
+import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
 fun TitledContent(
     title: String,
     trailingTitledContent: (@Composable () -> Unit)? = null,
-    titlePadding: PaddingValues = PaddingValues(),
+    titlePadding: PaddingValues = PaddingValues(
+        start = MaterialTheme.spacing.medium,
+        top = 0.dp,
+        end = MaterialTheme.spacing.medium,
+        bottom = MaterialTheme.spacing.extraSmall
+    ),
     style: TextStyle = MaterialTheme.typography.bodyLarge,
     color: Color = MaterialTheme.colorScheme.onSurface,
     modifier: Modifier = Modifier,
@@ -34,8 +41,7 @@ fun TitledContent(
             }
         },
         titlePadding = titlePadding,
+        content = content,
         modifier = modifier
-    ) {
-        content()
-    }
+    )
 }

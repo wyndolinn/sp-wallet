@@ -90,7 +90,7 @@ fun HorizontalTileMedium(
             label?.let {
                 Text(
                     modifier = Modifier,
-                    text = title,
+                    text = it,
                     style = MaterialTheme.typography.labelMedium,
                     color = contentState.asLabelColor()
                 )

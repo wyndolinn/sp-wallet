@@ -52,6 +52,8 @@ fun CustomCardTile(
         description = balance.formatted.joinToUiText(" ").asString(),
         onClick = onClick,
         modifier = modifier
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     )
 }
 
@@ -64,10 +66,7 @@ private fun CustomCardTilePreview() {
             iconBackground = CardColors.GREEN.asColor(),
             cardName = "pipipupu",
             balance = OreDisplayableValue.of(555555),
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.medium)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }
 }

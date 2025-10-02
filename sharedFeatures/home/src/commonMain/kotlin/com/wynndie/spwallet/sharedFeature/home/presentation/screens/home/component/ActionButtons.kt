@@ -11,10 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_card
+import com.wynndie.spwallet.sharedResources.ic_add_card
+import com.wynndie.spwallet.sharedResources.ic_people
+import com.wynndie.spwallet.sharedResources.ic_transaction
 import com.wynndie.spwallet.sharedResources.transfer_between_cards
 import com.wynndie.spwallet.sharedResources.transfer_by_number
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalIconButton
 import com.wynndie.spwallet.sharedtheme.theme.spacing
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -29,21 +33,21 @@ fun ActionButtons(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
     ) {
         TonalIconButton(
-            icon = Icons.Outlined.AddCard,
+            icon = painterResource(Res.drawable.ic_add_card),
             text = stringResource(Res.string.activate_card),
             onClick = { onAuthCardClick() },
             modifier = Modifier.weight(1f)
         )
 
         TonalIconButton(
-            icon = Icons.Outlined.TransferWithinAStation,
+            icon = painterResource(Res.drawable.ic_transaction),
             text = stringResource(Res.string.transfer_between_cards),
             onClick = { onTransferBetweenCardsClick() },
             modifier = Modifier.weight(1f)
         )
 
         TonalIconButton(
-            icon = Icons.Outlined.People,
+            icon = painterResource(Res.drawable.ic_people),
             text = stringResource(Res.string.transfer_by_number),
             onClick = { onTransferByNumberClick() },
             modifier = Modifier.weight(1f)

@@ -53,6 +53,8 @@ fun AuthedCardTile(
         description = balance.formatted.joinToUiText(" ").asString(),
         onClick = onClick,
         modifier = modifier
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     )
 }
 
@@ -66,10 +68,7 @@ private fun AuthedCardTilePreview() {
             cardName = "pipipupu",
             cardNumber = "12345",
             balance = OreDisplayableValue.of(555555),
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.medium)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }
 }

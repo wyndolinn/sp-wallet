@@ -18,12 +18,14 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
+import com.wynndie.spwallet.sharedResources.ic_people
 import com.wynndie.spwallet.sharedResources.transfer_by_number
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TextButton
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalIconButton
 import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
 import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
 import com.wynndie.spwallet.sharedtheme.theme.spacing
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +88,7 @@ private fun AuthedCardSheetContent(
             }
 
             TonalIconButton(
-                icon = Icons.Outlined.People,
+                icon = painterResource(Res.drawable.ic_people),
                 text = stringResource(Res.string.transfer_by_number),
                 onClick = { onTransferButtonClick(cards[page].id) },
                 modifier = Modifier

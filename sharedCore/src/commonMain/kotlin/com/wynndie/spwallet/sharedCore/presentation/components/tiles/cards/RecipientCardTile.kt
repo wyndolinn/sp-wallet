@@ -42,6 +42,8 @@ fun RecipientCardTile(
         description = cardName,
         onClick = onClick,
         modifier = modifier
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     )
 }
 
@@ -54,10 +56,7 @@ private fun RecipientCardTilePreview() {
             iconBackground = CardColors.GREEN.asColor(),
             cardName = "pipipupu",
             cardNumber = "12345",
-            modifier = Modifier
-                .padding(MaterialTheme.spacing.medium)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }
 }
