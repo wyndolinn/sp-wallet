@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.OutlinedTextFieldDefaults.Container
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -36,15 +37,13 @@ internal fun BasicInputField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     singleLine: Boolean = true,
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
     readOnly: Boolean = false,
     enabled: Boolean = true
 ) {
-
-    val colors = OutlinedTextFieldDefaults.colors()
-
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
@@ -90,8 +89,7 @@ internal fun BasicInputField(
                         interactionSource = interactionSource,
                         colors = colors,
                         shape = MaterialTheme.shapes.medium,
-                        focusedBorderThickness = 2.dp,
-                        unfocusedBorderThickness = 2.dp,
+                        focusedBorderThickness = 2.dp
                     )
                 },
                 contentPadding = PaddingValues(

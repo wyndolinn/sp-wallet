@@ -39,7 +39,7 @@ fun InfoLayoutSmall(
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
@@ -60,7 +60,7 @@ fun InfoLayoutSmall(
         action = action,
         contentVerticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         topContentArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-        bodyContentArrangement = Arrangement.spacedBy(0.dp),
+        bodyContentArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         trailingContentArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         modifier = modifier
     )

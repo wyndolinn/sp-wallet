@@ -69,6 +69,7 @@
     <string name="card_name">Название карты</string>
     <string name="enter_balance">Баланс карты</string>
     <string name="balance">Баланс</string>
+    <string name="name_or_number">Имя или номер</string>
 
 
     <string name="require_activation">Требуется активация</string>

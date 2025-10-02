@@ -17,6 +17,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_card
+import com.wynndie.spwallet.sharedResources.require_activation
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
@@ -41,8 +42,8 @@ fun UnauthedCardTile(
         },
         leadingContentShape = MaterialTheme.shapes.small,
         leadingContentBackground = iconBackground,
-        label = "$cardNumber • $cardName",
-        title = stringResource(Res.string.activate_card),
+        title = "$cardNumber • $cardName",
+        description = stringResource(Res.string.require_activation),
         onClick = onClick,
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
