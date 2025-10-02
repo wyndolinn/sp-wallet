@@ -1,16 +1,13 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -26,27 +23,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.components.RecipientTransparentTile
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
-import com.wynndie.spwallet.sharedResources.ic_arrow_right
 import com.wynndie.spwallet.sharedResources.ic_person
 import com.wynndie.spwallet.sharedResources.name_or_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
 import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutSmall
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
-import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.HorizontalTileMedium
-import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.HorizontalTileSmall
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -131,25 +124,11 @@ private fun SearchRecipientScreenContent(
             state.recipients.isNotEmpty() -> {
                 LazyColumn {
                     items(state.recipients) { recipient ->
-                        HorizontalTileMedium(
-                            leadingContent = {
-                                Image(
-                                    painter = recipient.icon.asImage(),
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                                    contentDescription = null
-                                )
-                            },
-                            leadingContentBackground = recipient.color.asColor(),
-                            leadingContentShape = CircleShape,
-                            title = recipient.name,
-                            description = recipient.number,
-                            trailingContent = {
-                                Image(
-                                    painter = painterResource(Res.drawable.ic_arrow_right),
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                                    contentDescription = null
-                                )
-                            },
+                        RecipientTransparentTile(
+                            icon = recipient.icon.asImage(),
+                            color = recipient.color.asColor(),
+                            cardNumber = recipient.number,
+                            cardOwner = recipient.name,
                             onClick = {
                                 onAction(
                                     SearchRecipientAction.OnClickRecipient(
@@ -158,12 +137,6 @@ private fun SearchRecipientScreenContent(
                                     )
                                 )
                             },
-                            contentPadding = PaddingValues(
-                                start = MaterialTheme.spacing.medium,
-                                top = MaterialTheme.spacing.small,
-                                end = MaterialTheme.spacing.extraSmall,
-                                bottom = MaterialTheme.spacing.small
-                            ),
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -171,25 +144,11 @@ private fun SearchRecipientScreenContent(
             }
 
             state.isNewRecipient -> {
-                HorizontalTileMedium(
-                    leadingContent = {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_person),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                            contentDescription = null
-                        )
-                    },
-                    leadingContentBackground = MaterialTheme.colorScheme.primary,
-                    leadingContentShape = CircleShape,
-                    title = stringResource(Res.string.recipient),
-                    description = state.recipientInputFieldState.value.text,
-                    trailingContent = {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_arrow_right),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                            contentDescription = null
-                        )
-                    },
+                RecipientTransparentTile(
+                    icon = painterResource(Res.drawable.ic_person),
+                    color = MaterialTheme.colorScheme.primary,
+                    cardNumber = state.recipientInputFieldState.value.text,
+                    cardOwner = stringResource(Res.string.recipient),
                     onClick = {
                         onAction(
                             SearchRecipientAction.OnClickRecipient(
@@ -197,12 +156,6 @@ private fun SearchRecipientScreenContent(
                             )
                         )
                     },
-                    contentPadding = PaddingValues(
-                        start = MaterialTheme.spacing.medium,
-                        top = MaterialTheme.spacing.small,
-                        end = 0.dp,
-                        bottom = MaterialTheme.spacing.small
-                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = MaterialTheme.spacing.medium)
