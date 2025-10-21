@@ -1,13 +1,11 @@
-package com.wynndie.spwallet.sharedCore.presentation.models
+package com.wynndie.spwallet.sharedCore.presentation.states
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 
 data class InputFieldState(
     val value: TextFieldValue = TextFieldValue(""),
-    val hasError: Boolean = false,
-    val maxLength: Int = 256,
     val supportingText: UiText? = null,
-    val prefix: String? = null,
-    val suffix: String? = null
+    val hasError: Boolean = false,
+    val maxLength: Int = 256
 )

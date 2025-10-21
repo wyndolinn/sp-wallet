@@ -8,17 +8,14 @@ fun buildOffsetMapping(rawText: String, formattedText: String): OffsetMapping {
     val transformedToOriginalOffsets = mutableListOf<Int>()
 
     var rawIndex = 0
-
-    formattedText.forEachIndexed { formattedIndex, formattedChar ->
+    formattedText.forEachIndexed { index, char ->
         val isRawCharInBounds = rawIndex < rawText.length
-        val isSameChar = isRawCharInBounds && formattedChar == rawText[rawIndex]
+        val isSameChar = isRawCharInBounds && char == rawText[rawIndex]
 
+        transformedToOriginalOffsets.add(rawIndex)
         if (isSameChar) {
-            originalToTransformedOffsets.add(formattedIndex)
-            transformedToOriginalOffsets.add(rawIndex)
+            originalToTransformedOffsets.add(index)
             rawIndex++
-        } else {
-            transformedToOriginalOffsets.add(rawIndex)
         }
     }
 

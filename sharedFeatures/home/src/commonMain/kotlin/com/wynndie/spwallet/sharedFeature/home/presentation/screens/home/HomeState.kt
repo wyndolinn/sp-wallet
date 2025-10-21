@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue

@@ -12,6 +12,7 @@ import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.components.effects.ObserveAsEvents
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controllers.permission.PermissionsController
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
@@ -30,6 +31,7 @@ fun App() {
     }
 
     BindEffect(permissionsController = permissionsController)
+    PermissionsController.init(permissionsController)
 
 
     ObserveAsEvents(OverlayController.overlay) { overlay ->

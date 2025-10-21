@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
-import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 

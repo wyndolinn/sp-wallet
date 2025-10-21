@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res

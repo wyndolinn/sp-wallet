@@ -5,7 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.models.KeyboardAction
-import com.wynndie.spwallet.sharedCore.presentation.models.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -5,8 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEvent
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.withContext
