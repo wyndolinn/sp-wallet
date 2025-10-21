@@ -9,34 +9,38 @@ import dev.icerock.moko.permissions.RequestCanceledException
 
 object PermissionsController {
 
-    private var permissionsController: PermissionsController? = null
+    private var _controller: PermissionsController? = null
 
     fun init(controller: PermissionsController) {
-        if (permissionsController != null) return
-        permissionsController = controller
+        if (_controller != null) return
+        _controller = controller
     }
 
-    suspend fun requestPermission(permission: Permission): Unit? {
-        val controller = permissionsController ?: return null
+    suspend fun requestPermission(permission: Permission): PermissionState {
+        val controller = _controller ?: return PermissionState.NotDetermined
 
         return try {
             when (controller.getPermissionState(permission)) {
-                PermissionState.NotDetermined -> controller.openAppSettings()
-                PermissionState.NotGranted -> controller.providePermission(permission)
+                PermissionState.NotDetermined -> controller.providePermission(permission)
+                PermissionState.Granted -> controller.openAppSettings()
+                PermissionState.NotGranted -> controller.openAppSettings()
                 PermissionState.DeniedAlways -> controller.providePermission(permission)
                 PermissionState.Denied -> controller.providePermission(permission)
-                PermissionState.Granted -> controller.providePermission(permission)
             }
-        } catch (_: DeniedAlwaysException) {
-
+            controller.getPermissionState(permission)
         } catch (_: DeniedException) {
-
-        } catch(_: RequestCanceledException) {
-
+            controller.getPermissionState(permission)
+        } catch (_: DeniedAlwaysException) {
+            controller.openAppSettings()
+            controller.getPermissionState(permission)
+        } catch (_: RequestCanceledException) {
+            controller.getPermissionState(permission)
         }
     }
 
-    suspend fun getPermissionState(permission: Permission): PermissionState? {
-        return permissionsController?.getPermissionState(permission)
+    suspend fun getPermissionState(permission: Permission): PermissionState {
+        return _controller
+            ?.getPermissionState(permission)
+            ?: PermissionState.NotDetermined
     }
 }
