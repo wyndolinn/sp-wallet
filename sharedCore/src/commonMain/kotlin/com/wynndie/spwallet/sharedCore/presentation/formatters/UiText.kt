@@ -1,10 +1,12 @@
 package com.wynndie.spwallet.sharedCore.presentation.formatters
 
 import androidx.compose.runtime.Composable
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
+@Serializable
 sealed interface UiText {
 
     data class DynamicString(val value: String) : UiText

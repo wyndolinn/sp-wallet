@@ -55,8 +55,7 @@ class TransferByCardViewModel(
                 state.copy(
                     user = user,
                     commentInputFieldState = state.commentInputFieldState.copy(
-                        maxLength = state.commentInputFieldState.maxLength - prefix.length,
-                        prefix = prefix
+                        maxLength = state.commentInputFieldState.maxLength - prefix.length
                     )
                 )
             }

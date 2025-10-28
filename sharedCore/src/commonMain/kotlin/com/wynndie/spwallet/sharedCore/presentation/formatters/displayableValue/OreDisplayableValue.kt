@@ -1,13 +1,17 @@
 package com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue
 
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.serializaers.UiTextListSerializer
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.x_of_ore
 import com.wynndie.spwallet.sharedResources.x_of_shulkers
 import com.wynndie.spwallet.sharedResources.x_of_stacks
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class OreDisplayableValue(
     override val value: Long,
+    @Serializable(with = UiTextListSerializer::class)
     override val formatted: List<UiText>
 ) : DisplayableValue<List<UiText>> {
 
