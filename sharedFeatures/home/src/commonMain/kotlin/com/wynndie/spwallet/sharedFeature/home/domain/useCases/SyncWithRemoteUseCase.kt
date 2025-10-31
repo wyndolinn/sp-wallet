@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.domain.usecase
+package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome

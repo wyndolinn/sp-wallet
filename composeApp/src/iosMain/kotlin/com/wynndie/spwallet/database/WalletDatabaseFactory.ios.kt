@@ -11,13 +11,13 @@ import platform.Foundation.NSUserDomainMask
 actual class WalletDatabaseFactory {
 
     actual fun create(): RoomDatabase.Builder<WalletDatabase> {
-        val dbFile = documentDirectory() + "/${WalletDatabase.Companion.DB_NAME}"
+        val dbFile = documentDirectory() + "/${WalletDatabase.DB_NAME}"
         return Room.databaseBuilder<WalletDatabase>(name = dbFile)
     }
 
     @OptIn(ExperimentalForeignApi::class)
     private fun documentDirectory(): String {
-        val documentDirectory = NSFileManager.Companion.defaultManager.URLForDirectory(
+        val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
             directory = NSDocumentDirectory,
             inDomain = NSUserDomainMask,
             appropriateForURL = null,

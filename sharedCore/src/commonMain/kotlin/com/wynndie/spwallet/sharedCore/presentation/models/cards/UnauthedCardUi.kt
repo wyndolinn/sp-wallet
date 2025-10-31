@@ -6,7 +6,6 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class UnauthedCardUi(
     override val id: String,
     override val name: String,

@@ -8,10 +8,8 @@ import com.wynndie.spwallet.sharedResources.x_of_shulkers
 import com.wynndie.spwallet.sharedResources.x_of_stacks
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class OreDisplayableValue(
     override val value: Long,
-    @Serializable(with = UiTextListSerializer::class)
     override val formatted: List<UiText>
 ) : DisplayableValue<List<UiText>> {
 

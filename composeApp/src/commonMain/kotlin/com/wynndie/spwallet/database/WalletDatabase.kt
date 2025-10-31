@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.wynndie.spwallet.sharedCore.data.local.dao.CardsDao
@@ -21,6 +22,7 @@ import com.wynndie.spwallet.sharedCore.data.local.entities.UnauthedCardEntity
     ],
     version = 1
 )
+@ConstructedBy(WalletDatabaseConstructor::class)
 abstract class WalletDatabase : RoomDatabase() {
 
     abstract val userDao: UserDao

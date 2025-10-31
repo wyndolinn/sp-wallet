@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.domain.usecase
+package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository

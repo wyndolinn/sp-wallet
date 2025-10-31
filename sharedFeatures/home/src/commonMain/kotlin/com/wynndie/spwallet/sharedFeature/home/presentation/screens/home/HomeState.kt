@@ -10,7 +10,6 @@ import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class HomeState(
     val screenLoadingState: LoadingState = LoadingState.Finished,
     val authLoadingState: LoadingState = LoadingState.Finished,

@@ -6,7 +6,6 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class AuthedCardUi(
     override val id: String,
     override val authKey: String,

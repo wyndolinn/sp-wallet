@@ -1,7 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.onError
@@ -11,7 +10,6 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asSavedState
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
@@ -22,8 +20,8 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
-import com.wynndie.spwallet.sharedFeature.home.domain.usecase.DeleteAuthedCardUseCase
-import com.wynndie.spwallet.sharedFeature.home.domain.usecase.SyncWithRemoteUseCase
+import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
+import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +34,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
-    private val savedStateHandle: SavedStateHandle,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val authCardUseCase: AuthCardUseCase,
@@ -44,11 +41,7 @@ class HomeViewModel(
     private val tokenValidator: TokenValidator
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(HomeState()).asSavedState(
-        scope = viewModelScope,
-        savedStateHandle = savedStateHandle,
-        key = "homeScreenState"
-    )
+    private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
     init {

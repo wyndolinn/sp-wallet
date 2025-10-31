@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedFeature.home.di
 import com.wynndie.spwallet.sharedFeature.home.domain.encoders.AuthKeyEncoder
 import com.wynndie.spwallet.sharedFeature.home.domain.encoders.Base64AuthKeyEncoder
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
-import com.wynndie.spwallet.sharedFeature.home.domain.usecase.DeleteAuthedCardUseCase
-import com.wynndie.spwallet.sharedFeature.home.domain.usecase.SyncWithRemoteUseCase
+import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
+import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeViewModel
