@@ -1,7 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue
 
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedCore.presentation.serializaers.UiTextListSerializer
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.x_of_ore
 import com.wynndie.spwallet.sharedResources.x_of_shulkers

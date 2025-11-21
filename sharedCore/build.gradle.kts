@@ -53,9 +53,6 @@ kotlin {
             api(libs.koin.compose.viewmodel)
             api(libs.koin.core)
 
-            api(libs.moko.permissions.compose)
-            api(libs.moko.permissions.notifications)
-
             api(libs.kotlinx.serialization.json)
             api(libs.bundles.ktor)
             api(libs.bundles.coil)
@@ -93,16 +90,19 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

@@ -20,7 +20,6 @@ sealed interface UiImage {
     data class VectorImage(val vector: ImageVector) : UiImage {
         @Composable
         override fun asPainter(): VectorPainter = rememberVectorPainter(vector)
-
     }
 
     data class UrlImage(val value: String) : UiImage {
