@@ -25,7 +25,7 @@ fun TextButton(
     TextButton(
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.height(MaterialTheme.sizing.small)
+        modifier = modifier.height(MaterialTheme.sizing.medium)
     ) {
         Crossfade(
             targetState = isLoading

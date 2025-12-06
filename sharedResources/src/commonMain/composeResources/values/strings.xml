@@ -52,7 +52,7 @@
     <string name="activate_first_card">Активируйте карту</string>
 
     <string name="auth_card_to_get_benefits">Активируйте любую карту и совершайте переводы</string>
-    <string name="auth_instruction">Получить ID&#160;и&#160;токен карты можно на&#160;сайте во&#160;вкладке «Кошелёк». Выберите карту, нажмите «Поделиться» и&#160;сгенерируйте новый API токен.</string>
+    <string name="auth_instruction">Получить ID и&#160;токен карты можно на&#160;сайте во&#160;вкладке «Кошелёк». Выберите карту, нажмите «Поделиться» и&#160;сгенерируйте новый API&#160;токен.</string>
 
     <string name="bank_card_label">%1$s • %2$s</string>
     <string name="enter_id">ID карты</string>

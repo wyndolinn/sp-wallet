@@ -8,13 +8,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Sizing(
-    val extraExtraSmall: Dp = 24.dp,
-    val extraSmall: Dp = 32.dp,
-    val small: Dp = 40.dp,
-    val medium: Dp = 48.dp,
-    val large: Dp = 56.dp,
-    val extraLarge: Dp = 64.dp,
-    val extraExtraLarge: Dp = 72.dp
+    val extraSmall: Dp = 24.dp,
+    val small: Dp = 32.dp,
+    val medium: Dp = 40.dp,
+    val large: Dp = 48.dp,
+    val extraLarge: Dp = 56.dp
 )
 
 val LocalSizing = compositionLocalOf { Sizing() }

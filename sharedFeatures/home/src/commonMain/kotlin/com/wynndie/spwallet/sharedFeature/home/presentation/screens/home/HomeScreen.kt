@@ -3,18 +3,14 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,12 +27,15 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
+import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AppBarContent
@@ -48,14 +47,13 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_cards
 import com.wynndie.spwallet.sharedResources.app_logo_foreground
 import com.wynndie.spwallet.sharedResources.app_name
+import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedResources.bank_cards
 import com.wynndie.spwallet.sharedResources.create
 import com.wynndie.spwallet.sharedResources.custom_cards
-import com.wynndie.spwallet.sharedResources.total_balance
-import com.wynndie.spwallet.sharedResources.x_of_ore
+import com.wynndie.spwallet.sharedResources.no_authed_cards
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.OutlinedButton
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutMedium
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalButton
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
 import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.TitledContent
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
@@ -190,7 +188,10 @@ fun HomeScreenRoot(
                     HomeScreenContent(
                         state = state,
                         onAction = viewModel::onAction,
-                        contentPadding = innerPadding
+                        contentPadding = innerPadding,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
                     )
                 }
             }
@@ -208,157 +209,152 @@ private fun HomeScreenContent(
 
     val isUserAuthed = state.authedCards.isNotEmpty()
 
-    LazyColumn(
+    Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
-        contentPadding = contentPadding,
         modifier = modifier
     ) {
+        BalanceComponent(
+            balance = state.totalBalance,
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+        )
 
-        item {
-            Spacer(Modifier.height(MaterialTheme.spacing.medium))
-
-            InfoLayoutMedium(
-                label = stringResource(Res.string.total_balance),
-                title = stringResource(Res.string.x_of_ore, state.totalBalance.value).uppercase(),
-                description = if (state.totalBalance.value != 0L) {
-                    state.totalBalance.formatted.joinToUiText(" ").asString()
-                } else null,
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+        if (isUserAuthed) {
+            ActionButtons(
+                onAuthCardClick = {
+                    onAction(HomeAction.OnToggleAuthCardSheet(true))
+                },
+                onTransferBetweenCardsClick = {
+                    onAction(HomeAction.OnClickTransferBetweenCard(null))
+                },
+                onTransferByNumberClick = {
+                    onAction(HomeAction.OnClickTransferByCard(null))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+            )
+        } else {
+            AuthCardOffer(
+                title = stringResource(Res.string.no_authed_cards),
+                description = stringResource(Res.string.auth_card_to_get_benefits),
+                onClickAuthCard = {
+                    onAction(HomeAction.OnToggleAuthCardSheet(true))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
             )
         }
 
-        item {
-            if (isUserAuthed) {
-                ActionButtons(
-                    onAuthCardClick = {
-                        onAction(HomeAction.OnToggleAuthCardSheet(true))
-                    },
-                    onTransferBetweenCardsClick = {
-                        onAction(HomeAction.OnClickTransferBetweenCard(null))
-                    },
-                    onTransferByNumberClick = {
-                        onAction(HomeAction.OnClickTransferByCard(null))
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium)
-                )
-            } else {
-                AuthCardOffer(
-                    onClickAuthCard = {
-                        onAction(HomeAction.OnToggleAuthCardSheet(true))
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium)
-                )
-            }
-        }
+        Column(
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        ) {
 
-        item {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
-            ) {
-
-                if (state.authedCards.isNotEmpty()) {
-                    TitledContent(
-                        title = stringResource(Res.string.bank_cards)
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-                        ) {
-                            state.authedCards.forEach { card ->
-                                AuthedCardTile(
-                                    icon = card.icon.asImage(),
-                                    iconBackground = card.color.asColor(),
-                                    cardName = card.name,
-                                    cardNumber = card.number,
-                                    balance = card.balance,
-                                    onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = MaterialTheme.spacing.medium)
-                                )
-                            }
-                        }
-                    }
-                }
-
+            if (state.authedCards.isNotEmpty()) {
                 TitledContent(
-                    title = stringResource(
-                        Res.string.custom_cards,
-                        state.customCards.size,
-                        CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
-                    )
+                    title = stringResource(Res.string.bank_cards)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
                     ) {
-                        state.customCards.forEach { card ->
-                            CustomCardTile(
+                        state.authedCards.forEach { card ->
+                            AuthedCardTile(
                                 icon = card.icon.asImage(),
                                 iconBackground = card.color.asColor(),
                                 cardName = card.name,
+                                cardNumber = card.number,
                                 balance = card.balance,
-                                onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
+                                onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = MaterialTheme.spacing.medium)
                             )
-                        }
-
-                        AnimatedVisibility(
-                            visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
-                        ) {
-                            OutlinedButton(
-                                text = stringResource(Res.string.create),
-                                onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                            )
-                        }
-                    }
-                }
-
-                if (state.unauthedCards.isNotEmpty()) {
-                    TitledContent(
-                        title = stringResource(Res.string.activate_cards)
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-                        ) {
-                            state.unauthedCards.forEach { card ->
-                                UnauthedCardTile(
-                                    icon = card.icon.asImage(),
-                                    iconBackground = card.color.asColor(),
-                                    cardName = card.name,
-                                    cardNumber = card.number,
-                                    onClick = { onAction(HomeAction.OnClickUnauthedCard(card.id)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = MaterialTheme.spacing.medium)
-                                )
-                            }
                         }
                     }
                 }
             }
 
-            Spacer(Modifier.height(MaterialTheme.spacing.medium))
+            TitledContent(
+                title = stringResource(
+                    Res.string.custom_cards,
+                    state.customCards.size,
+                    CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
+                )
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                ) {
+                    state.customCards.forEach { card ->
+                        CustomCardTile(
+                            icon = card.icon.asImage(),
+                            iconBackground = card.color.asColor(),
+                            cardName = card.name,
+                            balance = card.balance,
+                            onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.spacing.medium)
+                        )
+                    }
+
+                    AnimatedVisibility(
+                        visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
+                    ) {
+                        TonalButton(
+                            text = stringResource(Res.string.create),
+                            onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.spacing.medium)
+                        )
+                    }
+                }
+            }
+
+            if (state.unauthedCards.isNotEmpty()) {
+                TitledContent(
+                    title = stringResource(Res.string.activate_cards)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                    ) {
+                        state.unauthedCards.forEach { card ->
+                            UnauthedCardTile(
+                                icon = card.icon.asImage(),
+                                iconBackground = card.color.asColor(),
+                                cardName = card.name,
+                                cardNumber = card.number,
+                                onClick = { onAction(HomeAction.OnClickUnauthedCard(card.id)) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenContentPreview() {
     AppTheme {
         HomeScreenContent(
-            state = HomeState(),
+            state = HomeState(
+                authedCards = listOf(
+                    AuthedCardUi.of(
+                        createAuthedCard(
+                            name = "asdf",
+                            number = "3245",
+                            balance = 1234
+                        )
+                    )
+                )
+            ),
             onAction = { },
-            contentPadding = PaddingValues(MaterialTheme.spacing.medium),
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+            contentPadding = PaddingValues(MaterialTheme.spacing.medium)
         )
     }
 }

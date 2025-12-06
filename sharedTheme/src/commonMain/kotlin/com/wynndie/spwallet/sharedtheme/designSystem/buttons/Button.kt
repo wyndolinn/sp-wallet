@@ -40,7 +40,7 @@ fun Button(
                 MaterialTheme.colorScheme.primary
             }
         ),
-        modifier = modifier.height(MaterialTheme.sizing.medium)
+        modifier = modifier.height(MaterialTheme.sizing.large)
     ) {
         Crossfade(
             targetState = isLoading

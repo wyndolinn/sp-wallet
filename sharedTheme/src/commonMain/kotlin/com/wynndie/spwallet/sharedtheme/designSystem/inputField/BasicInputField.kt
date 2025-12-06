@@ -49,7 +49,7 @@ internal fun BasicInputField(
         onValueChange = onValueChange,
         enabled = enabled,
         readOnly = readOnly,
-        textStyle = MaterialTheme.typography.bodyMedium,
+        textStyle = MaterialTheme.typography.bodySmall,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
@@ -66,7 +66,7 @@ internal fun BasicInputField(
                     {
                         Text(
                             text = it,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.outline
                         )
                     }

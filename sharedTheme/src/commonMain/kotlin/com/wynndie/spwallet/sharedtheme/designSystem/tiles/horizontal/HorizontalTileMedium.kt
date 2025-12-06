@@ -91,7 +91,7 @@ fun HorizontalTileMedium(
                 Text(
                     modifier = Modifier,
                     text = it,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.labelMedium,
                     color = contentState.asLabelColor()
                 )
 
@@ -101,7 +101,7 @@ fun HorizontalTileMedium(
             Text(
                 modifier = Modifier,
                 text = title,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 color = contentState.asTitleColor()
             )
 
@@ -109,7 +109,7 @@ fun HorizontalTileMedium(
                 Text(
                     modifier = Modifier,
                     text = it,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelLarge,
                     color = contentState.asDescriptionColor()
                 )
             }

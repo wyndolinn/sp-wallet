@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -35,7 +36,8 @@ internal fun ButtonLayout(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight(600)
         )
 
         trailingIcon?.let {

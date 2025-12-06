@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedtheme.designSystem.buttons
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
 @Composable
@@ -30,8 +32,7 @@ fun IconButton(
     ) {
         IconButton(
             onClick = onClick,
-            enabled = enabled && !loading,
-            modifier = modifier
+            enabled = enabled && !loading
         ) {
             Image(
                 painter = icon,

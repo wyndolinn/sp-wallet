@@ -83,9 +83,9 @@ private fun CustomizationSheetContent(
                     border = FilterChipDefaults.filterChipBorder(
                         enabled = true,
                         selected = selectedColorChip == chip,
-                        borderWidth = MaterialTheme.sizing.extraExtraSmall.factor(1/2f),
+                        borderWidth = MaterialTheme.sizing.extraSmall.factor(1/2f),
                         borderColor = MaterialTheme.colorScheme.surface,
-                        selectedBorderWidth = MaterialTheme.sizing.extraExtraSmall.factor(1/2f),
+                        selectedBorderWidth = MaterialTheme.sizing.extraSmall.factor(1/2f),
                         selectedBorderColor = MaterialTheme.colorScheme.surface
                     ),
                     modifier = Modifier

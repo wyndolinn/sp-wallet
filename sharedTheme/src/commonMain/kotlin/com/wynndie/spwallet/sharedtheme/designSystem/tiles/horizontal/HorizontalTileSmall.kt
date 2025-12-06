@@ -48,7 +48,7 @@ fun HorizontalTileSmall(
     onClick: (() -> Unit)? = null
 ) {
 
-    val minContentHeight = MaterialTheme.sizing.extraSmall
+    val minContentHeight = MaterialTheme.sizing.small
 
     BaseHorizontalTile(
         leadingContent = leadingContent?.let {

@@ -15,17 +15,7 @@ data class Spacing(
     val medium: Dp = 16.dp,
     val large: Dp = 32.dp,
     val extraLarge: Dp = 64.dp
-) {
-    fun scale(factor: Float): Spacing {
-        return Spacing(
-            extraSmall = extraSmall * factor,
-            small = small * factor,
-            medium = medium * factor,
-            large = large * factor,
-            extraLarge = extraLarge * factor
-        )
-    }
-}
+)
 
 val LocalSpacing = compositionLocalOf { Spacing() }
 val MaterialTheme.spacing: Spacing

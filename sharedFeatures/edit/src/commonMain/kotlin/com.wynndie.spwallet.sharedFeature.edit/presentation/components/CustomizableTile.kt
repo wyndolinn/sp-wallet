@@ -46,7 +46,7 @@ fun CustomizableTile(
             painter = icon,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier.size(MaterialTheme.sizing.large)
+            modifier = Modifier.size(MaterialTheme.sizing.extraLarge)
         )
 
         Spacer(Modifier.weight(1f))

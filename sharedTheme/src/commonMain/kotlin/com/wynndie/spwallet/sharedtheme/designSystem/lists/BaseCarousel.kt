@@ -48,7 +48,7 @@ fun <T> BaseCarousel(
                 items.forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
-                            .size(MaterialTheme.sizing.extraExtraSmall.factor(1/3f))
+                            .size(MaterialTheme.sizing.extraSmall.factor(1/3f))
                             .clip(CircleShape)
                             .background(
                                 color = if (pagerState.currentPage == index) {

@@ -23,6 +23,7 @@ internal fun BaseTitledContent(
     content: @Composable () -> Unit
 ) {
     Column(
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         modifier = modifier
     ) {
         Row(
