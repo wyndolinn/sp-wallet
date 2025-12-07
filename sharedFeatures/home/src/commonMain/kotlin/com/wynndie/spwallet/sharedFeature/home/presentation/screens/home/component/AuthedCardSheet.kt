@@ -3,10 +3,9 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.compon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,6 +18,8 @@ import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.ic_people
+import com.wynndie.spwallet.sharedResources.ic_transaction
+import com.wynndie.spwallet.sharedResources.transfer_between_cards
 import com.wynndie.spwallet.sharedResources.transfer_by_number
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TextButton
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalIconButton
@@ -35,6 +36,7 @@ fun AuthedCardSheet(
     cards: List<AuthedCardUi>,
     page: Int,
     onDeleteButtonClick: () -> Unit,
+    onTransferBetweenCardsClick: (String) -> Unit,
     onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -46,6 +48,7 @@ fun AuthedCardSheet(
             page = page,
             onDeleteButtonClick = onDeleteButtonClick,
             onTransferButtonClick = onTransferButtonClick,
+            onTransferBetweenCardsClick = onTransferButtonClick,
             modifier = modifier
         )
     }
@@ -56,6 +59,7 @@ private fun AuthedCardSheetContent(
     cards: List<AuthedCardUi>,
     page: Int,
     onDeleteButtonClick: () -> Unit,
+    onTransferBetweenCardsClick: (String) -> Unit,
     onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -87,14 +91,24 @@ private fun AuthedCardSheetContent(
                 }
             }
 
-            TonalIconButton(
-                icon = painterResource(Res.drawable.ic_people),
-                text = stringResource(Res.string.transfer_by_number),
-                onClick = { onTransferButtonClick(cards[page].id) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            ) {
+                TonalIconButton(
+                    icon = painterResource(Res.drawable.ic_transaction),
+                    text = stringResource(Res.string.transfer_between_cards),
+                    onClick = { onTransferBetweenCardsClick(cards[page].id) },
+                    modifier = Modifier.weight(1f)
+                )
+
+                TonalIconButton(
+                    icon = painterResource(Res.drawable.ic_people),
+                    text = stringResource(Res.string.transfer_by_number),
+                    onClick = { onTransferButtonClick(cards[page].id) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
 
         TextButton(

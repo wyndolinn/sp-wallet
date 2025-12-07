@@ -2,42 +2,19 @@ package com.wynndie.spwallet.sharedCore.presentation.formatters.input
 
 sealed class InputFilterOptions(val predicate: (Char) -> Boolean) {
 
-    sealed class Text(
-        predicate: (Char) -> Boolean
-    ) : InputFilterOptions(predicate = predicate) {
+    data object LettersOrDigits : InputFilterOptions(predicate = {
+        it.isLetterOrDigit()
+    })
 
-        data object LettersOnly : Text(predicate = {
-            it.isLetter()
-        })
+    data object DigitsOnly : InputFilterOptions(predicate = {
+        it.isDigit()
+    })
 
-        data object LatinOnly : Text(predicate = {
-            it in 'a'..'z' || it in 'A'..'Z'
-        })
+    data object Uuid : InputFilterOptions(predicate = {
+        it.isDigit() || it in 'a'..'f' || it in 'A'..'F' || it == '-'
+    })
 
-        data object LettersOrDigits : Text(predicate = {
-            it.isLetterOrDigit()
-        })
-    }
-
-    sealed class Digits(
-        predicate: (Char) -> Boolean
-    ) : InputFilterOptions(predicate = predicate) {
-
-        data object DigitsOnly : Digits(predicate = {
-            it.isDigit()
-        })
-    }
-
-    sealed class Structured(
-        predicate: (Char) -> Boolean
-    ) : InputFilterOptions(predicate = predicate) {
-
-        data object Uuid : Structured(predicate = {
-            it.isDigit() || it in 'a'..'f' || it in 'A'..'F' || it == '-'
-        })
-
-        data object Base64 : Structured(predicate = {
-            it.isDigit() || it in 'a'..'z' || it in 'A'..'Z' || it == '+' || it == '/' || it == '='
-        })
-    }
+    data object Base64 : InputFilterOptions(predicate = {
+        it.isDigit() || it in 'a'..'z' || it in 'A'..'Z' || it == '+' || it == '/' || it == '='
+    })
 }

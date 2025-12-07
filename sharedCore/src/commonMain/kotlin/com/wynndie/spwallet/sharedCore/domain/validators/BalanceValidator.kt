@@ -12,7 +12,7 @@ class BalanceValidator : Validator<String> {
             return false to ValidationError.INVALID_CHARACTERS
 
         if (value.toLong() <= 0)
-            return false to ValidationError.INSUFFICIENT_VALUE
+            return false to ValidationError.BELOW_MINIMUM_VALUE
 
         return true to null
     }

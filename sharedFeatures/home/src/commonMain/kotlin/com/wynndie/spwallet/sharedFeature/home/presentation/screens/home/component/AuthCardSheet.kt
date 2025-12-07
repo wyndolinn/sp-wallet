@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -50,9 +51,11 @@ fun AuthCardSheet(
     cards: List<UnauthedCardUi>,
     initialPage: Int,
     tokenInputFieldState: InputFieldState,
-    onChangeTokenValue: (TextFieldValue) -> Unit,
     idInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
+    onToggleCardIdFocus: (Boolean) -> Unit,
+    onChangeTokenValue: (TextFieldValue) -> Unit,
+    onToggleCardTokenFocus: (Boolean) -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -68,10 +71,12 @@ fun AuthCardSheet(
             isAuthButtonEnabled = isAuthButtonEnabled,
             cards = cards,
             page = initialPage,
-            tokenInputFieldState = tokenInputFieldState,
-            onTokenValueChange = onChangeTokenValue,
             idInputFieldState = idInputFieldState,
+            tokenInputFieldState = tokenInputFieldState,
             onChangeIdValue = onChangeIdValue,
+            onToggleCardIdFocus = onToggleCardIdFocus,
+            onChangeTokenValue = onChangeTokenValue,
+            onToggleCardTokenFocus = onToggleCardTokenFocus,
             onClickAuthButton = onClickAuthButton,
             modifier = modifier
         )
@@ -83,10 +88,12 @@ private fun AuthCardSheetContent(
     isAuthButtonEnabled: Boolean,
     cards: List<UnauthedCardUi>,
     page: Int,
-    tokenInputFieldState: InputFieldState,
-    onTokenValueChange: (TextFieldValue) -> Unit,
     idInputFieldState: InputFieldState,
+    tokenInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
+    onToggleCardIdFocus: (Boolean) -> Unit,
+    onChangeTokenValue: (TextFieldValue) -> Unit,
+    onToggleCardTokenFocus: (Boolean) -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -142,13 +149,16 @@ private fun AuthCardSheetContent(
                         onNext = {
                             focusManager.moveFocus(FocusDirection.Down)
                         }
-                    )
+                    ),
+                    modifier = Modifier.onFocusChanged {
+                        onToggleCardIdFocus(it.isFocused)
+                    }
                 )
             }
 
             InputField(
                 value = tokenInputFieldState.value,
-                onValueChange = { onTokenValueChange(it) },
+                onValueChange = { onChangeTokenValue(it) },
                 label = stringResource(Res.string.enter_token),
                 placeholder = stringResource(Res.string.token),
                 supportingText = tokenInputFieldState.supportingText?.asString(),
@@ -162,7 +172,10 @@ private fun AuthCardSheetContent(
                         focusManager.clearFocus(true)
                         onClickAuthButton(cards[page].id, tokenInputFieldState.value.text)
                     }
-                )
+                ),
+                modifier = Modifier.onFocusChanged {
+                    onToggleCardTokenFocus(it.isFocused)
+                }
             )
 
             Text(

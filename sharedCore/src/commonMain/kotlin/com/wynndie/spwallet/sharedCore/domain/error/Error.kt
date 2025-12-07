@@ -17,17 +17,18 @@ sealed interface DataError : Error {
     }
 
     enum class Local : DataError {
-        DISK_FULL,
-        EMPTY_TABLE,
-        NO_MATCH_FOUND
+        DISK_FULL
     }
 }
 
 enum class ValidationError : Error {
     EMPTY_FIELD,
-    BELOW_MINIMUM,
-    ABOVE_MAXIMUM,
-    EXACT_VALUE_REQUIRED,
     INVALID_CHARACTERS,
-    INSUFFICIENT_VALUE
+    INVALID_FORMAT,
+    BELOW_MINIMUM_VALUE,
+    ABOVE_MAXIMUM_VALUE,
+    EXACT_VALUE_REQUIRED,
+    BELOW_MINIMUM_LENGTH,
+    ABOVE_MAXIMUM_LENGTH,
+    EXACT_LENGTH_REQUIRED
 }

@@ -9,13 +9,10 @@ import com.wynndie.spwallet.sharedResources.error_above_maximum_value
 import com.wynndie.spwallet.sharedResources.error_bad_request
 import com.wynndie.spwallet.sharedResources.error_below_minimum_value
 import com.wynndie.spwallet.sharedResources.error_empty_field
-import com.wynndie.spwallet.sharedResources.error_empty_table
 import com.wynndie.spwallet.sharedResources.error_forbidden
 import com.wynndie.spwallet.sharedResources.error_internal_server_error
 import com.wynndie.spwallet.sharedResources.error_invalid_characters
 import com.wynndie.spwallet.sharedResources.error_no_internet
-import com.wynndie.spwallet.sharedResources.error_no_match_found
-import com.wynndie.spwallet.sharedResources.error_not_enough_money
 import com.wynndie.spwallet.sharedResources.error_not_found
 import com.wynndie.spwallet.sharedResources.error_request_timeout
 import com.wynndie.spwallet.sharedResources.error_serialization
@@ -36,14 +33,15 @@ fun Error.asUiText(): UiText {
         DataError.Remote.UNKNOWN -> UiText.ResourceString(Res.string.error_unknown)
 
         DataError.Local.DISK_FULL -> UiText.ResourceString(Res.string.error_unknown)
-        DataError.Local.EMPTY_TABLE -> UiText.ResourceString(Res.string.error_empty_table)
-        DataError.Local.NO_MATCH_FOUND -> UiText.ResourceString(Res.string.error_no_match_found)
 
         ValidationError.EMPTY_FIELD -> UiText.ResourceString(Res.string.error_empty_field)
-        ValidationError.BELOW_MINIMUM -> UiText.ResourceString(Res.string.error_below_minimum_value)
-        ValidationError.ABOVE_MAXIMUM -> UiText.ResourceString(Res.string.error_above_maximum_value)
+        ValidationError.BELOW_MINIMUM_VALUE -> UiText.ResourceString(Res.string.error_below_minimum_value)
+        ValidationError.ABOVE_MAXIMUM_VALUE -> UiText.ResourceString(Res.string.error_above_maximum_value)
         ValidationError.EXACT_VALUE_REQUIRED -> UiText.ResourceString(Res.string.error_above_maximum_value)
         ValidationError.INVALID_CHARACTERS -> UiText.ResourceString(Res.string.error_invalid_characters)
-        ValidationError.INSUFFICIENT_VALUE -> UiText.ResourceString(Res.string.error_not_enough_money)
+        ValidationError.INVALID_FORMAT -> UiText.ResourceString(Res.string.error_unknown)
+        ValidationError.BELOW_MINIMUM_LENGTH -> UiText.ResourceString(Res.string.error_unknown)
+        ValidationError.ABOVE_MAXIMUM_LENGTH -> UiText.ResourceString(Res.string.error_unknown)
+        ValidationError.EXACT_LENGTH_REQUIRED -> UiText.ResourceString(Res.string.error_unknown)
     }
 }

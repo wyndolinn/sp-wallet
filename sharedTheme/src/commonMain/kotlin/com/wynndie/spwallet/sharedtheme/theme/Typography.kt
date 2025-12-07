@@ -102,22 +102,22 @@ val Typography = Typography(
     labelLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(400),
-        fontSize = 14.sp,
-        lineHeight = 14.sp,
-        letterSpacing = 0.2.sp
+        fontSize = 15.sp,
+        lineHeight = 15.sp,
+        letterSpacing = 0.3.sp
     ),
     labelMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(400),
-        fontSize = 12.sp,
-        lineHeight = 12.sp,
-        letterSpacing = 0.2.sp
+        fontSize = 13.sp,
+        lineHeight = 13.sp,
+        letterSpacing = 0.3.sp
     ),
     labelSmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight(400),
-        fontSize = 10.sp,
-        lineHeight = 10.sp,
-        letterSpacing = 0.2.sp
+        fontSize = 11.sp,
+        lineHeight = 11.sp,
+        letterSpacing = 0.3.sp
     )
 )

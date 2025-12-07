@@ -144,7 +144,7 @@ fun InputField(
             supportingText?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = contentState.asDescriptionColor()
                 )
             }

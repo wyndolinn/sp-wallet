@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.base.BaseHorizontalTile
 import com.wynndie.spwallet.sharedtheme.extensions.ContentState
 import com.wynndie.spwallet.sharedtheme.extensions.asDescriptionColor
@@ -101,7 +102,8 @@ fun HorizontalTileMedium(
             Text(
                 modifier = Modifier,
                 text = title,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight(600),
                 color = contentState.asTitleColor()
             )
 

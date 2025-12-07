@@ -40,18 +40,16 @@ fun Dialog(
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.fillMaxWidth()
             )
         },
         text = {
-            Column {
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth()
+            )
         },
         shape = MaterialTheme.shapes.medium,
         containerColor = MaterialTheme.colorScheme.surfaceContainer,

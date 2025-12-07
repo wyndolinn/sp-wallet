@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedtheme.designSystem.buttons
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -25,6 +26,14 @@ fun TextButton(
     TextButton(
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
+        enabled = enabled,
+        colors = ButtonDefaults.textButtonColors().copy(
+            contentColor = if (hasError) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.primary
+            }
+        ),
         modifier = modifier.height(MaterialTheme.sizing.medium)
     ) {
         Crossfade(

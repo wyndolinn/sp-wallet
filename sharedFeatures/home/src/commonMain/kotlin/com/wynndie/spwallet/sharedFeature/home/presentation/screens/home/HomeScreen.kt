@@ -34,7 +34,6 @@ import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.Custo
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
@@ -42,7 +41,6 @@ import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.compone
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthCardOffer
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthCardSheet
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthedCardSheet
-import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.DeactivateCardDialog
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate_cards
 import com.wynndie.spwallet.sharedResources.app_logo_foreground
@@ -51,10 +49,14 @@ import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedResources.bank_cards
 import com.wynndie.spwallet.sharedResources.create
 import com.wynndie.spwallet.sharedResources.custom_cards
+import com.wynndie.spwallet.sharedResources.deactivate
+import com.wynndie.spwallet.sharedResources.deactivate_card_description
+import com.wynndie.spwallet.sharedResources.deactivate_card_title
 import com.wynndie.spwallet.sharedResources.no_authed_cards
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalButton
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.Dialog
 import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.TitledContent
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
@@ -75,20 +77,21 @@ fun HomeScreenRoot(
         AuthCardSheet(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet(false)) },
             loadingState = state.authLoadingState,
-            isAuthButtonEnabled = state.authLoadingState !is LoadingState.Loading,
+            isAuthButtonEnabled = state.isAuthButtonEnabled,
             cards = state.unauthedCards,
             initialPage = state.carouselPage,
             idInputFieldState = state.idInputFieldState,
             onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
+            onToggleCardIdFocus = {
+                if (!it) viewModel.onAction(HomeAction.OnToggleCardIdFocus)
+            },
             tokenInputFieldState = state.tokenInputFieldState,
             onChangeTokenValue = { viewModel.onAction(HomeAction.OnChangeCardTokenValue(it)) },
+            onToggleCardTokenFocus = {
+                if (!it) viewModel.onAction(HomeAction.OnToggleCardTokenFocus)
+            },
             onClickAuthButton = { id, token ->
-                viewModel.onAction(
-                    HomeAction.OnClickAuthCard(
-                        id = id,
-                        token = token
-                    )
-                )
+                viewModel.onAction(HomeAction.OnClickAuthCard(id = id, token = token))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,8 +104,15 @@ fun HomeScreenRoot(
             onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet(false)) },
             cards = state.authedCards,
             page = state.carouselPage,
-            onDeleteButtonClick = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(true)) },
-            onTransferButtonClick = { viewModel.onAction(HomeAction.OnClickTransferByCard(it)) },
+            onDeleteButtonClick = {
+                viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(true))
+            },
+            onTransferBetweenCardsClick = {
+                viewModel.onAction(HomeAction.OnClickTransferBetweenCard(it))
+            },
+            onTransferButtonClick = {
+                viewModel.onAction(HomeAction.OnClickTransferByCard(it))
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.medium)
@@ -110,16 +120,17 @@ fun HomeScreenRoot(
     }
 
     if (state.isDeactivateCardDialogVisible) {
-        DeactivateCardDialog(
+        Dialog(
             onConfirm = {
                 viewModel.onAction(
-                    HomeAction.OnClickDeactivateCard(
-                        card = state.authedCards[state.carouselPage]
-                    )
+                    HomeAction.OnClickDeactivateCard(state.authedCards[state.carouselPage])
                 )
             },
             onDismiss = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(false)) },
-            modifier = Modifier
+            title = stringResource(Res.string.deactivate_card_title),
+            description = stringResource(Res.string.deactivate_card_description),
+            confirmButtonText = stringResource(Res.string.deactivate),
+            isDestructive = true
         )
     }
 
@@ -344,14 +355,12 @@ fun HomeScreenContentPreview() {
         HomeScreenContent(
             state = HomeState(
                 authedCards = listOf(
-                    AuthedCardUi.of(
-                        createAuthedCard(
-                            name = "asdf",
-                            number = "3245",
-                            balance = 1234
-                        )
+                    createAuthedCard(
+                        name = "asdf",
+                        number = "3245",
+                        balance = 1234
                     )
-                )
+                ).map { AuthedCardUi.of(it) }
             ),
             onAction = { },
             contentPadding = PaddingValues(MaterialTheme.spacing.medium)

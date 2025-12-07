@@ -23,4 +23,6 @@ sealed interface HomeAction {
 
     data class OnChangeCardIdValue(val value: TextFieldValue) : HomeAction
     data class OnChangeCardTokenValue(val value: TextFieldValue) : HomeAction
+    data object OnToggleCardIdFocus : HomeAction
+    data object OnToggleCardTokenFocus : HomeAction
 }

@@ -100,7 +100,7 @@ class CustomCardViewModel(
 
             is CustomCardAction.OnChangeNameValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
+                    .filterBy(InputFilterOptions.LettersOrDigits.predicate)
                     .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
@@ -113,7 +113,7 @@ class CustomCardViewModel(
 
             is CustomCardAction.OnChangeBalanceValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
+                    .filterBy(InputFilterOptions.DigitsOnly.predicate)
                     .dropFirst('0')
                     .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 

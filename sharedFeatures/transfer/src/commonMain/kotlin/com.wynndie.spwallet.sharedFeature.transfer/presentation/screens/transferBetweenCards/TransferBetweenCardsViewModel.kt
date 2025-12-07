@@ -110,7 +110,7 @@ class TransferBetweenCardsViewModel(
 
             is TransferBetweenCardsAction.OnChangeTransferAmountValueAction -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
+                    .filterBy(InputFilterOptions.DigitsOnly.predicate)
                     .dropFirst('0')
                     .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 

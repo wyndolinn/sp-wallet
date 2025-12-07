@@ -11,22 +11,28 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavCo
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
+import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
-import com.wynndie.spwallet.sharedFeature.home.domain.validator.TokenValidator
-import com.wynndie.spwallet.sharedFeature.home.domain.validator.UuidValidator
+import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
+import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent.OnClickCustomCard
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent.OnClickTransferBetweenCards
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent.OnClickTransferByCard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -45,9 +51,8 @@ class HomeViewModel(
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            syncWithRemote()
-        }
+        syncWithRemote()
+
 
         userRepository.getAuthedUsers().onEach { users ->
             users.firstOrNull()?.let { user ->
@@ -74,15 +79,29 @@ class HomeViewModel(
             }
             updateBalance()
         }.launchIn(viewModelScope)
+
+
+        combine(
+            _state.map { it.idInputFieldState.value.text }.distinctUntilChanged(),
+            _state.map { it.tokenInputFieldState.value.text }.distinctUntilChanged()
+        ) { id, token ->
+
+            val validationResults = listOf(
+                uuidValidator.validate(id),
+                tokenValidator.validate(token)
+            ).map { it.first }
+
+            _state.update {
+                it.copy(isAuthButtonEnabled = validationResults.all { isValid -> isValid })
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: HomeAction) {
         when (action) {
             HomeAction.OnRefresh -> {
-                viewModelScope.launch {
-                    closeAllDialogs()
-                    syncWithRemote()
-                }
+                closeAllDialogs()
+                syncWithRemote()
             }
 
 
@@ -128,7 +147,7 @@ class HomeViewModel(
 
 
                 viewModelScope.launch {
-                    NavController.navigate(HomeNavEvent.OnClickTransferBetweenCards(action.cardId))
+                    NavController.navigate(OnClickTransferBetweenCards(action.cardId))
                 }
             }
 
@@ -188,7 +207,7 @@ class HomeViewModel(
 
             is HomeAction.OnClickTransferByCard -> {
                 viewModelScope.launch {
-                    NavController.navigate(HomeNavEvent.OnClickTransferByCard(action.cardId))
+                    NavController.navigate(OnClickTransferByCard(action.cardId))
                     closeAllDialogs()
                 }
             }
@@ -196,7 +215,7 @@ class HomeViewModel(
 
             is HomeAction.OnClickCustomCard -> {
                 viewModelScope.launch {
-                    NavController.navigate(HomeNavEvent.OnClickCustomCard(action.cardId))
+                    NavController.navigate(OnClickCustomCard(action.cardId))
                     closeAllDialogs()
                 }
             }
@@ -227,7 +246,7 @@ class HomeViewModel(
 
             is HomeAction.OnChangeCardIdValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Structured.Uuid.predicate)
+                    .filterBy(InputFilterOptions.Uuid.predicate)
                     .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
@@ -241,7 +260,7 @@ class HomeViewModel(
 
             is HomeAction.OnChangeCardTokenValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Structured.Base64.predicate)
+                    .filterBy(InputFilterOptions.Base64.predicate)
                     .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
                 _state.update { state ->
@@ -252,21 +271,31 @@ class HomeViewModel(
                     )
                 }
             }
+
+            HomeAction.OnToggleCardIdFocus -> {
+                isCardIdValid(state.value.idInputFieldState.value.text)
+            }
+
+            HomeAction.OnToggleCardTokenFocus -> {
+                isCardTokenValid(state.value.tokenInputFieldState.value.text)
+            }
         }
     }
 
-    private suspend fun syncWithRemote() {
-        _state.update {
-            it.copy(screenLoadingState = LoadingState.Loading)
-        }
-
-        syncWithRemoteUseCase()
-            .onError { error ->
-                OverlayController.send(OverlayType.Snackbar(error.asUiText()))
+    private fun syncWithRemote() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(screenLoadingState = LoadingState.Loading)
             }
 
-        _state.update {
-            it.copy(screenLoadingState = LoadingState.Finished)
+            syncWithRemoteUseCase()
+                .onError { error ->
+                    OverlayController.send(OverlayType.Snackbar(error.asUiText()))
+                }
+
+            _state.update {
+                it.copy(screenLoadingState = LoadingState.Finished)
+            }
         }
     }
 

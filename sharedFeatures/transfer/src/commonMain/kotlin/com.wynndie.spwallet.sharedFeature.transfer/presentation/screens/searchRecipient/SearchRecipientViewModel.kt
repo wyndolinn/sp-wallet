@@ -95,7 +95,7 @@ class SearchRecipientViewModel(
 
             is SearchRecipientAction.OnChangeRecipientValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
+                    .filterBy(InputFilterOptions.LettersOrDigits.predicate)
                     .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
 
                 _state.update { state ->

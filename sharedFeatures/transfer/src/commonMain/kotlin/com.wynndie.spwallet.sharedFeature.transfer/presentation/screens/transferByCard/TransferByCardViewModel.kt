@@ -147,7 +147,7 @@ class TransferByCardViewModel(
 
             is TransferByCardAction.OnChangeTransferAmountValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Digits.DigitsOnly.predicate)
+                    .filterBy(InputFilterOptions.DigitsOnly.predicate)
                     .dropFirst('0')
                     .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
@@ -162,7 +162,7 @@ class TransferByCardViewModel(
 
             is TransferByCardAction.OnChangeCommentValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.Text.LettersOrDigits.predicate)
+                    .filterBy(InputFilterOptions.LettersOrDigits.predicate)
                     .cutOffAt(CoreConstants.MAX_COMMENT_LENGTH) ?: return
 
                 _state.update { state ->
