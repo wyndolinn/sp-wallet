@@ -20,7 +20,6 @@ class SyncWithRemoteUseCase(
     suspend operator fun invoke(): EmptyOutcome<DataError> {
         var authedCards = cardsRepository.getAuthedCards().first()
         var unAuthedUser: UnauthedUser? = null
-
         authedCards.forEach { authedCard ->
             updateAuthedCard(authedCard)
                 .onError { error -> return Outcome.Error(error) }

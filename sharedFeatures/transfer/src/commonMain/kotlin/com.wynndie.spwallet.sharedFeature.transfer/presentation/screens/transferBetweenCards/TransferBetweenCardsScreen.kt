@@ -16,15 +16,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +40,7 @@ import com.wynndie.spwallet.sharedResources.between_cards
 import com.wynndie.spwallet.sharedResources.enter_transfer_amount
 import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_amount
+import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
@@ -63,6 +58,13 @@ fun TransferBetweenCardsScreenRoot(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = stringResource(Res.string.between_cards),
+                onClickBack = { viewModel.onAction(TransferBetweenCardsAction.OnClickBack) },
+                scrollBehavior = scrollBehavior
+            )
+        },
         modifier = Modifier
             .imePadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -70,29 +72,7 @@ fun TransferBetweenCardsScreenRoot(
                 detectTapGestures(
                     onTap = { focusManager.clearFocus(true) }
                 )
-            },
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        onClick = { viewModel.onAction(TransferBetweenCardsAction.OnClickBack) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
-                        )
-                    }
-                },
-                title = {
-                    Text(
-                        text = stringResource(Res.string.between_cards),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
+            }
     ) { innerPadding ->
 
         Crossfade(

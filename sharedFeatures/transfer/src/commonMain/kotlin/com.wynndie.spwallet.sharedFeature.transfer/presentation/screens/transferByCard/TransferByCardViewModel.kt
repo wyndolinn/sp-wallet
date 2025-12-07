@@ -6,11 +6,12 @@ import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
+import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
-import com.wynndie.spwallet.sharedCore.domain.validators.TransferCommentValidator
+import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
@@ -47,6 +48,8 @@ class TransferByCardViewModel(
     private val _state = MutableStateFlow(TransferByCardState())
     val state = _state.asStateFlow()
 
+    private var recipients = emptyList<RecipientCard>()
+
     init {
         userRepository.getAuthedUsers().onEach { users ->
             val user = users.firstOrNull() ?: return@onEach
@@ -74,15 +77,8 @@ class TransferByCardViewModel(
             }
         }.launchIn(viewModelScope)
 
-        recipientRepository.getRecipients().onEach { recipients ->
-            val recipient = recipients.find { it.id == _state.value.recipient.id }
-                ?: emptyRecipientCard.copy(number = _state.value.recipient.number)
-
-            _state.update { state ->
-                state.copy(
-                    recipient = RecipientCardUi.of(recipient)
-                )
-            }
+        recipientRepository.getRecipients().onEach { recipientCards ->
+            recipients = recipientCards
         }.launchIn(viewModelScope)
     }
 
@@ -183,7 +179,6 @@ class TransferByCardViewModel(
             }
 
             if (id != _state.value.recipient.id) {
-                val recipients = recipientRepository.getRecipients().first()
                 val recipient = recipients.find { it.id == _state.value.recipient.id }
                     ?: emptyRecipientCard.copy(number = _state.value.recipient.number)
 

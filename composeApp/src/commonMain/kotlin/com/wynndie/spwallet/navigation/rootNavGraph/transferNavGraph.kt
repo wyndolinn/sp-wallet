@@ -117,12 +117,6 @@ fun NavGraphBuilder.transferNavGraph(
                 )
             )
 
-            val recipientId by recipientViewModel.recipientId.collectAsStateWithLifecycle()
-            val recipientCardNumber by recipientViewModel.recipientCardNumber.collectAsStateWithLifecycle()
-            LaunchedEffect(recipientId, recipientCardNumber) {
-                viewModel.updateRecipient(recipientId, recipientCardNumber)
-            }
-
             ObserveNavEvent<TransferByCardNavEvent> { navEvent ->
                 when (navEvent) {
                     TransferByCardNavEvent.OnClickBack -> {
@@ -135,6 +129,12 @@ fun NavGraphBuilder.transferNavGraph(
                         }
                     }
                 }
+            }
+
+            val recipientId by recipientViewModel.recipientId.collectAsStateWithLifecycle()
+            val recipientCardNumber by recipientViewModel.recipientCardNumber.collectAsStateWithLifecycle()
+            LaunchedEffect(recipientId, recipientCardNumber) {
+                viewModel.updateRecipient(recipientId, recipientCardNumber)
             }
 
             TransferByCardScreenRoot(

@@ -3,12 +3,11 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchR
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,9 +39,7 @@ class SearchRecipientViewModel(
                 when {
                     query.isBlank() -> {
                         _state.update {
-                            it.copy(
-                                recipients = cachedRecipients
-                            )
+                            it.copy(recipients = cachedRecipients)
                         }
                     }
 
@@ -50,7 +47,9 @@ class SearchRecipientViewModel(
                         _state.update { state ->
                             state.copy(
                                 recipients = cachedRecipients.filter { recipient ->
-                                    recipient.number.contains(query) || recipient.name.contains(query)
+                                    recipient.number.contains(query) || recipient.name.contains(
+                                        query
+                                    )
                                 }
                             )
                         }

@@ -9,10 +9,10 @@ class TokenValidator : Validator<String> {
         if (value.isBlank())
             return false to ValidationError.EMPTY_FIELD
 
-        if (!base64CharsRegex.matches(value))
+        if (!value.matches(base64CharsRegex))
             return false to ValidationError.INVALID_CHARACTERS
 
-        if (!base64FormatRegex.matches(value))
+        if (!value.matches(base64FormatRegex))
             return false to ValidationError.INVALID_FORMAT
 
         return true to null

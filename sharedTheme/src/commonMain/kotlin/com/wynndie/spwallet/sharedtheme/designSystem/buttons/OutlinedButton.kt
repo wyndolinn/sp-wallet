@@ -25,7 +25,7 @@ fun OutlinedButton(
     OutlinedButton(
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.height(MaterialTheme.sizing.large)
+        modifier = modifier.height(MaterialTheme.sizing.extraLarge)
     ) {
         Crossfade(
             targetState = isLoading

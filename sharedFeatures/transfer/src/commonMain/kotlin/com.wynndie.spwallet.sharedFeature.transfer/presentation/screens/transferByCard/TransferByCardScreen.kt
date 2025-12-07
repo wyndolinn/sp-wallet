@@ -16,15 +16,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,8 +40,10 @@ import com.wynndie.spwallet.sharedResources.by_number
 import com.wynndie.spwallet.sharedResources.comment
 import com.wynndie.spwallet.sharedResources.enter_comment
 import com.wynndie.spwallet.sharedResources.enter_transfer_amount
+import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_amount
+import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
@@ -66,6 +62,13 @@ fun TransferByCardScreenRoot(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = stringResource(Res.string.by_number),
+                onClickBack = { viewModel.onAction(TransferByCardAction.OnClickBack) },
+                scrollBehavior = scrollBehavior
+            )
+        },
         modifier = Modifier
             .imePadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -73,29 +76,7 @@ fun TransferByCardScreenRoot(
                 detectTapGestures(
                     onTap = { focusManager.clearFocus(true) }
                 )
-            },
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        onClick = { viewModel.onAction(TransferByCardAction.OnClickBack) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
-                        )
-                    }
-                },
-                title = {
-                    Text(
-                        text = stringResource(Res.string.by_number),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
+            }
     ) { innerPadding ->
 
         Crossfade(
@@ -165,7 +146,7 @@ private fun TransferByNumberScreen(
             RecipientCardTile(
                 icon = state.recipient.icon.asImage(),
                 iconBackground = state.recipient.color.asColor(),
-                cardName = state.recipient.name,
+                cardName = state.recipient.name.ifBlank { stringResource(Res.string.recipient) },
                 cardNumber = state.recipient.number,
                 onClick = { onAction(TransferByCardAction.OnClickRecipient) },
                 modifier = Modifier
