@@ -14,7 +14,6 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNumberValidator
-import com.wynndie.spwallet.sharedCore.domain.validators.TransferCommentValidator
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -32,5 +31,4 @@ val coreSharedModule = module {
     singleOf(::BalanceValidator)
     singleOf(::CardNameValidator)
     singleOf(::CardNumberValidator)
-    singleOf(::TransferCommentValidator)
 }

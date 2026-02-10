@@ -20,6 +20,7 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
@@ -196,7 +197,7 @@ class CustomCardViewModel(
     }
 
     private fun isCardBalanceValid(value: String): Boolean {
-        val (isValid, error) = balanceValidator.validate(value)
+        val (isValid, error) = balanceValidator.validate(BalanceValidationValues(value))
         _state.update { state ->
             state.copy(
                 balanceInputFieldState = state.balanceInputFieldState.copy(

@@ -7,6 +7,7 @@ import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
@@ -136,7 +137,13 @@ class TransferBetweenCardsViewModel(
 
 
     private fun isTransferAmountValid(value: String): Boolean {
-        val (isValid, error) = transferAmountValidator.validate(value)
+
+        val validationValues = BalanceValidationValues(
+            value = value,
+            maxValue = _state.value.sourceCards[_state.value.sourceCardsCarouselPage].balance.value
+        )
+
+        val (isValid, error) = transferAmountValidator.validate(validationValues)
         _state.update { state ->
             state.copy(
                 amountInputFieldState = state.amountInputFieldState.copy(

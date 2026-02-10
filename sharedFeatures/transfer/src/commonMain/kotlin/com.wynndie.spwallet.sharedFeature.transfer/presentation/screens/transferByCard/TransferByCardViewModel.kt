@@ -25,6 +25,7 @@ import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
+import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -206,7 +207,13 @@ class TransferByCardViewModel(
 
 
     private fun isTransferAmountValid(value: String): Boolean {
-        val (isValid, error) = transferAmountValidator.validate(value)
+
+        val validationValues = BalanceValidationValues(
+            value = value,
+            maxValue = _state.value.cards[_state.value.carouselPage].balance.value
+        )
+
+        val (isValid, error) = transferAmountValidator.validate(validationValues)
         _state.update { state ->
             state.copy(
                 amountInputFieldState = state.amountInputFieldState.copy(

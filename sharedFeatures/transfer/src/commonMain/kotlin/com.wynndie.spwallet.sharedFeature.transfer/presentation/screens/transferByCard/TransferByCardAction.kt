@@ -17,6 +17,4 @@ sealed interface TransferByCardAction {
 
     data class OnChangeTransferAmountValue(val value: TextFieldValue) : TransferByCardAction
     data class OnChangeCommentValue(val value: TextFieldValue) : TransferByCardAction
-
-    data
 }
