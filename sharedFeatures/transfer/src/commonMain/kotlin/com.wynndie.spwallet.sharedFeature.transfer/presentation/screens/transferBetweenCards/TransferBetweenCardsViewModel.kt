@@ -12,11 +12,11 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavCo
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -24,9 +24,11 @@ import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCar
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -39,7 +41,19 @@ class TransferBetweenCardsViewModel(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TransferBetweenCardsState())
-    val state = _state.asStateFlow()
+    val state = _state.map { state ->
+        state.sourceCards.getOrNull(state.sourceCardsCarouselPage)?.let { sourceCard ->
+            state.copy(
+                destinationCards = state.destinationCards.filter {
+                    it.id != sourceCard.id
+                }
+            )
+        } ?: state
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = _state.value
+    )
 
     init {
         combine(
