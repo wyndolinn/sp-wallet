@@ -165,7 +165,6 @@ private fun TransferByNumberScreen(
                 value = state.amountInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
                 label = stringResource(Res.string.enter_transfer_amount),
-                placeholder = stringResource(Res.string.transfer_amount),
                 supportingText = state.amountInputFieldState.supportingText?.asString(),
                 hasError = state.amountInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
@@ -184,7 +183,6 @@ private fun TransferByNumberScreen(
                 value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
                 label = stringResource(Res.string.enter_comment),
-                placeholder = stringResource(Res.string.comment),
                 supportingText = state.commentInputFieldState.supportingText?.asString(),
                 hasError = state.commentInputFieldState.hasError,
                 singleLine = false,

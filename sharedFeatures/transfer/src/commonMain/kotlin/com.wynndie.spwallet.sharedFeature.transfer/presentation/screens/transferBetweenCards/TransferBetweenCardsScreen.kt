@@ -170,7 +170,6 @@ private fun TransferBetweenCardsScreenContent(
                     )
                 },
                 label = stringResource(Res.string.enter_transfer_amount),
-                placeholder = stringResource(Res.string.transfer_amount),
                 supportingText = state.amountInputFieldState.supportingText?.asString(),
                 hasError = state.amountInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
