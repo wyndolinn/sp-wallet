@@ -11,7 +11,7 @@ actual class WalletDatabaseFactory(
 
     actual fun create(): RoomDatabase.Builder<WalletDatabase> {
         val appContext = context.applicationContext
-        val dbFile = appContext.getDatabasePath(WalletDatabase.Companion.DB_NAME)
+        val dbFile = appContext.getDatabasePath(WalletDatabase.DB_NAME)
 
         return Room.databaseBuilder(
             context = appContext,
