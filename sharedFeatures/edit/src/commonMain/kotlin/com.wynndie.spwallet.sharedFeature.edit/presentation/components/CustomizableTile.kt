@@ -1,7 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,11 +19,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColorGradient
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
+import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.sizing
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CustomizableTile(
@@ -35,12 +41,11 @@ fun CustomizableTile(
 ) {
     Row(
         verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .background(color)
+            .cardColorGradient(color)
             .clickable(onClick = onClick)
             .padding(MaterialTheme.spacing.small)
-            .then(modifier)
     ) {
         Image(
             painter = icon,
@@ -57,7 +62,7 @@ fun CustomizableTile(
         ) {
             Text(
                 text = stringResource(Res.string.edit),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )
 
@@ -67,5 +72,18 @@ fun CustomizableTile(
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CustomizableTilePreview() {
+    AppTheme {
+        CustomizableTile(
+            color = CardColors.LIGHT_BLUE.asColor(),
+            icon = CardIcons.CASH.asImage(),
+            onClick = {},
+            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+        )
     }
 }

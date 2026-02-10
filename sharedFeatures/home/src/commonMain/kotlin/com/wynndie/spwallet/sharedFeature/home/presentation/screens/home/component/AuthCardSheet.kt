@@ -2,8 +2,8 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.compon
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -21,11 +21,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.UnauthedCardUi
+import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
@@ -112,19 +112,16 @@ private fun AuthCardSheetContent(
             BaseCarousel(
                 items = cards,
                 page = page,
-                modifier = Modifier
+                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+                pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
-                Box(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-                ) {
-                    UnauthedCardTile(
-                        icon = card.icon.asImage(),
-                        iconBackground = card.color.asColor(),
-                        cardName = card.name,
-                        cardNumber = card.number,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                TransferCardTile(
+                    name = card.name,
+                    number = card.number,
+                    icon = card.icon.asImage(),
+                    color = card.color.asColor(),
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,16 +31,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.RecipientCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.between_cards
 import com.wynndie.spwallet.sharedResources.enter_transfer_amount
 import com.wynndie.spwallet.sharedResources.transfer
-import com.wynndie.spwallet.sharedResources.transfer_amount
+import com.wynndie.spwallet.sharedResources.transfer_from
+import com.wynndie.spwallet.sharedResources.transfer_to
 import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
@@ -126,11 +127,12 @@ private fun TransferBetweenCardsScreenContent(
                 Box(
                     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
                 ) {
-                    AuthedCardTile(
+                    TransferCardTile(
+                        title = stringResource(Res.string.transfer_from),
                         icon = card.icon.asImage(),
-                        iconBackground = card.color.asColor(),
-                        cardName = card.name,
-                        cardNumber = card.number,
+                        color = card.color.asColor(),
+                        name = card.name,
+                        number = card.number,
                         balance = card.balance,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -140,19 +142,18 @@ private fun TransferBetweenCardsScreenContent(
             BaseCarousel(
                 items = state.destinationCards,
                 page = state.destinationCardsCarouselPage,
-                modifier = Modifier
+                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+                pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
-                Box(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-                ) {
-                    RecipientCardTile(
-                        icon = card.icon.asImage(),
-                        iconBackground = card.color.asColor(),
-                        cardName = card.name,
-                        cardNumber = card.number ?: "",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                TransferCardTile(
+                    title = stringResource(Res.string.transfer_to),
+                    icon = card.icon.asImage(),
+                    color = card.color.asColor(),
+                    name = card.name,
+                    number = card.number ?: "",
+                    balance = card.balance,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 

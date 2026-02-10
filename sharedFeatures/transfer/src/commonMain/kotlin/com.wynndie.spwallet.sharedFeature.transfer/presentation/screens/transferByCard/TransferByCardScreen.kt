@@ -30,19 +30,18 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.RecipientCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number
-import com.wynndie.spwallet.sharedResources.comment
 import com.wynndie.spwallet.sharedResources.enter_comment
 import com.wynndie.spwallet.sharedResources.enter_transfer_amount
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.transfer
-import com.wynndie.spwallet.sharedResources.transfer_amount
+import com.wynndie.spwallet.sharedResources.transfer_from
+import com.wynndie.spwallet.sharedResources.transfer_to
 import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
@@ -132,22 +131,26 @@ private fun TransferByNumberScreen(
                 Box(
                     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
                 ) {
-                    AuthedCardTile(
+                    TransferCardTile(
+                        title = stringResource(Res.string.transfer_from),
                         icon = card.icon.asImage(),
-                        iconBackground = card.color.asColor(),
-                        cardName = card.name,
-                        cardNumber = card.number,
+                        color = card.color.asColor(),
+                        name = card.name,
+                        number = card.number,
                         balance = card.balance,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
 
-            RecipientCardTile(
+            TransferCardTile(
+                title = stringResource(Res.string.transfer_to),
                 icon = state.recipient.icon.asImage(),
-                iconBackground = state.recipient.color.asColor(),
-                cardName = state.recipient.name.ifBlank { stringResource(Res.string.recipient) },
-                cardNumber = state.recipient.number,
+                color = if (state.recipient.name.isNotBlank()) {
+                    state.recipient.color.asColor()
+                } else MaterialTheme.colorScheme.tertiary,
+                name = state.recipient.name.ifBlank { stringResource(Res.string.recipient) },
+                number = state.recipient.number,
                 onClick = { onAction(TransferByCardAction.OnClickRecipient) },
                 modifier = Modifier
                     .fillMaxWidth()

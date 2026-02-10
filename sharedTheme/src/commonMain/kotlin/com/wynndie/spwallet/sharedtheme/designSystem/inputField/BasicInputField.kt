@@ -94,7 +94,7 @@ internal fun BasicInputField(
                 },
                 contentPadding = PaddingValues(
                     horizontal = MaterialTheme.spacing.medium,
-                    vertical = MaterialTheme.spacing.small
+                    vertical = 12.dp
                 )
             )
         },

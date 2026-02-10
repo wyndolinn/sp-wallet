@@ -17,15 +17,12 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,11 +33,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
-import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsAmount
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.component.CustomizationSheet
@@ -54,10 +49,10 @@ import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.enter_card_name
 import com.wynndie.spwallet.sharedResources.no_name
 import com.wynndie.spwallet.sharedResources.save
-import com.wynndie.spwallet.sharedResources.x_of_ore
+import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutMedium
 import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
+import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
@@ -95,23 +90,8 @@ fun CustomCardScreenRoot(
     Scaffold(
         topBar = {
             TopAppBar(
-                navigationIcon = {
-                    IconButton(
-                        onClick = { viewModel.onAction(CustomCardAction.OnClickBack) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null
-                        )
-                    }
-                },
-                title = {
-                    Text(
-                        text = stringResource(Res.string.cash_account),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
+                title = stringResource(Res.string.cash_account),
+                onClickBack = { viewModel.onAction(CustomCardAction.OnClickBack) },
                 actions = {
                     if (state.card.id.isNotBlank()) {
                         IconButton(
@@ -182,14 +162,9 @@ private fun CustomCardScreen(
         modifier = modifier
     ) {
 
-        InfoLayoutMedium(
-            label = state.card.name.ifBlank { stringResource(Res.string.no_name) },
-            title = stringResource(
-                Res.string.x_of_ore,
-                state.card.balance.value.toString().formatAsAmount()
-            ).uppercase(),
-            description = state.card.balance.formatted.joinToUiText(" ").asString(),
-            modifier = Modifier
+        BalanceComponent(
+            title = state.card.name.ifBlank { stringResource(Res.string.no_name) },
+            balance = state.card.balance
         )
 
         Spacer(Modifier.height(MaterialTheme.spacing.large))

@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.base.BaseInfoLayout
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 
@@ -39,7 +38,7 @@ fun InfoLayoutSmall(
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
@@ -50,7 +49,7 @@ fun InfoLayoutSmall(
             {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = textAlign,
                     modifier = Modifier.fillMaxWidth()
