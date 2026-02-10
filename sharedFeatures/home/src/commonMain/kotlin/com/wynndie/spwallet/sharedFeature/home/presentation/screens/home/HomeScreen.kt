@@ -321,29 +321,6 @@ private fun HomeScreenContent(
                     }
                 }
             }
-
-            if (state.unauthedCards.isNotEmpty()) {
-                TitledContent(
-                    title = stringResource(Res.string.activate_cards)
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-                    ) {
-                        state.unauthedCards.forEach { card ->
-                            UnauthedCardTile(
-                                icon = card.icon.asImage(),
-                                iconBackground = card.color.asColor(),
-                                cardName = card.name,
-                                cardNumber = card.number,
-                                onClick = { onAction(HomeAction.OnClickUnauthedCard(card.id)) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
 }
