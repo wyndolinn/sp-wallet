@@ -50,7 +50,6 @@ fun NavGraphBuilder.transferNavGraph(
                     }
 
                     is SearchRecipientNavEvent.OnClickRecipient -> {
-                        recipientViewModel.setRecipientId(navEvent.id)
                         recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
 
                         navController.navigate(
@@ -62,7 +61,7 @@ fun NavGraphBuilder.transferNavGraph(
                         }
                     }
 
-                    is SearchRecipientNavEvent.OnClickEditRecipient -> {
+                    is SearchRecipientNavEvent.OnClickAddRecipient -> {
 
                     }
                 }
@@ -87,13 +86,12 @@ fun NavGraphBuilder.transferNavGraph(
                     }
 
                     is SearchRecipientNavEvent.OnClickRecipient -> {
-                        recipientViewModel.setRecipientId(navEvent.id)
                         recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
 
                         navController.navigateUp()
                     }
 
-                    is SearchRecipientNavEvent.OnClickEditRecipient -> {
+                    is SearchRecipientNavEvent.OnClickAddRecipient -> {
 
                     }
                 }
@@ -131,10 +129,9 @@ fun NavGraphBuilder.transferNavGraph(
                 }
             }
 
-            val recipientId by recipientViewModel.recipientId.collectAsStateWithLifecycle()
             val recipientCardNumber by recipientViewModel.recipientCardNumber.collectAsStateWithLifecycle()
-            LaunchedEffect(recipientId, recipientCardNumber) {
-                viewModel.updateRecipient(recipientId, recipientCardNumber)
+            LaunchedEffect(recipientCardNumber) {
+                viewModel.updateRecipient(recipientCardNumber)
             }
 
             TransferByCardScreenRoot(

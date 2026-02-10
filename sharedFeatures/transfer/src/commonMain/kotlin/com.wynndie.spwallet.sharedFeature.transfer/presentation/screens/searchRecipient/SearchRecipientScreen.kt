@@ -111,10 +111,7 @@ private fun SearchRecipientScreenContent(
                             cardOwner = recipient.name,
                             onClick = {
                                 onAction(
-                                    SearchRecipientAction.OnClickRecipient(
-                                        cardNumber = recipient.number,
-                                        id = recipient.id
-                                    )
+                                    SearchRecipientAction.OnClickRecipient(recipient.number)
                                 )
                             },
                             modifier = Modifier.fillMaxWidth()

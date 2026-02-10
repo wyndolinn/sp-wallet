@@ -3,7 +3,6 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transfe
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
@@ -11,7 +10,7 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
-import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
@@ -22,7 +21,6 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
@@ -30,7 +28,6 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -39,7 +36,7 @@ import kotlinx.coroutines.launch
 class TransferByCardViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
-    private val recipientRepository: RecipientRepository,
+    recipientRepository: RecipientRepository,
     private val args: TransferByCardViewModelArgs,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: BalanceValidator,
@@ -173,27 +170,15 @@ class TransferByCardViewModel(
         }
     }
 
-    fun updateRecipient(id: String?, cardNumber: String) {
+    fun updateRecipient(cardNumber: String) {
         viewModelScope.launch {
             _state.update {
                 it.copy(loadingState = LoadingState.Loading)
             }
 
-            if (id != _state.value.recipient.id) {
-                val recipient = recipients.find { it.id == _state.value.recipient.id }
-                    ?: emptyRecipientCard.copy(number = _state.value.recipient.number)
-
-                _state.update { state ->
-                    state.copy(
-                        recipient = RecipientCardUi.of(recipient)
-                    )
-                }
-            }
-
             _state.update { state ->
                 state.copy(
                     recipient = state.recipient.copy(
-                        id = id ?: "",
                         number = cardNumber
                     )
                 )

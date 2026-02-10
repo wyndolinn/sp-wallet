@@ -77,17 +77,18 @@ class SearchRecipientViewModel(
                 viewModelScope.launch {
                     NavController.navigate(
                         SearchRecipientNavEvent.OnClickRecipient(
-                            id = action.id,
                             cardNumber = action.cardNumber
                         )
                     )
                 }
             }
 
-            is SearchRecipientAction.OnClickEditRecipient -> {
+            is SearchRecipientAction.OnClickAddRecipient -> {
                 viewModelScope.launch {
                     NavController.navigate(
-                        SearchRecipientNavEvent.OnClickEditRecipient(id = action.id)
+                        SearchRecipientNavEvent.OnClickAddRecipient(
+                            cardNumber = _state.value.recipientInputFieldState.value.text
+                        )
                     )
                 }
             }

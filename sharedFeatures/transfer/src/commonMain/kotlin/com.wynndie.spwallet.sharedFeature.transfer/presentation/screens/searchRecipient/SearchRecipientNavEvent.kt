@@ -7,11 +7,10 @@ sealed interface SearchRecipientNavEvent : NavEvent {
     data object OnClickBack : SearchRecipientNavEvent
 
     data class OnClickRecipient(
-        val id: String?,
         val cardNumber: String
     ) : SearchRecipientNavEvent
 
-    data class OnClickEditRecipient(
-        val id: String?
+    data class OnClickAddRecipient(
+        val cardNumber: String
     ) : SearchRecipientNavEvent
 }
