@@ -45,11 +45,10 @@ fun CustomCardTile(
         leadingContentShape = MaterialTheme.shapes.small,
         leadingContentBackground = iconBackground,
         label = cardName,
-        title = stringResource(
-            Res.string.x_of_ore,
-            balance.value.toString().formatAsAmount()
-        ).uppercase(),
-        description = balance.formatted.joinToUiText(" ").asString(),
+        title = stringResource(Res.string.x_of_ore, balance.value.toString())
+            .uppercase()
+            .formatAsAmount(),
+        description = balance.formatted.joinToUiText(" ").asString().formatAsAmount(),
         onClick = onClick,
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
