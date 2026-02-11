@@ -6,9 +6,11 @@ import com.wynndie.spwallet.sharedCore.data.remote.network.KtorRemoteSpWorldsUse
 import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsCardsDataSource
 import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsUserDataSource
 import com.wynndie.spwallet.sharedCore.data.repositories.CardsRepositoryImpl
+import com.wynndie.spwallet.sharedCore.data.repositories.PreferencesRepositoryImpl
 import com.wynndie.spwallet.sharedCore.data.repositories.RecipientRepositoryImpl
 import com.wynndie.spwallet.sharedCore.data.repositories.UserRepositoryImpl
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
@@ -27,6 +29,7 @@ val coreSharedModule = module {
     singleOf(::CardsRepositoryImpl).bind<CardsRepository>()
     singleOf(::UserRepositoryImpl).bind<UserRepository>()
     singleOf(::RecipientRepositoryImpl).bind<RecipientRepository>()
+    singleOf(::PreferencesRepositoryImpl).bind<PreferencesRepository>()
 
     singleOf(::BalanceValidator)
     singleOf(::CardNameValidator)

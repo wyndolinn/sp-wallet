@@ -42,13 +42,13 @@ fun BalanceComponent(
             fontWeight = FontWeight(600)
         )
 
-        if (balance.value != 0L) {
-            Text(
-                text = balance.formatted.joinToString(" ").formatAsAmount(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = if (balance.value != 0L) {
+                balance.formatted.joinToString(" ").formatAsAmount()
+            } else "",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

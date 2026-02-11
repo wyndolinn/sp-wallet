@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedCore.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
@@ -10,6 +11,7 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 data class CustomCardEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
+    val server: String,
     val name: String,
     val balance: Long,
     val color: Int,
@@ -18,6 +20,7 @@ data class CustomCardEntity(
     fun toDomain(): CustomCard {
         return CustomCard(
             id = id.toString(),
+            server = SpServersOptions.valueOf(server),
             name = name,
             balance = balance,
             color = CardColors.of(color),
@@ -29,6 +32,7 @@ data class CustomCardEntity(
         fun of(value: CustomCard): CustomCardEntity {
             return CustomCardEntity(
                 id = if (value.id.isBlank()) 0 else value.id.toInt(),
+                server = value.server.name,
                 name = value.name,
                 balance = value.balance,
                 color = value.color.id,

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
@@ -27,6 +28,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent.OnClickCustomCard
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent.OnClickTransferBetweenCards
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent.OnClickTransferByCard
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.models.HomeCardsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -40,6 +42,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val authCardUseCase: AuthCardUseCase,
@@ -54,32 +57,45 @@ class HomeViewModel(
         syncWithRemote()
 
 
+        preferencesRepository.getSelectedSpServer().onEach { server ->
+            _state.update { state ->
+                state.copy(selectedServer = server)
+            }
+        }.launchIn(viewModelScope)
+
         userRepository.getAuthedUsers().onEach { users ->
             users.firstOrNull()?.let { user ->
                 _state.update { it.copy(authedUser = user) }
             }
         }.launchIn(viewModelScope)
 
-        cardsRepository.getAuthedCards().onEach { cards ->
+        combine(
+            cardsRepository.getAuthedCards(),
+            cardsRepository.getUnauthedCards(),
+            cardsRepository.getCustomCards(),
+            preferencesRepository.getSelectedSpServer()
+        ) { authedCards, unauthedCard, customCards, selectedSever ->
+            HomeCardsData(
+                authedCards = authedCards.filter {
+                    it.server == selectedSever
+                }.map(AuthedCardUi::of),
+                unauthedCards = unauthedCard.filter {
+                    it.server == selectedSever
+                }.map(UnauthedCardUi::of),
+                customCards = customCards.filter {
+                    it.server == selectedSever
+                }.map(CustomCardUi::of)
+            )
+        }.onEach { data ->
             _state.update { state ->
-                state.copy(authedCards = cards.map { AuthedCardUi.of(it) })
+                state.copy(
+                    authedCards = data.authedCards,
+                    unauthedCards = data.unauthedCards,
+                    customCards = data.customCards
+                )
             }
             updateBalance()
         }.launchIn(viewModelScope)
-
-        cardsRepository.getUnauthedCards().onEach { cards ->
-            _state.update { state ->
-                state.copy(unauthedCards = cards.map { UnauthedCardUi.of(it) })
-            }
-        }.launchIn(viewModelScope)
-
-        cardsRepository.getCustomCards().onEach { cards ->
-            _state.update { state ->
-                state.copy(customCards = cards.map { CustomCardUi.of(it) })
-            }
-            updateBalance()
-        }.launchIn(viewModelScope)
-
 
         combine(
             _state.map { it.idInputFieldState.value.text }.distinctUntilChanged(),
@@ -97,6 +113,7 @@ class HomeViewModel(
         }.launchIn(viewModelScope)
     }
 
+
     fun onAction(action: HomeAction) {
         when (action) {
             HomeAction.OnRefresh -> {
@@ -108,6 +125,12 @@ class HomeViewModel(
             is HomeAction.OnSwipeCarousel -> {
                 _state.update { state ->
                     state.copy(carouselPage = action.index)
+                }
+            }
+
+            is HomeAction.OnClickServerOption -> {
+                viewModelScope.launch {
+                    preferencesRepository.setSelectedSpServer(action.server)
                 }
             }
 

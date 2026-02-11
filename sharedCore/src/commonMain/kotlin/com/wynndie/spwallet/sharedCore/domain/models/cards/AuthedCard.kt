@@ -1,7 +1,10 @@
 package com.wynndie.spwallet.sharedCore.domain.models.cards
 
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+
 data class AuthedCard(
     override val id: String,
+    override val server: SpServersOptions,
     override val authKey: String,
     override val name: String,
     override val number: String,
@@ -14,6 +17,7 @@ data class AuthedCard(
         return UnauthedCard(
             id = this.id,
             authKey = "",
+            server = this.server,
             name = this.name,
             number = this.number,
             balance = 0L,

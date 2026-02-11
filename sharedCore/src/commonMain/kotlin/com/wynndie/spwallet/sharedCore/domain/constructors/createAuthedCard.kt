@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedCore.domain.constructors
 
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
@@ -11,11 +12,13 @@ fun createAuthedCard(
     id: String = "",
     authKey: String = "",
     colors: CardColors = CardColors.BLUE,
-    icon: CardIcons = CardIcons.BANK_CARD
+    icon: CardIcons = CardIcons.BANK_CARD,
+    server: SpServersOptions = SpServersOptions.SP
 ): AuthedCard {
     return AuthedCard(
         id = id,
         authKey = authKey,
+        server = server,
         name = name,
         number = number,
         balance = balance,

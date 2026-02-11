@@ -38,13 +38,12 @@ kotlin {
             api(projects.sharedResources)
             api(projects.sharedTheme)
 
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material3)
-            api(compose.ui)
-            api(compose.components.resources)
-            api(compose.components.uiToolingPreview)
-            api(compose.materialIconsExtended)
+            api("org.jetbrains.compose.runtime:runtime:1.10.0")
+            api("org.jetbrains.compose.foundation:foundation:1.10.0")
+            api("org.jetbrains.compose.material3:material3:1.9.0")
+            api("org.jetbrains.compose.ui:ui:1.10.0")
+            api("org.jetbrains.compose.components:components-resources:1.10.0")
+            api("org.jetbrains.compose.ui:ui-tooling-preview:1.10.0")
 
             api(libs.androidx.lifecycle.viewmodel)
             api(libs.androidx.lifecycle.runtime.compose)
@@ -59,6 +58,9 @@ kotlin {
 
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
+
+            api(libs.datastore.preferences)
+            api(libs.datastore)
         }
 
         androidMain.dependencies {

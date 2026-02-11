@@ -3,7 +3,9 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
@@ -15,6 +17,7 @@ data class HomeState(
     val authLoadingState: LoadingState = LoadingState.Finished,
 
     val carouselPage: Int = 0,
+    val selectedServer: SpServersOptions = SpServersOptions.SP,
 
     val isAuthCardSheetVisible: Boolean = false,
     val isAuthedCardSheetVisible: Boolean = false,
@@ -22,7 +25,7 @@ data class HomeState(
 
     val isAuthButtonEnabled: Boolean = false,
 
-    val authedUser: AuthedUser = AuthedUser("", ""),
+    val authedUser: AuthedUser = emptyAuthedUser,
     val totalBalance: OreDisplayableValue = OreDisplayableValue.of(0L),
 
     val areCustomCardsVisible: Boolean = true,

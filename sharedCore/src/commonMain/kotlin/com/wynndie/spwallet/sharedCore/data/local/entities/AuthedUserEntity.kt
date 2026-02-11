@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedCore.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 
 @Entity
 data class AuthedUserEntity(

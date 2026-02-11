@@ -1,12 +1,14 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 
 sealed interface HomeAction {
     data object OnRefresh : HomeAction
 
     data class OnSwipeCarousel(val index: Int) : HomeAction
+    data class OnClickServerOption(val server: SpServersOptions) : HomeAction
 
     data class OnToggleAuthCardSheet(val isOpen: Boolean) : HomeAction
     data class OnToggleAuthedCardSheet(val isOpen: Boolean) : HomeAction

@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
@@ -7,6 +8,7 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.
 
 data class CustomCardUi(
     override val id: String,
+    override val server: SpServersOptions,
     override val name: String,
     override val balance: OreDisplayableValue,
     override val color: CardColors,
@@ -17,11 +19,12 @@ data class CustomCardUi(
 
     fun toDomain(): CustomCard {
         return CustomCard(
-            id = this.id,
-            name = this.name,
-            balance = this.balance.value,
-            color = this.color,
-            icon = this.icon
+            id = id,
+            server = server,
+            name = name,
+            balance = balance.value,
+            color = color,
+            icon = icon
         )
     }
 
@@ -29,6 +32,7 @@ data class CustomCardUi(
         fun of(value: CustomCard): CustomCardUi {
             return CustomCardUi(
                 id = value.id,
+                server = value.server,
                 name = value.name,
                 balance = OreDisplayableValue.of(value.balance),
                 color = value.color,

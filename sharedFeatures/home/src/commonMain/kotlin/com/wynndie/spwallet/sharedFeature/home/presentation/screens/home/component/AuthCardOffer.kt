@@ -35,7 +35,7 @@ internal fun AuthCardOffer(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         modifier = modifier
             .clip(MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .background(MaterialTheme.colorScheme.errorContainer)
             .padding(MaterialTheme.spacing.medium)
     ) {
         Column(

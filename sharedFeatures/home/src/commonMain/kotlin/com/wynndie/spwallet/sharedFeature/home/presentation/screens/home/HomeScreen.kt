@@ -3,6 +3,8 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,19 +17,29 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
@@ -59,6 +71,7 @@ import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
 import com.wynndie.spwallet.sharedtheme.designSystem.overlays.Dialog
 import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.TitledContent
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
+import com.wynndie.spwallet.sharedtheme.theme.RectangleShape
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -160,7 +173,9 @@ fun HomeScreenRoot(
                     title = {
                         AppBarContent(
                             image = painterResource(Res.drawable.app_logo_foreground),
-                            title = stringResource(Res.string.app_name)
+                            title = state.authedUser.name.ifBlank {
+                                stringResource(Res.string.app_name)
+                            }
                         )
                     },
                     scrollBehavior = scrollBehavior
@@ -228,6 +243,40 @@ private fun HomeScreenContent(
             balance = state.totalBalance,
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         )
+
+        MultiChoiceSegmentedButtonRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
+                .clip(MaterialTheme.shapes.medium)
+        ) {
+            SpServersOptions.entries.forEach { server ->
+                SegmentedButton(
+                    checked = server == state.selectedServer,
+                    shape = RectangleShape,
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    onCheckedChange = {
+                        onAction(HomeAction.OnClickServerOption(server))
+                    },
+                    contentPadding = PaddingValues(
+                        horizontal = MaterialTheme.spacing.medium,
+                        vertical = MaterialTheme.spacing.medium
+                    ),
+                    colors = SegmentedButtonDefaults.colors().copy(
+                        activeContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer
+                    ),
+                    icon = {},
+                    label = {
+                        Text(
+                            text = server.label,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight(600)
+                        )
+                    }
+                )
+            }
+        }
 
         if (isUserAuthed) {
             ActionButtons(

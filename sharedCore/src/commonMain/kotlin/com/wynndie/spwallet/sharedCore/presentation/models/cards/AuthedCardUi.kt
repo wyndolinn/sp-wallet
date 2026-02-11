@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
@@ -9,6 +10,7 @@ import kotlinx.serialization.Serializable
 data class AuthedCardUi(
     override val id: String,
     override val authKey: String,
+    override val server: SpServersOptions,
     override val name: String,
     override val number: String,
     override val balance: OreDisplayableValue,
@@ -18,13 +20,14 @@ data class AuthedCardUi(
 
     fun toDomain(): AuthedCard {
         return AuthedCard(
-            id = this.id,
-            authKey = this.authKey,
-            name = this.name,
-            number = this.number,
-            balance = this.balance.value,
-            color = this.color,
-            icon = this.icon
+            id = id,
+            server = server,
+            authKey = authKey,
+            name = name,
+            number = number,
+            balance = balance.value,
+            color = color,
+            icon = icon
         )
     }
 
@@ -33,6 +36,7 @@ data class AuthedCardUi(
             return AuthedCardUi(
                 id = value.id,
                 authKey = value.authKey,
+                server = value.server,
                 name = value.name,
                 number = value.number,
                 balance = OreDisplayableValue.of(value.balance),

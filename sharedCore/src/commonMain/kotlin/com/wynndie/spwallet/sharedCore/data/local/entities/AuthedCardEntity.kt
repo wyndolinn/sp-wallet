@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedCore.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
@@ -11,6 +12,7 @@ data class AuthedCardEntity(
     @PrimaryKey
     val id: String,
     val authKey: String,
+    val server: String,
     val name: String,
     val number: String,
     val balance: Long,
@@ -21,6 +23,7 @@ data class AuthedCardEntity(
         return AuthedCard(
             id = id,
             authKey = authKey,
+            server = SpServersOptions.valueOf(server),
             name = name,
             number = number,
             balance = balance,
@@ -34,6 +37,7 @@ data class AuthedCardEntity(
             return AuthedCardEntity(
                 id = value.id,
                 authKey = value.authKey,
+                server = value.server.name,
                 name = value.name,
                 number = value.number,
                 balance = value.balance,

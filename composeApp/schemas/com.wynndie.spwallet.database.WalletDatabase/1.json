@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bbe36e0c74a9e94f8e5dd062b06c1cee",
+    "identityHash": "a3adb18045ff58a24eb06d12afc0c8ca",
     "entities": [
       {
         "tableName": "AuthedUserEntity",
@@ -30,12 +30,18 @@
       },
       {
         "tableName": "CustomCardEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `server` TEXT NOT NULL, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "server",
+            "columnName": "server",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -72,7 +78,7 @@
       },
       {
         "tableName": "AuthedCardEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `authKey` TEXT NOT NULL, `name` TEXT NOT NULL, `number` TEXT NOT NULL, `balance` INTEGER NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `authKey` TEXT NOT NULL, `server` TEXT NOT NULL, `name` TEXT NOT NULL, `number` TEXT NOT NULL, `balance` INTEGER NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -83,6 +89,12 @@
           {
             "fieldPath": "authKey",
             "columnName": "authKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "server",
+            "columnName": "server",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -126,11 +138,17 @@
       },
       {
         "tableName": "UnauthedCardEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `number` TEXT NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `server` TEXT NOT NULL, `name` TEXT NOT NULL, `number` TEXT NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "server",
+            "columnName": "server",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -168,12 +186,18 @@
       },
       {
         "tableName": "RecipientEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `number` TEXT NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `server` TEXT NOT NULL, `name` TEXT NOT NULL, `number` TEXT NOT NULL, `color` INTEGER NOT NULL, `icon` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "server",
+            "columnName": "server",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -211,7 +235,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bbe36e0c74a9e94f8e5dd062b06c1cee')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a3adb18045ff58a24eb06d12afc0c8ca')"
     ]
   }
 }
