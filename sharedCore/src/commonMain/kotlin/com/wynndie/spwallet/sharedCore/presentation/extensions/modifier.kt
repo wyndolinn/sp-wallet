@@ -11,7 +11,8 @@ fun Modifier.cardColorGradient(color: Color): Modifier {
     val darkerColor = color.copy(
         red = color.red * (1 - darkCoefficient),
         green = color.green * (1 - darkCoefficient),
-        blue = color.blue * (1 - darkCoefficient)
+        blue = color.blue * (1 - darkCoefficient),
+        alpha = 0.2f
     )
 
     return this.drawBehind {

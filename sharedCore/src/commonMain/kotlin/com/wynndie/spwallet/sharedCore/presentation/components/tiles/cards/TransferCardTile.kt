@@ -44,7 +44,7 @@ fun TransferCardTile(
     Column(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .cardColorGradient(color)
+            .cardColorGradient(color.copy(alpha = 0.1f))
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(MaterialTheme.spacing.medium)
     ) {
@@ -52,7 +52,7 @@ fun TransferCardTile(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight(600)
             )
         }
@@ -65,7 +65,7 @@ fun TransferCardTile(
             Image(
                 painter = icon,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                colorFilter = ColorFilter.tint(color),
                 modifier = Modifier.size(MaterialTheme.sizing.large)
             )
 
@@ -73,8 +73,7 @@ fun TransferCardTile(
                 Text(
                     text = if (balance != null) "$number • $name" else name,
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.alpha(0.8f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
@@ -84,7 +83,7 @@ fun TransferCardTile(
                             .formatAsAmount()
                     } else number,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight(600)
                 )
             }
