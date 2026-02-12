@@ -1,10 +1,10 @@
 package com.wynndie.spwallet.sharedCore.domain.models.cards
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 
 data class RecipientCard(
     override val id: String,
-    override val server: SpServersOptions,
+    override val server: SpServers,
     override val name: String,
     override val number: String,
     override val color: CardColors,

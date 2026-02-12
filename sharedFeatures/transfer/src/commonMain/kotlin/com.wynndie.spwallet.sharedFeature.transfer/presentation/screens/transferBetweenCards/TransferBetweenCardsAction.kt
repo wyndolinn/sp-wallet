@@ -9,10 +9,7 @@ sealed interface TransferBetweenCardsAction {
     data object OnToggleCalculatorSheet : TransferBetweenCardsAction
 
     data object OnClickBack : TransferBetweenCardsAction
-    data class OnClickTransferAction(
-        val cardNumber: String,
-        val comment: String
-    ) : TransferBetweenCardsAction
+    data object OnClickTransferAction : TransferBetweenCardsAction
 
     data class OnChangeTransferAmountValueAction(val value: TextFieldValue) : TransferBetweenCardsAction
 }

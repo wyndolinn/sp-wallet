@@ -12,6 +12,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,10 +30,15 @@ fun <T> BaseCarousel(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     pageSpacing: Dp = 0.dp,
     enabled: Boolean = true,
+    onSwipePage: (Int) -> Unit = {},
     content: @Composable (T) -> Unit
 ) {
 
     val pagerState = rememberPagerState(initialPage = page) { items.size }
+
+    LaunchedEffect(pagerState.currentPage) {
+        onSwipePage(pagerState.currentPage)
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),

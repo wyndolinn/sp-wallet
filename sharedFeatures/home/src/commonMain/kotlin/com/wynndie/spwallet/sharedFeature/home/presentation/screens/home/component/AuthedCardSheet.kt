@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
@@ -65,6 +69,8 @@ private fun AuthedCardSheetContent(
     onTransferButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var currentPage by remember { mutableStateOf(page) }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,6 +79,9 @@ private fun AuthedCardSheetContent(
         BaseCarousel(
             items = cards,
             page = page,
+            onSwipePage = {
+                currentPage = it
+            },
             modifier = Modifier
         ) { card ->
             Box(
@@ -96,14 +105,14 @@ private fun AuthedCardSheetContent(
             TonalIconButton(
                 icon = painterResource(Res.drawable.ic_transaction),
                 text = stringResource(Res.string.transfer_between_cards),
-                onClick = { onTransferBetweenCardsClick(cards[page].id) },
+                onClick = { onTransferBetweenCardsClick(cards[currentPage].id) },
                 modifier = Modifier.weight(1f)
             )
 
             TonalIconButton(
                 icon = painterResource(Res.drawable.ic_people),
                 text = stringResource(Res.string.transfer_by_number),
-                onClick = { onTransferButtonClick(cards[page].id) },
+                onClick = { onTransferButtonClick(cards[currentPage].id) },
                 modifier = Modifier.weight(1f)
             )
 

@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedCore.data.remote.network
 
 import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
-import com.wynndie.spwallet.sharedCore.data.remote.dto.UnauthedUserDto
+import com.wynndie.spwallet.sharedCore.data.remote.dto.CardholderDto
 import com.wynndie.spwallet.sharedCore.data.remote.safeCall
 import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
@@ -16,8 +16,8 @@ class KtorRemoteSpWorldsUserDataSource(
 
     override suspend fun getUnauthedUser(
         authKey: String
-    ): Outcome<UnauthedUserDto, DataError.Remote> {
-        return safeCall<UnauthedUserDto> {
+    ): Outcome<CardholderDto, DataError.Remote> {
+        return safeCall<CardholderDto> {
             httpClient.get(urlString = "$SP_WORLDS_URL/accounts/me") {
                 header(HttpHeaders.Authorization, authKey)
             }

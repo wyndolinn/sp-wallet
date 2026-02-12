@@ -126,6 +126,9 @@ private fun TransferByNumberScreen(
             BaseCarousel(
                 items = state.cards,
                 page = state.carouselPage,
+                onSwipePage = {
+                    onAction(TransferByCardAction.OnSwipeCarousel(it))
+                },
                 modifier = Modifier
             ) { card ->
                 Box(

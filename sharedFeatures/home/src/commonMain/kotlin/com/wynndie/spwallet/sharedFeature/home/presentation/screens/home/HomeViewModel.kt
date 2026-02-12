@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.error.onError
-import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
@@ -181,30 +181,38 @@ class HomeViewModel(
                         it.copy(authLoadingState = LoadingState.Loading)
                     }
 
-                    val validationResults = listOf(
+                    val isAllValid = listOf(
                         isCardIdValid(action.id),
                         isCardTokenValid(action.token)
-                    )
+                    ).all { it }
 
-                    if (!validationResults.any { isValid -> !isValid }) {
-                        authCardUseCase(id = action.id, token = action.token)
-                            .onError {
-                                OverlayController.send(OverlayType.Snackbar(it.asUiText()))
-                            }
-                            .onSuccess {
-                                syncWithRemoteUseCase()
-                                _state.update { state ->
-                                    state.copy(
-                                        idInputFieldState = state.idInputFieldState.copy(
-                                            value = TextFieldValue("")
-                                        ),
-                                        tokenInputFieldState = state.tokenInputFieldState.copy(
-                                            value = TextFieldValue("")
-                                        ),
-                                        isAuthCardSheetVisible = false
-                                    )
-                                }
-                            }
+                    if (!isAllValid) {
+                        _state.update { it.copy(authLoadingState = LoadingState.Finished) }
+                        return@launch
+                    }
+
+                    authCardUseCase(
+                        server = _state.value.selectedServer,
+                        id = action.id,
+                        token = action.token
+                    ).getOrElse { error ->
+                        OverlayController.send(OverlayType.Snackbar(error.asUiText()))
+                        _state.update {
+                            it.copy(authLoadingState = LoadingState.Finished)
+                        }
+                        return@launch
+                    }
+                    syncWithRemoteUseCase()
+                    _state.update { state ->
+                        state.copy(
+                            idInputFieldState = state.idInputFieldState.copy(
+                                value = TextFieldValue("")
+                            ),
+                            tokenInputFieldState = state.tokenInputFieldState.copy(
+                                value = TextFieldValue("")
+                            ),
+                            isAuthCardSheetVisible = false
+                        )
                     }
 
                     _state.update {

@@ -1,10 +1,10 @@
 package com.wynndie.spwallet.sharedCore.domain.models.cards
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 
 interface Card {
     val id: String
-    val server: SpServersOptions
+    val server: SpServers
     val authKey: String?
     val name: String
     val number: String?

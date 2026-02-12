@@ -122,26 +122,29 @@ private fun TransferBetweenCardsScreenContent(
             BaseCarousel(
                 items = state.sourceCards,
                 page = state.sourceCardsCarouselPage,
-                modifier = Modifier
+                onSwipePage = {
+                    onAction(TransferBetweenCardsAction.OnSwipeSourceCardsCarousel(it))
+                },
+                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+                pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
-                Box(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-                ) {
-                    TransferCardTile(
-                        title = stringResource(Res.string.transfer_from),
-                        icon = card.icon.asImage(),
-                        color = card.color.asColor(),
-                        name = card.name,
-                        number = card.number,
-                        balance = card.balance,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                TransferCardTile(
+                    title = stringResource(Res.string.transfer_from),
+                    icon = card.icon.asImage(),
+                    color = card.color.asColor(),
+                    name = card.name,
+                    number = card.number,
+                    balance = card.balance,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             BaseCarousel(
                 items = state.destinationCards,
                 page = state.destinationCardsCarouselPage,
+                onSwipePage = {
+                    onAction(TransferBetweenCardsAction.OnSwipeDestinationCardsCarousel(it))
+                },
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
                 pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
@@ -191,7 +194,9 @@ private fun TransferBetweenCardsScreenContent(
 
         Button(
             text = stringResource(Res.string.transfer),
-            onClick = {},
+            onClick = {
+                onAction(TransferBetweenCardsAction.OnClickTransferAction)
+            },
             modifier = Modifier
                 .padding(MaterialTheme.spacing.medium)
                 .fillMaxWidth()

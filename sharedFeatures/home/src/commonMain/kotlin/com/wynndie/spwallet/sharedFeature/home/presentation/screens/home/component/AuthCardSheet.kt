@@ -12,6 +12,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -98,6 +102,7 @@ private fun AuthCardSheetContent(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
+    var currentPage by remember { mutableStateOf(page) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
@@ -112,6 +117,9 @@ private fun AuthCardSheetContent(
             BaseCarousel(
                 items = cards,
                 page = page,
+                onSwipePage = {
+                    currentPage = it
+                },
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
                 pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
@@ -167,7 +175,7 @@ private fun AuthCardSheetContent(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                        onClickAuthButton(cards[page].id, tokenInputFieldState.value.text)
+                        onClickAuthButton(cards[currentPage].id, tokenInputFieldState.value.text)
                     }
                 ),
                 modifier = Modifier.onFocusChanged {
@@ -183,7 +191,7 @@ private fun AuthCardSheetContent(
             )
         }
 
-        val cardId = if (cards.isNotEmpty()) cards[page].id else idInputFieldState.value.text
+        val cardId = if (cards.isNotEmpty()) cards[currentPage].id else idInputFieldState.value.text
         Button(
             text = stringResource(Res.string.activate),
             onClick = { onClickAuthButton(cardId, tokenInputFieldState.value.text) },

@@ -6,6 +6,7 @@ import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
@@ -26,6 +27,8 @@ import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -33,8 +36,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransferBetweenCardsViewModel(
-    userRepository: CardsRepository,
     cardsRepository: CardsRepository,
+    preferencesRepository: PreferencesRepository,
     private val args: TransferBetweenCardsArgs,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: BalanceValidator
@@ -58,12 +61,13 @@ class TransferBetweenCardsViewModel(
     init {
         combine(
             cardsRepository.getAuthedCards(),
-            cardsRepository.getUnauthedCards()
-        ) { authedCards, unauthedCards ->
+            cardsRepository.getUnauthedCards(),
+            preferencesRepository.getSelectedSpServer()
+        ) { authedCards, unauthedCards, selectedServer ->
 
             val destinationsCards = buildList {
-                addAll(authedCards.map(AuthedCardUi::of))
-                addAll(unauthedCards.map(UnauthedCardUi::of))
+                addAll(authedCards.filter { it.server == selectedServer }.map(AuthedCardUi::of))
+                addAll(unauthedCards.filter { it.server == selectedServer }.map(UnauthedCardUi::of))
             }
             val destinationCard = args.destinationCardId?.let { id ->
                 destinationsCards.find { it.id == id }
@@ -71,7 +75,7 @@ class TransferBetweenCardsViewModel(
 
             _state.update { state ->
                 state.copy(
-                    sourceCards = authedCards.map(AuthedCardUi::of),
+                    sourceCards = authedCards.filter { it.server == selectedServer }.map(AuthedCardUi::of),
                     destinationCards = destinationCard?.let { listOf(it) } ?: destinationsCards
                 )
             }
@@ -100,14 +104,15 @@ class TransferBetweenCardsViewModel(
                     _state.update { it.copy(loadingState = LoadingState.Loading) }
 
                     val sourceCard = state.value.sourceCards[state.value.sourceCardsCarouselPage]
+                    val targetCard = state.value.destinationCards[state.value.destinationCardsCarouselPage]
                     val transferAmount = state.value.amountInputFieldState.value.text
 
                     if (isTransferAmountValid(transferAmount)) {
                         transferByCardUseCase(
                             card = sourceCard.toDomain(),
-                            receiverCardNumber = action.cardNumber,
+                            receiverCardNumber = targetCard.number ?: "",
                             amount = transferAmount,
-                            comment = action.comment
+                            comment = "Перевод между счетами"
                         ).onError {
                             OverlayController.send(OverlayType.Snackbar(it.asUiText()))
                         }.onSuccess {

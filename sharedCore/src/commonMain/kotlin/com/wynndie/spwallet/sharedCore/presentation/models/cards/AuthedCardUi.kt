@@ -1,16 +1,15 @@
 package com.wynndie.spwallet.sharedCore.presentation.models.cards
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
-import kotlinx.serialization.Serializable
 
 data class AuthedCardUi(
     override val id: String,
     override val authKey: String,
-    override val server: SpServersOptions,
+    override val server: SpServers,
     override val name: String,
     override val number: String,
     override val balance: OreDisplayableValue,

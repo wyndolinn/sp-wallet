@@ -10,18 +10,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
-import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.HorizontalTileMedium
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate_card
 import com.wynndie.spwallet.sharedResources.require_activation
+import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.HorizontalTileMedium
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun UnauthedCardTile(

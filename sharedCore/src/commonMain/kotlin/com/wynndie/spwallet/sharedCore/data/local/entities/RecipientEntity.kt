@@ -2,7 +2,7 @@ package com.wynndie.spwallet.sharedCore.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
@@ -20,7 +20,7 @@ data class RecipientEntity(
     fun toDomain(): RecipientCard {
         return RecipientCard(
             id = id.toString(),
-            server = SpServersOptions.valueOf(server),
+            server = SpServers.valueOf(server),
             name = name,
             number = number,
             color = CardColors.of(color),

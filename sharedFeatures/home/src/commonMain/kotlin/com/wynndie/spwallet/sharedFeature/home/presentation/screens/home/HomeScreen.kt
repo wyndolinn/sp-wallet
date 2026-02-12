@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
@@ -39,11 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
-import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.UnauthedCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
@@ -54,7 +51,6 @@ import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.compone
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthCardSheet
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthedCardSheet
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate_cards
 import com.wynndie.spwallet.sharedResources.app_logo_foreground
 import com.wynndie.spwallet.sharedResources.app_name
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
@@ -250,7 +246,7 @@ private fun HomeScreenContent(
                 .padding(horizontal = MaterialTheme.spacing.medium)
                 .clip(MaterialTheme.shapes.medium)
         ) {
-            SpServersOptions.entries.forEach { server ->
+            SpServers.entries.forEach { server ->
                 SegmentedButton(
                     checked = server == state.selectedServer,
                     shape = RectangleShape,

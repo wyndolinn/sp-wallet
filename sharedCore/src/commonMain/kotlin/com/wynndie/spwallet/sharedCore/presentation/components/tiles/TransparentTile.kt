@@ -7,11 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.HorizontalTileSmall
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TransparentTile(

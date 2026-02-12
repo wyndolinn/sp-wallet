@@ -1,7 +1,5 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.sqlite.SQLiteException
 import com.wynndie.spwallet.sharedCore.data.local.dao.UserDao
 import com.wynndie.spwallet.sharedCore.data.local.entities.AuthedUserEntity
@@ -11,26 +9,24 @@ import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.error.map
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
-import com.wynndie.spwallet.sharedCore.domain.models.UnauthedUser
-import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
+import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class UserRepositoryImpl(
     private val remoteSpWorldsUserDataSource: RemoteSpWorldsUserDataSource,
-    private val userDao: UserDao,
-    private val prefs: PreferencesRepository
+    private val userDao: UserDao
 ) : UserRepository {
 
     override suspend fun getUnauthedUser(
-        authKey: String
-    ): Outcome<UnauthedUser, DataError.Remote> {
-        val server = prefs.getSelectedSpServer().first()
+        authKey: String,
+        server: SpServers
+    ): Outcome<Cardholder, DataError.Remote> {
         return remoteSpWorldsUserDataSource
             .getUnauthedUser(authKey = authKey)
-            .map { it.toUnauthedUser(server) }
+            .map { it.toDomain(server) }
     }
 
     override suspend fun insertAuthedUser(

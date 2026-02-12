@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedCore.data.remote.dto
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServersOptions
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
@@ -13,7 +13,7 @@ data class UnauthedCardDto(
     val number: String,
     val color: Int
 ) {
-    fun toUnauthedCard(server: SpServersOptions): UnauthedCard {
+    fun toDomain(server: SpServers): UnauthedCard {
         return UnauthedCard(
             id = id,
             authKey = "",
