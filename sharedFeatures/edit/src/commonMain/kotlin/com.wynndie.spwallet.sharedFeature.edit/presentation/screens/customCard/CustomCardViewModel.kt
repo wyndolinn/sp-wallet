@@ -20,6 +20,7 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CustomCardViewModel(
+    preferencesRepository: PreferencesRepository,
     private val args: CustomCardViewModelArgs,
     private val cardsRepository: CardsRepository,
     private val cardNameValidator: CardNameValidator,
@@ -49,7 +51,9 @@ class CustomCardViewModel(
 
             val card = cardsRepository.getCustomCards().first()
                 .find { it.id == args.cardId }
-                ?: emptyCustomCard
+                ?: emptyCustomCard.copy(
+                    server = preferencesRepository.getSelectedSpServer().first()
+                )
 
             _state.update { state ->
                 state.copy(

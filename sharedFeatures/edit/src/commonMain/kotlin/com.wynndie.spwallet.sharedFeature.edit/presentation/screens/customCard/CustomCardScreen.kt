@@ -163,7 +163,7 @@ private fun CustomCardScreen(
     ) {
 
         BalanceComponent(
-            title = state.card.name.ifBlank { stringResource(Res.string.no_name) },
+            title = stringResource(Res.string.balance),
             balance = state.card.balance
         )
 

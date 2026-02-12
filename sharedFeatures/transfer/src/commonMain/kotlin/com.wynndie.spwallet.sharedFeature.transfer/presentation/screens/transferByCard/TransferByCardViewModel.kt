@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transfe
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
@@ -150,13 +151,9 @@ class TransferByCardViewModel(
                     }
 
                     recipientRepository.insertRecipient(
-                        recipientCard = RecipientCard(
-                            id = action.cardNumber,
+                        recipientCard = emptyRecipientCard.copy(
                             server = preferencesRepository.getSelectedSpServer().first(),
-                            name = "",
-                            number = action.cardNumber,
-                            color = CardColors.BLUE,
-                            icon = CardIcons.PERSON
+                            number = action.cardNumber
                         )
                     )
 
