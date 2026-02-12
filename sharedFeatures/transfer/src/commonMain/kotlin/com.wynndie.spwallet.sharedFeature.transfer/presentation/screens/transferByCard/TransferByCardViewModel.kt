@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
@@ -26,8 +29,11 @@ import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCar
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
+import io.ktor.util.Hash.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -36,8 +42,9 @@ import kotlinx.coroutines.launch
 class TransferByCardViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
-    recipientRepository: RecipientRepository,
     private val args: TransferByCardViewModelArgs,
+    private val recipientRepository: RecipientRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: BalanceValidator,
     private val commentValidator: TransferCommentValidator,
@@ -47,22 +54,29 @@ class TransferByCardViewModel(
     val state = _state.asStateFlow()
 
     private var recipients = emptyList<RecipientCard>()
+    private var commentPrefix = ""
 
     init {
         userRepository.getAuthedUsers().onEach { users ->
             val user = users.firstOrNull() ?: return@onEach
-            val prefix = "${user.name}: "
+            commentPrefix = "${user.name}: "
             _state.update { state ->
                 state.copy(
                     user = user,
                     commentInputFieldState = state.commentInputFieldState.copy(
-                        maxLength = state.commentInputFieldState.maxLength - prefix.length
+                        maxLength = state.commentInputFieldState.maxLength - commentPrefix.length
                     )
                 )
             }
         }.launchIn(viewModelScope)
 
-        cardsRepository.getAuthedCards().onEach { cards ->
+        combine(
+            cardsRepository.getAuthedCards(),
+            preferencesRepository.getSelectedSpServer()
+        ) { cards, server ->
+            cards.filter { it.server == server }
+        }
+        .onEach { cards ->
             val card = cards.find { it.id == args.cardId }
                 ?: cards.firstOrNull()
                 ?: return@onEach
@@ -112,10 +126,11 @@ class TransferByCardViewModel(
                     _state.update { it.copy(loadingState = LoadingState.Loading) }
 
                     val selectedCard = state.value.cards[state.value.carouselPage]
+                    val comment = "$commentPrefix${action.comment.ifBlank { "Без комментария" }}"
 
                     val validationResults = listOf(
                         isTransferAmountValid(action.transferAmount),
-                        isCommentValid(action.comment)
+                        isCommentValid(comment)
                     )
 
                     if (validationResults.all { it }) {
@@ -123,7 +138,7 @@ class TransferByCardViewModel(
                             card = selectedCard.toDomain(),
                             receiverCardNumber = action.cardNumber,
                             amount = action.transferAmount,
-                            comment = action.comment
+                            comment = comment
                         ).onError {
                             OverlayController.send(OverlayType.Snackbar(it.asUiText()))
                         }.onSuccess {
@@ -133,6 +148,17 @@ class TransferByCardViewModel(
                             NavController.navigate(TransferByCardNavEvent.OnClickBack)
                         }
                     }
+
+                    recipientRepository.insertRecipient(
+                        recipientCard = RecipientCard(
+                            id = action.cardNumber,
+                            server = preferencesRepository.getSelectedSpServer().first(),
+                            name = "",
+                            number = action.cardNumber,
+                            color = CardColors.BLUE,
+                            icon = CardIcons.PERSON
+                        )
+                    )
 
                     _state.update { it.copy(loadingState = LoadingState.Finished) }
                 }

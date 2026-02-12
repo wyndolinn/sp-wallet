@@ -1,6 +1,5 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,14 +11,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -30,11 +27,9 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.components.RecipientTransparentTile
 import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.add
+import com.wynndie.spwallet.sharedResources.card_number
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
-import com.wynndie.spwallet.sharedResources.ic_add
 import com.wynndie.spwallet.sharedResources.ic_person
-import com.wynndie.spwallet.sharedResources.name_or_number
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
 import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
@@ -59,19 +54,6 @@ fun SearchRecipientScreenRoot(
                 title = stringResource(Res.string.recipient),
                 onClickBack = { viewModel.onAction(SearchRecipientAction.OnClickBack) }
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.onAction(SearchRecipientAction.OnClickAddRecipient)
-                }
-            ) {
-                Image(
-                    painter = painterResource(Res.drawable.ic_add),
-                    contentDescription = stringResource(Res.string.add),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-                )
-            }
         },
         modifier = Modifier
             .systemBarsPadding()
@@ -105,7 +87,7 @@ private fun SearchRecipientScreenContent(
         InputField(
             value = state.recipientInputFieldState.value,
             onValueChange = { onAction(SearchRecipientAction.OnChangeRecipientValue(it)) },
-            placeholder = stringResource(Res.string.name_or_number),
+            placeholder = stringResource(Res.string.card_number),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
@@ -126,7 +108,7 @@ private fun SearchRecipientScreenContent(
                             icon = recipient.icon.asImage(),
                             color = recipient.color.asColor(),
                             cardNumber = recipient.number,
-                            cardOwner = recipient.name,
+                            cardOwner = stringResource(Res.string.recipient),
                             onClick = {
                                 onAction(
                                     SearchRecipientAction.OnClickRecipient(recipient.number)
@@ -159,8 +141,8 @@ private fun SearchRecipientScreenContent(
 
             else -> {
                 InfoLayoutSmall(
-                    title = stringResource(Res.string.enter_recipient_card_number),
-                    description = stringResource(Res.string.recipient_history_empty),
+                    title = stringResource(Res.string.recipient_history_empty),
+                    description = stringResource(Res.string.enter_recipient_card_number),
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -3,14 +3,18 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchR
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.RecipientCardUi
+import io.ktor.util.Hash.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -19,7 +23,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchRecipientViewModel(
-    recipientRepository: RecipientRepository
+    recipientRepository: RecipientRepository,
+    preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchRecipientState())
@@ -28,8 +33,12 @@ class SearchRecipientViewModel(
     private var cachedRecipients = emptyList<RecipientCardUi>()
 
     init {
-        recipientRepository.getRecipients().onEach { recipients ->
-            cachedRecipients = recipients.map { RecipientCardUi.of(it) }
+        combine(
+            recipientRepository.getRecipients(),
+            preferencesRepository.getSelectedSpServer()
+        ) { recipients, server ->
+            cachedRecipients = recipients.filter { it.server == server }.map(RecipientCardUi::of)
+            _state.update { it.copy(recipients = cachedRecipients) }
         }.launchIn(viewModelScope)
 
         _state

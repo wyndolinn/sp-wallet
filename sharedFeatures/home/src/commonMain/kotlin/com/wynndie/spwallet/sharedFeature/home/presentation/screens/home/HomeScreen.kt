@@ -259,8 +259,10 @@ private fun HomeScreenContent(
                         vertical = MaterialTheme.spacing.medium
                     ),
                     colors = SegmentedButtonDefaults.colors().copy(
-                        activeContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                        inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer
+                        activeContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        activeContentColor = MaterialTheme.colorScheme.tertiary,
+                        inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        inactiveContentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     icon = {},
                     label = {

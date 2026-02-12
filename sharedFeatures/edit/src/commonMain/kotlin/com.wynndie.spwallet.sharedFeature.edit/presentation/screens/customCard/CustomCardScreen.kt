@@ -38,7 +38,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.component.CustomizationSheet
+import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.component.DeleteCardDialog
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.balance

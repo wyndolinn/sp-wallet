@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.component
+package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures

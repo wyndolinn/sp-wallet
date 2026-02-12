@@ -60,7 +60,7 @@
     <string name="enter_token">Токен карты</string>
     <string name="token">Токен</string>
     <string name="enter_card_number">Карта получателя</string>
-    <string name="card_number">Номер</string>
+    <string name="card_number">Номер карты</string>
     <string name="enter_transfer_amount">Сумма перевода</string>
     <string name="transfer_amount">Сумма</string>
     <string name="enter_comment">Комментарий</string>
@@ -111,7 +111,7 @@
     <string name="between_cards">Между счетами</string>
 
     <string name="recipient_card">Карта получателя</string>
-    <string name="recipient_history_empty">Не нашли сохранённых получателей</string>
+    <string name="recipient_history_empty">История переводов пуста</string>
     <string name="enter_recipient_card_number">Введите номер карты получателя</string>
 
 </resources>
