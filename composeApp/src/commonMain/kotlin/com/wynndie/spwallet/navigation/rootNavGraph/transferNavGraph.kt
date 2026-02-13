@@ -126,6 +126,13 @@ fun NavGraphBuilder.transferNavGraph(
                             launchSingleTop = true
                         }
                     }
+
+                    TransferByCardNavEvent.OnTransferSuccess -> {
+                        navController.popBackStack(
+                            route = TransferNavGraphRoutes.TransferNavGraph,
+                            inclusive = true
+                        )
+                    }
                 }
             }
 
@@ -151,6 +158,13 @@ fun NavGraphBuilder.transferNavGraph(
                 when (navEvent) {
                     TransferBetweenCardsNavEvent.OnClickBack -> {
                         navController.navigateUp()
+                    }
+
+                    TransferBetweenCardsNavEvent.OnTransferSuccess -> {
+                        navController.popBackStack(
+                            route = TransferNavGraphRoutes.TransferNavGraph,
+                            inclusive = true
+                        )
                     }
                 }
             }

@@ -6,36 +6,43 @@ import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
 import com.wynndie.spwallet.sharedCore.domain.error.onError
 import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
+import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
+import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
-import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
-import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Failed
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Finished
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Loading
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cash_creation_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CustomCardViewModel(
-    preferencesRepository: PreferencesRepository,
     private val args: CustomCardViewModelArgs,
     private val cardsRepository: CardsRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val cardNameValidator: CardNameValidator,
     private val balanceValidator: BalanceValidator
 ) : ViewModel() {
@@ -44,39 +51,26 @@ class CustomCardViewModel(
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(screenLoadingState = LoadingState.Loading)
-            }
+        loadCustomCard()
 
-            val card = cardsRepository.getCustomCards().first()
-                .find { it.id == args.cardId }
-                ?: emptyCustomCard.copy(
-                    server = preferencesRepository.getSelectedSpServer().first()
-                )
-
-            _state.update { state ->
-                state.copy(
-                    card = CustomCardUi.of(card),
-                    selectedColorChip = card.color,
-                    nameInputFieldState = state.nameInputFieldState.copy(
-                        value = TextFieldValue(card.name)
-                    ),
-                    balanceInputFieldState = state.balanceInputFieldState.copy(
-                        value = TextFieldValue(card.balance.toString())
-                    )
-                )
-            }
-
-            _state.update {
-                it.copy(screenLoadingState = LoadingState.Finished)
-            }
-        }
+        observeValidationStates(
+            _state.observeInputField(
+                inputField = { it.nameInputFieldState },
+                validation = { cardNameValidator.validate(it) },
+                updateState = { value -> _state.update { it.copy(nameInputFieldState = value) } }
+            ),
+            _state.observeInputField(
+                inputField = { it.balanceInputFieldState },
+                validation = { balanceValidator.validate(BalanceValidationValues(it)) },
+                updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
+            )
+        ).onEach { isAllValid ->
+            _state.update { it.copy(isSaveButtonEnabled = isAllValid) }
+        }.launchIn(viewModelScope)
     }
 
     fun onAction(action: CustomCardAction) {
         when (action) {
-
             CustomCardAction.OnToggleCalculatorSheet -> {
                 _state.update {
                     it.copy(isCalculatorSheetVisible = !state.value.isCalculatorSheetVisible)
@@ -148,32 +142,25 @@ class CustomCardViewModel(
             is CustomCardAction.OnClickSaveCard -> {
                 viewModelScope.launch {
                     _state.update {
-                        it.copy(saveLoadingState = LoadingState.Loading)
+                        it.copy(saveLoadingState = Loading)
                     }
 
-                    val validationResults = listOf(
-                        isCardNameValid(action.cardName),
-                        isCardBalanceValid(action.cardBalance)
-                    )
-
-                    if (!validationResults.any { isValid -> !isValid }) {
-                        cardsRepository.insertCustomCard(state.value.card.toDomain())
-                            .onError { error ->
-                                _state.update {
-                                    it.copy(
-                                        screenLoadingState = LoadingState.Failed(error.asUiText()),
-                                        saveLoadingState = LoadingState.Failed(error.asUiText())
-                                    )
-                                }
-                            }
-                            .onSuccess {
-                                _state.update { it.copy(saveLoadingState = LoadingState.Finished) }
-                                OverlayController.send(
-                                    OverlayType.Snackbar(UiText.ResourceString(Res.string.cash_creation_succeed))
+                    cardsRepository.insertCustomCard(state.value.card.toDomain())
+                        .onError { error ->
+                            _state.update {
+                                it.copy(
+                                    screenLoadingState = Failed(error.asUiText()),
+                                    saveLoadingState = Failed(error.asUiText())
                                 )
-                                NavController.navigate(CustomCardNavEvent.OnClickBack)
                             }
-                    }
+                        }
+                        .onSuccess {
+                            _state.update { it.copy(saveLoadingState = Finished) }
+                            OverlayController.send(
+                                Snackbar(ResourceString(Res.string.cash_creation_succeed))
+                            )
+                            NavController.navigate(CustomCardNavEvent.OnClickBack)
+                        }
                 }
             }
 
@@ -184,32 +171,53 @@ class CustomCardViewModel(
                     NavController.navigate(CustomCardNavEvent.OnClickBack)
                 }
             }
+
+            CustomCardAction.OnToggleNameFocus -> {
+                _state.validateInputField(
+                    inputField = { it.nameInputFieldState },
+                    validation = { cardNameValidator.validate(it) },
+                    updateState = { _state.update { state -> state.copy(nameInputFieldState = it) } }
+                )
+            }
+
+            CustomCardAction.OnToggleBalanceFocus -> {
+                _state.validateInputField(
+                    inputField = { it.balanceInputFieldState },
+                    validation = { balanceValidator.validate(BalanceValidationValues(it)) },
+                    updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
+                )
+            }
         }
     }
 
-    private fun isCardNameValid(value: String): Boolean {
-        val (isValid, error) = cardNameValidator.validate(value)
-        _state.update { state ->
-            state.copy(
-                nameInputFieldState = state.nameInputFieldState.copy(
-                    supportingText = error?.asUiText(),
-                    hasError = !isValid
-                )
-            )
-        }
-        return isValid
-    }
+    private fun loadCustomCard() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(screenLoadingState = Loading)
+            }
 
-    private fun isCardBalanceValid(value: String): Boolean {
-        val (isValid, error) = balanceValidator.validate(BalanceValidationValues(value))
-        _state.update { state ->
-            state.copy(
-                balanceInputFieldState = state.balanceInputFieldState.copy(
-                    supportingText = error?.asUiText(),
-                    hasError = !isValid
+            val card = cardsRepository.getCustomCards().first()
+                .find { it.id == args.cardId }
+                ?: emptyCustomCard.copy(
+                    server = preferencesRepository.getSelectedSpServer().first()
                 )
-            )
+
+            _state.update { state ->
+                state.copy(
+                    card = CustomCardUi.of(card),
+                    selectedColorChip = card.color,
+                    nameInputFieldState = state.nameInputFieldState.copy(
+                        value = TextFieldValue(card.name)
+                    ),
+                    balanceInputFieldState = state.balanceInputFieldState.copy(
+                        value = TextFieldValue(card.balance.toString())
+                    )
+                )
+            }
+
+            _state.update {
+                it.copy(screenLoadingState = Finished)
+            }
         }
-        return isValid
     }
 }

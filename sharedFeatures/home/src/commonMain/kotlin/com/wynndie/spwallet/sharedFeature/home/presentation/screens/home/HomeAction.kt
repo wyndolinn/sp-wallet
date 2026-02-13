@@ -7,7 +7,6 @@ import com.wynndie.spwallet.sharedCore.presentation.models.cards.AuthedCardUi
 sealed interface HomeAction {
     data object OnRefresh : HomeAction
 
-    data class OnSwipeCarousel(val index: Int) : HomeAction
     data class OnClickServerOption(val server: SpServers) : HomeAction
 
     data class OnToggleAuthCardSheet(val isOpen: Boolean) : HomeAction

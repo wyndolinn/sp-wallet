@@ -119,6 +119,7 @@ private fun AuthCardSheetContent(
                 page = page,
                 onSwipePage = {
                     currentPage = it
+                    onChangeIdValue(TextFieldValue(cards[it].id))
                 },
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
                 pageSpacing = MaterialTheme.spacing.medium

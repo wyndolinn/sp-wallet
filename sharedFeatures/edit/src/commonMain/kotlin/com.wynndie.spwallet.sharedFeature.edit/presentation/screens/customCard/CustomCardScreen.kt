@@ -47,7 +47,6 @@ import com.wynndie.spwallet.sharedResources.cash_account
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.enter_card_name
-import com.wynndie.spwallet.sharedResources.no_name
 import com.wynndie.spwallet.sharedResources.save
 import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
@@ -229,6 +228,7 @@ private fun CustomCardScreen(
                     )
                 )
             },
+            enabled = state.isSaveButtonEnabled,
             modifier = Modifier.fillMaxWidth()
         )
     }

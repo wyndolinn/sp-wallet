@@ -12,4 +12,6 @@ sealed interface TransferBetweenCardsAction {
     data object OnClickTransferAction : TransferBetweenCardsAction
 
     data class OnChangeTransferAmountValueAction(val value: TextFieldValue) : TransferBetweenCardsAction
+
+    data object OnToggleTransferAmountFocus : TransferBetweenCardsAction
 }

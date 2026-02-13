@@ -17,4 +17,7 @@ sealed interface CustomCardAction {
 
     data class OnChangeNameValue(val value: TextFieldValue) : CustomCardAction
     data class OnChangeBalanceValue(val value: TextFieldValue) : CustomCardAction
+
+    data object OnToggleNameFocus : CustomCardAction
+    data object OnToggleBalanceFocus : CustomCardAction
 }

@@ -12,6 +12,7 @@ data class CustomCardState(
     val saveLoadingState: LoadingState = LoadingState.Finished,
 
     val card: CustomCardUi = CustomCardUi.of(emptyCustomCard),
+    val isSaveButtonEnabled: Boolean = false,
 
     val isCustomizationSheetVisible: Boolean = false,
     val isCalculatorSheetVisible: Boolean = false,

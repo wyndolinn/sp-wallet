@@ -12,6 +12,9 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavCo
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
@@ -32,9 +35,7 @@ import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.models.
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -76,15 +77,15 @@ class HomeViewModel(
             preferencesRepository.getSelectedSpServer()
         ) { authedCards, unauthedCard, customCards, selectedSever ->
             HomeCardsData(
-                authedCards = authedCards.filter {
-                    it.server == selectedSever
-                }.map(AuthedCardUi::of),
-                unauthedCards = unauthedCard.filter {
-                    it.server == selectedSever
-                }.map(UnauthedCardUi::of),
-                customCards = customCards.filter {
-                    it.server == selectedSever
-                }.map(CustomCardUi::of)
+                authedCards = authedCards
+                    .filter { it.server == selectedSever }
+                    .map(AuthedCardUi::of),
+                unauthedCards = unauthedCard
+                    .filter { it.server == selectedSever }
+                    .map(UnauthedCardUi::of),
+                customCards = customCards
+                    .filter { it.server == selectedSever }
+                    .map(CustomCardUi::of)
             )
         }.onEach { data ->
             _state.update { state ->
@@ -97,19 +98,20 @@ class HomeViewModel(
             updateBalance()
         }.launchIn(viewModelScope)
 
-        combine(
-            _state.map { it.idInputFieldState.value.text }.distinctUntilChanged(),
-            _state.map { it.tokenInputFieldState.value.text }.distinctUntilChanged()
-        ) { id, token ->
 
-            val validationResults = listOf(
-                uuidValidator.validate(id),
-                tokenValidator.validate(token)
-            ).map { it.first }
-
-            _state.update {
-                it.copy(isAuthButtonEnabled = validationResults.all { isValid -> isValid })
-            }
+        observeValidationStates(
+            _state.observeInputField(
+                inputField = { it.idInputFieldState },
+                validation = { uuidValidator.validate(it) },
+                updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
+            ),
+            _state.observeInputField(
+                inputField = { it.tokenInputFieldState },
+                validation = { tokenValidator.validate(it) },
+                updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
+            )
+        ).onEach { isAllValid ->
+            _state.update { it.copy(isAuthButtonEnabled = isAllValid) }
         }.launchIn(viewModelScope)
     }
 
@@ -119,13 +121,6 @@ class HomeViewModel(
             HomeAction.OnRefresh -> {
                 closeAllDialogs()
                 syncWithRemote()
-            }
-
-
-            is HomeAction.OnSwipeCarousel -> {
-                _state.update { state ->
-                    state.copy(carouselPage = action.index)
-                }
             }
 
             is HomeAction.OnClickServerOption -> {
@@ -181,16 +176,6 @@ class HomeViewModel(
                         it.copy(authLoadingState = LoadingState.Loading)
                     }
 
-                    val isAllValid = listOf(
-                        isCardIdValid(action.id),
-                        isCardTokenValid(action.token)
-                    ).all { it }
-
-                    if (!isAllValid) {
-                        _state.update { it.copy(authLoadingState = LoadingState.Finished) }
-                        return@launch
-                    }
-
                     authCardUseCase(
                         server = _state.value.selectedServer,
                         id = action.id,
@@ -202,7 +187,9 @@ class HomeViewModel(
                         }
                         return@launch
                     }
+
                     syncWithRemoteUseCase()
+
                     _state.update { state ->
                         state.copy(
                             idInputFieldState = state.idInputFieldState.copy(
@@ -304,11 +291,19 @@ class HomeViewModel(
             }
 
             HomeAction.OnToggleCardIdFocus -> {
-                isCardIdValid(state.value.idInputFieldState.value.text)
+                _state.validateInputField(
+                    inputField = { it.idInputFieldState },
+                    validation = { uuidValidator.validate(it) },
+                    updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
+                )
             }
 
             HomeAction.OnToggleCardTokenFocus -> {
-                isCardTokenValid(state.value.tokenInputFieldState.value.text)
+                _state.validateInputField(
+                    inputField = { it.tokenInputFieldState },
+                    validation = { tokenValidator.validate(it) },
+                    updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
+                )
             }
         }
     }
@@ -347,31 +342,5 @@ class HomeViewModel(
                 isDeactivateCardDialogVisible = false
             )
         }
-    }
-
-    private fun isCardTokenValid(token: String): Boolean {
-        val (isValid, error) = tokenValidator.validate(token)
-        _state.update { state ->
-            state.copy(
-                tokenInputFieldState = state.tokenInputFieldState.copy(
-                    supportingText = error?.asUiText(),
-                    hasError = !isValid
-                )
-            )
-        }
-        return isValid
-    }
-
-    private fun isCardIdValid(id: String): Boolean {
-        val (isValid, error) = uuidValidator.validate(id)
-        _state.update { state ->
-            state.copy(
-                idInputFieldState = state.idInputFieldState.copy(
-                    supportingText = error?.asUiText(),
-                    hasError = !isValid
-                )
-            )
-        }
-        return isValid
     }
 }

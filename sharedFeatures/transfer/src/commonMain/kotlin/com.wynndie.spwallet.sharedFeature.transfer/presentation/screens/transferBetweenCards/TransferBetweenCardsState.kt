@@ -11,6 +11,8 @@ import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 data class TransferBetweenCardsState(
     val loadingState: LoadingState = LoadingState.Finished,
 
+    val isTransferButtonEnabled: Boolean = false,
+
     val user: AuthedUser = emptyAuthedUser,
     val sourceCards: List<AuthedCardUi> = emptyList(),
     val destinationCards: List<CardUi> = emptyList(),

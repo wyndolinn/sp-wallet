@@ -3,17 +3,19 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transfe
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.error.onError
-import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
+import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
@@ -27,10 +29,9 @@ import com.wynndie.spwallet.sharedResources.transaction_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -75,10 +76,27 @@ class TransferBetweenCardsViewModel(
 
             _state.update { state ->
                 state.copy(
-                    sourceCards = authedCards.filter { it.server == selectedServer }.map(AuthedCardUi::of),
+                    sourceCards = authedCards.filter { it.server == selectedServer }
+                        .map(AuthedCardUi::of),
                     destinationCards = destinationCard?.let { listOf(it) } ?: destinationsCards
                 )
             }
+        }.launchIn(viewModelScope)
+
+        observeValidationStates(
+            _state.observeInputField(
+                inputField = { it.amountInputFieldState },
+                validation = {
+                    val validationValues = BalanceValidationValues(
+                        value = _state.value.amountInputFieldState.value.text,
+                        maxValue = _state.value.sourceCards[_state.value.sourceCardsCarouselPage].balance.value
+                    )
+                    transferAmountValidator.validate(validationValues)
+                },
+                updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
+            )
+        ).onEach { isAllValid ->
+            _state.update { it.copy(isTransferButtonEnabled = isAllValid) }
         }.launchIn(viewModelScope)
     }
 
@@ -104,24 +122,23 @@ class TransferBetweenCardsViewModel(
                     _state.update { it.copy(loadingState = LoadingState.Loading) }
 
                     val sourceCard = state.value.sourceCards[state.value.sourceCardsCarouselPage]
-                    val targetCard = state.value.destinationCards[state.value.destinationCardsCarouselPage]
+                    val targetCard =
+                        state.value.destinationCards[state.value.destinationCardsCarouselPage]
                     val transferAmount = state.value.amountInputFieldState.value.text
 
-                    if (isTransferAmountValid(transferAmount)) {
-                        transferByCardUseCase(
-                            card = sourceCard.toDomain(),
-                            receiverCardNumber = targetCard.number ?: "",
-                            amount = transferAmount,
-                            comment = "Перевод между счетами"
-                        ).onError {
-                            OverlayController.send(OverlayType.Snackbar(it.asUiText()))
-                        }.onSuccess {
-                            OverlayController.send(
-                                OverlayType.Snackbar(UiText.ResourceString(Res.string.transaction_succeed))
-                            )
-                            NavController.navigate(TransferBetweenCardsNavEvent.OnClickBack)
-                        }
+                    transferByCardUseCase(
+                        card = sourceCard.toDomain(),
+                        receiverCardNumber = targetCard.number ?: "",
+                        amount = transferAmount,
+                        comment = "Перевод между счетами"
+                    ).getOrElse { error ->
+                        OverlayController.send(Snackbar(error.asUiText()))
+                        _state.update { it.copy(loadingState = LoadingState.Finished) }
+                        return@launch
                     }
+
+                    OverlayController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+                    NavController.navigate(TransferBetweenCardsNavEvent.OnTransferSuccess)
 
                     _state.update { it.copy(loadingState = LoadingState.Finished) }
                 }
@@ -151,26 +168,20 @@ class TransferBetweenCardsViewModel(
                     )
                 }
             }
-        }
-    }
 
-
-    private fun isTransferAmountValid(value: String): Boolean {
-
-        val validationValues = BalanceValidationValues(
-            value = value,
-            maxValue = _state.value.sourceCards[_state.value.sourceCardsCarouselPage].balance.value
-        )
-
-        val (isValid, error) = transferAmountValidator.validate(validationValues)
-        _state.update { state ->
-            state.copy(
-                amountInputFieldState = state.amountInputFieldState.copy(
-                    supportingText = error?.asUiText(),
-                    hasError = !isValid
+            TransferBetweenCardsAction.OnToggleTransferAmountFocus -> {
+                _state.validateInputField(
+                    inputField = { it.amountInputFieldState },
+                    validation = {
+                        val validationValues = BalanceValidationValues(
+                            value = _state.value.amountInputFieldState.value.text,
+                            maxValue = _state.value.sourceCards[_state.value.sourceCardsCarouselPage].balance.value
+                        )
+                        transferAmountValidator.validate(validationValues)
+                    },
+                    updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
                 )
-            )
+            }
         }
-        return isValid
     }
 }

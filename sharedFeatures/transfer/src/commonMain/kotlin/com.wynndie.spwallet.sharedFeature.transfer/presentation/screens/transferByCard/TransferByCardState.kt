@@ -12,6 +12,8 @@ import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 data class TransferByCardState(
     val loadingState: LoadingState = LoadingState.Finished,
 
+    val isTransferButtonEnabled: Boolean = false,
+
     val user: AuthedUser = emptyAuthedUser,
     val recipient: RecipientCardUi = RecipientCardUi.of(emptyRecipientCard),
 

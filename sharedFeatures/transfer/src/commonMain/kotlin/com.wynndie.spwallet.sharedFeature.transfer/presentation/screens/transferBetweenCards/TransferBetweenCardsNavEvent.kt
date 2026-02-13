@@ -5,4 +5,5 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEv
 sealed interface TransferBetweenCardsNavEvent : NavEvent {
     
     data object OnClickBack : TransferBetweenCardsNavEvent
+    data object OnTransferSuccess : TransferBetweenCardsNavEvent
 }
