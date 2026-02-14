@@ -1,9 +1,5 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-import com.android.build.gradle.tasks.PackageApplication
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -80,6 +76,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0.0"
+        versionNameSuffix = "-beta1"
     }
 
     packaging {
@@ -105,16 +102,15 @@ android {
 
     android.applicationVariants.all {
         outputs.all {
-            val date = SimpleDateFormat("yyyy-MM-dd_HH-mm", Locale.getDefault()).format(Date())
             if (this is ApkVariantOutputImpl) {
-                outputFileName = "SpWallet_v${versionName}_${date}_${name}.apk"
+                outputFileName = "SpWallet_v${versionName}_${name}.apk"
             }
         }
     }
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.ui.tooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)

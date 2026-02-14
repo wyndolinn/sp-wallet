@@ -33,6 +33,7 @@ coreKtx = "1.7.0"
 composeTest = "1.10.2"
 runner = "1.7.0"
 core = "1.7.0"
+uiTooling = "1.10.1"
 
 
 [libraries]
@@ -88,6 +89,7 @@ core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx"
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
+ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTooling" }
 
 
 [plugins]
