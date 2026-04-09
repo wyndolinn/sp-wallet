@@ -88,8 +88,7 @@ class TransferBetweenCardsViewModel(
                 inputField = { it.amountInputFieldState },
                 validation = {
                     val validationValues = BalanceValidationValues(
-                        value = _state.value.amountInputFieldState.value.text,
-                        maxValue = _state.value.sourceCards[_state.value.sourceCardsCarouselPage].balance.value
+                        value = _state.value.amountInputFieldState.value.text
                     )
                     transferAmountValidator.validate(validationValues)
                 },
