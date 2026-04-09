@@ -61,7 +61,7 @@ class CustomCardViewModel(
             ),
             _state.observeInputField(
                 inputField = { it.balanceInputFieldState },
-                validation = { balanceValidator.validate(BalanceValidationValues(it)) },
+                validation = { balanceValidator.validate(BalanceValidationValues(it, minValue = 0)) },
                 updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
             )
         ).onEach { isAllValid ->
