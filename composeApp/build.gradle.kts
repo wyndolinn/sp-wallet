@@ -87,11 +87,24 @@ android {
 
     buildTypes {
         getByName("debug") {
+            isMinifyEnabled = false
 
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "_debug"
+
+            manifestPlaceholders["usesCleartextTraffic"] = true
         }
 
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            manifestPlaceholders["usesCleartextTraffic"] = false
         }
     }
 
