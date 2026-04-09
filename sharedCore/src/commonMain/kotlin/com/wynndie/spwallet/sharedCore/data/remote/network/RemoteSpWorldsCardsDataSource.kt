@@ -5,6 +5,5 @@ import com.wynndie.spwallet.sharedCore.domain.error.DataError
 import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 
 interface RemoteSpWorldsCardsDataSource {
-
     suspend fun getCardBalance(authKey: String): Outcome<CardBalanceDto, DataError.Remote>
 }

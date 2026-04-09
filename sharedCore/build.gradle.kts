@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 
-    alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
@@ -61,6 +61,8 @@ kotlin {
 
             api(libs.datastore.preferences)
             api(libs.datastore)
+
+            api("io.appmetrica.analytics:analytics:8.0.0")
         }
 
         androidMain.dependencies {
@@ -91,6 +93,10 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     packaging {

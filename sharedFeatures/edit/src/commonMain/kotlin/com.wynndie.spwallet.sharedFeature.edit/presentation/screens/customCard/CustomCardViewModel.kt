@@ -113,7 +113,6 @@ class CustomCardViewModel(
             is CustomCardAction.OnChangeBalanceValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.DigitsOnly.predicate)
-                    .dropFirst('0')
                     .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
                 _state.update { state ->

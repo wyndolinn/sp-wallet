@@ -30,11 +30,14 @@ import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCar
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
+import io.ktor.util.Hash.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -54,6 +57,7 @@ class TransferByCardViewModel(
     val state = _state.asStateFlow()
 
     private var commentPrefix = ""
+    private var maxValue = 0L
 
     init {
         userRepository.getAuthedUsers().onEach { users ->
@@ -93,8 +97,7 @@ class TransferByCardViewModel(
                 inputField = { it.amountInputFieldState },
                 validation = {
                     val validationValues = BalanceValidationValues(
-                        value = _state.value.amountInputFieldState.value.text,
-                        maxValue = _state.value.cards[_state.value.carouselPage].balance.value
+                        value = _state.value.amountInputFieldState.value.text
                     )
                     transferAmountValidator.validate(validationValues)
                 },

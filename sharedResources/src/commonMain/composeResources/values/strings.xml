@@ -29,6 +29,7 @@
     <!--  COMMON LOCAL STORAGE ERRORS  -->
     <string name="error_empty_table">Нет сохранённых данных</string>
     <string name="error_no_match_found">Не найдено совпадений</string>
+    <string name="error_disk_full">Не найдено совпадений</string>
 
     <!--  COMMON VALIDATION ERRORS  -->
     <string name="error_empty_field">*обязательно</string>
