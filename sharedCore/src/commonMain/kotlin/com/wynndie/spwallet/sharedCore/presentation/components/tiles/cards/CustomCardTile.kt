@@ -15,9 +15,9 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.extensions.joinToUiText
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.joinToString
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.x_of_ore
 import com.wynndie.spwallet.sharedtheme.designSystem.tiles.horizontal.HorizontalTileMedium
@@ -48,7 +48,7 @@ fun CustomCardTile(
         title = stringResource(Res.string.x_of_ore, balance.value.toString())
             .uppercase()
             .formatAsAmount(),
-        description = balance.formatted.joinToUiText(" ").asString().formatAsAmount(),
+        description = balance.formatted.joinToString(" ").formatAsAmount(),
         onClick = onClick,
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)

@@ -7,7 +7,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardU
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
-import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeViewModel
+import com.wynndie.spwallet.sharedFeature.home.presentation.HomeViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind

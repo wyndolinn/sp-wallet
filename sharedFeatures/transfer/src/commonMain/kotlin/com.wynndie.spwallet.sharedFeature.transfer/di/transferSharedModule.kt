@@ -6,10 +6,10 @@ import com.wynndie.spwallet.sharedFeature.transfer.data.repositories.TransferRep
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
-import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.RecipientViewModel
-import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.searchRecipient.SearchRecipientViewModel
-import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferBetweenCards.TransferBetweenCardsViewModel
-import com.wynndie.spwallet.sharedFeature.transfer.presentation.screens.transferByCard.TransferByCardViewModel
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.RecipientViewModel
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.searchRecipient.SearchRecipientViewModel
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.transferBetweenCards.TransferBetweenCardsViewModel
+import com.wynndie.spwallet.sharedFeature.transfer.presentation.transferByCard.TransferByCardViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf

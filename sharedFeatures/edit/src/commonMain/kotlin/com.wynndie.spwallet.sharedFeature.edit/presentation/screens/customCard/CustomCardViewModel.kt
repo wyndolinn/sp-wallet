@@ -17,11 +17,9 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Finished
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Loading
 import com.wynndie.spwallet.sharedResources.Res
@@ -120,7 +118,7 @@ class CustomCardViewModel(
                 _state.update { state ->
                     state.copy(
                         card = state.card.copy(
-                            balance = OreDisplayableValue.of(value.text.ifBlank { "0" }.toLong())
+                            balance = value.text.ifBlank { "0" }.toLong()
                         ),
                         balanceInputFieldState = state.balanceInputFieldState.copy(
                             value = value
@@ -146,7 +144,7 @@ class CustomCardViewModel(
                         it.copy(saveLoadingState = Loading)
                     }
 
-                    cardsRepository.insertCustomCard(state.value.card.toDomain())
+                    cardsRepository.insertCustomCard(state.value.card)
 
                     _state.update { it.copy(saveLoadingState = Finished) }
                     OverlayController.send(
@@ -159,7 +157,7 @@ class CustomCardViewModel(
             is CustomCardAction.OnClickDeleteCard -> {
                 viewModelScope.launch {
                     _state.update { it.copy(isDeleteDialogVisible = false) }
-                    cardsRepository.deleteCustomCard(_state.value.card.toDomain())
+                    cardsRepository.deleteCustomCard(_state.value.card)
                     NavController.navigate(CustomCardNavEvent.OnClickBack)
                 }
             }
@@ -196,7 +194,7 @@ class CustomCardViewModel(
 
             _state.update { state ->
                 state.copy(
-                    card = CustomCardUi.of(card),
+                    card = card,
                     selectedColorChip = card.color,
                     nameInputFieldState = state.nameInputFieldState.copy(
                         value = TextFieldValue(card.name)

@@ -8,9 +8,9 @@ import com.wynndie.spwallet.navigation.EditNavGraphRoutes
 import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
 import com.wynndie.spwallet.navigation.ObserveNavEvent
 import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
-import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeNavEvent
-import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeScreenRoot
-import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeViewModel
+import com.wynndie.spwallet.sharedFeature.home.presentation.HomeNavEvent
+import com.wynndie.spwallet.sharedFeature.home.presentation.HomeScreenRoot
+import com.wynndie.spwallet.sharedFeature.home.presentation.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.homeNavGraph(

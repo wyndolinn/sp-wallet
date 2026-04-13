@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
@@ -163,7 +164,7 @@ private fun CustomCardScreen(
 
         BalanceComponent(
             title = stringResource(Res.string.balance),
-            balance = state.card.balance
+            balance = state.card.balance.formatAsDisplayableOre()
         )
 
         Spacer(Modifier.height(MaterialTheme.spacing.large))

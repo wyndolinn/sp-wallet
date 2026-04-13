@@ -16,11 +16,9 @@ data class UnauthedCardDto(
     fun toDomain(server: SpServers): UnauthedCard {
         return UnauthedCard(
             id = id,
-            authKey = "",
             server = server,
             name = name,
             number = number,
-            balance = 0L,
             color = CardColors.of(color),
             icon = CardIcons.ADD_CARD
         )

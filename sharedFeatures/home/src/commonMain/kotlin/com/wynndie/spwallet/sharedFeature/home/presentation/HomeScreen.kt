@@ -1,0 +1,384 @@
+package com.wynndie.spwallet.sharedFeature.home.presentation
+
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedFeature.home.presentation.component.ActionButtons
+import com.wynndie.spwallet.sharedFeature.home.presentation.component.AppBarContent
+import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardOffer
+import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardSheet
+import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthedCardSheet
+import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.app_logo_foreground
+import com.wynndie.spwallet.sharedResources.app_name
+import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
+import com.wynndie.spwallet.sharedResources.bank_cards
+import com.wynndie.spwallet.sharedResources.create
+import com.wynndie.spwallet.sharedResources.custom_cards
+import com.wynndie.spwallet.sharedResources.deactivate
+import com.wynndie.spwallet.sharedResources.deactivate_card_description
+import com.wynndie.spwallet.sharedResources.deactivate_card_title
+import com.wynndie.spwallet.sharedResources.ic_reload
+import com.wynndie.spwallet.sharedResources.no_authed_cards
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
+import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalButton
+import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
+import com.wynndie.spwallet.sharedtheme.designSystem.overlays.Dialog
+import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.TitledContent
+import com.wynndie.spwallet.sharedtheme.theme.AppTheme
+import com.wynndie.spwallet.sharedtheme.theme.RectangleShape
+import com.wynndie.spwallet.sharedtheme.theme.spacing
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenRoot(
+    viewModel: HomeViewModel
+) {
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val focusManager = LocalFocusManager.current
+
+    if (state.isAuthCardSheetVisible) {
+        AuthCardSheet(
+            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet(false)) },
+            loadingState = state.authLoadingState,
+            isAuthButtonEnabled = state.isAuthButtonEnabled,
+            cards = state.unauthedCards,
+            initialPage = state.carouselPage,
+            idInputFieldState = state.idInputFieldState,
+            onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
+            onToggleCardIdFocus = {
+                if (!it) viewModel.onAction(HomeAction.OnToggleCardIdFocus)
+            },
+            tokenInputFieldState = state.tokenInputFieldState,
+            onChangeTokenValue = { viewModel.onAction(HomeAction.OnChangeCardTokenValue(it)) },
+            onToggleCardTokenFocus = {
+                if (!it) viewModel.onAction(HomeAction.OnToggleCardTokenFocus)
+            },
+            onClickAuthButton = { id, token ->
+                viewModel.onAction(HomeAction.OnClickAuthCard(id = id, token = token))
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = MaterialTheme.spacing.medium)
+        )
+    }
+
+    if (state.isAuthedCardSheetVisible) {
+        AuthedCardSheet(
+            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet(false)) },
+            cards = state.authedCards,
+            page = state.carouselPage,
+            onDeleteButtonClick = {
+                viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(true))
+            },
+            onTransferBetweenCardsClick = {
+                viewModel.onAction(HomeAction.OnClickTransferBetweenCard(it))
+            },
+            onTransferButtonClick = {
+                viewModel.onAction(HomeAction.OnClickTransferByCard(it))
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = MaterialTheme.spacing.medium)
+        )
+    }
+
+    if (state.isDeactivateCardDialogVisible) {
+        Dialog(
+            onConfirm = {
+                viewModel.onAction(
+                    HomeAction.OnClickDeactivateCard(state.authedCards[state.carouselPage])
+                )
+            },
+            onDismiss = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(false)) },
+            title = stringResource(Res.string.deactivate_card_title),
+            description = stringResource(Res.string.deactivate_card_description),
+            confirmButtonText = stringResource(Res.string.deactivate),
+            isDestructive = true
+        )
+    }
+
+
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    Scaffold(
+        topBar = {
+            if (state.authedCards.isNotEmpty()) {
+                TopAppBar(
+                    title = {
+                        AppBarContent(
+                            image = painterResource(Res.drawable.app_logo_foreground),
+                            title = state.authedUser.name
+                        )
+                    },
+                    actions = {
+                        IconButton(
+                            icon = painterResource(Res.drawable.ic_reload),
+                            onClick = { viewModel.onAction(HomeAction.OnRefresh) },
+                            loading = state.screenLoadingState == LoadingState.Loading
+                        )
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            } else {
+                TopAppBar(
+                    title = {
+                        AppBarContent(
+                            image = painterResource(Res.drawable.app_logo_foreground),
+                            title = state.authedUser.name.ifBlank {
+                                stringResource(Res.string.app_name)
+                            }
+                        )
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+            }
+        },
+        modifier = Modifier
+            .imePadding()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { focusManager.clearFocus(true) }
+                )
+            }
+    ) { innerPadding ->
+
+        Crossfade(
+            targetState = state.screenLoadingState,
+            animationSpec = tween(500)
+        ) { screenState ->
+
+            when (screenState) {
+                LoadingState.Loading -> {
+                    LoadingScreen(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+
+                is LoadingState.Failed -> {
+
+                }
+
+                LoadingState.Finished -> {
+                    HomeScreenContent(
+                        state = state,
+                        onAction = viewModel::onAction,
+                        contentPadding = innerPadding,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeScreenContent(
+    state: HomeState,
+    onAction: (HomeAction) -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier
+) {
+
+    val isUserAuthed = state.authedCards.isNotEmpty()
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+        modifier = modifier
+    ) {
+        BalanceComponent(
+            balance = state.totalBalance,
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+        )
+
+        MultiChoiceSegmentedButtonRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
+                .clip(MaterialTheme.shapes.medium)
+        ) {
+            SpServers.entries.forEach { server ->
+                SegmentedButton(
+                    checked = server == state.selectedServer,
+                    shape = RectangleShape,
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    onCheckedChange = {
+                        onAction(HomeAction.OnClickServerOption(server))
+                    },
+                    contentPadding = PaddingValues(
+                        horizontal = MaterialTheme.spacing.medium,
+                        vertical = MaterialTheme.spacing.medium
+                    ),
+                    colors = SegmentedButtonDefaults.colors().copy(
+                        activeContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        activeContentColor = MaterialTheme.colorScheme.tertiary,
+                        inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        inactiveContentColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    icon = {},
+                    label = {
+                        Text(
+                            text = server.label,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight(600)
+                        )
+                    }
+                )
+            }
+        }
+
+        if (isUserAuthed) {
+            ActionButtons(
+                onAuthCardClick = {
+                    onAction(HomeAction.OnToggleAuthCardSheet(true))
+                },
+                onTransferBetweenCardsClick = {
+                    onAction(HomeAction.OnClickTransferBetweenCard(null))
+                },
+                onTransferByNumberClick = {
+                    onAction(HomeAction.OnClickTransferByCard(null))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+            )
+        } else {
+            AuthCardOffer(
+                title = stringResource(Res.string.no_authed_cards),
+                description = stringResource(Res.string.auth_card_to_get_benefits),
+                onClickAuthCard = {
+                    onAction(HomeAction.OnToggleAuthCardSheet(true))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+            )
+        }
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        ) {
+
+            if (state.authedCards.isNotEmpty()) {
+                TitledContent(
+                    title = stringResource(Res.string.bank_cards)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                    ) {
+                        state.authedCards.forEach { card ->
+                            AuthedCardTile(
+                                icon = card.icon.asImage(),
+                                iconBackground = card.color.asColor(),
+                                cardName = card.name,
+                                cardNumber = card.number,
+                                balance = card.balance.formatAsDisplayableOre(),
+                                onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                            )
+                        }
+                    }
+                }
+            }
+
+            TitledContent(
+                title = stringResource(Res.string.custom_cards)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                ) {
+                    state.customCards.forEach { card ->
+                        CustomCardTile(
+                            icon = card.icon.asImage(),
+                            iconBackground = card.color.asColor(),
+                            cardName = card.name,
+                            balance = card.balance.formatAsDisplayableOre(),
+                            onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.spacing.medium)
+                        )
+                    }
+
+                    TonalButton(
+                        text = stringResource(Res.string.create),
+                        onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.spacing.medium)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenContentPreview() {
+    AppTheme {
+        HomeScreenContent(
+            state = HomeState(
+                authedCards = listOf(
+                    createAuthedCard(
+                        name = "asdf",
+                        number = "3245",
+                        balance = 1234
+                    )
+                )
+            ),
+            onAction = { },
+            contentPadding = PaddingValues(MaterialTheme.spacing.medium)
+        )
+    }
+}
