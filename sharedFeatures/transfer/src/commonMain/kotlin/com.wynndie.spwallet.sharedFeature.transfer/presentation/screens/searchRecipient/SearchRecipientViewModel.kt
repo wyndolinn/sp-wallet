@@ -66,7 +66,7 @@ class SearchRecipientViewModel(
                 }
 
                 val isCardNumberEntered =
-                    query.length == CoreConstants.CARD_NUMBER_LENGTH && query.all { it.isDigit() }
+                    query.length == 5 && query.all { it.isDigit() }
                 _state.update { state ->
                     state.copy(isNewRecipient = isCardNumberEntered && state.recipients.isEmpty())
                 }

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
-import com.wynndie.spwallet.sharedCore.domain.error.onError
-import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
+import com.wynndie.spwallet.sharedCore.domain.outcome.onError
+import com.wynndie.spwallet.sharedCore.domain.outcome.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
@@ -30,14 +30,11 @@ import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCar
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.transaction_succeed
-import io.ktor.util.Hash.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

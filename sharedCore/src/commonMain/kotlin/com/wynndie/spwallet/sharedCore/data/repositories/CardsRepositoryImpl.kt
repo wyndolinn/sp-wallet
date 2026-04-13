@@ -1,15 +1,13 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
-import androidx.sqlite.SQLiteException
 import com.wynndie.spwallet.sharedCore.data.local.dao.CardsDao
 import com.wynndie.spwallet.sharedCore.data.local.entities.AuthedCardEntity
 import com.wynndie.spwallet.sharedCore.data.local.entities.CustomCardEntity
 import com.wynndie.spwallet.sharedCore.data.local.entities.UnauthedCardEntity
 import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsCardsDataSource
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.map
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.map
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
@@ -24,7 +22,7 @@ class CardsRepositoryImpl(
 
     override suspend fun getCardBalance(
         authKey: String
-    ): Outcome<Long, DataError.Remote> {
+    ): Outcome<Long, Error.Network> {
         return remoteSpWorldsCardsDataSource
             .getCardBalance(authKey = authKey)
             .map { it.balance }
@@ -33,13 +31,8 @@ class CardsRepositoryImpl(
 
     override suspend fun insertCustomCard(
         card: CustomCard
-    ): EmptyOutcome<DataError.Local> {
-        return try {
-            cardsDao.insertCustomCard(CustomCardEntity.of(card))
-            Outcome.Success(Unit)
-        } catch (_: SQLiteException) {
-            Outcome.Error(DataError.Local.DISK_FULL)
-        }
+    ) {
+        cardsDao.insertCustomCard(CustomCardEntity.of(card))
     }
 
     override fun getCustomCards(): Flow<List<CustomCard>> {
@@ -57,13 +50,8 @@ class CardsRepositoryImpl(
 
     override suspend fun insertAuthedCard(
         card: AuthedCard
-    ): EmptyOutcome<DataError.Local> {
-        return try {
-            cardsDao.insertAuthedCard(AuthedCardEntity.of(card))
-            Outcome.Success(Unit)
-        } catch (_: SQLiteException) {
-            Outcome.Error(DataError.Local.DISK_FULL)
-        }
+    ) {
+        cardsDao.insertAuthedCard(AuthedCardEntity.of(card))
     }
 
     override fun getAuthedCards(): Flow<List<AuthedCard>> {
@@ -81,13 +69,8 @@ class CardsRepositoryImpl(
 
     override suspend fun insertUnauthedCard(
         card: UnauthedCard
-    ): EmptyOutcome<DataError.Local> {
-        return try {
-            cardsDao.insertUnauthedCard(UnauthedCardEntity.from(card))
-            Outcome.Success(Unit)
-        } catch (_: SQLiteException) {
-            Outcome.Error(DataError.Local.DISK_FULL)
-        }
+    ) {
+        cardsDao.insertUnauthedCard(UnauthedCardEntity.from(card))
     }
 
     override fun getUnauthedCards(): Flow<List<UnauthedCard>> {

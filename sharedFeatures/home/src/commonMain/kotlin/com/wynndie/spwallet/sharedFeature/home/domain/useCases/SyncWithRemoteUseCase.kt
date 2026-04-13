@@ -1,11 +1,11 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.getOrNull
-import com.wynndie.spwallet.sharedCore.domain.error.onError
-import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
+import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.getOrNull
+import com.wynndie.spwallet.sharedCore.domain.outcome.onError
+import com.wynndie.spwallet.sharedCore.domain.outcome.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
@@ -18,7 +18,7 @@ class SyncWithRemoteUseCase(
     private val cardsRepository: CardsRepository
 ) {
 
-    suspend operator fun invoke(): EmptyOutcome<DataError> {
+    suspend operator fun invoke(): EmptyOutcome<Error.Network> {
         SpServers.entries.forEach { server ->
             var authedCards = cardsRepository.getAuthedCards().first()
             var cardholder: Cardholder? = null
@@ -50,7 +50,7 @@ class SyncWithRemoteUseCase(
                     val isCardAuthed = authedCards.any { it.id == card.id }
                     if (!isCardAuthed) cardsRepository.insertUnauthedCard(card)
                 }
-            } ?: return Outcome.Error(DataError.Remote.UNAUTHORIZED)
+            } ?: return Outcome.Error(Error.Network.UNAUTHORIZED)
         }
 
         return Outcome.Success(Unit)
@@ -58,18 +58,18 @@ class SyncWithRemoteUseCase(
 
     private suspend fun updateAuthedCard(
         authedCard: AuthedCard
-    ): Outcome<Cardholder?, DataError.Remote> {
+    ): Outcome<Cardholder?, Error.Network> {
 
         val user = userRepository.getUnauthedUser(
             authKey = authedCard.authKey,
             server = authedCard.server
         ).onError {
-            if (it != DataError.Remote.UNAUTHORIZED) return Outcome.Error(it)
+            if (it != Error.Network.UNAUTHORIZED) return Outcome.Error(it)
             cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 
         val cardBalance = cardsRepository.getCardBalance(authedCard.authKey).onError {
-            if (it != DataError.Remote.UNAUTHORIZED) return Outcome.Error(it)
+            if (it != Error.Network.UNAUTHORIZED) return Outcome.Error(it)
             cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 

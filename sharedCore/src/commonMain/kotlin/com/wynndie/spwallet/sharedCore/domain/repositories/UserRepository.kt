@@ -1,8 +1,7 @@
 package com.wynndie.spwallet.sharedCore.domain.repositories
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
@@ -13,9 +12,9 @@ interface UserRepository {
     suspend fun getUnauthedUser(
         authKey: String,
         server: SpServers
-    ): Outcome<Cardholder, DataError.Remote>
+    ): Outcome<Cardholder, Error.Network>
 
-    suspend fun insertAuthedUser(user: AuthedUser): EmptyOutcome<DataError.Local>
+    suspend fun insertAuthedUser(user: AuthedUser)
     fun getAuthedUsers(): Flow<List<AuthedUser>>
     suspend fun deleteAuthedUser(user: AuthedUser)
 }

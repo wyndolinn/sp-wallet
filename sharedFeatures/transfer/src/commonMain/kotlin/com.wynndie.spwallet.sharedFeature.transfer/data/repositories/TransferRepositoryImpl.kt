@@ -1,8 +1,8 @@
 package com.wynndie.spwallet.sharedFeature.transfer.data.repositories
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.map
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.map
 import com.wynndie.spwallet.sharedFeature.transfer.data.remote.dto.TransferDto
 import com.wynndie.spwallet.sharedFeature.transfer.data.remote.network.RemoteSpWorldsTransferDataSource
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.Transfer
@@ -15,7 +15,7 @@ class TransferRepositoryImpl(
     override suspend fun makeTransaction(
         authKey: String,
         transfer: Transfer
-    ): Outcome<Long, DataError.Remote> {
+    ): Outcome<Long, Error.Network> {
         return remoteSpWorldsTransferDataSource
             .makeTransaction(
                 authKey = authKey,

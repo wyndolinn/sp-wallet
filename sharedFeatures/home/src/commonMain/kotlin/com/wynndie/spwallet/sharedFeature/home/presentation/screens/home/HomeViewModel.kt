@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
-import com.wynndie.spwallet.sharedCore.domain.error.onError
+import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
+import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository

@@ -33,10 +33,10 @@ data class HomeState(
     val unauthedCards: List<UnauthedCardUi> = emptyList(),
 
     val idInputFieldState: InputFieldState = InputFieldState(
-        maxLength = CoreConstants.UUID_LENGTH
+        maxLength = 36
     ),
     val tokenInputFieldState: InputFieldState = InputFieldState(
-        maxLength = CoreConstants.TOKEN_LENGTH
+        maxLength = 32
     )
 )
 

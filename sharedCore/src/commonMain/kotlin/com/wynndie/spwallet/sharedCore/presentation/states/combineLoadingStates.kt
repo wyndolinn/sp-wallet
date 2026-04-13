@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.states
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 
 internal fun combineLoadingStates(
@@ -10,9 +10,11 @@ internal fun combineLoadingStates(
         states.any { it is LoadingState.Loading } -> LoadingState.Loading
 
         states.any { it is LoadingState.Failed } -> {
-            val failedLoadingState =
-                states.firstOrNull { it is LoadingState.Failed } as? LoadingState.Failed
-            val error = failedLoadingState?.message ?: DataError.Remote.UNKNOWN.asUiText()
+            val failedLoadingState = states.firstOrNull {
+                it is LoadingState.Failed
+            } as? LoadingState.Failed
+
+            val error = failedLoadingState?.message ?: Error.Network.UNKNOWN.asUiText()
             LoadingState.Failed(error)
         }
 

@@ -1,9 +1,9 @@
-package com.wynndie.spwallet.sharedCore.domain.error
+package com.wynndie.spwallet.sharedCore.domain.outcome
 
 typealias RootError = Error
 typealias EmptyOutcome<E> = Outcome<Unit, E>
 
-sealed interface Outcome<out D, out E : RootError> {
+sealed interface Outcome<out D, out E : Error> {
     data class Success<out D>(val data: D) : Outcome<D, Nothing>
     data class Error<out E : RootError>(val error: E) : Outcome<Nothing, E>
 }

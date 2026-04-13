@@ -98,7 +98,7 @@
     <string name="activate_card">Активировать карту</string>
     <string name="transfer_by_number">Перевод по номеру</string>
     <string name="transfer_between_cards">Перевод между счетами</string>
-    <string name="custom_cards">Пользовательские карты (%1$s/%2$s)</string>
+    <string name="custom_cards">Наличные</string>
     <string name="bank_cards">Банковские карты</string>
     <string name="transfer_from">Со счёта</string>
     <string name="transfer_to">На счёт</string>

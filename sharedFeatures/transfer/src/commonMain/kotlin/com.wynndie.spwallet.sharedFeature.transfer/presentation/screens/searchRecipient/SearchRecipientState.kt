@@ -6,7 +6,7 @@ import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
 
 data class SearchRecipientState(
     val recipientInputFieldState: InputFieldState  = InputFieldState(
-        maxLength = CoreConstants.MAX_RECIPIENT_NAME_LENGTH
+        maxLength = 16
     ),
     val recipients: List<RecipientCardUi> = emptyList(),
     val isNewRecipient: Boolean = false

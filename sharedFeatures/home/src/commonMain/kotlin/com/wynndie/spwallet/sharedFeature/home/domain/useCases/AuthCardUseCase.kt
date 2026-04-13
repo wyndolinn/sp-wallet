@@ -1,9 +1,9 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
+import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
@@ -19,7 +19,7 @@ class AuthCardUseCase(
         server: SpServers,
         id: String,
         token: String
-    ): EmptyOutcome<DataError> {
+    ): EmptyOutcome<Error.Network> {
         val authKey = authKeyEncoder.encode(id, token)
 
         val user = userRepository.getUnauthedUser(

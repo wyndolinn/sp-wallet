@@ -1,13 +1,11 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
-import androidx.sqlite.SQLiteException
 import com.wynndie.spwallet.sharedCore.data.local.dao.UserDao
 import com.wynndie.spwallet.sharedCore.data.local.entities.AuthedUserEntity
 import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsUserDataSource
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.map
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.map
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
@@ -23,7 +21,7 @@ class UserRepositoryImpl(
     override suspend fun getUnauthedUser(
         authKey: String,
         server: SpServers
-    ): Outcome<Cardholder, DataError.Remote> {
+    ): Outcome<Cardholder, Error.Network> {
         return remoteSpWorldsUserDataSource
             .getUnauthedUser(authKey = authKey)
             .map { it.toDomain(server) }
@@ -31,13 +29,8 @@ class UserRepositoryImpl(
 
     override suspend fun insertAuthedUser(
         user: AuthedUser
-    ): EmptyOutcome<DataError.Local> {
-        return try {
-            userDao.insertAuthedUser(AuthedUserEntity.from(user))
-            Outcome.Success(Unit)
-        } catch (_: SQLiteException) {
-            Outcome.Error(DataError.Local.DISK_FULL)
-        }
+    ) {
+        userDao.insertAuthedUser(AuthedUserEntity.from(user))
     }
 
     override fun getAuthedUsers(): Flow<List<AuthedUser>> {

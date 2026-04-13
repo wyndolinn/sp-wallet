@@ -1,9 +1,9 @@
 package com.wynndie.spwallet.sharedFeature.transfer.domain.useCases
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
+import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.Transfer
@@ -19,7 +19,7 @@ class TransferByCardUseCase(
         receiverCardNumber: String,
         amount: String,
         comment: String
-    ): EmptyOutcome<DataError.Remote> {
+    ): EmptyOutcome<Error.Network> {
 
         val transfer = Transfer(
             receiverCardNumber = receiverCardNumber,

@@ -334,11 +334,7 @@ private fun HomeScreenContent(
             }
 
             TitledContent(
-                title = stringResource(
-                    Res.string.custom_cards,
-                    state.customCards.size,
-                    CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
-                )
+                title = stringResource(Res.string.custom_cards)
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
@@ -356,17 +352,13 @@ private fun HomeScreenContent(
                         )
                     }
 
-                    AnimatedVisibility(
-                        visible = state.customCards.size < CoreConstants.MAX_CUSTOM_CARDS_AMOUNT
-                    ) {
-                        TonalButton(
-                            text = stringResource(Res.string.create),
-                            onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = MaterialTheme.spacing.medium)
-                        )
-                    }
+                    TonalButton(
+                        text = stringResource(Res.string.create),
+                        onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.spacing.medium)
+                    )
                 }
             }
         }

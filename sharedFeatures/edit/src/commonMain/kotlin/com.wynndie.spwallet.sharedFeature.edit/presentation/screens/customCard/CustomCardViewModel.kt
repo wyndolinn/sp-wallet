@@ -4,8 +4,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
-import com.wynndie.spwallet.sharedCore.domain.error.onError
-import com.wynndie.spwallet.sharedCore.domain.error.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
@@ -15,7 +13,6 @@ import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidatio
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType.Snackbar
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
@@ -23,10 +20,8 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceSt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
 import com.wynndie.spwallet.sharedCore.presentation.models.cards.CustomCardUi
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Failed
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Finished
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Loading
 import com.wynndie.spwallet.sharedResources.Res
@@ -61,7 +56,14 @@ class CustomCardViewModel(
             ),
             _state.observeInputField(
                 inputField = { it.balanceInputFieldState },
-                validation = { balanceValidator.validate(BalanceValidationValues(it, minValue = 0)) },
+                validation = {
+                    balanceValidator.validate(
+                        BalanceValidationValues(
+                            it,
+                            minValue = 0
+                        )
+                    )
+                },
                 updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
             )
         ).onEach { isAllValid ->
@@ -145,21 +147,12 @@ class CustomCardViewModel(
                     }
 
                     cardsRepository.insertCustomCard(state.value.card.toDomain())
-                        .onError { error ->
-                            _state.update {
-                                it.copy(
-                                    screenLoadingState = Failed(error.asUiText()),
-                                    saveLoadingState = Failed(error.asUiText())
-                                )
-                            }
-                        }
-                        .onSuccess {
-                            _state.update { it.copy(saveLoadingState = Finished) }
-                            OverlayController.send(
-                                Snackbar(ResourceString(Res.string.cash_creation_succeed))
-                            )
-                            NavController.navigate(CustomCardNavEvent.OnClickBack)
-                        }
+
+                    _state.update { it.copy(saveLoadingState = Finished) }
+                    OverlayController.send(
+                        Snackbar(ResourceString(Res.string.cash_creation_succeed))
+                    )
+                    NavController.navigate(CustomCardNavEvent.OnClickBack)
                 }
             }
 
