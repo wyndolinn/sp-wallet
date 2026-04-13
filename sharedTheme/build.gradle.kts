@@ -2,16 +2,21 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
-    androidTarget {
+    android {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
+
+        namespace = "com.wynndie.spwallet.sharedTheme"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        androidResources.enable = true
     }
 
     listOf(
@@ -27,53 +32,17 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(projects.sharedResources)
+            implementation(projects.sharedResources)
 
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material3)
-            api(compose.ui)
-            api(compose.components.resources)
-            api(compose.components.uiToolingPreview)
-            api(compose.materialIconsExtended)
-
-            implementation(libs.bundles.coil)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.uiToolingPreview)
         }
-
-        androidMain.dependencies {
-            api(projects.sharedResources)
-            api(compose.preview)
-        }
-
-        iosMain.dependencies {
-            api(projects.sharedResources)
-        }
-    }
-}
-
-android {
-    namespace = "com.wynndie.spwallet.sharedTheme"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    androidRuntimeClasspath(libs.compose.uiTooling)
 }

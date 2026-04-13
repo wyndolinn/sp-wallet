@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -30,11 +28,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
@@ -62,6 +60,7 @@ import com.wynndie.spwallet.sharedResources.custom_cards
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.deactivate_card_description
 import com.wynndie.spwallet.sharedResources.deactivate_card_title
+import com.wynndie.spwallet.sharedResources.ic_reload
 import com.wynndie.spwallet.sharedResources.no_authed_cards
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalButton
@@ -73,7 +72,6 @@ import com.wynndie.spwallet.sharedtheme.theme.RectangleShape
 import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,7 +157,7 @@ fun HomeScreenRoot(
                     },
                     actions = {
                         IconButton(
-                            icon = rememberVectorPainter(Icons.Outlined.Refresh),
+                            icon = painterResource(Res.drawable.ic_reload),
                             onClick = { viewModel.onAction(HomeAction.OnRefresh) },
                             loading = state.screenLoadingState == LoadingState.Loading
                         )

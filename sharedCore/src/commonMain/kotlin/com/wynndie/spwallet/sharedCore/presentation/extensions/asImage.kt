@@ -1,21 +1,21 @@
 package com.wynndie.spwallet.sharedCore.presentation.extensions
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBalanceWallet
-import androidx.compose.material.icons.outlined.AddCard
-import androidx.compose.material.icons.outlined.CreditCard
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiImage
+import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.ic_add_card
+import com.wynndie.spwallet.sharedResources.ic_card
+import com.wynndie.spwallet.sharedResources.ic_person
+import com.wynndie.spwallet.sharedResources.ic_wallet
 
 @Composable
 fun CardIcons.asImage(): Painter {
     return when (this) {
-        CardIcons.CASH -> UiImage.VectorImage(Icons.Outlined.AccountBalanceWallet).asPainter()
-        CardIcons.BANK_CARD -> UiImage.VectorImage(Icons.Outlined.CreditCard).asPainter()
-        CardIcons.ADD_CARD -> UiImage.VectorImage(Icons.Outlined.AddCard).asPainter()
-        CardIcons.PERSON -> UiImage.VectorImage(Icons.Outlined.Person).asPainter()
+        CardIcons.CASH -> UiImage.ResourceImage(Res.drawable.ic_wallet).asPainter()
+        CardIcons.BANK_CARD -> UiImage.ResourceImage(Res.drawable.ic_card).asPainter()
+        CardIcons.ADD_CARD -> UiImage.ResourceImage(Res.drawable.ic_add_card).asPainter()
+        CardIcons.PERSON -> UiImage.ResourceImage(Res.drawable.ic_person).asPainter()
     }
 }

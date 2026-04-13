@@ -2,10 +2,6 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.compon
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AddCard
-import androidx.compose.material.icons.outlined.People
-import androidx.compose.material.icons.outlined.TransferWithinAStation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

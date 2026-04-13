@@ -16,8 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +30,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
@@ -47,6 +46,7 @@ import com.wynndie.spwallet.sharedResources.cash_account
 import com.wynndie.spwallet.sharedResources.delete
 import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.enter_card_name
+import com.wynndie.spwallet.sharedResources.ic_delete
 import com.wynndie.spwallet.sharedResources.save
 import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
 import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
@@ -54,8 +54,8 @@ import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
 import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
 import com.wynndie.spwallet.sharedtheme.theme.AppTheme
 import com.wynndie.spwallet.sharedtheme.theme.spacing
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,7 +97,7 @@ fun CustomCardScreenRoot(
                             onClick = { viewModel.onAction(CustomCardAction.OnToggleDeleteDialog) }
                         ) {
                             Icon(
-                                imageVector = Icons.Outlined.Delete,
+                                painter = painterResource(Res.drawable.ic_delete),
                                 contentDescription = stringResource(Res.string.delete),
                                 tint = MaterialTheme.colorScheme.error
                             )
@@ -234,7 +234,7 @@ private fun CustomCardScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CustomCardScreenPreview() {
     AppTheme {
