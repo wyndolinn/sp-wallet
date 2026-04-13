@@ -49,6 +49,7 @@ android {
         create("qa") {
             initWith(getByName("debug"))
 
+            isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
 
