@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
+package com.wynndie.spwallet.sharedFeature.edit.presentation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -39,7 +39,7 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayab
 import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.component.DeleteCardDialog
+import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.balance
 import com.wynndie.spwallet.sharedResources.card_name
@@ -69,9 +69,9 @@ fun CustomCardScreenRoot(
 
     if (state.isCustomizationSheetVisible) {
         CustomizationSheet(
-            onDismiss = { viewModel.onAction(CustomCardAction.OnToggleCustomizationSheet) },
+            onDismiss = { viewModel.onAction(CustomCardAction.ToggleCustomizationSheet(false)) },
             selectedColorChip = state.selectedColorChip,
-            onColorChipClick = { viewModel.onAction(CustomCardAction.OnClickColorChip(it)) },
+            onColorChipClick = { viewModel.onAction(CustomCardAction.SelectColor(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium)
@@ -80,8 +80,8 @@ fun CustomCardScreenRoot(
 
     if (state.isDeleteDialogVisible) {
         DeleteCardDialog(
-            onConfirm = { viewModel.onAction(CustomCardAction.OnClickDeleteCard) },
-            onDismiss = { viewModel.onAction(CustomCardAction.OnToggleDeleteDialog) },
+            onConfirm = { viewModel.onAction(CustomCardAction.DeleteCard) },
+            onDismiss = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(false)) },
             modifier = Modifier
         )
     }
@@ -91,11 +91,11 @@ fun CustomCardScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.cash_account),
-                onClickBack = { viewModel.onAction(CustomCardAction.OnClickBack) },
+                onClickBack = { viewModel.onAction(CustomCardAction.NavigateBack) },
                 actions = {
                     if (state.card.id.isNotBlank()) {
                         IconButton(
-                            onClick = { viewModel.onAction(CustomCardAction.OnToggleDeleteDialog) }
+                            onClick = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(true)) }
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_delete),
@@ -175,13 +175,13 @@ private fun CustomCardScreen(
             CustomizableTile(
                 color = state.card.color.asColor(),
                 icon = state.card.icon.asImage(),
-                onClick = { onAction(CustomCardAction.OnToggleCustomizationSheet) },
+                onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             InputField(
                 value = state.nameInputFieldState.value,
-                onValueChange = { onAction(CustomCardAction.OnChangeNameValue(it)) },
+                onValueChange = { onAction(CustomCardAction.ChangeNameValue(it)) },
                 label = stringResource(Res.string.enter_card_name),
                 placeholder = stringResource(Res.string.card_name),
                 supportingText = state.nameInputFieldState.supportingText?.asString(),
@@ -199,7 +199,7 @@ private fun CustomCardScreen(
 
             InputField(
                 value = state.balanceInputFieldState.value,
-                onValueChange = { onAction(CustomCardAction.OnChangeBalanceValue(it)) },
+                onValueChange = { onAction(CustomCardAction.ChangeBalanceValue(it)) },
                 label = stringResource(Res.string.enter_balance),
                 placeholder = stringResource(Res.string.balance),
                 supportingText = state.balanceInputFieldState.supportingText?.asString(),
@@ -221,14 +221,7 @@ private fun CustomCardScreen(
 
         Button(
             text = stringResource(Res.string.save),
-            onClick = {
-                onAction(
-                    CustomCardAction.OnClickSaveCard(
-                        cardName = state.nameInputFieldState.value.text,
-                        cardBalance = state.balanceInputFieldState.value.text
-                    )
-                )
-            },
+            onClick = { onAction(CustomCardAction.SaveCard) },
             enabled = state.isSaveButtonEnabled,
             modifier = Modifier.fillMaxWidth()
         )

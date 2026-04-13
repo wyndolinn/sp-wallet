@@ -17,10 +17,8 @@ data class TransferBetweenCardsState(
     val sourceCards: List<AuthedCard> = emptyList(),
     val destinationCards: List<TransferCard> = emptyList(),
 
-    val sourceCardsCarouselPage: Int = 0,
-    val destinationCardsCarouselPage: Int = 0,
-
-    val isCalculatorSheetVisible: Boolean = false,
+    val selectedSourceCard: Int = 0,
+    val selectedDestinationCard: Int = 0,
 
     val amountInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH

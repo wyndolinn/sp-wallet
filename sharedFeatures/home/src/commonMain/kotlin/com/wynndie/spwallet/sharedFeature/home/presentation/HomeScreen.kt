@@ -82,23 +82,23 @@ fun HomeScreenRoot(
 
     if (state.isAuthCardSheetVisible) {
         AuthCardSheet(
-            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthCardSheet(false)) },
+            onDismiss = { viewModel.onAction(HomeAction.ToggleAuthCardSheet(false)) },
             loadingState = state.authLoadingState,
             isAuthButtonEnabled = state.isAuthButtonEnabled,
             cards = state.unauthedCards,
             initialPage = state.carouselPage,
             idInputFieldState = state.idInputFieldState,
-            onChangeIdValue = { viewModel.onAction(HomeAction.OnChangeCardIdValue(it)) },
+            onChangeIdValue = { viewModel.onAction(HomeAction.ChangeCardIdValue(it)) },
             onToggleCardIdFocus = {
-                if (!it) viewModel.onAction(HomeAction.OnToggleCardIdFocus)
+                if (!it) viewModel.onAction(HomeAction.ClearIdFocus)
             },
             tokenInputFieldState = state.tokenInputFieldState,
-            onChangeTokenValue = { viewModel.onAction(HomeAction.OnChangeCardTokenValue(it)) },
+            onChangeTokenValue = { viewModel.onAction(HomeAction.ChangeTokenValue(it)) },
             onToggleCardTokenFocus = {
-                if (!it) viewModel.onAction(HomeAction.OnToggleCardTokenFocus)
+                if (!it) viewModel.onAction(HomeAction.ClearCardTokenFocus)
             },
             onClickAuthButton = { id, token ->
-                viewModel.onAction(HomeAction.OnClickAuthCard(id = id, token = token))
+                viewModel.onAction(HomeAction.AuthCard(id = id, token = token))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -108,17 +108,17 @@ fun HomeScreenRoot(
 
     if (state.isAuthedCardSheetVisible) {
         AuthedCardSheet(
-            onDismiss = { viewModel.onAction(HomeAction.OnToggleAuthedCardSheet(false)) },
+            onDismiss = { viewModel.onAction(HomeAction.ToggleAuthedCardSheet(false)) },
             cards = state.authedCards,
             page = state.carouselPage,
             onDeleteButtonClick = {
-                viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(true))
+                viewModel.onAction(HomeAction.ToggleDeleteCardDialog(true))
             },
             onTransferBetweenCardsClick = {
-                viewModel.onAction(HomeAction.OnClickTransferBetweenCard(it))
+                viewModel.onAction(HomeAction.TransferBetweenCards(it))
             },
             onTransferButtonClick = {
-                viewModel.onAction(HomeAction.OnClickTransferByCard(it))
+                viewModel.onAction(HomeAction.TransferByCard(it))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -130,10 +130,10 @@ fun HomeScreenRoot(
         Dialog(
             onConfirm = {
                 viewModel.onAction(
-                    HomeAction.OnClickDeactivateCard(state.authedCards[state.carouselPage])
+                    HomeAction.DeactivateCard(state.authedCards[state.carouselPage])
                 )
             },
-            onDismiss = { viewModel.onAction(HomeAction.OnToggleDeleteCardDialog(false)) },
+            onDismiss = { viewModel.onAction(HomeAction.ToggleDeleteCardDialog(false)) },
             title = stringResource(Res.string.deactivate_card_title),
             description = stringResource(Res.string.deactivate_card_description),
             confirmButtonText = stringResource(Res.string.deactivate),
@@ -156,7 +156,7 @@ fun HomeScreenRoot(
                     actions = {
                         IconButton(
                             icon = painterResource(Res.drawable.ic_reload),
-                            onClick = { viewModel.onAction(HomeAction.OnRefresh) },
+                            onClick = { viewModel.onAction(HomeAction.Refresh) },
                             loading = state.screenLoadingState == LoadingState.Loading
                         )
                     },
@@ -251,7 +251,7 @@ private fun HomeScreenContent(
                     shape = RectangleShape,
                     border = BorderStroke(0.dp, Color.Transparent),
                     onCheckedChange = {
-                        onAction(HomeAction.OnClickServerOption(server))
+                        onAction(HomeAction.SelectServer(server))
                     },
                     contentPadding = PaddingValues(
                         horizontal = MaterialTheme.spacing.medium,
@@ -278,13 +278,13 @@ private fun HomeScreenContent(
         if (isUserAuthed) {
             ActionButtons(
                 onAuthCardClick = {
-                    onAction(HomeAction.OnToggleAuthCardSheet(true))
+                    onAction(HomeAction.ToggleAuthCardSheet(true))
                 },
                 onTransferBetweenCardsClick = {
-                    onAction(HomeAction.OnClickTransferBetweenCard(null))
+                    onAction(HomeAction.TransferBetweenCards(""))
                 },
                 onTransferByNumberClick = {
-                    onAction(HomeAction.OnClickTransferByCard(null))
+                    onAction(HomeAction.TransferByCard(""))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -295,7 +295,7 @@ private fun HomeScreenContent(
                 title = stringResource(Res.string.no_authed_cards),
                 description = stringResource(Res.string.auth_card_to_get_benefits),
                 onClickAuthCard = {
-                    onAction(HomeAction.OnToggleAuthCardSheet(true))
+                    onAction(HomeAction.ToggleAuthCardSheet(true))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -321,7 +321,7 @@ private fun HomeScreenContent(
                                 cardName = card.name,
                                 cardNumber = card.number,
                                 balance = card.balance.formatAsDisplayableOre(),
-                                onClick = { onAction(HomeAction.OnClickAuthedCard(card.id)) },
+                                onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = MaterialTheme.spacing.medium)
@@ -343,7 +343,7 @@ private fun HomeScreenContent(
                             iconBackground = card.color.asColor(),
                             cardName = card.name,
                             balance = card.balance.formatAsDisplayableOre(),
-                            onClick = { onAction(HomeAction.OnClickCustomCard(card.id)) },
+                            onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.spacing.medium)
@@ -352,7 +352,7 @@ private fun HomeScreenContent(
 
                     TonalButton(
                         text = stringResource(Res.string.create),
-                        onClick = { onAction(HomeAction.OnClickCustomCard(null)) },
+                        onClick = { onAction(HomeAction.SelectCustomCard("")) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = MaterialTheme.spacing.medium)

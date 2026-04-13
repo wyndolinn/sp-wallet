@@ -45,24 +45,18 @@ fun NavGraphBuilder.transferNavGraph(
 
             ObserveNavEvent<SearchRecipientNavEvent> { navEvent ->
                 when (navEvent) {
-                    SearchRecipientNavEvent.OnClickBack -> {
+                    SearchRecipientNavEvent.NavigateBack -> {
                         navController.navigateUp()
                     }
 
-                    is SearchRecipientNavEvent.OnClickRecipient -> {
+                    is SearchRecipientNavEvent.NavigateToTransfer -> {
                         recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
 
                         navController.navigate(
-                            Route.TransferNavGraph.TransferByCardNumber(
-                                cardId = args.cardId,
-                            )
+                            Route.TransferNavGraph.TransferByCardNumber(args.cardId)
                         ) {
                             launchSingleTop = true
                         }
-                    }
-
-                    is SearchRecipientNavEvent.OnClickAddRecipient -> {
-
                     }
                 }
             }
@@ -81,18 +75,13 @@ fun NavGraphBuilder.transferNavGraph(
 
             ObserveNavEvent<SearchRecipientNavEvent> { navEvent ->
                 when (navEvent) {
-                    SearchRecipientNavEvent.OnClickBack -> {
+                    SearchRecipientNavEvent.NavigateBack -> {
                         navController.navigateUp()
                     }
 
-                    is SearchRecipientNavEvent.OnClickRecipient -> {
+                    is SearchRecipientNavEvent.NavigateToTransfer -> {
                         recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
-
                         navController.navigateUp()
-                    }
-
-                    is SearchRecipientNavEvent.OnClickAddRecipient -> {
-
                     }
                 }
             }
@@ -115,17 +104,17 @@ fun NavGraphBuilder.transferNavGraph(
 
             ObserveNavEvent<TransferByCardNavEvent> { navEvent ->
                 when (navEvent) {
-                    TransferByCardNavEvent.OnClickBack -> {
+                    TransferByCardNavEvent.NavigateBack -> {
                         navController.navigateUp()
                     }
 
-                    TransferByCardNavEvent.OnClickRecipient -> {
+                    TransferByCardNavEvent.NavigateToEditRecipient -> {
                         navController.navigate(Route.TransferNavGraph.EditRecipient) {
                             launchSingleTop = true
                         }
                     }
 
-                    TransferByCardNavEvent.OnTransferSuccess -> {
+                    TransferByCardNavEvent.NavigateToResult -> {
                         navController.popBackStack(
                             route = Route.TransferNavGraph,
                             inclusive = true
@@ -154,11 +143,11 @@ fun NavGraphBuilder.transferNavGraph(
 
             ObserveNavEvent<TransferBetweenCardsNavEvent> { navEvent ->
                 when (navEvent) {
-                    TransferBetweenCardsNavEvent.OnClickBack -> {
+                    TransferBetweenCardsNavEvent.NavigateBack -> {
                         navController.navigateUp()
                     }
 
-                    TransferBetweenCardsNavEvent.OnTransferSuccess -> {
+                    TransferBetweenCardsNavEvent.NavigateToResult -> {
                         navController.popBackStack(
                             route = Route.TransferNavGraph,
                             inclusive = true

@@ -13,15 +13,10 @@ data class TransferByCardState(
     val loadingState: LoadingState = LoadingState.Finished,
 
     val isTransferButtonEnabled: Boolean = false,
-
     val user: AuthedUser = emptyAuthedUser,
     val recipient: RecipientCard = emptyRecipientCard,
-
-    val cards: List<AuthedCard> = emptyList(),
-
-    val carouselPage: Int = 0,
-    val isCalculatorSheetVisible: Boolean = false,
-
+    val sourceCards: List<AuthedCard> = emptyList(),
+    val selectedSourceCard: Int = 0,
     val amountInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH
     ),

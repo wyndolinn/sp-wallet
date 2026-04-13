@@ -3,7 +3,6 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferBetween
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEvent
 
 sealed interface TransferBetweenCardsNavEvent : NavEvent {
-    
-    data object OnClickBack : TransferBetweenCardsNavEvent
-    data object OnTransferSuccess : TransferBetweenCardsNavEvent
+    data object NavigateBack : TransferBetweenCardsNavEvent
+    data object NavigateToResult : TransferBetweenCardsNavEvent
 }

@@ -25,7 +25,7 @@ fun NavGraphBuilder.homeNavGraph(
 
             ObserveNavEvent<HomeNavEvent> { navEvent ->
                 when (navEvent) {
-                    is HomeNavEvent.OnClickCustomCard -> {
+                    is HomeNavEvent.NavigateToCustomCard -> {
                         navController.navigate(
                             Route.EditNavGraph.CustomCard(navEvent.cardId)
                         ) {
@@ -33,7 +33,7 @@ fun NavGraphBuilder.homeNavGraph(
                         }
                     }
 
-                    is HomeNavEvent.OnClickTransferByCard -> {
+                    is HomeNavEvent.NavigateToTransferByCard -> {
                         navController.navigate(
                             Route.TransferNavGraph.SearchRecipient(navEvent.cardId)
                         ) {
@@ -41,7 +41,7 @@ fun NavGraphBuilder.homeNavGraph(
                         }
                     }
 
-                    is HomeNavEvent.OnClickTransferBetweenCards -> {
+                    is HomeNavEvent.NavigateToTransferBetweenCards -> {
                         navController.navigate(
                             Route.TransferNavGraph.TransferBetweenCards(navEvent.cardId)
                         ) {

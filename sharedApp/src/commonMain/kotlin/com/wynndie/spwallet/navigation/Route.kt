@@ -16,22 +16,22 @@ sealed interface Route {
     data object TransferNavGraph : Route {
 
         @Serializable
-        data class SearchRecipient(val cardId: String? = null)
+        data class SearchRecipient(val cardId: String = "")
 
         @Serializable
         data object EditRecipient
 
         @Serializable
-        data class TransferByCardNumber(val cardId: String?)
+        data class TransferByCardNumber(val cardId: String)
 
         @Serializable
-        data class TransferBetweenCards(val cardId: String?)
+        data class TransferBetweenCards(val cardId: String)
     }
 
     @Serializable
     data object EditNavGraph : Route {
 
         @Serializable
-        data class CustomCard(val cardId: String? = null)
+        data class CustomCard(val cardId: String = "")
     }
 }

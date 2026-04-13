@@ -62,7 +62,7 @@ fun TransferBetweenCardsScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.between_cards),
-                onClickBack = { viewModel.onAction(TransferBetweenCardsAction.OnClickBack) },
+                onClickBack = { viewModel.onAction(TransferBetweenCardsAction.NavigateBack) },
                 scrollBehavior = scrollBehavior
             )
         },
@@ -121,10 +121,8 @@ private fun TransferBetweenCardsScreenContent(
         ) {
             BaseCarousel(
                 items = state.sourceCards,
-                page = state.sourceCardsCarouselPage,
-                onSwipePage = {
-                    onAction(TransferBetweenCardsAction.OnSwipeSourceCardsCarousel(it))
-                },
+                page = state.selectedSourceCard,
+                onSwipePage = { onAction(TransferBetweenCardsAction.SelectSourceCard(it)) },
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
                 pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
@@ -141,9 +139,9 @@ private fun TransferBetweenCardsScreenContent(
 
             BaseCarousel(
                 items = state.destinationCards,
-                page = state.destinationCardsCarouselPage,
+                page = state.selectedDestinationCard,
                 onSwipePage = {
-                    onAction(TransferBetweenCardsAction.OnSwipeDestinationCardsCarousel(it))
+                    onAction(TransferBetweenCardsAction.SelectDestinationCard(it))
                 },
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
                 pageSpacing = MaterialTheme.spacing.medium
@@ -170,7 +168,7 @@ private fun TransferBetweenCardsScreenContent(
                 value = state.amountInputFieldState.value,
                 onValueChange = {
                     onAction(
-                        TransferBetweenCardsAction.OnChangeTransferAmountValueAction(it)
+                        TransferBetweenCardsAction.ChangeAmountValue(it)
                     )
                 },
                 label = stringResource(Res.string.enter_transfer_amount),
@@ -195,7 +193,7 @@ private fun TransferBetweenCardsScreenContent(
         Button(
             text = stringResource(Res.string.transfer),
             onClick = {
-                onAction(TransferBetweenCardsAction.OnClickTransferAction)
+                onAction(TransferBetweenCardsAction.MakeTransfer)
             },
             enabled = state.isTransferButtonEnabled,
             modifier = Modifier

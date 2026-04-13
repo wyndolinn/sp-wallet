@@ -73,33 +73,23 @@ class SearchRecipientViewModel(
 
     fun onAction(action: SearchRecipientAction) {
         when (action) {
-            SearchRecipientAction.OnClickBack -> {
+            SearchRecipientAction.NavigateBack -> {
                 viewModelScope.launch {
-                    NavController.navigate(SearchRecipientNavEvent.OnClickBack)
+                    NavController.navigate(SearchRecipientNavEvent.NavigateBack)
                 }
             }
 
-            is SearchRecipientAction.OnClickRecipient -> {
+            is SearchRecipientAction.SelectRecipient -> {
                 viewModelScope.launch {
                     NavController.navigate(
-                        SearchRecipientNavEvent.OnClickRecipient(
+                        SearchRecipientNavEvent.NavigateToTransfer(
                             cardNumber = action.cardNumber
                         )
                     )
                 }
             }
 
-            is SearchRecipientAction.OnClickAddRecipient -> {
-                viewModelScope.launch {
-                    NavController.navigate(
-                        SearchRecipientNavEvent.OnClickAddRecipient(
-                            cardNumber = _state.value.recipientInputFieldState.value.text
-                        )
-                    )
-                }
-            }
-
-            is SearchRecipientAction.OnChangeRecipientValue -> {
+            is SearchRecipientAction.ChangeRecipientValue -> {
                 val value = action.value
                     .filterBy(InputFilterOptions.LettersOrDigits.predicate)
                     .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return

@@ -7,10 +7,10 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.wynndie.spwallet.navigation.ObserveNavEvent
 import com.wynndie.spwallet.navigation.Route
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardNavEvent
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardParams
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardScreenRoot
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModel
+import com.wynndie.spwallet.sharedFeature.edit.presentation.CustomCardNavEvent
+import com.wynndie.spwallet.sharedFeature.edit.presentation.CustomCardParams
+import com.wynndie.spwallet.sharedFeature.edit.presentation.CustomCardScreenRoot
+import com.wynndie.spwallet.sharedFeature.edit.presentation.CustomCardViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -32,7 +32,7 @@ fun NavGraphBuilder.editNavGraph(
 
             ObserveNavEvent<CustomCardNavEvent> { navEvent ->
                 when (navEvent) {
-                    CustomCardNavEvent.OnClickBack -> {
+                    CustomCardNavEvent.NavigateBack -> {
                         navController.navigateUp()
                     }
                 }

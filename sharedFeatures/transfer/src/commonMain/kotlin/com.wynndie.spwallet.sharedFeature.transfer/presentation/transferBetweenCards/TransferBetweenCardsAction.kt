@@ -3,15 +3,10 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferBetween
 import androidx.compose.ui.text.input.TextFieldValue
 
 sealed interface TransferBetweenCardsAction {
-    data class OnSwipeSourceCardsCarousel(val index: Int) : TransferBetweenCardsAction
-    data class OnSwipeDestinationCardsCarousel(val index: Int) : TransferBetweenCardsAction
-
-    data object OnToggleCalculatorSheet : TransferBetweenCardsAction
-
-    data object OnClickBack : TransferBetweenCardsAction
-    data object OnClickTransferAction : TransferBetweenCardsAction
-
-    data class OnChangeTransferAmountValueAction(val value: TextFieldValue) : TransferBetweenCardsAction
-
-    data object OnToggleTransferAmountFocus : TransferBetweenCardsAction
+    data object NavigateBack : TransferBetweenCardsAction
+    data object MakeTransfer : TransferBetweenCardsAction
+    data class SelectSourceCard(val index: Int) : TransferBetweenCardsAction
+    data class SelectDestinationCard(val index: Int) : TransferBetweenCardsAction
+    data class ChangeAmountValue(val value: TextFieldValue) : TransferBetweenCardsAction
+    data object ClearAmountFocus : TransferBetweenCardsAction
 }

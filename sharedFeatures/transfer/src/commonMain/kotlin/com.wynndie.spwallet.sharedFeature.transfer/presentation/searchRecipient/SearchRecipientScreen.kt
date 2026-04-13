@@ -52,7 +52,7 @@ fun SearchRecipientScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.recipient),
-                onClickBack = { viewModel.onAction(SearchRecipientAction.OnClickBack) }
+                onClickBack = { viewModel.onAction(SearchRecipientAction.NavigateBack) }
             )
         },
         modifier = Modifier
@@ -86,7 +86,7 @@ private fun SearchRecipientScreenContent(
     ) {
         InputField(
             value = state.recipientInputFieldState.value,
-            onValueChange = { onAction(SearchRecipientAction.OnChangeRecipientValue(it)) },
+            onValueChange = { onAction(SearchRecipientAction.ChangeRecipientValue(it)) },
             placeholder = stringResource(Res.string.card_number),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -111,7 +111,7 @@ private fun SearchRecipientScreenContent(
                             cardOwner = stringResource(Res.string.recipient),
                             onClick = {
                                 onAction(
-                                    SearchRecipientAction.OnClickRecipient(recipient.number)
+                                    SearchRecipientAction.SelectRecipient(recipient.number)
                                 )
                             },
                             modifier = Modifier.fillMaxWidth()
@@ -128,7 +128,7 @@ private fun SearchRecipientScreenContent(
                     cardOwner = stringResource(Res.string.recipient),
                     onClick = {
                         onAction(
-                            SearchRecipientAction.OnClickRecipient(
+                            SearchRecipientAction.SelectRecipient(
                                 cardNumber = state.recipientInputFieldState.value.text
                             )
                         )

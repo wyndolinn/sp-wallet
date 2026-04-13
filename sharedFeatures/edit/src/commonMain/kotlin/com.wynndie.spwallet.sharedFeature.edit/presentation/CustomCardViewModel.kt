@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
+package com.wynndie.spwallet.sharedFeature.edit.presentation
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -71,112 +71,16 @@ class CustomCardViewModel(
 
     fun onAction(action: CustomCardAction) {
         when (action) {
-            CustomCardAction.OnToggleCalculatorSheet -> {
-                _state.update {
-                    it.copy(isCalculatorSheetVisible = !state.value.isCalculatorSheetVisible)
-                }
-            }
-
-            CustomCardAction.OnToggleCustomizationSheet -> {
-                _state.update {
-                    it.copy(isCustomizationSheetVisible = !state.value.isCustomizationSheetVisible)
-                }
-            }
-
-            CustomCardAction.OnToggleDeleteDialog -> {
-                _state.update {
-                    it.copy(isDeleteDialogVisible = !state.value.isDeleteDialogVisible)
-                }
-            }
-
-
-            CustomCardAction.OnClickBack -> {
-                viewModelScope.launch {
-                    NavController.navigate(CustomCardNavEvent.OnClickBack)
-                }
-            }
-
-
-            is CustomCardAction.OnChangeNameValue -> {
-                val value = action.value
-                    .filterBy(InputFilterOptions.LettersOrDigits.predicate)
-                    .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
-
-                _state.update { state ->
-                    state.copy(
-                        card = state.card.copy(name = value.text),
-                        nameInputFieldState = state.nameInputFieldState.copy(value = value)
-                    )
-                }
-            }
-
-            is CustomCardAction.OnChangeBalanceValue -> {
-                val value = action.value
-                    .filterBy(InputFilterOptions.DigitsOnly.predicate)
-                    .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
-
-                _state.update { state ->
-                    state.copy(
-                        card = state.card.copy(
-                            balance = value.text.ifBlank { "0" }.toLong()
-                        ),
-                        balanceInputFieldState = state.balanceInputFieldState.copy(
-                            value = value
-                        )
-                    )
-                }
-            }
-
-
-            is CustomCardAction.OnClickColorChip -> {
-                _state.update { state ->
-                    state.copy(
-                        card = state.card.copy(color = CardColors.of(action.value)),
-                        selectedColorChip = CardColors.of(action.value)
-                    )
-                }
-            }
-
-
-            is CustomCardAction.OnClickSaveCard -> {
-                viewModelScope.launch {
-                    _state.update {
-                        it.copy(saveLoadingState = Loading)
-                    }
-
-                    cardsRepository.insertCustomCard(state.value.card)
-
-                    _state.update { it.copy(saveLoadingState = Finished) }
-                    OverlayController.send(
-                        Snackbar(ResourceString(Res.string.cash_creation_succeed))
-                    )
-                    NavController.navigate(CustomCardNavEvent.OnClickBack)
-                }
-            }
-
-            is CustomCardAction.OnClickDeleteCard -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(isDeleteDialogVisible = false) }
-                    cardsRepository.deleteCustomCard(_state.value.card)
-                    NavController.navigate(CustomCardNavEvent.OnClickBack)
-                }
-            }
-
-            CustomCardAction.OnToggleNameFocus -> {
-                _state.validateInputField(
-                    inputField = { it.nameInputFieldState },
-                    validation = { cardNameValidator.validate(it) },
-                    updateState = { _state.update { state -> state.copy(nameInputFieldState = it) } }
-                )
-            }
-
-            CustomCardAction.OnToggleBalanceFocus -> {
-                _state.validateInputField(
-                    inputField = { it.balanceInputFieldState },
-                    validation = { balanceValidator.validate(BalanceValidationValues(it)) },
-                    updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
-                )
-            }
+            CustomCardAction.NavigateBack -> onBack()
+            CustomCardAction.DeleteCard -> deleteCard()
+            CustomCardAction.SaveCard -> saveCard()
+            is CustomCardAction.SelectColor -> selectColor(action.value)
+            is CustomCardAction.ChangeNameValue -> changeNameValue(action.value)
+            is CustomCardAction.ChangeBalanceValue -> changeBalanceValue(action.value)
+            CustomCardAction.ClearNameFocus -> onClearNameFocus()
+            CustomCardAction.ClearBalanceFocus -> onClearBalanceFocus()
+            is CustomCardAction.ToggleCustomizationSheet -> toggleCustomizationSheet(action.open)
+            is CustomCardAction.ToggleDeleteDialog -> toggleDeleteCardDialog(action.open)
         }
     }
 
@@ -209,5 +113,98 @@ class CustomCardViewModel(
                 it.copy(screenLoadingState = Finished)
             }
         }
+    }
+
+    private fun onBack() {
+        viewModelScope.launch {
+            NavController.navigate(CustomCardNavEvent.NavigateBack)
+        }
+    }
+
+    private fun deleteCard() {
+        viewModelScope.launch {
+            _state.update { it.copy(isDeleteDialogVisible = false) }
+            cardsRepository.deleteCustomCard(_state.value.card)
+            NavController.navigate(CustomCardNavEvent.NavigateBack)
+        }
+    }
+
+    private fun saveCard() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(saveLoadingState = Loading)
+            }
+
+            cardsRepository.insertCustomCard(state.value.card)
+
+            _state.update { it.copy(saveLoadingState = Finished) }
+            OverlayController.send(
+                Snackbar(ResourceString(Res.string.cash_creation_succeed))
+            )
+            NavController.navigate(CustomCardNavEvent.NavigateBack)
+        }
+    }
+
+    private fun selectColor(color: Int) {
+        _state.update { state ->
+            state.copy(
+                card = state.card.copy(color = CardColors.of(color)),
+                selectedColorChip = CardColors.of(color)
+            )
+        }
+    }
+
+    private fun changeNameValue(value: TextFieldValue) {
+        val value = value
+            .filterBy(InputFilterOptions.LettersOrDigits.predicate)
+            .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
+
+        _state.update { state ->
+            state.copy(
+                card = state.card.copy(name = value.text),
+                nameInputFieldState = state.nameInputFieldState.copy(value = value)
+            )
+        }
+    }
+
+    private fun changeBalanceValue(value: TextFieldValue) {
+        val value = value
+            .filterBy(InputFilterOptions.DigitsOnly.predicate)
+            .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
+
+        _state.update { state ->
+            state.copy(
+                card = state.card.copy(
+                    balance = value.text.ifBlank { "0" }.toLong()
+                ),
+                balanceInputFieldState = state.balanceInputFieldState.copy(
+                    value = value
+                )
+            )
+        }
+    }
+
+    private fun onClearNameFocus() {
+        _state.validateInputField(
+            inputField = { it.nameInputFieldState },
+            validation = { cardNameValidator.validate(it) },
+            updateState = { _state.update { state -> state.copy(nameInputFieldState = it) } }
+        )
+    }
+
+    private fun onClearBalanceFocus() {
+        _state.validateInputField(
+            inputField = { it.balanceInputFieldState },
+            validation = { balanceValidator.validate(BalanceValidationValues(it)) },
+            updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
+        )
+    }
+
+    private fun toggleCustomizationSheet(open: Boolean) {
+        _state.update { it.copy(isCustomizationSheetVisible = open) }
+    }
+
+    private fun toggleDeleteCardDialog(open: Boolean) {
+        _state.update { it.copy(isDeleteDialogVisible = open) }
     }
 }

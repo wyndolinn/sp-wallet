@@ -65,7 +65,7 @@ fun TransferByCardScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.by_number),
-                onClickBack = { viewModel.onAction(TransferByCardAction.OnClickBack) },
+                onClickBack = { viewModel.onAction(TransferByCardAction.NavigateBack) },
                 scrollBehavior = scrollBehavior
             )
         },
@@ -125,10 +125,10 @@ private fun TransferByNumberScreen(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
         ) {
             BaseCarousel(
-                items = state.cards,
-                page = state.carouselPage,
+                items = state.sourceCards,
+                page = state.selectedSourceCard,
                 onSwipePage = {
-                    onAction(TransferByCardAction.OnSwipeCarousel(it))
+                    onAction(TransferByCardAction.SelectSourceCard(it))
                 },
                 modifier = Modifier
             ) { card ->
@@ -155,7 +155,7 @@ private fun TransferByNumberScreen(
                 } else MaterialTheme.colorScheme.tertiary,
                 name = state.recipient.name.ifBlank { stringResource(Res.string.recipient) },
                 number = state.recipient.number,
-                onClick = { onAction(TransferByCardAction.OnClickRecipient) },
+                onClick = { onAction(TransferByCardAction.EditRecipient) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.medium)
@@ -170,7 +170,7 @@ private fun TransferByNumberScreen(
 
             InputField(
                 value = state.amountInputFieldState.value,
-                onValueChange = { onAction(TransferByCardAction.OnChangeTransferAmountValue(it)) },
+                onValueChange = { onAction(TransferByCardAction.ChangeAmountValue(it)) },
                 label = stringResource(Res.string.enter_transfer_amount),
                 supportingText = state.amountInputFieldState.supportingText?.asString(),
                 hasError = state.amountInputFieldState.hasError,
@@ -188,7 +188,7 @@ private fun TransferByNumberScreen(
 
             InputField(
                 value = state.commentInputFieldState.value,
-                onValueChange = { onAction(TransferByCardAction.OnChangeCommentValue(it)) },
+                onValueChange = { onAction(TransferByCardAction.ChangeCommentValue(it)) },
                 label = stringResource(Res.string.enter_comment),
                 supportingText = state.commentInputFieldState.supportingText?.asString(),
                 hasError = state.commentInputFieldState.hasError,
@@ -201,13 +201,7 @@ private fun TransferByNumberScreen(
                 keyboardActions = KeyboardActions(
                     onNext = {
                         focusManager.clearFocus(true)
-                        onAction(
-                            TransferByCardAction.OnClickTransfer(
-                                cardNumber = state.recipient.number,
-                                transferAmount = state.amountInputFieldState.value.text,
-                                comment = state.commentInputFieldState.value.text
-                            )
-                        )
+                        onAction(TransferByCardAction.MakeTransfer)
                     }
                 ),
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
@@ -219,15 +213,7 @@ private fun TransferByNumberScreen(
 
         Button(
             text = stringResource(Res.string.transfer),
-            onClick = {
-                onAction(
-                    TransferByCardAction.OnClickTransfer(
-                        cardNumber = state.recipient.number,
-                        transferAmount = state.amountInputFieldState.value.text,
-                        comment = state.commentInputFieldState.value.text
-                    )
-                )
-            },
+            onClick = { onAction(TransferByCardAction.MakeTransfer) },
             enabled = state.isTransferButtonEnabled,
             modifier = Modifier
                 .padding(MaterialTheme.spacing.medium)

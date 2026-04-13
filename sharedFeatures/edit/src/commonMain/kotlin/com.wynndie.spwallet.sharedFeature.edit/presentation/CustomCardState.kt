@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
+package com.wynndie.spwallet.sharedFeature.edit.presentation
 
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
@@ -15,7 +15,6 @@ data class CustomCardState(
     val isSaveButtonEnabled: Boolean = false,
 
     val isCustomizationSheetVisible: Boolean = false,
-    val isCalculatorSheetVisible: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
 
     val nameInputFieldState: InputFieldState = InputFieldState(

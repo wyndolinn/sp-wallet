@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferBetweenCards
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
@@ -45,7 +46,7 @@ class TransferBetweenCardsViewModel(
 
     private val _state = MutableStateFlow(TransferBetweenCardsState())
     val state = _state.map { state ->
-        state.sourceCards.getOrNull(state.sourceCardsCarouselPage)?.let { sourceCard ->
+        state.sourceCards.getOrNull(state.selectedSourceCard)?.let { sourceCard ->
             state.copy(
                 destinationCards = state.destinationCards.filter {
                     it.id != sourceCard.id
@@ -69,9 +70,7 @@ class TransferBetweenCardsViewModel(
                 addAll(authedCards.filter { it.server == selectedServer }.map(TransferCard::of))
                 addAll(unauthedCards.filter { it.server == selectedServer }.map(TransferCard::of))
             }
-            val destinationCard = args.destinationCardId?.let { id ->
-                destinationsCards.find { it.id == id }
-            }
+            val destinationCard = destinationsCards.find { it.id == args.destinationCardId }
 
             _state.update { state ->
                 state.copy(
@@ -99,86 +98,82 @@ class TransferBetweenCardsViewModel(
 
     fun onAction(action: TransferBetweenCardsAction) {
         when (action) {
-            is TransferBetweenCardsAction.OnSwipeSourceCardsCarousel -> {
-                _state.update { it.copy(sourceCardsCarouselPage = action.index) }
-            }
-
-            is TransferBetweenCardsAction.OnSwipeDestinationCardsCarousel -> {
-                _state.update { it.copy(destinationCardsCarouselPage = action.index) }
-            }
-
-
-            TransferBetweenCardsAction.OnClickBack -> {
-                viewModelScope.launch {
-                    NavController.navigate(TransferBetweenCardsNavEvent.OnClickBack)
-                }
-            }
-
-            is TransferBetweenCardsAction.OnClickTransferAction -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(loadingState = LoadingState.Loading) }
-
-                    val sourceCard = state.value.sourceCards[state.value.sourceCardsCarouselPage]
-                    val targetCard =
-                        state.value.destinationCards[state.value.destinationCardsCarouselPage]
-                    val transferAmount = state.value.amountInputFieldState.value.text
-
-                    transferByCardUseCase(
-                        card = sourceCard,
-                        receiver = targetCard.number,
-                        amount = transferAmount,
-                        comment = "Перевод между счетами"
-                    ).getOrElse { error ->
-                        OverlayController.send(Snackbar(error.asUiText()))
-                        _state.update { it.copy(loadingState = LoadingState.Finished) }
-                        return@launch
-                    }
-
-                    OverlayController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
-                    NavController.navigate(TransferBetweenCardsNavEvent.OnTransferSuccess)
-
-                    _state.update { it.copy(loadingState = LoadingState.Finished) }
-                }
-            }
-
-
-            is TransferBetweenCardsAction.OnChangeTransferAmountValueAction -> {
-                val value = action.value
-                    .filterBy(InputFilterOptions.DigitsOnly.predicate)
-                    .dropFirst('0')
-                    .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
-
-                _state.update { state ->
-                    state.copy(
-                        amountInputFieldState = state.amountInputFieldState.copy(
-                            value = value
-                        )
-                    )
-                }
-            }
-
-
-            TransferBetweenCardsAction.OnToggleCalculatorSheet -> {
-                _state.update { state ->
-                    state.copy(
-                        isCalculatorSheetVisible = !state.isCalculatorSheetVisible
-                    )
-                }
-            }
-
-            TransferBetweenCardsAction.OnToggleTransferAmountFocus -> {
-                _state.validateInputField(
-                    inputField = { it.amountInputFieldState },
-                    validation = {
-                        val validationValues = BalanceValidationValues(
-                            value = _state.value.amountInputFieldState.value.text,
-                            maxValue = _state.value.sourceCards[_state.value.sourceCardsCarouselPage].balance
-                        )
-                        transferAmountValidator.validate(validationValues)
-                    },
-                    updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
-                )
-            }
+            TransferBetweenCardsAction.NavigateBack -> goBack()
+            TransferBetweenCardsAction.MakeTransfer -> makeTransfer()
+            is TransferBetweenCardsAction.SelectSourceCard -> selectSourceCard(action.index)
+            is TransferBetweenCardsAction.SelectDestinationCard -> selectDestinationCard(action.index)
+            is TransferBetweenCardsAction.ChangeAmountValue -> changeAmountValue(action.value)
+            TransferBetweenCardsAction.ClearAmountFocus -> clearAmountFocus()
         }
+    }
+
+    private fun makeTransfer() {
+        viewModelScope.launch {
+            _state.update { it.copy(loadingState = LoadingState.Loading) }
+
+            val sourceCard = state.value.sourceCards[state.value.selectedSourceCard]
+            val targetCard =
+                state.value.destinationCards[state.value.selectedDestinationCard]
+            val transferAmount = state.value.amountInputFieldState.value.text
+
+            transferByCardUseCase(
+                card = sourceCard,
+                receiver = targetCard.number,
+                amount = transferAmount,
+                comment = "Перевод между счетами"
+            ).getOrElse { error ->
+                OverlayController.send(Snackbar(error.asUiText()))
+                _state.update { it.copy(loadingState = LoadingState.Finished) }
+                return@launch
+            }
+
+            OverlayController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+            NavController.navigate(TransferBetweenCardsNavEvent.NavigateToResult)
+
+            _state.update { it.copy(loadingState = LoadingState.Finished) }
+        }
+    }
+
+    private fun changeAmountValue(value: TextFieldValue) {
+        val value = value
+            .filterBy(InputFilterOptions.DigitsOnly.predicate)
+            .dropFirst('0')
+            .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
+
+        _state.update { state ->
+            state.copy(
+                amountInputFieldState = state.amountInputFieldState.copy(
+                    value = value
+                )
+            )
+        }
+    }
+
+    private fun clearAmountFocus() {
+        _state.validateInputField(
+            inputField = { it.amountInputFieldState },
+            validation = {
+                val validationValues = BalanceValidationValues(
+                    value = _state.value.amountInputFieldState.value.text,
+                    maxValue = _state.value.sourceCards[_state.value.selectedSourceCard].balance
+                )
+                transferAmountValidator.validate(validationValues)
+            },
+            updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
+        )
+    }
+
+    private fun goBack() {
+        viewModelScope.launch {
+            NavController.navigate(TransferBetweenCardsNavEvent.NavigateBack)
+        }
+    }
+
+    private fun selectSourceCard(index: Int) {
+        _state.update { it.copy(selectedSourceCard = index) }
+    }
+
+    private fun selectDestinationCard(index: Int) {
+        _state.update { it.copy(selectedDestinationCard = index) }
     }
 }

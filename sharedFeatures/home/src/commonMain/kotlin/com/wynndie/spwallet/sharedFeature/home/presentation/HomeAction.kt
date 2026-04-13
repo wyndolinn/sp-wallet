@@ -5,25 +5,26 @@ import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 
 sealed interface HomeAction {
-    data object OnRefresh : HomeAction
+    data object Refresh : HomeAction
 
-    data class OnClickServerOption(val server: SpServers) : HomeAction
+    data class SelectServer(val server: SpServers) : HomeAction
 
-    data class OnToggleAuthCardSheet(val isOpen: Boolean) : HomeAction
-    data class OnToggleAuthedCardSheet(val isOpen: Boolean) : HomeAction
-    data class OnToggleDeleteCardDialog(val isOpen: Boolean) : HomeAction
+    data class ToggleAuthCardSheet(val open: Boolean) : HomeAction
+    data class ToggleAuthedCardSheet(val open: Boolean) : HomeAction
+    data class ToggleDeleteCardDialog(val open: Boolean) : HomeAction
 
-    data class OnClickTransferBetweenCard(val cardId: String?) : HomeAction
-    data class OnClickAuthCard(val id: String, val token: String) : HomeAction
-    data class OnClickDeactivateCard(val card: AuthedCard) : HomeAction
-    data class OnClickTransferByCard(val cardId: String?) : HomeAction
+    data class TransferBetweenCards(val id: String) : HomeAction
+    data class TransferByCard(val id: String) : HomeAction
+    data class AuthCard(val id: String, val token: String) : HomeAction
+    data class DeactivateCard(val card: AuthedCard) : HomeAction
 
-    data class OnClickAuthedCard(val cardId: String) : HomeAction
-    data class OnClickUnauthedCard(val cardId: String) : HomeAction
-    data class OnClickCustomCard(val cardId: String?) : HomeAction
+    data class SelectAuthedCard(val id: String) : HomeAction
+    data class SelectUnauthedCard(val id: String) : HomeAction
+    data class SelectCustomCard(val id: String) : HomeAction
 
-    data class OnChangeCardIdValue(val value: TextFieldValue) : HomeAction
-    data class OnChangeCardTokenValue(val value: TextFieldValue) : HomeAction
-    data object OnToggleCardIdFocus : HomeAction
-    data object OnToggleCardTokenFocus : HomeAction
+    data class ChangeCardIdValue(val value: TextFieldValue) : HomeAction
+    data class ChangeTokenValue(val value: TextFieldValue) : HomeAction
+
+    data object ClearIdFocus : HomeAction
+    data object ClearCardTokenFocus : HomeAction
 }

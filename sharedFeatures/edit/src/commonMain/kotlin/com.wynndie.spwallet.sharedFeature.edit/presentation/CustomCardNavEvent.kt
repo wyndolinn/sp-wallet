@@ -1,7 +1,7 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
+package com.wynndie.spwallet.sharedFeature.edit.presentation
 
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEvent
 
 sealed interface CustomCardNavEvent : NavEvent {
-    data object OnClickBack : CustomCardNavEvent
+    data object NavigateBack : CustomCardNavEvent
 }
