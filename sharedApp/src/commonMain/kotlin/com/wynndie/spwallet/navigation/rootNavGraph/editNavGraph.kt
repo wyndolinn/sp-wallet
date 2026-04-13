@@ -5,29 +5,30 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import com.wynndie.spwallet.navigation.EditNavGraphRoutes
 import com.wynndie.spwallet.navigation.ObserveNavEvent
-import com.wynndie.spwallet.navigation.koinViewModelWithArgs
+import com.wynndie.spwallet.navigation.Route
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardNavEvent
+import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardParams
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardScreenRoot
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModel
-import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard.CustomCardViewModelArgs
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.editNavGraph(
     navController: NavController
 ) {
 
-    navigation<EditNavGraphRoutes.EditNavGraph>(
-        startDestination = EditNavGraphRoutes.CustomCard()
+    navigation<Route.EditNavGraph>(
+        startDestination = Route.EditNavGraph.CustomCard()
     ) {
 
-        composable<EditNavGraphRoutes.CustomCard> { navBackStackEntry ->
+        composable<Route.EditNavGraph.CustomCard> { navBackStackEntry ->
 
-            val args = navBackStackEntry.toRoute<EditNavGraphRoutes.CustomCard>()
+            val args = navBackStackEntry.toRoute<Route.EditNavGraph.CustomCard>()
 
-            val viewModel = koinViewModelWithArgs<CustomCardViewModel>(
-                CustomCardViewModelArgs(cardId = args.cardId)
-            )
+            val viewModel = koinViewModel<CustomCardViewModel> {
+                parametersOf(CustomCardParams(args.cardId))
+            }
 
             ObserveNavEvent<CustomCardNavEvent> { navEvent ->
                 when (navEvent) {

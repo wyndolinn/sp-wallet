@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 class TransferBetweenCardsViewModel(
     cardsRepository: CardsRepository,
     preferencesRepository: PreferencesRepository,
-    private val args: TransferBetweenCardsArgs,
+    private val args: TransferBetweenCardsParams,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: BalanceValidator
 ) : ViewModel() {

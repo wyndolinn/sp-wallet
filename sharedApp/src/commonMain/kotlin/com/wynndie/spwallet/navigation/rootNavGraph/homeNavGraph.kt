@@ -4,10 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.wynndie.spwallet.navigation.EditNavGraphRoutes
-import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
 import com.wynndie.spwallet.navigation.ObserveNavEvent
-import com.wynndie.spwallet.navigation.TransferNavGraphRoutes
+import com.wynndie.spwallet.navigation.Route
 import com.wynndie.spwallet.sharedFeature.home.presentation.HomeNavEvent
 import com.wynndie.spwallet.sharedFeature.home.presentation.HomeScreenRoot
 import com.wynndie.spwallet.sharedFeature.home.presentation.HomeViewModel
@@ -17,11 +15,11 @@ fun NavGraphBuilder.homeNavGraph(
     navController: NavController
 ) {
 
-    navigation<HomeNavGraphRoutes.HomeNavGraph>(
-        startDestination = HomeNavGraphRoutes.Home
+    navigation<Route.HomeNavGraph>(
+        startDestination = Route.HomeNavGraph.Home
     ) {
 
-        composable<HomeNavGraphRoutes.Home> {
+        composable<Route.HomeNavGraph.Home> {
 
             val viewModel = koinViewModel<HomeViewModel>()
 
@@ -29,7 +27,7 @@ fun NavGraphBuilder.homeNavGraph(
                 when (navEvent) {
                     is HomeNavEvent.OnClickCustomCard -> {
                         navController.navigate(
-                            EditNavGraphRoutes.CustomCard(navEvent.cardId)
+                            Route.EditNavGraph.CustomCard(navEvent.cardId)
                         ) {
                             launchSingleTop = true
                         }
@@ -37,7 +35,7 @@ fun NavGraphBuilder.homeNavGraph(
 
                     is HomeNavEvent.OnClickTransferByCard -> {
                         navController.navigate(
-                            TransferNavGraphRoutes.SearchRecipient(navEvent.cardId)
+                            Route.TransferNavGraph.SearchRecipient(navEvent.cardId)
                         ) {
                             launchSingleTop = true
                         }
@@ -45,7 +43,7 @@ fun NavGraphBuilder.homeNavGraph(
 
                     is HomeNavEvent.OnClickTransferBetweenCards -> {
                         navController.navigate(
-                            TransferNavGraphRoutes.TransferBetweenCards(navEvent.cardId)
+                            Route.TransferNavGraph.TransferBetweenCards(navEvent.cardId)
                         ) {
                             launchSingleTop = true
                         }

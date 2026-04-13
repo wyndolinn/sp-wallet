@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CustomCardViewModel(
-    private val args: CustomCardViewModelArgs,
+    private val args: CustomCardParams,
     private val cardsRepository: CardsRepository,
     private val preferencesRepository: PreferencesRepository,
     private val cardNameValidator: CardNameValidator,

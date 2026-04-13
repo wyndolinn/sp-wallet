@@ -7,7 +7,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.wynndie.spwallet.navigation.HomeNavGraphRoutes
+import com.wynndie.spwallet.navigation.Route
 import com.wynndie.spwallet.navigation.rootNavGraph.navHost.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.components.effects.ObserveAsEvents
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
@@ -49,7 +49,7 @@ fun App() {
             }
         ) { _ ->
             RootNavHost(
-                startDestination = HomeNavGraphRoutes.HomeNavGraph
+                startDestination = Route.HomeNavGraph
             )
         }
     }

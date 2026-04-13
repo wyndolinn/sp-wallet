@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 class TransferByCardViewModel(
     userRepository: UserRepository,
     cardsRepository: CardsRepository,
-    private val args: TransferByCardViewModelArgs,
+    private val args: TransferByCardParams,
     private val recipientRepository: RecipientRepository,
     private val preferencesRepository: PreferencesRepository,
     private val transferByCardUseCase: TransferByCardUseCase,

@@ -3,56 +3,35 @@ package com.wynndie.spwallet.navigation
 import kotlinx.serialization.Serializable
 
 
-sealed interface Route
-
-
-sealed interface HomeNavGraphRoutes : Route {
+sealed interface Route {
 
     @Serializable
-    data object HomeNavGraph : HomeNavGraphRoutes
+    data object HomeNavGraph : Route {
+
+        @Serializable
+        data object Home
+    }
 
     @Serializable
-    data object Home : HomeNavGraphRoutes
-}
+    data object TransferNavGraph : Route {
 
+        @Serializable
+        data class SearchRecipient(val cardId: String? = null)
 
-sealed interface TransferNavGraphRoutes : Route {
+        @Serializable
+        data object EditRecipient
 
-    @Serializable
-    data object TransferNavGraph : TransferNavGraphRoutes
+        @Serializable
+        data class TransferByCardNumber(val cardId: String?)
 
-    @Serializable
-    data class SearchRecipient(
-        val cardId: String? = null
-    ) : TransferNavGraphRoutes
-
-    @Serializable
-    data object EditSearchRecipient : TransferNavGraphRoutes
+        @Serializable
+        data class TransferBetweenCards(val cardId: String?)
+    }
 
     @Serializable
-    data class TransferByCardNumber(
-        val cardId: String?
-    ) : TransferNavGraphRoutes
+    data object EditNavGraph : Route {
 
-    @Serializable
-    data class TransferBetweenCards(
-        val cardId: String?
-    ) : TransferNavGraphRoutes
-
-    @Serializable
-    data object TransferResult : TransferNavGraphRoutes
-}
-
-sealed interface EditNavGraphRoutes : Route {
-
-    @Serializable
-    data object EditNavGraph : TransferNavGraphRoutes
-
-    @Serializable
-    data class CustomCard(
-        val cardId: String? = null
-    ) : TransferNavGraphRoutes
-
-    @Serializable
-    data object EditResult : TransferNavGraphRoutes
+        @Serializable
+        data class CustomCard(val cardId: String? = null)
+    }
 }
