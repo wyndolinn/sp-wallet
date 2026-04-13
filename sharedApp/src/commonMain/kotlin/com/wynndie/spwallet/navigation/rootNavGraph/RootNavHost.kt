@@ -1,12 +1,12 @@
-package com.wynndie.spwallet.navigation.rootNavGraph.navHost
+package com.wynndie.spwallet.navigation.rootNavGraph
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.wynndie.spwallet.navigation.Route
-import com.wynndie.spwallet.navigation.rootNavGraph.editNavGraph
-import com.wynndie.spwallet.navigation.rootNavGraph.homeNavGraph
-import com.wynndie.spwallet.navigation.rootNavGraph.transferNavGraph
+import com.wynndie.spwallet.navigation.rootNavGraph.graphs.editNavGraph
+import com.wynndie.spwallet.navigation.rootNavGraph.graphs.homeNavGraph
+import com.wynndie.spwallet.navigation.rootNavGraph.graphs.transferNavGraph
 
 @Composable
 fun RootNavHost(

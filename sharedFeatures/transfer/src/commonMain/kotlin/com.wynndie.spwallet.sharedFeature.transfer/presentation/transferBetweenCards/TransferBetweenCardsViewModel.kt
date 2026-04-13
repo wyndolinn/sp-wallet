@@ -125,7 +125,7 @@ class TransferBetweenCardsViewModel(
 
                     transferByCardUseCase(
                         card = sourceCard,
-                        receiverCardNumber = targetCard.number,
+                        receiver = targetCard.number,
                         amount = transferAmount,
                         comment = "Перевод между счетами"
                     ).getOrElse { error ->

@@ -1,7 +1,5 @@
 package com.wynndie.spwallet.sharedFeature.transfer.di
 
-import com.wynndie.spwallet.sharedFeature.transfer.data.remote.network.KtorRemoteSpWorldsTransferDataSource
-import com.wynndie.spwallet.sharedFeature.transfer.data.remote.network.RemoteSpWorldsTransferDataSource
 import com.wynndie.spwallet.sharedFeature.transfer.data.repositories.TransferRepositoryImpl
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
@@ -17,11 +15,9 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val transferSharedModule = module {
-    singleOf(::KtorRemoteSpWorldsTransferDataSource).bind<RemoteSpWorldsTransferDataSource>()
     singleOf(::TransferRepositoryImpl).bind<TransferRepository>()
 
     factoryOf(::TransferByCardUseCase)
-
     factoryOf(::TransferCommentValidator)
 
     viewModelOf(::RecipientViewModel)

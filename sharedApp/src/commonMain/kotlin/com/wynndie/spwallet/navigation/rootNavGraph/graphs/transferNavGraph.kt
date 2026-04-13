@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.navigation.rootNavGraph
+package com.wynndie.spwallet.navigation.rootNavGraph.graphs
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue

@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.navigation.rootNavGraph
+package com.wynndie.spwallet.navigation.rootNavGraph.graphs
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

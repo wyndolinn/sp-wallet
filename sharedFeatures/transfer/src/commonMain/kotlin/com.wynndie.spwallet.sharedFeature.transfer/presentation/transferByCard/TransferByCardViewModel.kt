@@ -53,7 +53,6 @@ class TransferByCardViewModel(
     val state = _state.asStateFlow()
 
     private var commentPrefix = ""
-    private var maxValue = 0L
 
     init {
         userRepository.getAuthedUsers().onEach { users ->
@@ -145,7 +144,7 @@ class TransferByCardViewModel(
 
                     transferByCardUseCase(
                         card = selectedCard,
-                        receiverCardNumber = action.cardNumber,
+                        receiver = action.cardNumber,
                         amount = action.transferAmount,
                         comment = comment
                     ).onError {

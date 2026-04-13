@@ -4,28 +4,36 @@ import com.wynndie.spwallet.sharedCore.data.local.dao.CardsDao
 import com.wynndie.spwallet.sharedCore.data.local.entities.AuthedCardEntity
 import com.wynndie.spwallet.sharedCore.data.local.entities.CustomCardEntity
 import com.wynndie.spwallet.sharedCore.data.local.entities.UnauthedCardEntity
-import com.wynndie.spwallet.sharedCore.data.remote.network.RemoteSpWorldsCardsDataSource
-import com.wynndie.spwallet.sharedCore.domain.outcome.Error
-import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
-import com.wynndie.spwallet.sharedCore.domain.outcome.map
+import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
+import com.wynndie.spwallet.sharedCore.data.remote.dto.CardBalanceDto
+import com.wynndie.spwallet.sharedCore.data.remote.safeCall
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.map
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class CardsRepositoryImpl(
-    private val remoteSpWorldsCardsDataSource: RemoteSpWorldsCardsDataSource,
+    private val httpClient: HttpClient,
     private val cardsDao: CardsDao
 ) : CardsRepository {
 
     override suspend fun getCardBalance(
         authKey: String
     ): Outcome<Long, Error.Network> {
-        return remoteSpWorldsCardsDataSource
-            .getCardBalance(authKey = authKey)
-            .map { it.balance }
+        return safeCall<CardBalanceDto> {
+            httpClient.get(urlString = "$SP_WORLDS_URL/card") {
+                header(HttpHeaders.Authorization, authKey)
+            }
+        }.map { it.balance }
     }
 
 
