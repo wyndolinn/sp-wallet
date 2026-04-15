@@ -1,12 +1,11 @@
 package com.wynndie.spwallet.sharedFeature.transfer.domain.useCases
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
-import com.wynndie.spwallet.sharedFeature.transfer.domain.models.Transfer
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
 
 class TransferByCardUseCase(
@@ -16,19 +15,17 @@ class TransferByCardUseCase(
 
     suspend operator fun invoke(
         card: AuthedCard,
-        receiverCardNumber: String,
+        receiver: String,
         amount: String,
         comment: String
-    ): EmptyOutcome<DataError.Remote> {
-
-        val transfer = Transfer(
-            receiverCardNumber = receiverCardNumber,
+    ): EmptyOutcome<Error.Network> {
+        
+        val cardBalance = transferRepository.makeTransaction(
+            authKey = card.authKey,
+            receiver = receiver,
             amount = amount.toLong(),
             comment = comment
-        )
-
-        val cardBalance = transferRepository.makeTransaction(card.authKey, transfer)
-            .getOrElse { return Outcome.Error(it) }
+        ).getOrElse { return Outcome.Error(it) }
 
         cardsRepository.insertAuthedCard(card.copy(balance = cardBalance))
 

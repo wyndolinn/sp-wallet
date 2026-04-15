@@ -2,20 +2,24 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
 
 kotlin {
-    androidTarget {
+    android {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
+
+        namespace = "com.wynndie.spwallet.sharedFeatures.home"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        androidResources.enable = true
     }
 
     listOf(
@@ -36,52 +40,13 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.sharedCore)
-            implementation(projects.sharedResources)
-
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
         }
-
-        androidMain.dependencies {
-            implementation(projects.sharedCore)
-            implementation(projects.sharedResources)
-        }
-
-        iosMain.dependencies {
-            implementation(projects.sharedCore)
-            implementation(projects.sharedResources)
-        }
-    }
-}
-
-android {
-    namespace = "com.wynndie.spwallet.sharedFeatures.home"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
-    add("kspAndroid", libs.androidx.room.compiler)
-    add("kspIosX64", libs.androidx.room.compiler)
-    add("kspIosArm64", libs.androidx.room.compiler)
-    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    androidRuntimeClasspath(libs.compose.uiTooling)
 }
 

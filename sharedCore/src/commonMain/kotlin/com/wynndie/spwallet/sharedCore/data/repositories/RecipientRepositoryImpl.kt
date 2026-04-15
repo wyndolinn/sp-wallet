@@ -1,11 +1,7 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
-import androidx.sqlite.SQLiteException
 import com.wynndie.spwallet.sharedCore.data.local.dao.RecipientDao
 import com.wynndie.spwallet.sharedCore.data.local.entities.RecipientEntity
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.EmptyOutcome
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +13,8 @@ class RecipientRepositoryImpl(
 
     override suspend fun insertRecipient(
         recipientCard: RecipientCard
-    ): EmptyOutcome<DataError.Local> {
-        return try {
-            recipientDao.insertRecipient(RecipientEntity.of(recipientCard))
-            Outcome.Success(Unit)
-        } catch (_: SQLiteException) {
-            Outcome.Error(DataError.Local.DISK_FULL)
-        }
+    ) {
+        recipientDao.insertRecipient(RecipientEntity.of(recipientCard))
     }
 
     override fun getRecipients(): Flow<List<RecipientCard>> {

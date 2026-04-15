@@ -1,25 +1,35 @@
 package com.wynndie.spwallet.sharedFeature.transfer.data.repositories
 
-import com.wynndie.spwallet.sharedCore.domain.error.DataError
-import com.wynndie.spwallet.sharedCore.domain.error.Outcome
-import com.wynndie.spwallet.sharedCore.domain.error.map
-import com.wynndie.spwallet.sharedFeature.transfer.data.remote.dto.TransferDto
-import com.wynndie.spwallet.sharedFeature.transfer.data.remote.network.RemoteSpWorldsTransferDataSource
-import com.wynndie.spwallet.sharedFeature.transfer.domain.models.Transfer
+import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
+import com.wynndie.spwallet.sharedCore.data.remote.dto.CardBalanceDto
+import com.wynndie.spwallet.sharedCore.data.remote.safeCall
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
+import com.wynndie.spwallet.sharedCore.domain.outcome.map
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
+import io.ktor.client.HttpClient
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.http.HttpHeaders
 
 class TransferRepositoryImpl(
-    private val remoteSpWorldsTransferDataSource: RemoteSpWorldsTransferDataSource
+    private val httpClient: HttpClient
 ) : TransferRepository {
 
     override suspend fun makeTransaction(
         authKey: String,
-        transfer: Transfer
-    ): Outcome<Long, DataError.Remote> {
-        return remoteSpWorldsTransferDataSource
-            .makeTransaction(
-                authKey = authKey,
-                transaction = TransferDto.from(transfer)
-            ).map { it.balance }
+        receiver: String,
+        amount: Long,
+        comment: String
+    ): Outcome<Long, Error.Network> {
+        return safeCall<CardBalanceDto> {
+            httpClient.post(urlString = "$SP_WORLDS_URL/transactions") {
+                header(HttpHeaders.Authorization, authKey)
+                parameter("receiver", receiver)
+                parameter("amount", amount)
+                parameter("comment", comment)
+            }
+        }.map { it.balance }
     }
 }

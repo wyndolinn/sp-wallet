@@ -1,19 +1,19 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.validators
 
-import com.wynndie.spwallet.sharedCore.domain.error.ValidationError
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
 import com.wynndie.spwallet.sharedCore.domain.validators.Validator
 
 class TokenValidator : Validator<String> {
 
-    override fun validate(value: String): Pair<Boolean, ValidationError?> {
+    override fun validate(value: String): Pair<Boolean, Error.Validation?> {
         if (value.isBlank())
-            return false to ValidationError.EMPTY_FIELD
+            return false to Error.Validation.EMPTY_FIELD
 
         if (!value.matches(base64CharsRegex))
-            return false to ValidationError.INVALID_CHARACTERS
+            return false to Error.Validation.INVALID_CHARACTERS
 
         if (!value.matches(base64FormatRegex))
-            return false to ValidationError.INVALID_FORMAT
+            return false to Error.Validation.INVALID_FORMAT
 
         return true to null
     }

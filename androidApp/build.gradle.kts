@@ -1,0 +1,97 @@
+plugins {
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.composeCompiler)
+}
+
+dependencies {
+    implementation(projects.sharedApp)
+
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.components.resources)
+    implementation(libs.compose.uiToolingPreview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodelCompose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+
+    implementation(libs.kotlin.test)
+}
+
+android {
+    namespace = "com.wynndie.spwallet"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+    defaultConfig {
+        applicationId = "com.wynndie.spwallet"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        versionCode = 2
+        versionName = "1.1.0"
+        versionNameSuffix = ""
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "_debug"
+
+            manifestPlaceholders["usesCleartextTraffic"] = true
+        }
+
+        create("qa") {
+            initWith(getByName("debug"))
+
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            applicationIdSuffix = ".qa"
+            versionNameSuffix = "_qa"
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            manifestPlaceholders["usesCleartextTraffic"] = true
+        }
+
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            applicationIdSuffix = ".release"
+            versionNameSuffix = "_release"
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            manifestPlaceholders["usesCleartextTraffic"] = false
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.androidx.core.ktx)
+    debugImplementation(libs.compose.uiTooling)
+}
+
+base {
+    val version = android.defaultConfig.versionName
+    val suffix = android.defaultConfig.versionNameSuffix
+    archivesName.set("sp-wallet-$version$suffix")
+}

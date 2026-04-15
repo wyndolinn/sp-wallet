@@ -1,4 +1,4 @@
-rootProject.name = "SpWallet"
+rootProject.name = "sp-wallet"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -14,6 +14,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 
 dependencyResolutionManagement {
     repositories {
@@ -28,10 +31,10 @@ dependencyResolutionManagement {
     }
 }
 
-include(":composeApp")
-include(":sharedResources")
-include(":sharedTheme")
+include(":androidApp")
+include(":sharedApp")
 include(":sharedCore")
+include(":sharedResources")
 include(":sharedFeatures:home")
 include(":sharedFeatures:transfer")
 include(":sharedFeatures:edit")

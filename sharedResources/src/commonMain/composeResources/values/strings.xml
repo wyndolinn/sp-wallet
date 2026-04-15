@@ -56,19 +56,13 @@
     <string name="auth_instruction">Получить ID и&#160;токен карты можно на&#160;сайте во&#160;вкладке «Кошелёк». Выберите карту, нажмите «Поделиться» и&#160;сгенерируйте новый API&#160;токен.</string>
 
     <string name="bank_card_label">%1$s • %2$s</string>
-    <string name="enter_id">ID карты</string>
     <string name="id">ID</string>
-    <string name="enter_token">Токен карты</string>
     <string name="token">Токен</string>
-    <string name="enter_card_number">Карта получателя</string>
     <string name="card_number">Номер карты</string>
-    <string name="enter_transfer_amount">Сумма перевода</string>
-    <string name="transfer_amount">Сумма</string>
-    <string name="enter_comment">Комментарий</string>
+    <string name="transfer_amount">Сумма перевода</string>
+    <string name="amount">Сумма</string>
     <string name="comment">Комментарий</string>
-    <string name="enter_card_name">Название карты</string>
     <string name="card_name">Название карты</string>
-    <string name="enter_balance">Баланс карты</string>
     <string name="balance">Баланс</string>
     <string name="name_or_number">Имя или номер</string>
 
@@ -98,7 +92,7 @@
     <string name="activate_card">Активировать карту</string>
     <string name="transfer_by_number">Перевод по номеру</string>
     <string name="transfer_between_cards">Перевод между счетами</string>
-    <string name="custom_cards">Пользовательские карты (%1$s/%2$s)</string>
+    <string name="custom_cards">Наличные</string>
     <string name="bank_cards">Банковские карты</string>
     <string name="transfer_from">Со счёта</string>
     <string name="transfer_to">На счёт</string>
@@ -112,7 +106,7 @@
     <string name="between_cards">Между счетами</string>
 
     <string name="recipient_card">Карта получателя</string>
-    <string name="recipient_history_empty">История переводов пуста</string>
+    <string name="recipient_history_empty">Сохранённые получатели не нашлись</string>
     <string name="enter_recipient_card_number">Введите номер карты получателя</string>
 
 </resources>
