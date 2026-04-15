@@ -93,5 +93,5 @@ dependencies {
 base {
     val version = android.defaultConfig.versionName
     val suffix = android.defaultConfig.versionNameSuffix
-    archivesName.set("sp-wallet-$version$suffix")
+    archivesName.set("sp-wallet-v$version$suffix")
 }
