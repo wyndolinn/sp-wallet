@@ -1,14 +1,14 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
+import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
+import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
 import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrNull
 import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.outcome.onSuccess
-import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
-import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.first
@@ -19,15 +19,19 @@ class SyncWithRemoteUseCase(
 ) {
 
     suspend operator fun invoke(): EmptyOutcome<Error.Network> {
-        SpServers.entries.forEach { server ->
+        SpServers.entries.forEachIndexed { index, server ->
             var authedCards = cardsRepository.getAuthedCards().first()
             var cardholder: Cardholder? = null
             authedCards
                 .filter { it.server == server }
                 .forEach { authedCard ->
                     updateAuthedCard(authedCard)
-                        .onError { error -> return Outcome.Error(error) }
-                        .onSuccess { user -> if (user != null) cardholder = user }
+                        .onError { error ->
+                            return Outcome.Error(error)
+                        }
+                        .onSuccess { user ->
+                            if (user != null) cardholder = user
+                        }
                 }
 
             userRepository.getAuthedUsers().first()
@@ -42,6 +46,10 @@ class SyncWithRemoteUseCase(
                     cardsRepository.deleteUnauthedCard(card)
                 }
 
+            if (cardholder == null && index == SpServers.entries.lastIndex) {
+                return Outcome.Error(Error.Network.UNAUTHORIZED)
+            }
+
             cardholder?.let { user ->
                 userRepository.insertAuthedUser(user.toAuthedUser())
 
@@ -50,7 +58,7 @@ class SyncWithRemoteUseCase(
                     val isCardAuthed = authedCards.any { it.id == card.id }
                     if (!isCardAuthed) cardsRepository.insertUnauthedCard(card)
                 }
-            } ?: return Outcome.Error(Error.Network.UNAUTHORIZED)
+            }
         }
 
         return Outcome.Success(Unit)
