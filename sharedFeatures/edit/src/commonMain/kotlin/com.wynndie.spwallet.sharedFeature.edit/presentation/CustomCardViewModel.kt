@@ -10,18 +10,18 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
-import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType.Snackbar
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Finished
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Loading
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Finished
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Loading
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cash_creation_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +37,9 @@ class CustomCardViewModel(
     private val cardsRepository: CardsRepository,
     private val preferencesRepository: PreferencesRepository,
     private val cardNameValidator: CardNameValidator,
-    private val balanceValidator: BalanceValidator
+    private val balanceValidator: BalanceValidator,
+    private val navEventController: NavEventController,
+    private val snackbarController: SnackbarController
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CustomCardState())
@@ -117,7 +119,7 @@ class CustomCardViewModel(
 
     private fun onBack() {
         viewModelScope.launch {
-            NavController.navigate(CustomCardNavEvent.NavigateBack)
+            navEventController.navigate(CustomCardNavEvent.NavigateBack)
         }
     }
 
@@ -125,7 +127,7 @@ class CustomCardViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isDeleteDialogVisible = false) }
             cardsRepository.deleteCustomCard(_state.value.card)
-            NavController.navigate(CustomCardNavEvent.NavigateBack)
+            navEventController.navigate(CustomCardNavEvent.NavigateBack)
         }
     }
 
@@ -138,10 +140,8 @@ class CustomCardViewModel(
             cardsRepository.insertCustomCard(state.value.card)
 
             _state.update { it.copy(saveLoadingState = Finished) }
-            OverlayController.send(
-                Snackbar(ResourceString(Res.string.cash_creation_succeed))
-            )
-            NavController.navigate(CustomCardNavEvent.NavigateBack)
+            snackbarController.send(Snackbar(ResourceString(Res.string.cash_creation_succeed)))
+            navEventController.navigate(CustomCardNavEvent.NavigateBack)
         }
     }
 

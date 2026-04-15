@@ -10,10 +10,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.wynndie.spwallet.navigation.Route
 import com.wynndie.spwallet.navigation.rootNavGraph.RootNavHost
 import com.wynndie.spwallet.sharedCore.presentation.components.ObserveAsEvents
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @Composable
 fun App() {
@@ -21,21 +21,17 @@ fun App() {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-
-    ObserveAsEvents(OverlayController.overlay) { overlay ->
-        when (overlay) {
-            is OverlayType.Snackbar -> {
-                scope.launch {
-                    val currentSnackbarData = snackbarHostState.currentSnackbarData
-                    currentSnackbarData?.dismiss()
-                    snackbarHostState.showSnackbar(
-                        message = overlay.message.asStringAsync(),
-                        actionLabel = overlay.actionLabel?.asStringAsync(),
-                        withDismissAction = overlay.withDismissAction,
-                        duration = overlay.duration
-                    )
-                }
-            }
+    val snackbarController = koinInject<SnackbarController>()
+    ObserveAsEvents(snackbarController.overlay) { snackbar ->
+        scope.launch {
+            val currentSnackbarData = snackbarHostState.currentSnackbarData
+            currentSnackbarData?.dismiss()
+            snackbarHostState.showSnackbar(
+                message = snackbar.message.asStringAsync(),
+                actionLabel = snackbar.actionLabel?.asStringAsync(),
+                withDismissAction = snackbar.withDismissAction,
+                duration = snackbar.duration
+            )
         }
     }
 

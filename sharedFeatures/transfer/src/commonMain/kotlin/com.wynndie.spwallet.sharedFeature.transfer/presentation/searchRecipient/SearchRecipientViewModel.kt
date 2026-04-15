@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
-import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class SearchRecipientViewModel(
     recipientRepository: RecipientRepository,
-    preferencesRepository: PreferencesRepository
+    preferencesRepository: PreferencesRepository,
+    private val navEventController: NavEventController
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchRecipientState())
@@ -75,16 +76,14 @@ class SearchRecipientViewModel(
         when (action) {
             SearchRecipientAction.NavigateBack -> {
                 viewModelScope.launch {
-                    NavController.navigate(SearchRecipientNavEvent.NavigateBack)
+                    navEventController.navigate(SearchRecipientNavEvent.NavigateBack)
                 }
             }
 
             is SearchRecipientAction.SelectRecipient -> {
                 viewModelScope.launch {
-                    NavController.navigate(
-                        SearchRecipientNavEvent.NavigateToTransfer(
-                            cardNumber = action.cardNumber
-                        )
+                    navEventController.navigate(
+                        SearchRecipientNavEvent.NavigateToTransfer(action.cardNumber)
                     )
                 }
             }

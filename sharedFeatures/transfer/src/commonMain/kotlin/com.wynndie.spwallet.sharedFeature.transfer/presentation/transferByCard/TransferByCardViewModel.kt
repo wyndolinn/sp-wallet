@@ -13,19 +13,19 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
-import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType.Snackbar
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
@@ -48,6 +48,8 @@ class TransferByCardViewModel(
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: BalanceValidator,
     private val commentValidator: TransferCommentValidator,
+    private val navEventController: NavEventController,
+    private val snackbarController: SnackbarController
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TransferByCardState())
@@ -156,12 +158,10 @@ class TransferByCardViewModel(
                 amount = _state.value.amountInputFieldState.value.text,
                 comment = comment
             ).onError {
-                OverlayController.send(Snackbar(it.asUiText()))
+                snackbarController.send(Snackbar(it.asUiText()))
             }.onSuccess {
-                OverlayController.send(
-                    Snackbar(ResourceString(Res.string.transaction_succeed))
-                )
-                NavController.navigate(TransferByCardNavEvent.NavigateBack)
+                snackbarController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+                navEventController.navigate(TransferByCardNavEvent.NavigateBack)
             }
 
             recipientRepository.insertRecipient(
@@ -228,13 +228,13 @@ class TransferByCardViewModel(
 
     private fun goBack() {
         viewModelScope.launch {
-            NavController.navigate(TransferByCardNavEvent.NavigateBack)
+            navEventController.navigate(TransferByCardNavEvent.NavigateBack)
         }
     }
 
     private fun editRecipient() {
         viewModelScope.launch {
-            NavController.navigate(TransferByCardNavEvent.NavigateToEditRecipient)
+            navEventController.navigate(TransferByCardNavEvent.NavigateToEditRecipient)
         }
     }
 

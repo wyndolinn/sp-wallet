@@ -12,9 +12,9 @@ import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
-import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
+import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
+import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
@@ -44,7 +44,9 @@ class HomeViewModel(
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val authCardUseCase: AuthCardUseCase,
     private val uuidValidator: UuidValidator,
-    private val tokenValidator: TokenValidator
+    private val tokenValidator: TokenValidator,
+    private val navEventController: NavEventController,
+    private val snackbarController: SnackbarController
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -136,7 +138,7 @@ class HomeViewModel(
 
             syncWithRemoteUseCase()
                 .onError { error ->
-                    OverlayController.send(OverlayType.Snackbar(error.asUiText()))
+                    snackbarController.send(Snackbar(error.asUiText()))
                 }
 
             _state.update {
@@ -157,7 +159,7 @@ class HomeViewModel(
                 id = id,
                 token = token
             ).getOrElse { error ->
-                OverlayController.send(OverlayType.Snackbar(error.asUiText()))
+                snackbarController.send(Snackbar(error.asUiText()))
                 _state.update {
                     it.copy(authLoadingState = LoadingState.Finished)
                 }
@@ -281,13 +283,13 @@ class HomeViewModel(
 
     private fun transferBetweenCard(id: String) {
         viewModelScope.launch {
-            NavController.navigate(HomeNavEvent.NavigateToTransferBetweenCards(id))
+            navEventController.navigate(HomeNavEvent.NavigateToTransferBetweenCards(id))
         }
     }
 
     private fun transferByCard(id: String) {
         viewModelScope.launch {
-            NavController.navigate(HomeNavEvent.NavigateToTransferByCard(id))
+            navEventController.navigate(HomeNavEvent.NavigateToTransferByCard(id))
             closeOverlays()
         }
     }
@@ -317,7 +319,7 @@ class HomeViewModel(
 
     private fun selectCustomCard(id: String) {
         viewModelScope.launch {
-            NavController.navigate(HomeNavEvent.NavigateToCustomCard(id))
+            navEventController.navigate(HomeNavEvent.NavigateToCustomCard(id))
             closeOverlays()
         }
     }

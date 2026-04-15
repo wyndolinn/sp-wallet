@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -12,11 +13,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.total_balance
 import com.wynndie.spwallet.sharedResources.x_of_ore
-import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,7 +27,7 @@ fun BalanceComponent(
     title: String = stringResource(Res.string.total_balance)
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.animateContentSize()
     ) {
         Text(
             text = title,
@@ -43,13 +44,13 @@ fun BalanceComponent(
             fontWeight = FontWeight(600)
         )
 
-        Text(
-            text = if (balance.value != 0L) {
-                balance.formatted.asFormattedAmount()
-            } else "",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        if (balance.value > 0L) {
+            Text(
+                text = balance.formatted.asFormattedAmount(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
