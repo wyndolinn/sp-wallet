@@ -18,17 +18,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColorGradient
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.extensions.tileShadow
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -48,17 +48,17 @@ fun TransferCardTile(
 ) {
     Column(
         modifier = modifier
+            .tileShadow(MaterialTheme.shapes.large, color)
             .clip(MaterialTheme.shapes.medium)
-            .cardColorGradient(color.copy(alpha = 0.1f))
+            .cardColorGradient(color.copy(alpha = 0.05f))
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(MaterialTheme.spacing.medium)
     ) {
         if (headline.isNotBlank()) {
             Text(
                 text = headline,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -76,20 +76,17 @@ fun TransferCardTile(
 
             Column(
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(MaterialTheme.spacing.medium)
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

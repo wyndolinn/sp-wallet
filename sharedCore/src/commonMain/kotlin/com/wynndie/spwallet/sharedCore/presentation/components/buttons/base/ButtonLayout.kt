@@ -1,8 +1,8 @@
 package com.wynndie.spwallet.sharedCore.presentation.components.buttons.base
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,14 +20,14 @@ internal fun ButtonLayout(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(
-            space = MaterialTheme.spacing.small,
+            space = MaterialTheme.spacing.extraSmall,
             alignment = Alignment.CenterHorizontally
         ),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
         leadingIcon?.let {
-            Image(
+            Icon(
                 painter = it,
                 contentDescription = null
             )
@@ -35,8 +35,7 @@ internal fun ButtonLayout(
 
         Text(
             text = text,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.SemiBold
+            style = MaterialTheme.typography.labelLarge
         )
     }
 }

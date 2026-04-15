@@ -34,9 +34,10 @@ fun OutlinedButton(
             vertical = MaterialTheme.spacing.small
         ),
         colors = ButtonDefaults.outlinedButtonColors().copy(
-            containerColor = if (destructive) {
+            contentColor = if (destructive) {
                 MaterialTheme.colorScheme.error
-            } else MaterialTheme.colorScheme.primary
+            } else MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
         ),
         border = BorderStroke(
             width = 2.dp,

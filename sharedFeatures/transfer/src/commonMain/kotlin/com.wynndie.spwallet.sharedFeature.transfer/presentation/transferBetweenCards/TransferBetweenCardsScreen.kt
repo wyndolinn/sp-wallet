@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferBetween
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -38,11 +39,11 @@ import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCar
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.between_cards
-import com.wynndie.spwallet.sharedResources.enter_transfer_amount
+import com.wynndie.spwallet.sharedResources.transfer_amount
 import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_from
 import com.wynndie.spwallet.sharedResources.transfer_to
@@ -112,63 +113,66 @@ private fun TransferBetweenCardsScreenContent(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
-    Column(modifier = modifier) {
-        BaseCarousel(
-            items = state.sourceCards,
-            page = state.selectedSourceCard,
-            onSwipePage = { onAction(TransferBetweenCardsAction.SelectSourceCard(it)) },
-            contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
-            pageSpacing = MaterialTheme.spacing.medium
-        ) { card ->
-            TransferCardTile(
-                headline = stringResource(Res.string.transfer_from),
-                title = stringResource(Res.string.x_of_ore, card.balance)
-                    .asFormattedAmount()
-                    .uppercase(),
-                text = "${card.number} • ${card.name}",
-                icon = card.icon.asPainter(),
-                color = card.color.asColor(),
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        Spacer(Modifier.height(MaterialTheme.spacing.medium))
-
-        BaseCarousel(
-            items = state.destinationCards,
-            page = state.selectedDestinationCard,
-            onSwipePage = { onAction(TransferBetweenCardsAction.SelectDestinationCard(it)) },
-            contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
-            pageSpacing = MaterialTheme.spacing.medium
-        ) { card ->
-            if (card.balance == null) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
+        modifier = modifier
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        ) {
+            BaseCarousel(
+                items = state.sourceCards,
+                page = state.selectedSourceCard,
+                onSwipePage = { onAction(TransferBetweenCardsAction.SelectSourceCard(it)) },
+                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+                pageSpacing = MaterialTheme.spacing.medium
+            ) { card ->
                 TransferCardTile(
-                    headline = stringResource(Res.string.transfer_to),
-                    title = card.number,
-                    text = card.name,
-                    icon = card.icon.asPainter(),
-                    color = card.color.asColor(),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            } else {
-                TransferCardTile(
-                    headline = stringResource(Res.string.transfer_to),
+                    headline = stringResource(Res.string.transfer_from),
                     title = stringResource(Res.string.x_of_ore, card.balance)
-                        .asFormattedAmount().uppercase(),
+                        .asFormattedAmount()
+                        .uppercase(),
                     text = "${card.number} • ${card.name}",
                     icon = card.icon.asPainter(),
                     color = card.color.asColor(),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-        }
 
-        Spacer(Modifier.height(MaterialTheme.spacing.large))
+            BaseCarousel(
+                items = state.destinationCards,
+                page = state.selectedDestinationCard,
+                onSwipePage = { onAction(TransferBetweenCardsAction.SelectDestinationCard(it)) },
+                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+                pageSpacing = MaterialTheme.spacing.medium
+            ) { card ->
+                if (card.balance == null) {
+                    TransferCardTile(
+                        headline = stringResource(Res.string.transfer_to),
+                        title = card.name,
+                        text = card.number,
+                        icon = card.icon.asPainter(),
+                        color = card.color.asColor(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    TransferCardTile(
+                        headline = stringResource(Res.string.transfer_to),
+                        title = stringResource(Res.string.x_of_ore, card.balance)
+                            .asFormattedAmount().uppercase(),
+                        text = "${card.number} • ${card.name}",
+                        icon = card.icon.asPainter(),
+                        color = card.color.asColor(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        }
 
         InputField(
             value = state.amountInputFieldState.value,
             onValueChange = { onAction(TransferBetweenCardsAction.ChangeAmountValue(it)) },
-            label = stringResource(Res.string.enter_transfer_amount),
+            label = stringResource(Res.string.transfer_amount),
             supportingText = state.amountInputFieldState.supportingText?.asString(),
             hasError = state.amountInputFieldState.hasError,
             keyboardOptions = KeyboardOptions(
@@ -180,8 +184,6 @@ private fun TransferBetweenCardsScreenContent(
             ),
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         )
-
-        Spacer(Modifier.height(MaterialTheme.spacing.large))
 
         Button(
             text = stringResource(Res.string.transfer),

@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -23,12 +23,12 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColorGradient
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.edit
-import com.wynndie.spwallet.sharedResources.ic_edit
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.edit
+import com.wynndie.spwallet.sharedResources.ic_edit
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -45,24 +45,32 @@ fun CustomizableTile(
             .clip(MaterialTheme.shapes.medium)
             .cardColorGradient(color)
             .clickable(onClick = onClick)
-            .padding(MaterialTheme.spacing.small)
     ) {
-        Image(
-            painter = icon,
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier.size(MaterialTheme.sizes.extraLarge)
-        )
-
-        Spacer(Modifier.weight(1f))
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
+        ) {
+            Image(
+                painter = icon,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                modifier = Modifier.size(MaterialTheme.sizes.extraLarge)
+            )
+        }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+            horizontalArrangement = Arrangement.spacedBy(
+                space = MaterialTheme.spacing.small,
+                alignment = Alignment.End
+            ),
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .weight(1f)
+                .padding(MaterialTheme.spacing.medium)
         ) {
             Text(
                 text = stringResource(Res.string.edit),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
 

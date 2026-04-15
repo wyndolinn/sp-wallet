@@ -40,10 +40,10 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction
-import com.wynndie.spwallet.sharedResources.enter_id
-import com.wynndie.spwallet.sharedResources.enter_token
+import com.wynndie.spwallet.sharedResources.ic_add_card
 import com.wynndie.spwallet.sharedResources.id
 import com.wynndie.spwallet.sharedResources.token
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,8 +54,8 @@ fun AuthCardSheet(
     isAuthButtonEnabled: Boolean,
     cards: List<UnauthedCard>,
     initialPage: Int,
-    tokenInputFieldState: InputFieldState,
-    idInputFieldState: InputFieldState,
+    tokenInputState: InputFieldState,
+    idInputState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
     onToggleCardIdFocus: () -> Unit,
     onChangeTokenValue: (TextFieldValue) -> Unit,
@@ -71,133 +71,107 @@ fun AuthCardSheet(
             LoadingDialog()
         }
 
-        AuthCardSheetContent(
-            isAuthButtonEnabled = isAuthButtonEnabled,
-            cards = cards,
-            page = initialPage,
-            idInputFieldState = idInputFieldState,
-            tokenInputFieldState = tokenInputFieldState,
-            onChangeIdValue = onChangeIdValue,
-            onToggleCardIdFocus = onToggleCardIdFocus,
-            onChangeTokenValue = onChangeTokenValue,
-            onToggleCardTokenFocus = onToggleCardTokenFocus,
-            onClickAuthButton = onClickAuthButton,
-            modifier = modifier
-        )
-    }
-}
-
-@Composable
-private fun AuthCardSheetContent(
-    isAuthButtonEnabled: Boolean,
-    cards: List<UnauthedCard>,
-    page: Int,
-    idInputFieldState: InputFieldState,
-    tokenInputFieldState: InputFieldState,
-    onChangeIdValue: (TextFieldValue) -> Unit,
-    onToggleCardIdFocus: () -> Unit,
-    onChangeTokenValue: (TextFieldValue) -> Unit,
-    onToggleCardTokenFocus: () -> Unit,
-    onClickAuthButton: (String, String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val focusManager = LocalFocusManager.current
-    var currentPage by remember { mutableStateOf(page) }
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
-        modifier = modifier
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
-                )
-            }
-    ) {
-        if (cards.isNotEmpty()) {
-            BaseCarousel(
-                items = cards,
-                page = page,
-                onSwipePage = {
-                    currentPage = it
-                    onChangeIdValue(TextFieldValue(cards[it].id))
-                },
-                contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
-                pageSpacing = MaterialTheme.spacing.medium
-            ) { card ->
-                TransferCardTile(
-                    title = card.number,
-                    text = card.number,
-                    icon = card.icon.asPainter(),
-                    color = card.color.asColor(),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
+        val focusManager = LocalFocusManager.current
+        var currentPage by remember { mutableStateOf(initialPage) }
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+            modifier = modifier
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { focusManager.clearFocus(true) }
+                    )
+                }
         ) {
+            if (cards.isNotEmpty()) {
+                BaseCarousel(
+                    items = cards,
+                    page = initialPage,
+                    onSwipePage = {
+                        currentPage = it
+                        onChangeIdValue(TextFieldValue(cards[it].id))
+                    },
+                    contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+                    pageSpacing = MaterialTheme.spacing.medium
+                ) { card ->
+                    TransferCardTile(
+                        title = card.name,
+                        text = card.number,
+                        icon = card.icon.asPainter(),
+                        color = card.color.asColor(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
 
-            if (cards.isEmpty()) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            ) {
+                if (cards.isEmpty()) {
+                    InputField(
+                        value = idInputState.value,
+                        onValueChange = { onChangeIdValue(it) },
+                        label = stringResource(Res.string.id),
+                        supportingText = idInputState.supportingText?.asString(),
+                        hasError = idInputState.hasError,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        ),
+                        modifier = Modifier.onFocusChanged {
+                            if (!it.isFocused) onToggleCardIdFocus()
+                        }
+                    )
+                }
+
                 InputField(
-                    value = idInputFieldState.value,
-                    onValueChange = { onChangeIdValue(it) },
-                    label = stringResource(Res.string.enter_id),
-                    placeholder = stringResource(Res.string.id),
-                    supportingText = idInputFieldState.supportingText?.asString(),
-                    hasError = idInputFieldState.hasError,
+                    value = tokenInputState.value,
+                    onValueChange = { onChangeTokenValue(it) },
+                    label = stringResource(Res.string.token),
+                    supportingText = tokenInputState.supportingText?.asString(),
+                    hasError = tokenInputState.hasError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        onDone = {
+                            focusManager.clearFocus(true)
+                            onClickAuthButton(cards[currentPage].id, tokenInputState.value.text)
+                        }
                     ),
                     modifier = Modifier.onFocusChanged {
-                        if (!it.isFocused) onToggleCardIdFocus()
+                        if (!it.isFocused) onToggleCardTokenFocus()
                     }
+                )
+
+                Text(
+                    text = stringResource(Res.string.auth_instruction),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
                 )
             }
 
-            InputField(
-                value = tokenInputFieldState.value,
-                onValueChange = { onChangeTokenValue(it) },
-                label = stringResource(Res.string.enter_token),
-                placeholder = stringResource(Res.string.token),
-                supportingText = tokenInputFieldState.supportingText?.asString(),
-                hasError = tokenInputFieldState.hasError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        focusManager.clearFocus(true)
-                        onClickAuthButton(cards[currentPage].id, tokenInputFieldState.value.text)
-                    }
-                ),
-                modifier = Modifier.onFocusChanged {
-                    if (!it.isFocused) onToggleCardTokenFocus()
-                }
-            )
+            Button(
+                text = stringResource(Res.string.activate),
+                icon = painterResource(Res.drawable.ic_add_card),
+                onClick = {
+                    val cardId = if (cards.isEmpty()) {
+                        idInputState.value.text
+                    } else cards[currentPage].id
 
-            Text(
-                text = stringResource(Res.string.auth_instruction),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                    onClickAuthButton(cardId, tokenInputState.value.text)
+                },
+                enabled = isAuthButtonEnabled,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
             )
         }
-
-        val cardId = if (cards.isNotEmpty()) cards[currentPage].id else idInputFieldState.value.text
-        Button(
-            text = stringResource(Res.string.activate),
-            onClick = { onClickAuthButton(cardId, tokenInputFieldState.value.text) },
-            enabled = isAuthButtonEnabled,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.spacing.medium)
-        )
     }
 }

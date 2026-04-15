@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.searchRecipient
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
@@ -27,17 +29,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.RecipientTile
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedFeature.transfer.presentation.searchRecipient.components.RecipientTransparentTile
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.card_number
 import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
-import com.wynndie.spwallet.sharedResources.ic_person
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,17 +101,15 @@ private fun SearchRecipientScreenContent(
 
         when {
             state.recipients.isNotEmpty() -> {
-                LazyColumn {
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = MaterialTheme.spacing.extraLarge)
+                ) {
                     items(state.recipients) { recipient ->
-                        RecipientTransparentTile(
-                            icon = recipient.icon.asPainter(),
-                            color = recipient.color.asColor(),
-                            cardNumber = recipient.number,
-                            cardOwner = stringResource(Res.string.recipient),
+                        RecipientTile(
+                            label = stringResource(Res.string.recipient),
+                            title = recipient.number,
                             onClick = {
-                                onAction(
-                                    SearchRecipientAction.SelectRecipient(recipient.number)
-                                )
+                                onAction(SearchRecipientAction.SelectRecipient(recipient.number))
                             },
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -122,40 +118,39 @@ private fun SearchRecipientScreenContent(
             }
 
             state.isNewRecipient -> {
-                RecipientTransparentTile(
-                    icon = painterResource(Res.drawable.ic_person),
-                    color = MaterialTheme.colorScheme.primary,
-                    cardNumber = state.recipientInputFieldState.value.text,
-                    cardOwner = stringResource(Res.string.recipient),
+                val cardNumber = state.recipientInputFieldState.value.text
+                RecipientTile(
+                    label = stringResource(Res.string.recipient),
+                    title = cardNumber,
                     onClick = {
-                        onAction(
-                            SearchRecipientAction.SelectRecipient(
-                                cardNumber = state.recipientInputFieldState.value.text
-                            )
-                        )
+                        onAction(SearchRecipientAction.SelectRecipient(cardNumber))
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = MaterialTheme.spacing.medium)
+                        .padding(vertical = MaterialTheme.spacing.extraLarge)
                 )
             }
 
             else -> {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(MaterialTheme.spacing.medium)
+                        .padding(
+                            horizontal = MaterialTheme.spacing.medium,
+                            vertical = MaterialTheme.spacing.extraLarge
+                        )
                 ) {
                     Text(
-                        text = stringResource(Res.string.recipient_history_empty),
+                        text = stringResource(Res.string.enter_recipient_card_number),
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
                     )
 
                     Text(
-                        text = stringResource(Res.string.enter_recipient_card_number),
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(Res.string.recipient_history_empty),
+                        style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center
                     )
                 }

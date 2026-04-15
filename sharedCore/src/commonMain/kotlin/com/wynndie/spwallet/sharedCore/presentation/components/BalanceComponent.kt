@@ -1,6 +1,5 @@
 package com.wynndie.spwallet.sharedCore.presentation.components
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
@@ -26,31 +25,27 @@ fun BalanceComponent(
     modifier: Modifier = Modifier,
     title: String = stringResource(Res.string.total_balance)
 ) {
-    Column(
-        modifier = modifier.animateContentSize()
-    ) {
+    Column(modifier = modifier) {
         Text(
             text = title,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
+        Spacer(Modifier.height(MaterialTheme.spacing.extraExtraSmall))
 
         Text(
             text = stringResource(Res.string.x_of_ore, balance.value)
-                .uppercase()
-                .asFormattedAmount(),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight(600)
+                .asFormattedAmount().uppercase(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
-        if (balance.value > 0L) {
-            Text(
-                text = balance.formatted.asFormattedAmount(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = balance.formatted.asFormattedAmount(),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 

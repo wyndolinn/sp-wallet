@@ -79,8 +79,8 @@ class CustomCardViewModel(
             is CustomCardAction.SelectColor -> selectColor(action.value)
             is CustomCardAction.ChangeNameValue -> changeNameValue(action.value)
             is CustomCardAction.ChangeBalanceValue -> changeBalanceValue(action.value)
-            CustomCardAction.ClearNameFocus -> onClearNameFocus()
-            CustomCardAction.ClearBalanceFocus -> onClearBalanceFocus()
+            CustomCardAction.ClearNameFocus -> clearNameFocus()
+            CustomCardAction.ClearBalanceFocus -> clearBalanceFocus()
             is CustomCardAction.ToggleCustomizationSheet -> toggleCustomizationSheet(action.open)
             is CustomCardAction.ToggleDeleteDialog -> toggleDeleteCardDialog(action.open)
         }
@@ -184,7 +184,7 @@ class CustomCardViewModel(
         }
     }
 
-    private fun onClearNameFocus() {
+    private fun clearNameFocus() {
         _state.validateInputField(
             inputField = { it.nameInputFieldState },
             validation = { cardNameValidator.validate(it) },
@@ -192,7 +192,7 @@ class CustomCardViewModel(
         )
     }
 
-    private fun onClearBalanceFocus() {
+    private fun clearBalanceFocus() {
         _state.validateInputField(
             inputField = { it.balanceInputFieldState },
             validation = { balanceValidator.validate(BalanceValidationValues(it)) },

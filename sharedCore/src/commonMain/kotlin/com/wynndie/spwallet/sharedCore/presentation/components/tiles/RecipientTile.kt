@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -32,12 +34,15 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RecipientTile(
+    label: String,
     title: String,
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .heightIn(min = MaterialTheme.sizes.extraLarge)
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(
                 horizontal = MaterialTheme.spacing.medium,
@@ -45,11 +50,12 @@ fun RecipientTile(
             )
     ) {
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(MaterialTheme.sizes.medium)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .border(2.dp, MaterialTheme.colorScheme.outlineVariant)
+                .border(2.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
         ) {
             Icon(
                 painter = painterResource(Res.drawable.ic_person),
@@ -62,19 +68,18 @@ fun RecipientTile(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .weight(1f)
-                .padding(MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium)
         ) {
             Text(
-                text = stringResource(Res.string.recipient),
-                style = MaterialTheme.typography.labelMedium,
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -91,6 +96,7 @@ fun RecipientTile(
 private fun RecipientTilePreview() {
     AppTheme {
         RecipientTile(
+            label = stringResource(Res.string.recipient),
             title = "55555",
         )
     }

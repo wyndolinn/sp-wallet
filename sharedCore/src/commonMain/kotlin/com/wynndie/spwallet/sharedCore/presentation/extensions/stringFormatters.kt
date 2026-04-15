@@ -1,6 +1,7 @@
-package com.wynndie.spwallet.sharedCore.presentation.formatters
+package com.wynndie.spwallet.sharedCore.presentation.extensions
 
 import androidx.compose.runtime.Composable
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 
 fun String.asFormattedAmount(): String {
     return this.replace(Regex("\\B(?=(\\d{3})+(?!\\d))"), " ")
@@ -8,5 +9,5 @@ fun String.asFormattedAmount(): String {
 
 @Composable
 fun Long.asDisplayableOre(): DisplayableOreValue {
-    return  DisplayableOreValue.of(this)
+    return DisplayableOreValue.of(this)
 }

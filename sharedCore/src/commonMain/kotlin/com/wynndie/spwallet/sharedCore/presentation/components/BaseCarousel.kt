@@ -18,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.wynndie.spwallet.sharedCore.presentation.extensions.factor
-import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @Composable
@@ -41,7 +39,7 @@ fun <T> BaseCarousel(
     }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
@@ -56,17 +54,17 @@ fun <T> BaseCarousel(
 
         if (items.size > 1) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall)
             ) {
                 items.forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
-                            .size(MaterialTheme.sizes.extraSmall.factor(1 / 3f))
+                            .size(6.dp)
                             .clip(CircleShape)
                             .background(
                                 color = if (pagerState.currentPage == index) {
                                     MaterialTheme.colorScheme.secondary
-                                } else MaterialTheme.colorScheme.surfaceContainer
+                                } else MaterialTheme.colorScheme.secondaryContainer
                             )
                     )
                 }

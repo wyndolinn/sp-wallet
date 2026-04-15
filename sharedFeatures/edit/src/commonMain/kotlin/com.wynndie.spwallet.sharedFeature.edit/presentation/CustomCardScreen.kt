@@ -33,10 +33,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
+import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
+import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
+import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
@@ -45,16 +51,8 @@ import com.wynndie.spwallet.sharedResources.balance
 import com.wynndie.spwallet.sharedResources.card_name
 import com.wynndie.spwallet.sharedResources.cash_account
 import com.wynndie.spwallet.sharedResources.delete
-import com.wynndie.spwallet.sharedResources.enter_balance
-import com.wynndie.spwallet.sharedResources.enter_card_name
 import com.wynndie.spwallet.sharedResources.ic_delete
 import com.wynndie.spwallet.sharedResources.save
-import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
-import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
-import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
-import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -70,8 +68,8 @@ fun CustomCardScreenRoot(
     if (state.isCustomizationSheetVisible) {
         CustomizationSheet(
             onDismiss = { viewModel.onAction(CustomCardAction.ToggleCustomizationSheet(false)) },
-            selectedColorChip = state.selectedColorChip,
-            onColorChipClick = { viewModel.onAction(CustomCardAction.SelectColor(it)) },
+            selectedColor = state.selectedColorChip,
+            onColorClick = { viewModel.onAction(CustomCardAction.SelectColor(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium)
@@ -159,6 +157,7 @@ private fun CustomCardScreen(
     val focusManager = LocalFocusManager.current
 
     Column(
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
         modifier = modifier
     ) {
 
@@ -167,23 +166,20 @@ private fun CustomCardScreen(
             balance = state.card.balance.asDisplayableOre()
         )
 
-        Spacer(Modifier.height(MaterialTheme.spacing.large))
+        CustomizableTile(
+            color = state.card.color.asColor(),
+            icon = state.card.icon.asPainter(),
+            onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) },
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
         ) {
-            CustomizableTile(
-                color = state.card.color.asColor(),
-                icon = state.card.icon.asPainter(),
-                onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
             InputField(
                 value = state.nameInputFieldState.value,
                 onValueChange = { onAction(CustomCardAction.ChangeNameValue(it)) },
-                label = stringResource(Res.string.enter_card_name),
-                placeholder = stringResource(Res.string.card_name),
+                label = stringResource(Res.string.card_name),
                 supportingText = state.nameInputFieldState.supportingText?.asString(),
                 hasError = state.nameInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
@@ -200,8 +196,7 @@ private fun CustomCardScreen(
             InputField(
                 value = state.balanceInputFieldState.value,
                 onValueChange = { onAction(CustomCardAction.ChangeBalanceValue(it)) },
-                label = stringResource(Res.string.enter_balance),
-                placeholder = stringResource(Res.string.balance),
+                label = stringResource(Res.string.balance),
                 supportingText = state.balanceInputFieldState.supportingText?.asString(),
                 hasError = state.balanceInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
@@ -215,9 +210,6 @@ private fun CustomCardScreen(
                 )
             )
         }
-
-        Spacer(Modifier.height(MaterialTheme.spacing.large))
-        Spacer(Modifier.weight(1f))
 
         Button(
             text = stringResource(Res.string.save),

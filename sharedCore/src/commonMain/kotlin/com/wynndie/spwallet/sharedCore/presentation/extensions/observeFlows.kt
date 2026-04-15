@@ -21,7 +21,6 @@ fun <T> MutableStateFlow<T>.observeInputField(
         .onEach { inputField ->
             val (isValid, _) = validation(inputField.value.text)
             if (!isValid) return@onEach
-
             updateState(inputField.copy(supportingText = null, hasError = false))
         }
         .transform { inputField ->

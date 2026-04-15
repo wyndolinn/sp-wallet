@@ -34,7 +34,7 @@ fun TonalButton(
         colors = ButtonDefaults.filledTonalButtonColors().copy(
             contentColor = if (destructive) {
                 MaterialTheme.colorScheme.error
-            } else MaterialTheme.colorScheme.primary,
+            } else MaterialTheme.colorScheme.onSecondaryContainer,
             containerColor = if (destructive) {
                 MaterialTheme.colorScheme.errorContainer
             } else MaterialTheme.colorScheme.primaryContainer

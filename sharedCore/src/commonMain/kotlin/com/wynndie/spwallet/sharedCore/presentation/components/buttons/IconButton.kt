@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +22,7 @@ fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     label: String = "",
+    color: Color = MaterialTheme.colorScheme.primary,
     destructive: Boolean = false,
     enabled: Boolean = true,
     loading: Boolean = false
@@ -36,7 +38,7 @@ fun IconButton(
             colors = IconButtonDefaults.iconButtonColors().copy(
                 contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
-                } else MaterialTheme.colorScheme.primary
+                } else color
             )
         ) {
             Icon(
@@ -48,8 +50,7 @@ fun IconButton(
         if (label.isNotBlank()) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             )

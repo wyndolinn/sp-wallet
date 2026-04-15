@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.isUnspecified
 fun DynamicText(
     text: String,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Start,
-    maxLines: Int = Int.MAX_VALUE,
-    style: TextStyle = MaterialTheme.typography.bodyMedium,
-    color: Color = style.color
+    style: TextStyle = MaterialTheme.typography.bodySmall,
+    color: Color = style.color,
+    textAlign: TextAlign = style.textAlign,
+    maxLines: Int = Int.MAX_VALUE
 ) {
 
     val defaultFontSize = MaterialTheme.typography.bodyMedium.fontSize

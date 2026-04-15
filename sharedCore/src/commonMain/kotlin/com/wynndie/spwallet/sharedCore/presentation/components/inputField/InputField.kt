@@ -74,7 +74,7 @@ fun InputField(
             )
         }
 
-        Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
+        Spacer(Modifier.height(MaterialTheme.spacing.extraExtraSmall))
 
         BasicInputField(
             modifier = Modifier.fillMaxWidth(),

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -30,7 +31,7 @@ fun TonalIconButton(
     loading: Boolean = false
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
@@ -38,13 +39,16 @@ fun TonalIconButton(
             onClick = onClick,
             enabled = enabled && !loading,
             contentPadding = PaddingValues(
-                horizontal = MaterialTheme.spacing.medium,
-                vertical = MaterialTheme.spacing.small
+                horizontal = MaterialTheme.spacing.small,
+                vertical = MaterialTheme.spacing.extraExtraSmall
             ),
             colors = ButtonDefaults.filledTonalButtonColors().copy(
-                containerColor = if (destructive) {
+                contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
-                } else MaterialTheme.colorScheme.primary
+                } else MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = if (destructive) {
+                    MaterialTheme.colorScheme.errorContainer
+                } else MaterialTheme.colorScheme.primaryContainer
             ),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
@@ -60,8 +64,7 @@ fun TonalIconButton(
         label?.let {
             Text(
                 text = it,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             )

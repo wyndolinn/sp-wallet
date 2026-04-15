@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedCore.presentation.visualTransformations
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 
 internal class AmountVisualTransformation : VisualTransformation {
 

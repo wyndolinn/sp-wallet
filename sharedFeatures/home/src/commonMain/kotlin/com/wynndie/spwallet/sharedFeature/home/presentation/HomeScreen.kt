@@ -1,61 +1,56 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
+import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.IconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalButton
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
-import com.wynndie.spwallet.sharedCore.presentation.theme.RectangleShape
+import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.ActionButtons
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.AppBarContent
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardOffer
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardSheet
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthedCardSheet
 import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.app_logo_foreground
 import com.wynndie.spwallet.sharedResources.app_name
 import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
@@ -65,6 +60,8 @@ import com.wynndie.spwallet.sharedResources.custom_cards
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.deactivate_card_description
 import com.wynndie.spwallet.sharedResources.deactivate_card_title
+import com.wynndie.spwallet.sharedResources.ic_add
+import com.wynndie.spwallet.sharedResources.ic_add_card
 import com.wynndie.spwallet.sharedResources.ic_reload
 import com.wynndie.spwallet.sharedResources.no_authed_cards
 import com.wynndie.spwallet.sharedResources.x_of_ore
@@ -87,10 +84,10 @@ fun HomeScreenRoot(
             isAuthButtonEnabled = state.isAuthButtonEnabled,
             cards = state.unauthedCards,
             initialPage = state.carouselPage,
-            idInputFieldState = state.idInputFieldState,
+            idInputState = state.idInputFieldState,
             onChangeIdValue = { viewModel.onAction(HomeAction.ChangeCardIdValue(it)) },
             onToggleCardIdFocus = { viewModel.onAction(HomeAction.ClearIdFocus) },
-            tokenInputFieldState = state.tokenInputFieldState,
+            tokenInputState = state.tokenInputFieldState,
             onChangeTokenValue = { viewModel.onAction(HomeAction.ChangeTokenValue(it)) },
             onToggleCardTokenFocus = { viewModel.onAction(HomeAction.ClearCardTokenFocus) },
             onClickAuthButton = { id, token -> viewModel.onAction(HomeAction.AuthCard(id, token)) },
@@ -117,7 +114,8 @@ fun HomeScreenRoot(
     if (state.isDeactivateCardDialogVisible) {
         Dialog(
             onConfirm = {
-                viewModel.onAction(HomeAction.DeactivateCard(state.authedCards[state.carouselPage]))
+                val card = state.authedCards[state.carouselPage]
+                viewModel.onAction(HomeAction.DeactivateCard(card))
             },
             onDismiss = { viewModel.onAction(HomeAction.ToggleDeleteCardDialog(false)) },
             title = stringResource(Res.string.deactivate_card_title),
@@ -131,36 +129,29 @@ fun HomeScreenRoot(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
-            if (state.authedCards.isNotEmpty()) {
-                TopAppBar(
-                    title = {
-                        AppBarContent(
-                            image = painterResource(Res.drawable.app_logo_foreground),
-                            title = state.authedUser.name
-                        )
-                    },
-                    actions = {
+            TopAppBar(
+                title = state.authedUser.name.ifBlank {
+                    stringResource(Res.string.app_name)
+                },
+                titleSlots = {
+                    Image(
+                        painter = painterResource(Res.drawable.app_logo_foreground),
+                        contentDescription = null,
+                        modifier = Modifier.size(MaterialTheme.sizes.small)
+                    )
+                },
+                actions = {
+                    if (state.authedUser.name.isNotBlank()) {
                         IconButton(
                             icon = painterResource(Res.drawable.ic_reload),
                             onClick = { viewModel.onAction(HomeAction.Refresh) },
+                            color = MaterialTheme.colorScheme.onSurface,
                             loading = state.screenLoadingState == LoadingState.Loading
                         )
-                    },
-                    scrollBehavior = scrollBehavior
-                )
-            } else {
-                TopAppBar(
-                    title = {
-                        AppBarContent(
-                            image = painterResource(Res.drawable.app_logo_foreground),
-                            title = state.authedUser.name.ifBlank {
-                                stringResource(Res.string.app_name)
-                            }
-                        )
-                    },
-                    scrollBehavior = scrollBehavior
-                )
-            }
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
         },
         modifier = Modifier
             .imePadding()
@@ -210,7 +201,7 @@ private fun HomeScreenContent(
 ) {
     val isUserAuthed = state.authedCards.isNotEmpty()
     Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
         modifier = modifier
     ) {
         BalanceComponent(
@@ -226,28 +217,9 @@ private fun HomeScreenContent(
         ) {
             SpServers.entries.forEach { server ->
                 SegmentedButton(
-                    checked = server == state.selectedServer,
-                    shape = RectangleShape,
-                    border = BorderStroke(0.dp, Color.Transparent),
-                    onCheckedChange = { onAction(HomeAction.SelectServer(server)) },
-                    contentPadding = PaddingValues(
-                        horizontal = MaterialTheme.spacing.medium,
-                        vertical = MaterialTheme.spacing.medium
-                    ),
-                    colors = SegmentedButtonDefaults.colors().copy(
-                        activeContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        activeContentColor = MaterialTheme.colorScheme.tertiary,
-                        inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        inactiveContentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    icon = {},
-                    label = {
-                        Text(
-                            text = server.label,
-                            style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight(600)
-                        )
-                    }
+                    label = server.label,
+                    selected = server == state.selectedServer,
+                    onClick = { onAction(HomeAction.SelectServer(server)) }
                 )
             }
         }
@@ -286,7 +258,8 @@ private fun HomeScreenContent(
                     }
 
                     TonalButton(
-                        text = stringResource(Res.string.create),
+                        text = stringResource(Res.string.activate),
+                        icon = painterResource(Res.drawable.ic_add_card),
                         onClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -328,6 +301,7 @@ private fun HomeScreenContent(
 
                 TonalButton(
                     text = stringResource(Res.string.create),
+                    icon = painterResource(Res.drawable.ic_add),
                     onClick = { onAction(HomeAction.SelectCustomCard("")) },
                     modifier = Modifier
                         .fillMaxWidth()
