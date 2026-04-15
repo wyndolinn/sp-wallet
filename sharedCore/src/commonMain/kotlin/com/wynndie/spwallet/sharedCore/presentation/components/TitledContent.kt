@@ -23,9 +23,7 @@ fun TitledContent(
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         )
 
         Box {
