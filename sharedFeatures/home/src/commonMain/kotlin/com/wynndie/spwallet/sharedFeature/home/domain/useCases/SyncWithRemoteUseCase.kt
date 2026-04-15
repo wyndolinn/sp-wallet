@@ -19,36 +19,24 @@ class SyncWithRemoteUseCase(
 ) {
 
     suspend operator fun invoke(): EmptyOutcome<Error.Network> {
-        SpServers.entries.forEachIndexed { index, server ->
+        SpServers.entries.forEach { server ->
             var authedCards = cardsRepository.getAuthedCards().first()
             var cardholder: Cardholder? = null
             authedCards
                 .filter { it.server == server }
                 .forEach { authedCard ->
                     updateAuthedCard(authedCard)
-                        .onError { error ->
-                            return Outcome.Error(error)
-                        }
-                        .onSuccess { user ->
-                            if (user != null) cardholder = user
-                        }
+                        .onError { error -> return Outcome.Error(error) }
+                        .onSuccess { user -> if (user != null) cardholder = user }
                 }
 
             userRepository.getAuthedUsers().first()
                 .filter { it.server == server }
-                .forEach { user ->
-                    userRepository.deleteAuthedUser(user)
-                }
+                .forEach { user -> userRepository.deleteAuthedUser(user) }
 
             cardsRepository.getUnauthedCards().first()
                 .filter { it.server == server }
-                .forEach { card ->
-                    cardsRepository.deleteUnauthedCard(card)
-                }
-
-            if (cardholder == null && index == SpServers.entries.lastIndex) {
-                return Outcome.Error(Error.Network.UNAUTHORIZED)
-            }
+                .forEach { card -> cardsRepository.deleteUnauthedCard(card) }
 
             cardholder?.let { user ->
                 userRepository.insertAuthedUser(user.toAuthedUser())
