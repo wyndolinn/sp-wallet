@@ -27,10 +27,10 @@ import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.ic_arrow_right
 import com.wynndie.spwallet.sharedResources.ic_person
 import com.wynndie.spwallet.sharedResources.recipient
-import com.wynndie.spwallet.sharedtheme.extensions.thenIfNotNull
-import com.wynndie.spwallet.sharedtheme.theme.AppTheme
-import com.wynndie.spwallet.sharedtheme.theme.sizing
-import com.wynndie.spwallet.sharedtheme.theme.spacing
+import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -44,7 +44,7 @@ fun RecipientTransparentTile(
     modifier: Modifier = Modifier
 ) {
     val iconColor = MaterialTheme.colorScheme.primary
-    val minContentHeight = MaterialTheme.sizing.medium
+    val minContentHeight = MaterialTheme.sizes.medium
     Row(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         modifier = modifier

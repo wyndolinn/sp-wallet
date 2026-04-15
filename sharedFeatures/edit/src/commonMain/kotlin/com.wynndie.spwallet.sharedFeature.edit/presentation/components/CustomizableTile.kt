@@ -21,14 +21,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColorGradient
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.edit
 import com.wynndie.spwallet.sharedResources.ic_edit
-import com.wynndie.spwallet.sharedtheme.theme.AppTheme
-import com.wynndie.spwallet.sharedtheme.theme.sizing
-import com.wynndie.spwallet.sharedtheme.theme.spacing
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -51,7 +51,7 @@ fun CustomizableTile(
             painter = icon,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier = Modifier.size(MaterialTheme.sizing.extraLarge)
+            modifier = Modifier.size(MaterialTheme.sizes.extraLarge)
         )
 
         Spacer(Modifier.weight(1f))
@@ -81,7 +81,7 @@ private fun CustomizableTilePreview() {
     AppTheme {
         CustomizableTile(
             color = CardColors.LIGHT_BLUE.asColor(),
-            icon = CardIcons.CASH.asImage(),
+            icon = CardIcons.CASH.asPainter(),
             onClick = {},
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )

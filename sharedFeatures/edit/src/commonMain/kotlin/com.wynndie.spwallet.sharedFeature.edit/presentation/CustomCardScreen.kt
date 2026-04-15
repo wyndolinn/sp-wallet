@@ -32,11 +32,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
+import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
@@ -49,12 +49,12 @@ import com.wynndie.spwallet.sharedResources.enter_balance
 import com.wynndie.spwallet.sharedResources.enter_card_name
 import com.wynndie.spwallet.sharedResources.ic_delete
 import com.wynndie.spwallet.sharedResources.save
-import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
-import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
-import com.wynndie.spwallet.sharedtheme.theme.AppTheme
-import com.wynndie.spwallet.sharedtheme.theme.spacing
+import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
+import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
+import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -164,7 +164,7 @@ private fun CustomCardScreen(
 
         BalanceComponent(
             title = stringResource(Res.string.balance),
-            balance = state.card.balance.formatAsDisplayableOre()
+            balance = state.card.balance.asDisplayableOre()
         )
 
         Spacer(Modifier.height(MaterialTheme.spacing.large))
@@ -174,7 +174,7 @@ private fun CustomCardScreen(
         ) {
             CustomizableTile(
                 color = state.card.color.asColor(),
-                icon = state.card.icon.asImage(),
+                icon = state.card.icon.asPainter(),
                 onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) },
                 modifier = Modifier.fillMaxWidth()
             )

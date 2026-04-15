@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedCore.presentation.extensions
 
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
-import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFieldState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -44,14 +44,11 @@ fun <T> MutableStateFlow<T>.validateInputField(
     )
 
     updateState(updatedField)
-
     return isValid
 }
 
 fun observeValidationStates(
     vararg flows: Flow<Boolean>
 ): Flow<Boolean> {
-    return combine(flows.toList()) { states ->
-        states.all { it }
-    }
+    return combine(flows.toList()) { states -> states.all { it } }
 }

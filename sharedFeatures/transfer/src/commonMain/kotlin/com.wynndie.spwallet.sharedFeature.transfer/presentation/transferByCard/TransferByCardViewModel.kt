@@ -21,11 +21,11 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
@@ -177,7 +177,7 @@ class TransferByCardViewModel(
 
     private fun changeAmountValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.DigitsOnly.predicate)
+            .filterBy(InputFilters.DigitsOnly.predicate)
             .dropFirst('0')
             .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
@@ -192,7 +192,7 @@ class TransferByCardViewModel(
 
     private fun changeCommentValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.LettersOrDigits.predicate)
+            .filterBy(InputFilters.LettersOrDigits.predicate)
             .cutOffAt(CoreConstants.MAX_COMMENT_LENGTH) ?: return
 
         _state.update { state ->

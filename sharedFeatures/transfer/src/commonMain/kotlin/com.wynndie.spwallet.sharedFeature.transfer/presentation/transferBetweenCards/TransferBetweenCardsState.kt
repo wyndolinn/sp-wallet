@@ -4,8 +4,8 @@ import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.TransferCard
 
 data class TransferBetweenCardsState(

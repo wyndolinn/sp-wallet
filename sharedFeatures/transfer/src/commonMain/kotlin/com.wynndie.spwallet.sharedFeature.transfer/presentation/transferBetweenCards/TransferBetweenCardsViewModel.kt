@@ -17,11 +17,11 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.TransferCard
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedResources.Res
@@ -136,7 +136,7 @@ class TransferBetweenCardsViewModel(
 
     private fun changeAmountValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.DigitsOnly.predicate)
+            .filterBy(InputFilters.DigitsOnly.predicate)
             .dropFirst('0')
             .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 

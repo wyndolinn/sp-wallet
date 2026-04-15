@@ -9,10 +9,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.wynndie.spwallet.navigation.Route
 import com.wynndie.spwallet.navigation.rootNavGraph.RootNavHost
-import com.wynndie.spwallet.sharedCore.presentation.components.effects.ObserveAsEvents
+import com.wynndie.spwallet.sharedCore.presentation.components.ObserveAsEvents
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.OverlayType
-import com.wynndie.spwallet.sharedtheme.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import kotlinx.coroutines.launch
 
 @Composable

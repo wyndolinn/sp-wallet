@@ -3,9 +3,8 @@ package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferByCard
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,11 +29,17 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
+import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
+import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
+import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.by_number
 import com.wynndie.spwallet.sharedResources.enter_comment
@@ -43,12 +48,7 @@ import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.transfer
 import com.wynndie.spwallet.sharedResources.transfer_from
 import com.wynndie.spwallet.sharedResources.transfer_to
-import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
-import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
-import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
-import com.wynndie.spwallet.sharedtheme.theme.spacing
+import com.wynndie.spwallet.sharedResources.x_of_ore
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,101 +115,84 @@ private fun TransferByNumberScreen(
     onAction: (TransferByCardAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     val focusManager = LocalFocusManager.current
-
-    Column(
-        modifier = modifier
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
-        ) {
-            BaseCarousel(
-                items = state.sourceCards,
-                page = state.selectedSourceCard,
-                onSwipePage = {
-                    onAction(TransferByCardAction.SelectSourceCard(it))
-                },
-                modifier = Modifier
-            ) { card ->
-                Box(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-                ) {
-                    TransferCardTile(
-                        title = stringResource(Res.string.transfer_from),
-                        icon = card.icon.asImage(),
-                        color = card.color.asColor(),
-                        name = card.name,
-                        number = card.number,
-                        balance = card.balance.formatAsDisplayableOre(),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
-
+    Column(modifier = modifier) {
+        BaseCarousel(
+            items = state.sourceCards,
+            page = state.selectedSourceCard,
+            onSwipePage = { onAction(TransferByCardAction.SelectSourceCard(it)) },
+            contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+            pageSpacing = MaterialTheme.spacing.medium,
+        ) { card ->
             TransferCardTile(
-                title = stringResource(Res.string.transfer_to),
-                icon = state.recipient.icon.asImage(),
-                color = if (state.recipient.name.isNotBlank()) {
-                    state.recipient.color.asColor()
-                } else MaterialTheme.colorScheme.tertiary,
-                name = state.recipient.name.ifBlank { stringResource(Res.string.recipient) },
-                number = state.recipient.number,
-                onClick = { onAction(TransferByCardAction.EditRecipient) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
+                headline = stringResource(Res.string.transfer_from),
+                title = stringResource(Res.string.x_of_ore, card.balance)
+                    .asFormattedAmount().uppercase(),
+                text = "${card.number} • ${card.name}",
+                icon = card.icon.asPainter(),
+                color = card.color.asColor(),
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
-        Spacer(Modifier.height(MaterialTheme.spacing.large))
+        Spacer(Modifier.height(MaterialTheme.spacing.medium))
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-        ) {
-
-            InputField(
-                value = state.amountInputFieldState.value,
-                onValueChange = { onAction(TransferByCardAction.ChangeAmountValue(it)) },
-                label = stringResource(Res.string.enter_transfer_amount),
-                supportingText = state.amountInputFieldState.supportingText?.asString(),
-                hasError = state.amountInputFieldState.hasError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }
-                ),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-            )
-
-            InputField(
-                value = state.commentInputFieldState.value,
-                onValueChange = { onAction(TransferByCardAction.ChangeCommentValue(it)) },
-                label = stringResource(Res.string.enter_comment),
-                supportingText = state.commentInputFieldState.supportingText?.asString(),
-                hasError = state.commentInputFieldState.hasError,
-                singleLine = false,
-                minLines = 3,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.clearFocus(true)
-                        onAction(TransferByCardAction.MakeTransfer)
-                    }
-                ),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-            )
-        }
+        TransferCardTile(
+            headline = stringResource(Res.string.transfer_to),
+            title = state.recipient.number,
+            text = state.recipient.name.ifBlank { stringResource(Res.string.recipient) },
+            icon = state.recipient.icon.asPainter(),
+            color = if (state.recipient.name.isNotBlank()) {
+                state.recipient.color.asColor()
+            } else MaterialTheme.colorScheme.tertiary,
+            onClick = { onAction(TransferByCardAction.EditRecipient) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
+        )
 
         Spacer(Modifier.height(MaterialTheme.spacing.large))
-        Spacer(Modifier.weight(1f))
+
+        InputField(
+            value = state.amountInputFieldState.value,
+            onValueChange = { onAction(TransferByCardAction.ChangeAmountValue(it)) },
+            label = stringResource(Res.string.enter_transfer_amount),
+            supportingText = state.amountInputFieldState.supportingText?.asString(),
+            hasError = state.amountInputFieldState.hasError,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            ),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+        )
+
+        Spacer(Modifier.height(MaterialTheme.spacing.small))
+
+        InputField(
+            value = state.commentInputFieldState.value,
+            onValueChange = { onAction(TransferByCardAction.ChangeCommentValue(it)) },
+            label = stringResource(Res.string.enter_comment),
+            supportingText = state.commentInputFieldState.supportingText?.asString(),
+            hasError = state.commentInputFieldState.hasError,
+            singleLine = false,
+            minLines = 3,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus(true)
+                    onAction(TransferByCardAction.MakeTransfer)
+                }
+            ),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+        )
+
+        Spacer(Modifier.height(MaterialTheme.spacing.large))
 
         Button(
             text = stringResource(Res.string.transfer),

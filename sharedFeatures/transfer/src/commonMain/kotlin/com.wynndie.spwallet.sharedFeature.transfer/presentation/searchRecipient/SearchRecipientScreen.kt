@@ -1,6 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.searchRecipient
 
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -13,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,8 +25,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
+import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.transfer.presentation.searchRecipient.components.RecipientTransparentTile
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.card_number
@@ -32,10 +37,6 @@ import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
 import com.wynndie.spwallet.sharedResources.ic_person
 import com.wynndie.spwallet.sharedResources.recipient
 import com.wynndie.spwallet.sharedResources.recipient_history_empty
-import com.wynndie.spwallet.sharedtheme.designSystem.appBars.top.TopAppBar
-import com.wynndie.spwallet.sharedtheme.designSystem.infoLayouts.vertical.InfoLayoutSmall
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
-import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -105,7 +106,7 @@ private fun SearchRecipientScreenContent(
                 LazyColumn {
                     items(state.recipients) { recipient ->
                         RecipientTransparentTile(
-                            icon = recipient.icon.asImage(),
+                            icon = recipient.icon.asPainter(),
                             color = recipient.color.asColor(),
                             cardNumber = recipient.number,
                             cardOwner = stringResource(Res.string.recipient),
@@ -140,14 +141,24 @@ private fun SearchRecipientScreenContent(
             }
 
             else -> {
-                InfoLayoutSmall(
-                    title = stringResource(Res.string.recipient_history_empty),
-                    description = stringResource(Res.string.enter_recipient_card_number),
-                    textAlign = TextAlign.Center,
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(MaterialTheme.spacing.medium)
-                )
+                ) {
+                    Text(
+                        text = stringResource(Res.string.recipient_history_empty),
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Text(
+                        text = stringResource(Res.string.enter_recipient_card_number),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

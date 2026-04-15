@@ -49,7 +49,6 @@ kotlin {
 
         commonMain.dependencies {
             api(projects.sharedResources)
-            api(projects.sharedTheme)
 
             api(libs.compose.runtime)
             api(libs.compose.foundation)

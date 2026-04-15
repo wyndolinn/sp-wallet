@@ -26,11 +26,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
+import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
+import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingDialog
+import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.states.InputFieldState
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate
 import com.wynndie.spwallet.sharedResources.auth_instruction
@@ -38,12 +44,6 @@ import com.wynndie.spwallet.sharedResources.enter_id
 import com.wynndie.spwallet.sharedResources.enter_token
 import com.wynndie.spwallet.sharedResources.id
 import com.wynndie.spwallet.sharedResources.token
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
-import com.wynndie.spwallet.sharedtheme.designSystem.inputField.InputField
-import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
-import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingDialog
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
-import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,9 +57,9 @@ fun AuthCardSheet(
     tokenInputFieldState: InputFieldState,
     idInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
-    onToggleCardIdFocus: (Boolean) -> Unit,
+    onToggleCardIdFocus: () -> Unit,
     onChangeTokenValue: (TextFieldValue) -> Unit,
-    onToggleCardTokenFocus: (Boolean) -> Unit,
+    onToggleCardTokenFocus: () -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -95,9 +95,9 @@ private fun AuthCardSheetContent(
     idInputFieldState: InputFieldState,
     tokenInputFieldState: InputFieldState,
     onChangeIdValue: (TextFieldValue) -> Unit,
-    onToggleCardIdFocus: (Boolean) -> Unit,
+    onToggleCardIdFocus: () -> Unit,
     onChangeTokenValue: (TextFieldValue) -> Unit,
-    onToggleCardTokenFocus: (Boolean) -> Unit,
+    onToggleCardTokenFocus: () -> Unit,
     onClickAuthButton: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -125,9 +125,9 @@ private fun AuthCardSheetContent(
                 pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
                 TransferCardTile(
-                    name = card.name,
-                    number = card.number,
-                    icon = card.icon.asImage(),
+                    title = card.number,
+                    text = card.number,
+                    icon = card.icon.asPainter(),
                     color = card.color.asColor(),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -152,12 +152,10 @@ private fun AuthCardSheetContent(
                         imeAction = ImeAction.Next
                     ),
                     keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     ),
                     modifier = Modifier.onFocusChanged {
-                        onToggleCardIdFocus(it.isFocused)
+                        if (!it.isFocused) onToggleCardIdFocus()
                     }
                 )
             }
@@ -180,7 +178,7 @@ private fun AuthCardSheetContent(
                     }
                 ),
                 modifier = Modifier.onFocusChanged {
-                    onToggleCardTokenFocus(it.isFocused)
+                    if (!it.isFocused) onToggleCardTokenFocus()
                 }
             )
 

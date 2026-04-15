@@ -6,7 +6,7 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavController
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,7 +91,7 @@ class SearchRecipientViewModel(
 
             is SearchRecipientAction.ChangeRecipientValue -> {
                 val value = action.value
-                    .filterBy(InputFilterOptions.LettersOrDigits.predicate)
+                    .filterBy(InputFilters.LettersOrDigits.predicate)
                     .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
 
                 _state.update { state ->

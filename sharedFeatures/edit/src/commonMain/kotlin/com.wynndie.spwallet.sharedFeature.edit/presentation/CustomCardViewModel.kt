@@ -17,11 +17,11 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Finished
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState.Loading
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Finished
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Loading
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cash_creation_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -156,7 +156,7 @@ class CustomCardViewModel(
 
     private fun changeNameValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.LettersOrDigits.predicate)
+            .filterBy(InputFilters.LettersOrDigits.predicate)
             .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
         _state.update { state ->
@@ -169,7 +169,7 @@ class CustomCardViewModel(
 
     private fun changeBalanceValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.DigitsOnly.predicate)
+            .filterBy(InputFilters.DigitsOnly.predicate)
             .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
         _state.update { state ->

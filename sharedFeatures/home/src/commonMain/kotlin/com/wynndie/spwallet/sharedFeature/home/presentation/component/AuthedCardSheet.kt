@@ -18,10 +18,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.TransferCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalIconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.deactivate
 import com.wynndie.spwallet.sharedResources.ic_delete
@@ -29,10 +34,6 @@ import com.wynndie.spwallet.sharedResources.ic_people
 import com.wynndie.spwallet.sharedResources.ic_transaction
 import com.wynndie.spwallet.sharedResources.transfer_between_cards
 import com.wynndie.spwallet.sharedResources.transfer_by_number
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalIconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.lists.BaseCarousel
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
-import com.wynndie.spwallet.sharedtheme.theme.spacing
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -55,7 +56,7 @@ fun AuthedCardSheet(
             page = page,
             onDeleteButtonClick = onDeleteButtonClick,
             onTransferButtonClick = onTransferButtonClick,
-            onTransferBetweenCardsClick = onTransferButtonClick,
+            onTransferBetweenCardsClick = onTransferBetweenCardsClick,
             modifier = modifier
         )
     }
@@ -71,7 +72,6 @@ private fun AuthedCardSheetContent(
     modifier: Modifier = Modifier
 ) {
     var currentPage by remember { mutableStateOf(page) }
-
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,11 +89,10 @@ private fun AuthedCardSheetContent(
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             ) {
                 TransferCardTile(
-                    icon = card.icon.asImage(),
+                    title = card.balance.asDisplayableOre().formatted,
+                    text = "${card.number} • ${card.name}",
+                    icon = card.icon.asPainter(),
                     color = card.color.asColor(),
-                    name = card.name,
-                    number = card.number,
-                    balance = card.balance.formatAsDisplayableOre(),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -105,26 +104,26 @@ private fun AuthedCardSheetContent(
         ) {
             TonalIconButton(
                 icon = painterResource(Res.drawable.ic_transaction),
-                text = stringResource(Res.string.transfer_between_cards),
+                label = stringResource(Res.string.transfer_between_cards),
                 onClick = { onTransferBetweenCardsClick(cards[currentPage].id) },
                 modifier = Modifier.weight(1f)
             )
 
             TonalIconButton(
                 icon = painterResource(Res.drawable.ic_people),
-                text = stringResource(Res.string.transfer_by_number),
+                label = stringResource(Res.string.transfer_by_number),
                 onClick = { onTransferButtonClick(cards[currentPage].id) },
                 modifier = Modifier.weight(1f)
             )
-
-            TonalIconButton(
-                icon = painterResource(Res.drawable.ic_delete),
-                text = stringResource(Res.string.deactivate),
-                hasError = true,
-                onClick = onDeleteButtonClick,
-                modifier = Modifier.weight(1f)
-            )
         }
+
+        OutlinedButton(
+            text = stringResource(Res.string.deactivate),
+            icon = painterResource(Res.drawable.ic_delete),
+            destructive = true,
+            onClick = onDeleteButtonClick,
+            modifier = Modifier.weight(1f)
+        )
 
         Spacer(Modifier.height(MaterialTheme.spacing.medium))
     }

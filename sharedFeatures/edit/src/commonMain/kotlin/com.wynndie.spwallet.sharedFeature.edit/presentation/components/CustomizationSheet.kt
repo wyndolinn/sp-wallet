@@ -25,12 +25,12 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.apply
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.Button
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.BottomSheet
-import com.wynndie.spwallet.sharedtheme.extensions.thenIf
-import com.wynndie.spwallet.sharedtheme.theme.AppTheme
-import com.wynndie.spwallet.sharedtheme.theme.sizing
-import com.wynndie.spwallet.sharedtheme.theme.spacing
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
+import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
+import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIf
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +90,7 @@ private fun CustomizationSheetContent(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
                         .thenIf(selectedColorChip == chip) { Modifier.background(chip.asColor()) }
-                        .size(MaterialTheme.sizing.large)
+                        .size(MaterialTheme.sizes.large)
                 ) {
                     Box(
                         modifier = Modifier
@@ -103,7 +103,7 @@ private fun CustomizationSheetContent(
                                     shape = MaterialTheme.shapes.small
                                 )
                             }
-                            .size(MaterialTheme.sizing.small)
+                            .size(MaterialTheme.sizes.small)
                             .clickable { onColorChipClick(chip.ordinal) }
                     )
                 }

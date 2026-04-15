@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
@@ -17,17 +19,15 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.displayableValue.OreDisplayableValue
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilterOptions
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
-import com.wynndie.spwallet.sharedFeature.home.presentation.models.HomeCardsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -201,7 +201,7 @@ class HomeViewModel(
 
     private fun changeIdValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.Uuid.predicate)
+            .filterBy(InputFilters.Uuid.predicate)
             .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
         _state.update { state ->
@@ -215,7 +215,7 @@ class HomeViewModel(
 
     private fun changeTokenValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilterOptions.Base64.predicate)
+            .filterBy(InputFilters.Base64.predicate)
             .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
         _state.update { state ->
@@ -326,9 +326,7 @@ class HomeViewModel(
         val authedCardsBalance = state.value.authedCards.sumOf { it.balance }
         val customCardsBalance = state.value.customCards.sumOf { it.balance }
         val totalBalance = authedCardsBalance + customCardsBalance
-        _state.update {
-            it.copy(totalBalance = OreDisplayableValue.of(totalBalance))
-        }
+        _state.update { it.copy(totalBalance = totalBalance) }
     }
 
     private fun closeOverlays() {
@@ -339,5 +337,13 @@ class HomeViewModel(
                 isDeactivateCardDialogVisible = false
             )
         }
+    }
+
+    companion object {
+        private data class HomeCardsData(
+            val authedCards: List<AuthedCard>,
+            val unauthedCards: List<UnauthedCard>,
+            val customCards: List<CustomCard>
+        )
     }
 }

@@ -1,7 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -36,13 +35,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
-import com.wynndie.spwallet.sharedCore.presentation.components.balance.BalanceComponent
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.AuthedCardTile
-import com.wynndie.spwallet.sharedCore.presentation.components.tiles.cards.CustomCardTile
+import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
+import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.IconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalButton
+import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
+import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asImage
-import com.wynndie.spwallet.sharedCore.presentation.formatters.formatAsDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.states.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
+import com.wynndie.spwallet.sharedCore.presentation.theme.RectangleShape
+import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AppBarContent
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardOffer
@@ -60,14 +67,7 @@ import com.wynndie.spwallet.sharedResources.deactivate_card_description
 import com.wynndie.spwallet.sharedResources.deactivate_card_title
 import com.wynndie.spwallet.sharedResources.ic_reload
 import com.wynndie.spwallet.sharedResources.no_authed_cards
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.IconButton
-import com.wynndie.spwallet.sharedtheme.designSystem.buttons.TonalButton
-import com.wynndie.spwallet.sharedtheme.designSystem.loading.LoadingScreen
-import com.wynndie.spwallet.sharedtheme.designSystem.overlays.Dialog
-import com.wynndie.spwallet.sharedtheme.designSystem.titledContent.TitledContent
-import com.wynndie.spwallet.sharedtheme.theme.AppTheme
-import com.wynndie.spwallet.sharedtheme.theme.RectangleShape
-import com.wynndie.spwallet.sharedtheme.theme.spacing
+import com.wynndie.spwallet.sharedResources.x_of_ore
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -89,17 +89,11 @@ fun HomeScreenRoot(
             initialPage = state.carouselPage,
             idInputFieldState = state.idInputFieldState,
             onChangeIdValue = { viewModel.onAction(HomeAction.ChangeCardIdValue(it)) },
-            onToggleCardIdFocus = {
-                if (!it) viewModel.onAction(HomeAction.ClearIdFocus)
-            },
+            onToggleCardIdFocus = { viewModel.onAction(HomeAction.ClearIdFocus) },
             tokenInputFieldState = state.tokenInputFieldState,
             onChangeTokenValue = { viewModel.onAction(HomeAction.ChangeTokenValue(it)) },
-            onToggleCardTokenFocus = {
-                if (!it) viewModel.onAction(HomeAction.ClearCardTokenFocus)
-            },
-            onClickAuthButton = { id, token ->
-                viewModel.onAction(HomeAction.AuthCard(id = id, token = token))
-            },
+            onToggleCardTokenFocus = { viewModel.onAction(HomeAction.ClearCardTokenFocus) },
+            onClickAuthButton = { id, token -> viewModel.onAction(HomeAction.AuthCard(id, token)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.medium)
@@ -111,15 +105,9 @@ fun HomeScreenRoot(
             onDismiss = { viewModel.onAction(HomeAction.ToggleAuthedCardSheet(false)) },
             cards = state.authedCards,
             page = state.carouselPage,
-            onDeleteButtonClick = {
-                viewModel.onAction(HomeAction.ToggleDeleteCardDialog(true))
-            },
-            onTransferBetweenCardsClick = {
-                viewModel.onAction(HomeAction.TransferBetweenCards(it))
-            },
-            onTransferButtonClick = {
-                viewModel.onAction(HomeAction.TransferByCard(it))
-            },
+            onDeleteButtonClick = { viewModel.onAction(HomeAction.ToggleDeleteCardDialog(true)) },
+            onTransferBetweenCardsClick = { viewModel.onAction(HomeAction.TransferBetweenCards(it)) },
+            onTransferButtonClick = { viewModel.onAction(HomeAction.TransferByCard(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.medium)
@@ -129,15 +117,13 @@ fun HomeScreenRoot(
     if (state.isDeactivateCardDialogVisible) {
         Dialog(
             onConfirm = {
-                viewModel.onAction(
-                    HomeAction.DeactivateCard(state.authedCards[state.carouselPage])
-                )
+                viewModel.onAction(HomeAction.DeactivateCard(state.authedCards[state.carouselPage]))
             },
             onDismiss = { viewModel.onAction(HomeAction.ToggleDeleteCardDialog(false)) },
             title = stringResource(Res.string.deactivate_card_title),
             description = stringResource(Res.string.deactivate_card_description),
             confirmButtonText = stringResource(Res.string.deactivate),
-            isDestructive = true
+            destructive = true
         )
     }
 
@@ -186,10 +172,7 @@ fun HomeScreenRoot(
             }
     ) { innerPadding ->
 
-        Crossfade(
-            targetState = state.screenLoadingState,
-            animationSpec = tween(500)
-        ) { screenState ->
+        Crossfade(state.screenLoadingState) { screenState ->
 
             when (screenState) {
                 LoadingState.Loading -> {
@@ -208,7 +191,6 @@ fun HomeScreenRoot(
                     HomeScreenContent(
                         state = state,
                         onAction = viewModel::onAction,
-                        contentPadding = innerPadding,
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
@@ -224,18 +206,15 @@ fun HomeScreenRoot(
 private fun HomeScreenContent(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-
     val isUserAuthed = state.authedCards.isNotEmpty()
-
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
         modifier = modifier
     ) {
         BalanceComponent(
-            balance = state.totalBalance,
+            balance = state.totalBalance.asDisplayableOre(),
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         )
 
@@ -250,9 +229,7 @@ private fun HomeScreenContent(
                     checked = server == state.selectedServer,
                     shape = RectangleShape,
                     border = BorderStroke(0.dp, Color.Transparent),
-                    onCheckedChange = {
-                        onAction(HomeAction.SelectServer(server))
-                    },
+                    onCheckedChange = { onAction(HomeAction.SelectServer(server)) },
                     contentPadding = PaddingValues(
                         horizontal = MaterialTheme.spacing.medium,
                         vertical = MaterialTheme.spacing.medium
@@ -277,73 +254,31 @@ private fun HomeScreenContent(
 
         if (isUserAuthed) {
             ActionButtons(
-                onAuthCardClick = {
-                    onAction(HomeAction.ToggleAuthCardSheet(true))
-                },
-                onTransferBetweenCardsClick = {
-                    onAction(HomeAction.TransferBetweenCards(""))
-                },
-                onTransferByNumberClick = {
-                    onAction(HomeAction.TransferByCard(""))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
-            )
-        } else {
-            AuthCardOffer(
-                title = stringResource(Res.string.no_authed_cards),
-                description = stringResource(Res.string.auth_card_to_get_benefits),
-                onClickAuthCard = {
-                    onAction(HomeAction.ToggleAuthCardSheet(true))
-                },
+                onAuthCardClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
+                onTransferBetweenCardsClick = { onAction(HomeAction.TransferBetweenCards("")) },
+                onTransferByNumberClick = { onAction(HomeAction.TransferByCard("")) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.medium)
             )
         }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        TitledContent(
+            title = stringResource(Res.string.bank_cards)
         ) {
-
             if (state.authedCards.isNotEmpty()) {
-                TitledContent(
-                    title = stringResource(Res.string.bank_cards)
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
-                    ) {
-                        state.authedCards.forEach { card ->
-                            AuthedCardTile(
-                                icon = card.icon.asImage(),
-                                iconBackground = card.color.asColor(),
-                                cardName = card.name,
-                                cardNumber = card.number,
-                                balance = card.balance.formatAsDisplayableOre(),
-                                onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                            )
-                        }
-                    }
-                }
-            }
-
-            TitledContent(
-                title = stringResource(Res.string.custom_cards)
-            ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
                 ) {
-                    state.customCards.forEach { card ->
-                        CustomCardTile(
-                            icon = card.icon.asImage(),
-                            iconBackground = card.color.asColor(),
-                            cardName = card.name,
-                            balance = card.balance.formatAsDisplayableOre(),
-                            onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },
+                    state.authedCards.forEach { card ->
+                        AccountCardTile(
+                            label = "${card.number} • ${card.name}",
+                            title = stringResource(Res.string.x_of_ore, card.balance)
+                                .asFormattedAmount().uppercase(),
+                            text = card.balance.asDisplayableOre().formatted,
+                            icon = card.icon.asPainter(),
+                            color = card.color.asColor(),
+                            onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.spacing.medium)
@@ -352,12 +287,52 @@ private fun HomeScreenContent(
 
                     TonalButton(
                         text = stringResource(Res.string.create),
-                        onClick = { onAction(HomeAction.SelectCustomCard("")) },
+                        onClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = MaterialTheme.spacing.medium)
                     )
                 }
+            } else {
+                AuthCardOffer(
+                    title = stringResource(Res.string.no_authed_cards),
+                    description = stringResource(Res.string.auth_card_to_get_benefits),
+                    onClickAuthCard = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                )
+            }
+        }
+
+        TitledContent(
+            title = stringResource(Res.string.custom_cards)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+            ) {
+                state.customCards.forEach { card ->
+                    AccountCardTile(
+                        label = card.name,
+                        title = stringResource(Res.string.x_of_ore, card.balance)
+                            .asFormattedAmount().uppercase(),
+                        text = card.balance.asDisplayableOre().formatted,
+                        icon = card.icon.asPainter(),
+                        color = card.color.asColor(),
+                        onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.spacing.medium)
+                    )
+                }
+
+                TonalButton(
+                    text = stringResource(Res.string.create),
+                    onClick = { onAction(HomeAction.SelectCustomCard("")) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                )
             }
         }
     }
@@ -378,7 +353,9 @@ fun HomeScreenContentPreview() {
                 )
             ),
             onAction = { },
-            contentPadding = PaddingValues(MaterialTheme.spacing.medium)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MaterialTheme.spacing.medium)
         )
     }
 }
