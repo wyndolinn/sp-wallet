@@ -48,7 +48,6 @@ fun TransferCardTile(
 ) {
     Column(
         modifier = modifier
-            .tileShadow(MaterialTheme.shapes.large, color)
             .clip(MaterialTheme.shapes.medium)
             .cardColorGradient(color.copy(alpha = 0.05f))
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }

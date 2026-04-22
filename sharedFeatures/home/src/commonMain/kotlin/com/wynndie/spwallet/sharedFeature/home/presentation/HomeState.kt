@@ -7,7 +7,7 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
 
 data class HomeState(
     val screenLoadingState: LoadingState = LoadingState.Finished,

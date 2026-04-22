@@ -19,9 +19,11 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputFiel
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Finished
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Loading
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.cash_creation_succeed
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +61,7 @@ class CustomCardViewModel(
                 validation = {
                     balanceValidator.validate(
                         BalanceValidationValues(
-                            it,
+                            value = it,
                             minValue = 0
                         )
                     )
@@ -156,7 +158,8 @@ class CustomCardViewModel(
 
     private fun changeNameValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.LettersOrDigits.predicate)
+            .filter(InputFilters.PlainText.predicate)
+            .trimSpaces()
             .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
         _state.update { state ->
@@ -169,7 +172,8 @@ class CustomCardViewModel(
 
     private fun changeBalanceValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.DigitsOnly.predicate)
+            .filter(InputFilters.Decimals.predicate)
+            .dropFirst('0') { it.length > 1 }
             .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 
         _state.update { state ->

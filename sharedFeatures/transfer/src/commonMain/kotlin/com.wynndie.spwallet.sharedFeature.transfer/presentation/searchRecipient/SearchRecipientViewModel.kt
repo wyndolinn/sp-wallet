@@ -1,14 +1,16 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.searchRecipient
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -43,30 +45,18 @@ class SearchRecipientViewModel(
             .map { it.recipientInputFieldState.value.text }
             .distinctUntilChanged()
             .onEach { query ->
-                when {
-                    query.isBlank() -> {
-                        _state.update {
-                            it.copy(recipients = cachedRecipients)
-                        }
-                    }
-
-                    else -> {
-                        _state.update { state ->
-                            state.copy(
-                                recipients = cachedRecipients.filter { recipient ->
-                                    recipient.number.contains(query) || recipient.name.contains(
-                                        query
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-
-                val isCardNumberEntered =
-                    query.length == 5 && query.all { it.isDigit() }
                 _state.update { state ->
-                    state.copy(isNewRecipient = isCardNumberEntered && state.recipients.isEmpty())
+                    val recipients = if (query.isNotBlank()) {
+                        cachedRecipients.filter {
+                            it.number.contains(query) || it.name.contains(query)
+                        }
+                    } else cachedRecipients
+
+                    val cardEntered = query.length == 5 && query.all { it.isDigit() }
+                    state.copy(
+                        recipients = recipients,
+                        isNewRecipient = cardEntered && recipients.isEmpty()
+                    )
                 }
             }
             .launchIn(viewModelScope)
@@ -74,33 +64,39 @@ class SearchRecipientViewModel(
 
     fun onAction(action: SearchRecipientAction) {
         when (action) {
-            SearchRecipientAction.NavigateBack -> {
-                viewModelScope.launch {
-                    navEventController.navigate(SearchRecipientNavEvent.NavigateBack)
-                }
-            }
+            SearchRecipientAction.NavigateBack -> navigateBack()
+            is SearchRecipientAction.SelectRecipient -> selectRecipient(action.cardNumber)
+            is SearchRecipientAction.ChangeRecipientValue -> changeRecipientValue(action.value)
+        }
+    }
 
-            is SearchRecipientAction.SelectRecipient -> {
-                viewModelScope.launch {
-                    navEventController.navigate(
-                        SearchRecipientNavEvent.NavigateToTransfer(action.cardNumber)
-                    )
-                }
-            }
 
-            is SearchRecipientAction.ChangeRecipientValue -> {
-                val value = action.value
-                    .filterBy(InputFilters.LettersOrDigits.predicate)
-                    .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
+    private fun navigateBack() {
+        viewModelScope.launch {
+            navEventController.navigate(SearchRecipientNavEvent.NavigateBack)
+        }
+    }
 
-                _state.update { state ->
-                    state.copy(
-                        recipientInputFieldState = state.recipientInputFieldState.copy(
-                            value = value
-                        )
-                    )
-                }
-            }
+    private fun selectRecipient(card: String) {
+        viewModelScope.launch {
+            navEventController.navigate(
+                SearchRecipientNavEvent.NavigateToTransfer(card)
+            )
+        }
+    }
+
+    private fun changeRecipientValue(value: TextFieldValue) {
+        val value = value
+            .filter(InputFilters.PlainText.predicate)
+            .trimSpaces()
+            .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
+
+        _state.update { state ->
+            state.copy(
+                recipientInputFieldState = state.recipientInputFieldState.copy(
+                    value = value
+                )
+            )
         }
     }
 }

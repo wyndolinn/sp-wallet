@@ -1,3 +1,6 @@
 TEAM_ID=
-BUNDLE_ID=com.wynndie.spwallet.SpWallet
-APP_NAME=SpWallet
+BUNDLE_ID=com.wynndie.spwallet
+APP_NAME=sp-wallet
+
+CURRENT_PROJECT_VERSION=2
+MARKETING_VERSION=1.1.0

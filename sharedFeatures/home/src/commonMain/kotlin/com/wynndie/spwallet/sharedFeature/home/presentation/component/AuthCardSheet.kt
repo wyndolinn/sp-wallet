@@ -35,7 +35,7 @@ import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCar
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedResources.Res
 import com.wynndie.spwallet.sharedResources.activate

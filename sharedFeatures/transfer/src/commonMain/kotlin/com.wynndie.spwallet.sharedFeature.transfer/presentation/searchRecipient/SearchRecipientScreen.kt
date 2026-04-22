@@ -89,7 +89,7 @@ private fun SearchRecipientScreenContent(
             placeholder = stringResource(Res.string.card_number),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = { focusManager.clearFocus(true) }

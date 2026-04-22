@@ -18,10 +18,10 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidation
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.TransferCard
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedResources.Res
@@ -138,8 +138,8 @@ class TransferBetweenCardsViewModel(
 
     private fun changeAmountValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.DigitsOnly.predicate)
-            .dropFirst('0')
+            .filter(InputFilters.Decimals.predicate)
+            .dropFirst('0') { it.length > 1 }
             .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
         _state.update { state ->
