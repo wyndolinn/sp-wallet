@@ -99,6 +99,7 @@
     <string name="no_cards_to_activate">Нет карт для активации!</string>
     <string name="create_card_on_site">Создайте карту на сайте</string>
     <string name="no_authed_cards">Нет активных карт!</string>
+    <string name="not_enough_cards">У вас только одна карта для перевода</string>
 
     <string name="activate_cards">Активируйте карты</string>
     <string name="cash_account">Наличный счёт</string>

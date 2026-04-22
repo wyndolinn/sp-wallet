@@ -23,11 +23,14 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
+import com.wynndie.spwallet.sharedResources.Res
+import com.wynndie.spwallet.sharedResources.not_enough_cards
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -283,6 +286,13 @@ class HomeViewModel(
 
     private fun transferBetweenCard(id: String) {
         viewModelScope.launch {
+            val authedCardsSize = _state.value.authedCards.size
+            val unauthedCardsSize = _state.value.unauthedCards.size
+            if (authedCardsSize + unauthedCardsSize <= 1) {
+                snackbarController.send(Snackbar(UiText.ResourceString(Res.string.not_enough_cards)))
+                return@launch
+            }
+
             navEventController.navigate(HomeNavEvent.NavigateToTransferBetweenCards(id))
         }
     }
