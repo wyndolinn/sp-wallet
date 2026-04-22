@@ -18,7 +18,7 @@ data class CustomCardState(
     val isDeleteDialogVisible: Boolean = false,
 
     val nameInputFieldState: InputFieldState = InputFieldState(
-        maxLength = 12
+        maxLength = 24
     ),
     val balanceInputFieldState: InputFieldState = InputFieldState(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH
