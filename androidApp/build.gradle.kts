@@ -3,22 +3,6 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
-dependencies {
-    implementation(projects.sharedApp)
-
-    implementation(libs.compose.runtime)
-    implementation(libs.compose.foundation)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.components.resources)
-    implementation(libs.compose.uiToolingPreview)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewmodelCompose)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-
-    implementation(libs.kotlin.test)
-}
-
 android {
     namespace = "com.wynndie.spwallet"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -27,8 +11,8 @@ android {
         applicationId = "com.wynndie.spwallet"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.1.1"
         versionNameSuffix = ""
     }
     packaging {
@@ -39,6 +23,7 @@ android {
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+
 
             applicationIdSuffix = ".debug"
             versionNameSuffix = "_debug"
@@ -68,9 +53,6 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
 
-            applicationIdSuffix = ".release"
-            versionNameSuffix = "_release"
-
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -83,15 +65,33 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    buildFeatures {
+        resValues = true
+        buildConfig = true
+    }
 }
 
 dependencies {
+    implementation(projects.sharedApp)
+
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.components.resources)
+    implementation(libs.compose.uiToolingPreview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodelCompose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlin.test)
+
     debugImplementation(libs.compose.uiTooling)
 }
 
 base {
     val version = android.defaultConfig.versionName
     val suffix = android.defaultConfig.versionNameSuffix
-    archivesName.set("sp-wallet-v$version$suffix")
+    archivesName.set("sp-wallet_v$version$suffix")
 }
