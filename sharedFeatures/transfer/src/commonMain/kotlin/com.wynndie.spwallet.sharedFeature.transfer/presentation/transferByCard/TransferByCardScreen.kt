@@ -191,7 +191,6 @@ private fun TransferByNumberScreen(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                        onAction(TransferByCardAction.MakeTransfer)
                     }
                 ),
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)

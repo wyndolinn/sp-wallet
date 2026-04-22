@@ -177,10 +177,10 @@ private fun TransferBetweenCardsScreenContent(
             hasError = state.amountInputFieldState.hasError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                onDone = { focusManager.clearFocus(true) }
             ),
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         )
