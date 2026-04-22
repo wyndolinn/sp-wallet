@@ -20,9 +20,9 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
@@ -203,7 +203,7 @@ class HomeViewModel(
 
     private fun changeIdValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.Uuid.predicate)
+            .filter(InputFilters.Uuid.predicate)
             .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
 
         _state.update { state ->
@@ -217,7 +217,7 @@ class HomeViewModel(
 
     private fun changeTokenValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.Base64.predicate)
+            .filter(InputFilters.Base64.predicate)
             .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
 
         _state.update { state ->

@@ -22,10 +22,11 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidation
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.dropFirst
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.filterBy
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
@@ -148,28 +149,30 @@ class TransferByCardViewModel(
         viewModelScope.launch {
             _state.update { it.copy(loadingState = LoadingState.Loading) }
 
-            val selectedCard = state.value.sourceCards[state.value.selectedSourceCard]
-            val comment =
-                "$commentPrefix${_state.value.commentInputFieldState.value.text.ifBlank { "Без комментария" }}"
+            val sourceCardIndex = _state.value.selectedSourceCard
+            val sourceCard = _state.value.sourceCards[sourceCardIndex]
+
+            val commentValue = _state.value.commentInputFieldState.value.text
+            val comment = "$commentPrefix${commentValue.ifBlank { "Без комментария" }}"
 
             transferByCardUseCase(
-                card = selectedCard,
+                card = sourceCard,
                 receiver = _state.value.recipient.number,
                 amount = _state.value.amountInputFieldState.value.text,
                 comment = comment
             ).onError {
                 snackbarController.send(Snackbar(it.asUiText()))
             }.onSuccess {
+                recipientRepository.insertRecipient(
+                    recipientCard = emptyRecipientCard.copy(
+                        server = preferencesRepository.getSelectedSpServer().first(),
+                        number = _state.value.recipient.number
+                    )
+                )
+
                 snackbarController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
                 navEventController.navigate(TransferByCardNavEvent.NavigateBack)
             }
-
-            recipientRepository.insertRecipient(
-                recipientCard = emptyRecipientCard.copy(
-                    server = preferencesRepository.getSelectedSpServer().first(),
-                    number = _state.value.recipient.number
-                )
-            )
 
             _state.update { it.copy(loadingState = LoadingState.Finished) }
         }
@@ -177,8 +180,8 @@ class TransferByCardViewModel(
 
     private fun changeAmountValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.DigitsOnly.predicate)
-            .dropFirst('0')
+            .filter(InputFilters.Decimals.predicate)
+            .dropFirst('0') { it.length > 1 }
             .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
         _state.update { state ->
@@ -192,7 +195,8 @@ class TransferByCardViewModel(
 
     private fun changeCommentValue(value: TextFieldValue) {
         val value = value
-            .filterBy(InputFilters.LettersOrDigits.predicate)
+            .filter(InputFilters.PlainText.predicate)
+            .trimSpaces()
             .cutOffAt(CoreConstants.MAX_COMMENT_LENGTH) ?: return
 
         _state.update { state ->

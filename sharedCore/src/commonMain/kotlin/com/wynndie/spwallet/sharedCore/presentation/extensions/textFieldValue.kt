@@ -1,17 +1,22 @@
-package com.wynndie.spwallet.sharedCore.presentation.formatters.input
+package com.wynndie.spwallet.sharedCore.presentation.extensions
 
 import androidx.compose.ui.text.input.TextFieldValue
 
-fun TextFieldValue.filterBy(predicate: (Char) -> Boolean): TextFieldValue {
+fun TextFieldValue.filter(predicate: (Char) -> Boolean): TextFieldValue {
     return this.copy(text = this.text.filter(predicate = predicate))
 }
 
-internal fun TextFieldValue.replace(oldChar: String, newChar: String): TextFieldValue {
+fun TextFieldValue.trimSpaces(): TextFieldValue {
+    return this.copy(text = this.text.replace(Regex("\\s+"), " "))
+}
+
+fun TextFieldValue.replace(oldChar: String, newChar: String): TextFieldValue {
     return this.copy(text = this.text.replace(oldChar, newChar))
 }
 
-fun TextFieldValue.dropFirst(char: Char): TextFieldValue {
+fun TextFieldValue.dropFirst(char: Char, condition: (String) -> Boolean = { true }): TextFieldValue {
     if (!this.text.startsWith(char)) return this
+    if (!condition(this.text)) return this
     return this.copy(text = this.text.dropWhile { it == char })
 }
 

@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedCore.presentation.extensions
 
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
-import com.wynndie.spwallet.sharedCore.presentation.formatters.input.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
