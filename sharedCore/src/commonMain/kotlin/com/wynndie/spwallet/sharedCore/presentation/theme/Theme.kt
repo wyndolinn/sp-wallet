@@ -89,10 +89,10 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
 
-    val colorScheme = when {
-        darkTheme -> darkScheme
-        else -> lightScheme
-    }
+//    val colorScheme = when {
+//        darkTheme -> darkScheme
+//        else -> lightScheme
+//    }
 
     CompositionLocalProvider(
         values = arrayOf(
@@ -101,7 +101,7 @@ fun AppTheme(
         )
     ) {
         MaterialTheme(
-            colorScheme = colorScheme,
+            colorScheme = lightScheme,
             shapes = Shapes,
             typography = Typography,
             content = content
