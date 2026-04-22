@@ -2,6 +2,7 @@ package com.wynndie.spwallet
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -44,7 +45,7 @@ fun App() {
             snackbarHost = {
                 SnackbarHost(
                     hostState = snackbarHostState,
-                    modifier = Modifier.safeContentPadding()
+                    modifier = Modifier.safeDrawingPadding()
                 ) {
                     Snackbar(snackbarData = it)
                 }
