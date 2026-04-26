@@ -29,17 +29,18 @@ android {
             versionNameSuffix = "_debug"
 
             manifestPlaceholders["usesCleartextTraffic"] = true
+            resValue("string", "app_name", "SpWallet (debug)")
         }
 
-        create("qa") {
+        create("staging") {
             initWith(getByName("debug"))
 
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
 
-            applicationIdSuffix = ".qa"
-            versionNameSuffix = "_qa"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "_staging"
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -47,6 +48,7 @@ android {
             )
 
             manifestPlaceholders["usesCleartextTraffic"] = true
+            resValue("string", "app_name", "SpWallet (staging)")
         }
 
         getByName("release") {
