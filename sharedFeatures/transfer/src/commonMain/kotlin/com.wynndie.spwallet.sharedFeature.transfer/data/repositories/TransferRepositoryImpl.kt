@@ -9,9 +9,10 @@ import com.wynndie.spwallet.sharedCore.domain.outcome.map
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
-import io.ktor.client.request.parameter
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.HttpHeaders
+import kotlinx.serialization.Serializable
 
 class TransferRepositoryImpl(
     private val httpClient: HttpClient
@@ -23,13 +24,27 @@ class TransferRepositoryImpl(
         amount: Long,
         comment: String
     ): Outcome<Long, Error.Network> {
+
+        val transfer = TransferDto(
+            receiver = receiver,
+            amount = amount,
+            comment = comment
+        )
+
         return safeCall<CardBalanceDto> {
             httpClient.post(urlString = "$SP_WORLDS_URL/transactions") {
                 header(HttpHeaders.Authorization, authKey)
-                parameter("receiver", receiver)
-                parameter("amount", amount)
-                parameter("comment", comment)
+                setBody(transfer)
             }
         }.map { it.balance }
+    }
+
+    companion object {
+        @Serializable
+        private data class TransferDto(
+            val receiver: String,
+            val amount: Long,
+            val comment: String
+        )
     }
 }

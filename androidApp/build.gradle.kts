@@ -29,6 +29,7 @@ android {
             versionNameSuffix = "_debug"
 
             manifestPlaceholders["usesCleartextTraffic"] = true
+            resValue("string", "app_name", "SpWallet (debug)")
         }
 
         create("staging") {
@@ -47,6 +48,7 @@ android {
             )
 
             manifestPlaceholders["usesCleartextTraffic"] = true
+            resValue("string", "app_name", "SpWallet (staging)")
         }
 
         getByName("release") {

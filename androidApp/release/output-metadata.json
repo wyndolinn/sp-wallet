@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.wynndie.spwallet.release",
+  "applicationId": "com.wynndie.spwallet",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 2,
-      "versionName": "1.1.0_release",
-      "outputFile": "sp-wallet-1.1.0-release.apk"
+      "versionCode": 3,
+      "versionName": "1.1.1",
+      "outputFile": "sp-wallet_v1.1.1-release.apk"
     }
   ],
   "elementType": "File",
@@ -22,14 +22,14 @@
       "minApi": 28,
       "maxApi": 30,
       "baselineProfiles": [
-        "baselineProfiles/1/sp-wallet-1.1.0-release.dm"
+        "baselineProfiles/1/sp-wallet_v1.1.1-release.dm"
       ]
     },
     {
       "minApi": 31,
       "maxApi": 2147483647,
       "baselineProfiles": [
-        "baselineProfiles/0/sp-wallet-1.1.0-release.dm"
+        "baselineProfiles/0/sp-wallet_v1.1.1-release.dm"
       ]
     }
   ],
