@@ -17,16 +17,16 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEv
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
-import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
+import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
+import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import com.wynndie.spwallet.sharedResources.Res
@@ -77,19 +77,18 @@ class TransferByCardViewModel(
             preferencesRepository.getSelectedSpServer()
         ) { cards, server ->
             cards.filter { it.server == server }
-        }
-            .onEach { cards ->
-                val card = cards.find { it.id == args.cardId }
-                    ?: cards.firstOrNull()
-                    ?: return@onEach
+        }.onEach { cards ->
+            val card = cards.find { it.id == args.cardId }
+                ?: cards.firstOrNull()
+                ?: return@onEach
 
-                _state.update { state ->
-                    state.copy(
-                        sourceCards = cards,
-                        selectedSourceCard = cards.indexOf(card)
-                    )
-                }
-            }.launchIn(viewModelScope)
+            _state.update { state ->
+                state.copy(
+                    sourceCards = cards,
+                    selectedSourceCard = cards.indexOf(card)
+                )
+            }
+        }.launchIn(viewModelScope)
 
         observeValidationStates(
             _state.observeInputField(
