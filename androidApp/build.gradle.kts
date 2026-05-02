@@ -11,8 +11,8 @@ android {
         applicationId = "com.wynndie.spwallet"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 3
-        versionName = "1.1.1"
+        versionCode = 4
+        versionName = "1.1.1.1"
         versionNameSuffix = ""
     }
     packaging {
@@ -95,5 +95,5 @@ dependencies {
 base {
     val version = android.defaultConfig.versionName
     val suffix = android.defaultConfig.versionNameSuffix
-    archivesName.set("sp-wallet_v$version$suffix")
+    archivesName.set("sp-wallet-v$version$suffix")
 }
