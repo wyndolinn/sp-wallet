@@ -1,9 +1,8 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
 import com.wynndie.spwallet.sharedCore.data.database.WalletDatabase
-import com.wynndie.spwallet.sharedCore.data.database.entities.AuthedCardEntity
-import com.wynndie.spwallet.sharedCore.data.database.entities.CustomCardEntity
-import com.wynndie.spwallet.sharedCore.data.database.entities.UnauthedCardEntity
+import com.wynndie.spwallet.sharedCore.data.mappers.toDomain
+import com.wynndie.spwallet.sharedCore.data.mappers.toEntity
 import com.wynndie.spwallet.sharedCore.data.network.SP_WORLDS_URL
 import com.wynndie.spwallet.sharedCore.data.network.dto.CardBalanceDto
 import com.wynndie.spwallet.sharedCore.data.network.safeCall
@@ -40,56 +39,50 @@ class CardsRepositoryImpl(
     override suspend fun insertCustomCard(
         card: CustomCard
     ) {
-        database.cardsDao.insertCustomCard(CustomCardEntity.of(card))
+        database.cardsDao.insertCustomCard(card.toEntity())
     }
 
     override fun getCustomCards(): Flow<List<CustomCard>> {
-        return database.cardsDao
-            .getCustomCards()
-            .map { cashCardEntities ->
-                cashCardEntities.map { it.toDomain() }
-            }
+        return database.cardsDao.getCustomCards().map { entities ->
+            entities.map { it.toDomain() }
+        }
     }
 
     override suspend fun deleteCustomCard(card: CustomCard) {
-        database.cardsDao.deleteCustomCard(CustomCardEntity.of(card))
+        database.cardsDao.deleteCustomCard(card.toEntity())
     }
 
 
     override suspend fun insertAuthedCard(
         card: AuthedCard
     ) {
-        database.cardsDao.insertAuthedCard(AuthedCardEntity.of(card))
+        database.cardsDao.insertAuthedCard(card.toEntity())
     }
 
     override fun getAuthedCards(): Flow<List<AuthedCard>> {
-        return database.cardsDao
-            .getAuthedCards()
-            .map { authedCardEntities ->
-                authedCardEntities.map { it.toDomain() }
-            }
+        return database.cardsDao.getAuthedCards().map {
+            entities -> entities.map { it.toDomain() }
+        }
     }
 
     override suspend fun deleteAuthedCard(card: AuthedCard) {
-        database.cardsDao.deleteAuthedCard(AuthedCardEntity.of(card))
+        database.cardsDao.deleteAuthedCard(card.toEntity())
     }
 
 
     override suspend fun insertUnauthedCard(
         card: UnauthedCard
     ) {
-        database.cardsDao.insertUnauthedCard(UnauthedCardEntity.from(card))
+        database.cardsDao.insertUnauthedCard(card.toEntity())
     }
 
     override fun getUnauthedCards(): Flow<List<UnauthedCard>> {
-        return database.cardsDao
-            .getUnauthedCards()
-            .map { unAuthedCardEntities ->
-                unAuthedCardEntities.map { it.toDomain() }
-            }
+        return database.cardsDao.getUnauthedCards().map { entities ->
+            entities.map { it.toDomain() }
+        }
     }
 
     override suspend fun deleteUnauthedCard(card: UnauthedCard) {
-        database.cardsDao.deleteUnauthedCard(UnauthedCardEntity.from(card))
+        database.cardsDao.deleteUnauthedCard(card.toEntity())
     }
 }

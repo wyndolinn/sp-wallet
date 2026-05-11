@@ -1,7 +1,8 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
 import com.wynndie.spwallet.sharedCore.data.database.WalletDatabase
-import com.wynndie.spwallet.sharedCore.data.database.entities.AuthedUserEntity
+import com.wynndie.spwallet.sharedCore.data.mappers.toDomain
+import com.wynndie.spwallet.sharedCore.data.mappers.toEntity
 import com.wynndie.spwallet.sharedCore.data.network.SP_WORLDS_URL
 import com.wynndie.spwallet.sharedCore.data.network.dto.CardholderDto
 import com.wynndie.spwallet.sharedCore.data.network.safeCall
@@ -38,18 +39,16 @@ class UserRepositoryImpl(
     override suspend fun insertAuthedUser(
         user: AuthedUser
     ) {
-        database.userDao.insertAuthedUser(AuthedUserEntity.from(user))
+        database.userDao.insertAuthedUser(user.toEntity())
     }
 
     override fun getAuthedUsers(): Flow<List<AuthedUser>> {
-        return database.userDao
-            .getAuthedUsers()
-            .map { authedUserEntities ->
-                authedUserEntities.map { it.toDomain() }
-            }
+        return database.userDao.getAuthedUsers().map { entities ->
+            entities.map { it.toDomain() }
+        }
     }
 
     override suspend fun deleteAuthedUser(user: AuthedUser) {
-        database.userDao.deleteAuthedUser(AuthedUserEntity.from(user))
+        database.userDao.deleteAuthedUser(user.toEntity())
     }
 }

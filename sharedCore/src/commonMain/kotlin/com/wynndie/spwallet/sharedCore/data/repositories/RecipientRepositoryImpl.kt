@@ -1,7 +1,8 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
 import com.wynndie.spwallet.sharedCore.data.database.WalletDatabase
-import com.wynndie.spwallet.sharedCore.data.database.entities.RecipientEntity
+import com.wynndie.spwallet.sharedCore.data.mappers.toDomain
+import com.wynndie.spwallet.sharedCore.data.mappers.toEntity
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import kotlinx.coroutines.flow.Flow
@@ -14,18 +15,16 @@ class RecipientRepositoryImpl(
     override suspend fun insertRecipient(
         recipientCard: RecipientCard
     ) {
-        database.recipientDao.insertRecipient(RecipientEntity.of(recipientCard))
+        database.recipientDao.insertRecipient(recipientCard.toEntity())
     }
 
     override fun getRecipients(): Flow<List<RecipientCard>> {
-        return database.recipientDao
-            .getRecipients()
-            .map { recipientEntities ->
-                recipientEntities.map { it.toDomain() }
-            }
+        return database.recipientDao.getRecipients().map { entities ->
+            entities.map { it.toDomain() }
+        }
     }
 
     override suspend fun deleteRecipient(recipientCard: RecipientCard) {
-        database.recipientDao.deleteRecipient(RecipientEntity.of(recipientCard))
+        database.recipientDao.deleteRecipient(recipientCard.toEntity())
     }
 }
