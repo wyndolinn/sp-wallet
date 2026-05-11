@@ -1,12 +1,12 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
-import com.wynndie.spwallet.sharedCore.data.local.dao.CardsDao
-import com.wynndie.spwallet.sharedCore.data.local.entities.AuthedCardEntity
-import com.wynndie.spwallet.sharedCore.data.local.entities.CustomCardEntity
-import com.wynndie.spwallet.sharedCore.data.local.entities.UnauthedCardEntity
-import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
-import com.wynndie.spwallet.sharedCore.data.remote.dto.CardBalanceDto
-import com.wynndie.spwallet.sharedCore.data.remote.safeCall
+import com.wynndie.spwallet.sharedCore.data.database.WalletDatabase
+import com.wynndie.spwallet.sharedCore.data.database.entities.AuthedCardEntity
+import com.wynndie.spwallet.sharedCore.data.database.entities.CustomCardEntity
+import com.wynndie.spwallet.sharedCore.data.database.entities.UnauthedCardEntity
+import com.wynndie.spwallet.sharedCore.data.network.SP_WORLDS_URL
+import com.wynndie.spwallet.sharedCore.data.network.dto.CardBalanceDto
+import com.wynndie.spwallet.sharedCore.data.network.safeCall
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.map
 
 class CardsRepositoryImpl(
     private val httpClient: HttpClient,
-    private val cardsDao: CardsDao
+    private val database: WalletDatabase
 ) : CardsRepository {
 
     override suspend fun getCardBalance(
@@ -40,11 +40,11 @@ class CardsRepositoryImpl(
     override suspend fun insertCustomCard(
         card: CustomCard
     ) {
-        cardsDao.insertCustomCard(CustomCardEntity.of(card))
+        database.cardsDao.insertCustomCard(CustomCardEntity.of(card))
     }
 
     override fun getCustomCards(): Flow<List<CustomCard>> {
-        return cardsDao
+        return database.cardsDao
             .getCustomCards()
             .map { cashCardEntities ->
                 cashCardEntities.map { it.toDomain() }
@@ -52,18 +52,18 @@ class CardsRepositoryImpl(
     }
 
     override suspend fun deleteCustomCard(card: CustomCard) {
-        cardsDao.deleteCustomCard(CustomCardEntity.of(card))
+        database.cardsDao.deleteCustomCard(CustomCardEntity.of(card))
     }
 
 
     override suspend fun insertAuthedCard(
         card: AuthedCard
     ) {
-        cardsDao.insertAuthedCard(AuthedCardEntity.of(card))
+        database.cardsDao.insertAuthedCard(AuthedCardEntity.of(card))
     }
 
     override fun getAuthedCards(): Flow<List<AuthedCard>> {
-        return cardsDao
+        return database.cardsDao
             .getAuthedCards()
             .map { authedCardEntities ->
                 authedCardEntities.map { it.toDomain() }
@@ -71,18 +71,18 @@ class CardsRepositoryImpl(
     }
 
     override suspend fun deleteAuthedCard(card: AuthedCard) {
-        cardsDao.deleteAuthedCard(AuthedCardEntity.of(card))
+        database.cardsDao.deleteAuthedCard(AuthedCardEntity.of(card))
     }
 
 
     override suspend fun insertUnauthedCard(
         card: UnauthedCard
     ) {
-        cardsDao.insertUnauthedCard(UnauthedCardEntity.from(card))
+        database.cardsDao.insertUnauthedCard(UnauthedCardEntity.from(card))
     }
 
     override fun getUnauthedCards(): Flow<List<UnauthedCard>> {
-        return cardsDao
+        return database.cardsDao
             .getUnauthedCards()
             .map { unAuthedCardEntities ->
                 unAuthedCardEntities.map { it.toDomain() }
@@ -90,6 +90,6 @@ class CardsRepositoryImpl(
     }
 
     override suspend fun deleteUnauthedCard(card: UnauthedCard) {
-        cardsDao.deleteUnauthedCard(UnauthedCardEntity.from(card))
+        database.cardsDao.deleteUnauthedCard(UnauthedCardEntity.from(card))
     }
 }

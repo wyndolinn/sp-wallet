@@ -1,6 +1,9 @@
 package com.wynndie.spwallet.sharedCore.di
 
-import com.wynndie.spwallet.sharedCore.data.remote.HttpClientFactory
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.wynndie.spwallet.sharedCore.data.database.WalletDatabaseFactory
+import com.wynndie.spwallet.sharedCore.data.datastore.WalletDataStoreFactory
+import com.wynndie.spwallet.sharedCore.data.network.HttpClientFactory
 import com.wynndie.spwallet.sharedCore.data.repositories.CardsRepositoryImpl
 import com.wynndie.spwallet.sharedCore.data.repositories.PreferencesRepositoryImpl
 import com.wynndie.spwallet.sharedCore.data.repositories.RecipientRepositoryImpl
@@ -20,6 +23,8 @@ import org.koin.dsl.module
 
 val coreSharedModule = module {
     single { HttpClientFactory.create(get()) }
+    single { get<WalletDatabaseFactory>().create().setDriver(BundledSQLiteDriver()).build() }
+    single { get<WalletDataStoreFactory>().create() }
 
     singleOf(::CardsRepositoryImpl).bind<CardsRepository>()
     singleOf(::UserRepositoryImpl).bind<UserRepository>()

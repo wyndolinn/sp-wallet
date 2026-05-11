@@ -12,8 +12,6 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     startKoin {
         config?.invoke(this)
         modules(
-            appSharedModule,
-            appPlatformModule,
             coreSharedModule,
             corePlatformModule,
             homeSharedModule,

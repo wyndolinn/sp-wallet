@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -33,15 +31,9 @@ kotlin {
         }
     }
 
-    room {
-        schemaDirectory("$projectDir/schemas")
-    }
-
     sourceSets {
         commonMain.dependencies {
             implementation(projects.sharedCore)
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.sqlite.bundled)
         }
     }
 }

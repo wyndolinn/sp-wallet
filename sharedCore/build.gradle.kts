@@ -67,8 +67,8 @@ kotlin {
             api(libs.bundles.ktor)
             api(libs.bundles.coil)
 
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.sqlite.bundled)
+            api(libs.androidx.room.runtime)
+            api(libs.sqlite.bundled)
 
             api(libs.datastore.preferences)
             api(libs.datastore)
