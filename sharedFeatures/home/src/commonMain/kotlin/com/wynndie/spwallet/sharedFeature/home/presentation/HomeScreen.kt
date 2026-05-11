@@ -235,6 +235,7 @@ private fun HomeScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = MaterialTheme.spacing.medium)
                 .padding(horizontal = MaterialTheme.spacing.medium)
         )
 
