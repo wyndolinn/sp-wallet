@@ -44,10 +44,15 @@ val Typography
             fontWeight = FontWeight.Bold,
             fontSize = 32.sp
         ),
+        headlineMedium = TextStyle(
+            fontFamily = InterFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 22.sp
+        ),
         headlineSmall = TextStyle(
             fontFamily = InterFontFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 20.sp
+            fontSize = 18.sp
         ),
 
 

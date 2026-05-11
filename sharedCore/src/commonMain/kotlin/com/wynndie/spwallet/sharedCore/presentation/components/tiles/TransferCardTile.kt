@@ -55,7 +55,7 @@ fun TransferCardTile(
         if (headline.isNotBlank()) {
             Text(
                 text = headline,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }

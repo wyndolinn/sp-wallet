@@ -38,7 +38,7 @@ fun BalanceComponent(
 
         Text(
             text = balance.formatted.asFormattedAmount(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
     }

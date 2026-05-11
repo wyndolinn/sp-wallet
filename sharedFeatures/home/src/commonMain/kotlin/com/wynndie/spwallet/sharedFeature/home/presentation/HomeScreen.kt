@@ -47,6 +47,7 @@ import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.ic_add
 import com.wynndie.spwallet.sharedCore.ic_add_card
 import com.wynndie.spwallet.sharedCore.no_authed_cards
+import com.wynndie.spwallet.sharedCore.nothing_found
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
@@ -273,7 +274,7 @@ private fun HomeScreenContent(
                 }
             } else {
                 AuthCardOffer(
-                    title = stringResource(Res.string.no_authed_cards),
+                    title = stringResource(Res.string.nothing_found),
                     description = stringResource(Res.string.auth_card_to_get_benefits),
                     onClickAuthCard = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                     modifier = Modifier
