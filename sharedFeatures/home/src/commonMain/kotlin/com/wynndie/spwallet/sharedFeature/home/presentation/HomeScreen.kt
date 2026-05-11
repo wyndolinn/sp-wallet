@@ -1,7 +1,13 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -200,10 +206,7 @@ fun HomeScreenRoot(
                         onRefresh = { viewModel.onAction(HomeAction.Refresh) },
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        Crossfade(
-                            targetState = state.selectedServer,
-                            animationSpec = tween(500)
-                        ) {
+                        Crossfade(state.selectedServer) {
                             HomeScreenContent(
                                 state = state,
                                 onAction = viewModel::onAction,

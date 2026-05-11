@@ -33,6 +33,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUse
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -80,6 +81,7 @@ class HomeViewModel(
             cardsRepository.getCustomCards(),
             preferencesRepository.getSelectedSpServer()
         ) { authedCards, unauthedCard, customCards, selectedSever ->
+            delay(150)
             HomeCardsData(
                 authedCards = authedCards.filter { it.server == selectedSever },
                 unauthedCards = unauthedCard.filter { it.server == selectedSever },
