@@ -36,11 +36,13 @@ fun BalanceComponent(
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Text(
-            text = balance.formatted.asFormattedAmount(),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        if (balance.formatted.isNotBlank()) {
+            Text(
+                text = balance.formatted.asFormattedAmount(),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 
@@ -49,7 +51,7 @@ fun BalanceComponent(
 private fun BalanceComponentPreview() {
     AppTheme {
         BalanceComponent(
-            balance = DisplayableOreValue.of(123412432134),
+            balance = DisplayableOreValue.of(10),
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }

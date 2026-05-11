@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 
 fun String.asFormattedAmount(): String {
-    return this.replace(Regex("\\B(?=(\\d{3})+(?!\\d))"), " ")
+    return this.replace(Regex("\\B(?=(\\d{3})+(?!\\d))"), " ")
 }
 
 @Composable

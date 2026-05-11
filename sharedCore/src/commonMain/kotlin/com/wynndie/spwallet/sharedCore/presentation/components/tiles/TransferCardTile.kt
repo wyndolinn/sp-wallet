@@ -55,7 +55,7 @@ fun TransferCardTile(
         if (headline.isNotBlank()) {
             Text(
                 text = headline,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
@@ -82,11 +82,13 @@ fun TransferCardTile(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (text.isNotBlank()) {
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }

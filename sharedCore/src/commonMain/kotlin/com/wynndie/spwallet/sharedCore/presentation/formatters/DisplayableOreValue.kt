@@ -20,7 +20,7 @@ data class DisplayableOreValue(
             if (value == 0L) {
                 return DisplayableOreValue(
                     value = value,
-                    formatted = UiText.ResourceString(Res.string.x_of_ore, value).asString()
+                    formatted = ""
                 )
             }
 
@@ -28,11 +28,13 @@ data class DisplayableOreValue(
             val stacks = value / ORE_IN_STACK % STACKS_IN_SHULKER
             val ore = value % ORE_IN_STACK
 
-            val formattedValue = buildList {
-                if (shulkers > 0) add(UiText.ResourceString(Res.string.x_of_shulkers, shulkers))
-                if (stacks > 0) add(UiText.ResourceString(Res.string.x_of_stacks, stacks))
-                if (ore > 0) add(UiText.ResourceString(Res.string.x_of_ore, ore))
-            }.map { it.asString() }.joinToString(" ")
+            val formattedValue = if (value >= ORE_IN_STACK) {
+                buildList {
+                    if (shulkers > 0) add(UiText.ResourceString(Res.string.x_of_shulkers, shulkers))
+                    if (stacks > 0) add(UiText.ResourceString(Res.string.x_of_stacks, stacks))
+                    if (ore > 0) add(UiText.ResourceString(Res.string.x_of_ore, ore))
+                }.map { it.asString() }.joinToString(" ")
+            } else ""
 
             return DisplayableOreValue(
                 value = value,
