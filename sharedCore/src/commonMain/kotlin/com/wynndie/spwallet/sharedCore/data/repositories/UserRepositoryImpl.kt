@@ -1,10 +1,11 @@
 package com.wynndie.spwallet.sharedCore.data.repositories
 
-import com.wynndie.spwallet.sharedCore.data.local.dao.UserDao
-import com.wynndie.spwallet.sharedCore.data.local.entities.AuthedUserEntity
-import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
-import com.wynndie.spwallet.sharedCore.data.remote.dto.CardholderDto
-import com.wynndie.spwallet.sharedCore.data.remote.safeCall
+import com.wynndie.spwallet.sharedCore.data.database.WalletDatabase
+import com.wynndie.spwallet.sharedCore.data.mappers.toDomain
+import com.wynndie.spwallet.sharedCore.data.mappers.toEntity
+import com.wynndie.spwallet.sharedCore.data.network.SP_WORLDS_URL
+import com.wynndie.spwallet.sharedCore.data.network.dto.CardholderDto
+import com.wynndie.spwallet.sharedCore.data.network.safeCall
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
@@ -21,7 +22,7 @@ import kotlinx.coroutines.flow.map
 
 class UserRepositoryImpl(
     private val httpClient: HttpClient,
-    private val userDao: UserDao
+    private val database: WalletDatabase
 ) : UserRepository {
 
     override suspend fun getUnauthedUser(
@@ -38,18 +39,16 @@ class UserRepositoryImpl(
     override suspend fun insertAuthedUser(
         user: AuthedUser
     ) {
-        userDao.insertAuthedUser(AuthedUserEntity.from(user))
+        database.userDao.insertAuthedUser(user.toEntity())
     }
 
     override fun getAuthedUsers(): Flow<List<AuthedUser>> {
-        return userDao
-            .getAuthedUsers()
-            .map { authedUserEntities ->
-                authedUserEntities.map { it.toDomain() }
-            }
+        return database.userDao.getAuthedUsers().map { entities ->
+            entities.map { it.toDomain() }
+        }
     }
 
     override suspend fun deleteAuthedUser(user: AuthedUser) {
-        userDao.deleteAuthedUser(AuthedUserEntity.from(user))
+        database.userDao.deleteAuthedUser(user.toEntity())
     }
 }

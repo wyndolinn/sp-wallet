@@ -18,6 +18,7 @@ data class TransferByCardState(
     val recipient: RecipientCard = emptyRecipientCard,
     val sourceCards: List<AuthedCard> = emptyList(),
     val selectedSourceCard: Int = 0,
+    val commentPrefix: String = "",
     val amountInputFieldState: InputFieldState = InputFieldState(
         value = TextFieldValue("0"),
         maxLength = CoreConstants.MAX_BALANCE_LENGTH

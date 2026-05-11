@@ -1,21 +1,21 @@
 package com.wynndie.spwallet.sharedCore.presentation.extensions
 
+import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.error_above_maximum_value
+import com.wynndie.spwallet.sharedCore.error_bad_request
+import com.wynndie.spwallet.sharedCore.error_below_minimum_value
+import com.wynndie.spwallet.sharedCore.error_empty_field
+import com.wynndie.spwallet.sharedCore.error_forbidden
+import com.wynndie.spwallet.sharedCore.error_internal_server_error
+import com.wynndie.spwallet.sharedCore.error_invalid_characters
+import com.wynndie.spwallet.sharedCore.error_no_internet
+import com.wynndie.spwallet.sharedCore.error_not_found
+import com.wynndie.spwallet.sharedCore.error_request_timeout
+import com.wynndie.spwallet.sharedCore.error_serialization
+import com.wynndie.spwallet.sharedCore.error_unauthorized
+import com.wynndie.spwallet.sharedCore.error_unknown
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.error_above_maximum_value
-import com.wynndie.spwallet.sharedResources.error_bad_request
-import com.wynndie.spwallet.sharedResources.error_below_minimum_value
-import com.wynndie.spwallet.sharedResources.error_empty_field
-import com.wynndie.spwallet.sharedResources.error_forbidden
-import com.wynndie.spwallet.sharedResources.error_internal_server_error
-import com.wynndie.spwallet.sharedResources.error_invalid_characters
-import com.wynndie.spwallet.sharedResources.error_no_internet
-import com.wynndie.spwallet.sharedResources.error_not_found
-import com.wynndie.spwallet.sharedResources.error_request_timeout
-import com.wynndie.spwallet.sharedResources.error_serialization
-import com.wynndie.spwallet.sharedResources.error_unauthorized
-import com.wynndie.spwallet.sharedResources.error_unknown
 
 fun Error.asUiText(): UiText {
     return when (this) {

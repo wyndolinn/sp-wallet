@@ -6,10 +6,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +28,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.by_number
+import com.wynndie.spwallet.sharedCore.comment
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
@@ -41,15 +42,12 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.by_number
-import com.wynndie.spwallet.sharedResources.comment
-import com.wynndie.spwallet.sharedResources.recipient
-import com.wynndie.spwallet.sharedResources.transfer
-import com.wynndie.spwallet.sharedResources.transfer_amount
-import com.wynndie.spwallet.sharedResources.transfer_from
-import com.wynndie.spwallet.sharedResources.transfer_to
-import com.wynndie.spwallet.sharedResources.x_of_ore
+import com.wynndie.spwallet.sharedCore.recipient
+import com.wynndie.spwallet.sharedCore.transfer
+import com.wynndie.spwallet.sharedCore.transfer_amount
+import com.wynndie.spwallet.sharedCore.transfer_from
+import com.wynndie.spwallet.sharedCore.transfer_to
+import com.wynndie.spwallet.sharedCore.x_of_ore
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -180,6 +178,8 @@ private fun TransferByNumberScreen(
                 value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.ChangeCommentValue(it)) },
                 label = stringResource(Res.string.comment),
+                prefix = state.commentPrefix,
+                placeholder = "Без комментария",
                 supportingText = state.commentInputFieldState.supportingText?.asString(),
                 hasError = state.commentInputFieldState.hasError,
                 singleLine = false,

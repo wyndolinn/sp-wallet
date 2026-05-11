@@ -1,8 +1,8 @@
 package com.wynndie.spwallet.sharedFeature.transfer.data.repositories
 
-import com.wynndie.spwallet.sharedCore.data.remote.SP_WORLDS_URL
-import com.wynndie.spwallet.sharedCore.data.remote.dto.CardBalanceDto
-import com.wynndie.spwallet.sharedCore.data.remote.safeCall
+import com.wynndie.spwallet.sharedCore.data.network.SP_WORLDS_URL
+import com.wynndie.spwallet.sharedCore.data.network.dto.CardBalanceDto
+import com.wynndie.spwallet.sharedCore.data.network.safeCall
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
 import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.map

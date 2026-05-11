@@ -8,6 +8,7 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 
 data class HomeState(
     val screenLoadingState: LoadingState = LoadingState.Finished,
@@ -21,6 +22,7 @@ data class HomeState(
     val isDeactivateCardDialogVisible: Boolean = false,
 
     val isAuthButtonEnabled: Boolean = false,
+    val authErrorMessage: UiText = UiText.DynamicString(""),
 
     val authedUser: AuthedUser = emptyAuthedUser,
     val totalBalance: Long = 0,

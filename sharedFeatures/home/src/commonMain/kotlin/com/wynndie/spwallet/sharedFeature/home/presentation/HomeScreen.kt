@@ -2,11 +2,13 @@ package com.wynndie.spwallet.sharedFeature.home.presentation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,23 +19,37 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.activate
+import com.wynndie.spwallet.sharedCore.app_logo_foreground
+import com.wynndie.spwallet.sharedCore.app_name
+import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
+import com.wynndie.spwallet.sharedCore.bank_cards
+import com.wynndie.spwallet.sharedCore.create
+import com.wynndie.spwallet.sharedCore.custom_cards
+import com.wynndie.spwallet.sharedCore.deactivate
+import com.wynndie.spwallet.sharedCore.deactivate_card_description
+import com.wynndie.spwallet.sharedCore.deactivate_card_title
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.nothing_found
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.IconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalButton
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
@@ -45,26 +61,11 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.x_of_ore
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardOffer
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardSheet
 import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthedCardSheet
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate
-import com.wynndie.spwallet.sharedResources.app_logo_foreground
-import com.wynndie.spwallet.sharedResources.app_name
-import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
-import com.wynndie.spwallet.sharedResources.bank_cards
-import com.wynndie.spwallet.sharedResources.create
-import com.wynndie.spwallet.sharedResources.custom_cards
-import com.wynndie.spwallet.sharedResources.deactivate
-import com.wynndie.spwallet.sharedResources.deactivate_card_description
-import com.wynndie.spwallet.sharedResources.deactivate_card_title
-import com.wynndie.spwallet.sharedResources.ic_add
-import com.wynndie.spwallet.sharedResources.ic_add_card
-import com.wynndie.spwallet.sharedResources.ic_reload
-import com.wynndie.spwallet.sharedResources.no_authed_cards
-import com.wynndie.spwallet.sharedResources.x_of_ore
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -91,6 +92,7 @@ fun HomeScreenRoot(
             onChangeTokenValue = { viewModel.onAction(HomeAction.ChangeTokenValue(it)) },
             onToggleCardTokenFocus = { viewModel.onAction(HomeAction.ClearCardTokenFocus) },
             onClickAuthButton = { id, token -> viewModel.onAction(HomeAction.AuthCard(id, token)) },
+            errorMessage = state.authErrorMessage.asString(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.medium)
@@ -141,13 +143,25 @@ fun HomeScreenRoot(
                     )
                 },
                 actions = {
-                    if (state.authedUser.name.isNotBlank()) {
-                        IconButton(
-                            icon = painterResource(Res.drawable.ic_reload),
-                            onClick = { viewModel.onAction(HomeAction.Refresh) },
-                            color = MaterialTheme.colorScheme.onSurface,
-                            loading = state.screenLoadingState == LoadingState.Loading
-                        )
+                    MultiChoiceSegmentedButtonRow(
+                        modifier = Modifier
+                            .padding(horizontal = MaterialTheme.spacing.medium)
+                            .clip(MaterialTheme.shapes.medium)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.secondary,
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .height(MaterialTheme.sizes.small)
+                    ) {
+                        SpServers.entries.forEach { server ->
+                            SegmentedButton(
+                                label = server.label,
+                                selected = server == state.selectedServer,
+                                onClick = { viewModel.onAction(HomeAction.SelectServer(server)) },
+                                enabled = state.screenLoadingState != LoadingState.Loading
+                            )
+                        }
                     }
                 },
                 scrollBehavior = scrollBehavior
@@ -162,9 +176,7 @@ fun HomeScreenRoot(
                 )
             }
     ) { innerPadding ->
-
         Crossfade(state.screenLoadingState) { screenState ->
-
             when (screenState) {
                 LoadingState.Loading -> {
                     LoadingScreen(
@@ -179,14 +191,21 @@ fun HomeScreenRoot(
                 }
 
                 LoadingState.Finished -> {
-                    HomeScreenContent(
-                        state = state,
-                        onAction = viewModel::onAction,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(innerPadding)
-                    )
+                    PullToRefreshBox(
+                        isRefreshing = state.screenLoadingState is LoadingState.Loading,
+                        onRefresh = { viewModel.onAction(HomeAction.Refresh) },
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        Crossfade(state.selectedServer) {
+                            HomeScreenContent(
+                                state = state,
+                                onAction = viewModel::onAction,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -206,27 +225,15 @@ private fun HomeScreenContent(
     ) {
         BalanceComponent(
             balance = state.totalBalance.asDisplayableOre(),
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-        )
-
-        MultiChoiceSegmentedButtonRow(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = MaterialTheme.spacing.medium)
                 .padding(horizontal = MaterialTheme.spacing.medium)
-                .clip(MaterialTheme.shapes.medium)
-        ) {
-            SpServers.entries.forEach { server ->
-                SegmentedButton(
-                    label = server.label,
-                    selected = server == state.selectedServer,
-                    onClick = { onAction(HomeAction.SelectServer(server)) }
-                )
-            }
-        }
+        )
 
         if (isUserAuthed) {
             ActionButtons(
-                onAuthCardClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                 onTransferBetweenCardsClick = { onAction(HomeAction.TransferBetweenCards("")) },
                 onTransferByNumberClick = { onAction(HomeAction.TransferByCard("")) },
                 modifier = Modifier
@@ -240,7 +247,7 @@ private fun HomeScreenContent(
         ) {
             if (state.authedCards.isNotEmpty()) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
                 ) {
                     state.authedCards.forEach { card ->
                         AccountCardTile(
@@ -257,9 +264,8 @@ private fun HomeScreenContent(
                         )
                     }
 
-                    TonalButton(
+                    OutlinedButton(
                         text = stringResource(Res.string.activate),
-                        icon = painterResource(Res.drawable.ic_add_card),
                         onClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -268,7 +274,7 @@ private fun HomeScreenContent(
                 }
             } else {
                 AuthCardOffer(
-                    title = stringResource(Res.string.no_authed_cards),
+                    title = stringResource(Res.string.nothing_found),
                     description = stringResource(Res.string.auth_card_to_get_benefits),
                     onClickAuthCard = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                     modifier = Modifier
@@ -282,7 +288,7 @@ private fun HomeScreenContent(
             title = stringResource(Res.string.custom_cards)
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
             ) {
                 state.customCards.forEach { card ->
                     AccountCardTile(
@@ -299,9 +305,8 @@ private fun HomeScreenContent(
                     )
                 }
 
-                TonalButton(
+                OutlinedButton(
                     text = stringResource(Res.string.create),
-                    icon = painterResource(Res.drawable.ic_add),
                     onClick = { onAction(HomeAction.SelectCustomCard("")) },
                     modifier = Modifier
                         .fillMaxWidth()

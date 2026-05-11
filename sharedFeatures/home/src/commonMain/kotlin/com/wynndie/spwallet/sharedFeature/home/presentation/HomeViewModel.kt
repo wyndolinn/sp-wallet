@@ -3,6 +3,7 @@ package com.wynndie.spwallet.sharedFeature.home.presentation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
@@ -12,25 +13,27 @@ import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
+import com.wynndie.spwallet.sharedCore.not_enough_cards
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
+import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.server_changed
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.not_enough_cards
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -55,9 +58,10 @@ class HomeViewModel(
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
+    private var loadingJob: Job? = null
+
     init {
         syncWithRemote()
-
 
         preferencesRepository.getSelectedSpServer().onEach { server ->
             _state.update { state ->
@@ -77,6 +81,7 @@ class HomeViewModel(
             cardsRepository.getCustomCards(),
             preferencesRepository.getSelectedSpServer()
         ) { authedCards, unauthedCard, customCards, selectedSever ->
+            delay(150)
             HomeCardsData(
                 authedCards = authedCards.filter { it.server == selectedSever },
                 unauthedCards = unauthedCard.filter { it.server == selectedSever },
@@ -113,7 +118,7 @@ class HomeViewModel(
 
     fun onAction(action: HomeAction) {
         when (action) {
-            HomeAction.Refresh -> syncWithRemote()
+            is HomeAction.Refresh -> syncWithRemote()
             is HomeAction.SelectServer -> selectServer(action.server)
             is HomeAction.ToggleAuthCardSheet -> toggleAuthCardSheet(action.open)
             is HomeAction.ToggleAuthedCardSheet -> toggleAuthedCardSheet(action.open)
@@ -134,27 +139,26 @@ class HomeViewModel(
 
     private fun syncWithRemote() {
         closeOverlays()
-        viewModelScope.launch {
-            _state.update {
-                it.copy(screenLoadingState = LoadingState.Loading)
+        loadingJob?.cancel()
+        loadingJob = viewModelScope.launch {
+            _state.update { it.copy(screenLoadingState = LoadingState.Loading) }
+
+            syncWithRemoteUseCase().onError { error ->
+                snackbarController.send(Snackbar(error.asUiText()))
             }
 
-            syncWithRemoteUseCase()
-                .onError { error ->
-                    snackbarController.send(Snackbar(error.asUiText()))
-                }
-
-            _state.update {
-                it.copy(screenLoadingState = LoadingState.Finished)
+            _state.update { it.copy(screenLoadingState = LoadingState.Finished)
             }
         }
     }
 
     private fun authCard(id: String, token: String) {
         viewModelScope.launch {
-
             _state.update {
-                it.copy(authLoadingState = LoadingState.Loading)
+                it.copy(
+                    authLoadingState = LoadingState.Loading,
+                    authErrorMessage = UiText.DynamicString("")
+                )
             }
 
             authCardUseCase(
@@ -162,9 +166,11 @@ class HomeViewModel(
                 id = id,
                 token = token
             ).getOrElse { error ->
-                snackbarController.send(Snackbar(error.asUiText()))
                 _state.update {
-                    it.copy(authLoadingState = LoadingState.Finished)
+                    it.copy(
+                        authLoadingState = LoadingState.Finished,
+                        authErrorMessage = error.asUiText()
+                    )
                 }
                 return@launch
             }
@@ -251,6 +257,9 @@ class HomeViewModel(
     private fun selectServer(server: SpServers) {
         viewModelScope.launch {
             preferencesRepository.setSelectedSpServer(server)
+            snackbarController.send(
+                Snackbar(UiText.ResourceString(Res.string.server_changed, server.label))
+            )
         }
     }
 

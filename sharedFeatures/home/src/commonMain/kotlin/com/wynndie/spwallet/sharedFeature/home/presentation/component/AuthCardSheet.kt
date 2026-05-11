@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
@@ -25,7 +27,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.activate
+import com.wynndie.spwallet.sharedCore.auth_instruction
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
+import com.wynndie.spwallet.sharedCore.ic_add_card
+import com.wynndie.spwallet.sharedCore.id
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
@@ -34,15 +41,10 @@ import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSh
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate
-import com.wynndie.spwallet.sharedResources.auth_instruction
-import com.wynndie.spwallet.sharedResources.ic_add_card
-import com.wynndie.spwallet.sharedResources.id
-import com.wynndie.spwallet.sharedResources.token
+import com.wynndie.spwallet.sharedCore.token
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -61,6 +63,7 @@ fun AuthCardSheet(
     onChangeTokenValue: (TextFieldValue) -> Unit,
     onToggleCardTokenFocus: () -> Unit,
     onClickAuthButton: (String, String) -> Unit,
+    errorMessage: String,
     modifier: Modifier = Modifier
 ) {
     BottomSheet(
@@ -95,6 +98,7 @@ fun AuthCardSheet(
                     pageSpacing = MaterialTheme.spacing.medium
                 ) { card ->
                     TransferCardTile(
+                        headline = stringResource(Res.string.activate),
                         title = card.name,
                         text = card.number,
                         icon = card.icon.asPainter(),
@@ -157,21 +161,35 @@ fun AuthCardSheet(
                 )
             }
 
-            Button(
-                text = stringResource(Res.string.activate),
-                icon = painterResource(Res.drawable.ic_add_card),
-                onClick = {
-                    val cardId = if (cards.isEmpty()) {
-                        idInputState.value.text
-                    } else cards[currentPage].id
+            Column(
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+            ) {
+                AnimatedVisibility(errorMessage.isNotBlank()) {
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
-                    onClickAuthButton(cardId, tokenInputState.value.text)
-                },
-                enabled = isAuthButtonEnabled,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
-            )
+                Button(
+                    text = stringResource(Res.string.activate),
+                    icon = painterResource(Res.drawable.ic_add_card),
+                    onClick = {
+                        val cardId = if (cards.isEmpty()) {
+                            idInputState.value.text
+                        } else cards[currentPage].id
+
+                        onClickAuthButton(cardId, tokenInputState.value.text)
+                    },
+                    enabled = isAuthButtonEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                )
+            }
         }
     }
 }
