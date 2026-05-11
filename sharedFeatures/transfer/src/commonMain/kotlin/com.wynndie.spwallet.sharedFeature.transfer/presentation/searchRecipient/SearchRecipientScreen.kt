@@ -27,15 +27,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.card_number
+import com.wynndie.spwallet.sharedCore.enter_recipient_card_number
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.RecipientTile
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.card_number
-import com.wynndie.spwallet.sharedResources.enter_recipient_card_number
-import com.wynndie.spwallet.sharedResources.recipient
-import com.wynndie.spwallet.sharedResources.recipient_history_empty
+import com.wynndie.spwallet.sharedCore.recipient
+import com.wynndie.spwallet.sharedCore.recipient_history_empty
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)

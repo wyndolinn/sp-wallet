@@ -48,13 +48,12 @@ kotlin {
         }
 
         commonMain.dependencies {
-            api(projects.sharedResources)
-
             api(libs.compose.runtime)
             api(libs.compose.foundation)
             api(libs.compose.material3)
             api(libs.compose.ui)
             api(libs.compose.uiToolingPreview)
+            api(libs.compose.components.resources)
 
             api(libs.androidx.lifecycle.viewmodel)
             api(libs.androidx.lifecycle.runtimeCompose)
@@ -79,6 +78,12 @@ kotlin {
             api(libs.ktor.client.darwin)
         }
     }
+}
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.wynndie.spwallet.sharedCore"
+    generateResClass = auto
 }
 
 dependencies {

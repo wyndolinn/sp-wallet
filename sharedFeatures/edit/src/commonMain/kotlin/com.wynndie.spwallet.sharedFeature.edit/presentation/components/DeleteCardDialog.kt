@@ -2,10 +2,10 @@ package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.delete
-import com.wynndie.spwallet.sharedResources.delete_card_description
-import com.wynndie.spwallet.sharedResources.delete_card_title
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.delete
+import com.wynndie.spwallet.sharedCore.delete_card_description
+import com.wynndie.spwallet.sharedCore.delete_card_title
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
 import org.jetbrains.compose.resources.stringResource
 

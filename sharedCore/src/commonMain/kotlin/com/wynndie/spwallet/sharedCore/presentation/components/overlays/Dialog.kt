@@ -6,9 +6,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.cancel
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.cancel
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

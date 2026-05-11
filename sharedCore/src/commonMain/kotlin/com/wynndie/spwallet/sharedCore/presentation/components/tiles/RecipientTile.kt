@@ -18,17 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.ic_arrow_right
+import com.wynndie.spwallet.sharedCore.ic_person
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.ic_arrow_right
-import com.wynndie.spwallet.sharedResources.ic_person
-import com.wynndie.spwallet.sharedResources.recipient
+import com.wynndie.spwallet.sharedCore.recipient
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

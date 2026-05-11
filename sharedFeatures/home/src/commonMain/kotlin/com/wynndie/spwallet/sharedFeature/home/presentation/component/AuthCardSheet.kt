@@ -25,7 +25,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.activate
+import com.wynndie.spwallet.sharedCore.auth_instruction
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
+import com.wynndie.spwallet.sharedCore.ic_add_card
+import com.wynndie.spwallet.sharedCore.id
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
@@ -34,15 +39,10 @@ import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSh
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate
-import com.wynndie.spwallet.sharedResources.auth_instruction
-import com.wynndie.spwallet.sharedResources.ic_add_card
-import com.wynndie.spwallet.sharedResources.id
-import com.wynndie.spwallet.sharedResources.token
+import com.wynndie.spwallet.sharedCore.token
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

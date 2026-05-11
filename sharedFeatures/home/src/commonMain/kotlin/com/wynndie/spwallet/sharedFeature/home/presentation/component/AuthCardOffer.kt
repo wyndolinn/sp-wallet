@@ -10,16 +10,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.activate
+import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
+import com.wynndie.spwallet.sharedCore.ic_add_card
+import com.wynndie.spwallet.sharedCore.no_authed_cards
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate
-import com.wynndie.spwallet.sharedResources.auth_card_to_get_benefits
-import com.wynndie.spwallet.sharedResources.ic_add_card
-import com.wynndie.spwallet.sharedResources.no_authed_cards
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

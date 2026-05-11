@@ -2,13 +2,13 @@ package com.wynndie.spwallet.sharedCore.presentation.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
+import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
+import com.wynndie.spwallet.sharedCore.ic_add_card
+import com.wynndie.spwallet.sharedCore.ic_card
+import com.wynndie.spwallet.sharedCore.ic_person
+import com.wynndie.spwallet.sharedCore.ic_wallet
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiImage
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.ic_add_card
-import com.wynndie.spwallet.sharedResources.ic_card
-import com.wynndie.spwallet.sharedResources.ic_person
-import com.wynndie.spwallet.sharedResources.ic_wallet
 
 @Composable
 fun CardIcons.asPainter(): Painter {

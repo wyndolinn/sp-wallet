@@ -5,15 +5,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.activate_card
+import com.wynndie.spwallet.sharedCore.ic_add_card
+import com.wynndie.spwallet.sharedCore.ic_people
+import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.activate_card
-import com.wynndie.spwallet.sharedResources.ic_add_card
-import com.wynndie.spwallet.sharedResources.ic_people
-import com.wynndie.spwallet.sharedResources.ic_transaction
-import com.wynndie.spwallet.sharedResources.transfer_between_cards
-import com.wynndie.spwallet.sharedResources.transfer_by_number
+import com.wynndie.spwallet.sharedCore.transfer_between_cards
+import com.wynndie.spwallet.sharedCore.transfer_by_number
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

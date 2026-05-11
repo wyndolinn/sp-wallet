@@ -6,10 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +31,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.balance
+import com.wynndie.spwallet.sharedCore.card_name
+import com.wynndie.spwallet.sharedCore.cash_account
+import com.wynndie.spwallet.sharedCore.delete
+import com.wynndie.spwallet.sharedCore.ic_delete
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
@@ -44,16 +48,10 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.save
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.balance
-import com.wynndie.spwallet.sharedResources.card_name
-import com.wynndie.spwallet.sharedResources.cash_account
-import com.wynndie.spwallet.sharedResources.delete
-import com.wynndie.spwallet.sharedResources.ic_delete
-import com.wynndie.spwallet.sharedResources.save
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

@@ -8,15 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.total_balance
-import com.wynndie.spwallet.sharedResources.x_of_ore
+import com.wynndie.spwallet.sharedCore.total_balance
+import com.wynndie.spwallet.sharedCore.x_of_ore
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -34,7 +34,6 @@ dependencyResolutionManagement {
 include(":androidApp")
 include(":sharedApp")
 include(":sharedCore")
-include(":sharedResources")
 include(":sharedFeatures:home")
 include(":sharedFeatures:transfer")
 include(":sharedFeatures:edit")

@@ -6,11 +6,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.inter_medium
-import com.wynndie.spwallet.sharedResources.roboto_bold
-import com.wynndie.spwallet.sharedResources.roboto_medium
-import com.wynndie.spwallet.sharedResources.roboto_regular
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.inter_medium
+import com.wynndie.spwallet.sharedCore.roboto_bold
+import com.wynndie.spwallet.sharedCore.roboto_medium
+import com.wynndie.spwallet.sharedCore.roboto_regular
 import org.jetbrains.compose.resources.Font
 
 val RobotoFontFamily
@@ -37,62 +37,63 @@ val InterFontFamily
         )
     )
 
-val Typography @Composable get() = Typography(
-    displaySmall = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 26.sp
-    ),
+val Typography
+    @Composable get() = Typography(
+        displaySmall = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 26.sp
+        ),
 
-    headlineSmall = TextStyle(
-        fontFamily = InterFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 20.sp
-    ),
-
-
-    titleLarge = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
-    ),
-    titleSmall = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 16.sp
-    ),
+        headlineSmall = TextStyle(
+            fontFamily = InterFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 20.sp
+        ),
 
 
-    bodyMedium = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    ),
-    bodySmall = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp
-    ),
+        titleLarge = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        ),
+        titleMedium = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 18.sp,
+        ),
+        titleSmall = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp
+        ),
 
 
-    labelLarge = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        bodyMedium = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp
+        ),
+        bodySmall = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp
+        ),
+
+
+        labelLarge = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp
+        ),
+        labelMedium = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp
+        ),
+        labelSmall = TextStyle(
+            fontFamily = RobotoFontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp
+        )
     )
-)

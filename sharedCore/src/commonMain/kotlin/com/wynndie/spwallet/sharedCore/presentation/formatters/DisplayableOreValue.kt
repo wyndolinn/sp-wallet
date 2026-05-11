@@ -1,11 +1,10 @@
 package com.wynndie.spwallet.sharedCore.presentation.formatters
 
 import androidx.compose.runtime.Composable
-import com.wynndie.spwallet.sharedResources.Res
-import com.wynndie.spwallet.sharedResources.x_of_ore
-import com.wynndie.spwallet.sharedResources.x_of_shulkers
-import com.wynndie.spwallet.sharedResources.x_of_stacks
-import kotlin.collections.joinToString
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.x_of_ore
+import com.wynndie.spwallet.sharedCore.x_of_shulkers
+import com.wynndie.spwallet.sharedCore.x_of_stacks
 
 data class DisplayableOreValue(
     val value: Long,
