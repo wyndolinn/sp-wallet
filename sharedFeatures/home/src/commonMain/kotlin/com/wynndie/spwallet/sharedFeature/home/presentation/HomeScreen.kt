@@ -1,13 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -51,16 +44,12 @@ import com.wynndie.spwallet.sharedCore.deactivate_card_description
 import com.wynndie.spwallet.sharedCore.deactivate_card_title
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
-import com.wynndie.spwallet.sharedCore.ic_add
-import com.wynndie.spwallet.sharedCore.ic_add_card
-import com.wynndie.spwallet.sharedCore.no_authed_cards
 import com.wynndie.spwallet.sharedCore.nothing_found
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalButton
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
@@ -170,6 +159,7 @@ fun HomeScreenRoot(
                                 label = server.label,
                                 selected = server == state.selectedServer,
                                 onClick = { viewModel.onAction(HomeAction.SelectServer(server)) },
+                                enabled = state.screenLoadingState != LoadingState.Loading
                             )
                         }
                     }

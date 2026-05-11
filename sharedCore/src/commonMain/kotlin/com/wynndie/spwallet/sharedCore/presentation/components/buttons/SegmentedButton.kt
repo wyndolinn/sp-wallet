@@ -26,13 +26,15 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
     selected: Boolean,
     onClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null
+    icon: Painter? = null,
+    enabled: Boolean = true
 ) {
     SegmentedButton(
         checked = selected,
+        onCheckedChange = onClick,
+        enabled = enabled,
         shape = RectangleShape,
         border = BorderStroke(0.dp, Color.Transparent),
-        onCheckedChange = onClick,
         contentPadding = PaddingValues(
             horizontal = MaterialTheme.spacing.extraExtraSmall,
             vertical = MaterialTheme.spacing.extraExtraSmall
