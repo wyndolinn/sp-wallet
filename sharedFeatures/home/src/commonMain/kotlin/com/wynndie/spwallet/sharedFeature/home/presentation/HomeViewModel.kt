@@ -26,6 +26,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputFiel
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.server_changed
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
@@ -251,6 +252,9 @@ class HomeViewModel(
     private fun selectServer(server: SpServers) {
         viewModelScope.launch {
             preferencesRepository.setSelectedSpServer(server)
+            snackbarController.send(
+                Snackbar(UiText.ResourceString(Res.string.server_changed, server.label))
+            )
         }
     }
 
