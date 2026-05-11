@@ -13,7 +13,7 @@
     <string name="clear">Очистить</string>
     <string name="delete">Удалить</string>
     <string name="deactivate">Деактивировать</string>
-    <string name="edit">Редактировать</string>
+    <string name="edit">Сменить цвет</string>
 
     <!--  COMMON NETWORK ERRORS  -->
     <string name="error_bad_request">Неправильный идентификатор или токен</string>
