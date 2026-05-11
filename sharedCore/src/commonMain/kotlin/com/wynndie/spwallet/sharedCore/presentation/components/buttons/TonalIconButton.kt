@@ -45,7 +45,7 @@ fun TonalIconButton(
             colors = ButtonDefaults.filledTonalButtonColors().copy(
                 contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
-                } else MaterialTheme.colorScheme.onSecondaryContainer,
+                } else MaterialTheme.colorScheme.onPrimaryContainer,
                 containerColor = if (destructive) {
                     MaterialTheme.colorScheme.errorContainer
                 } else MaterialTheme.colorScheme.primaryContainer
