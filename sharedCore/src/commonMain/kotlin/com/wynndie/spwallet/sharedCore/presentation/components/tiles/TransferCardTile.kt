@@ -27,7 +27,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColorGradient
+import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
@@ -48,7 +48,7 @@ fun TransferCardTile(
     Column(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .cardColorGradient(color.copy(alpha = 0.05f))
+            .cardColor(color.copy(alpha = 0.05f))
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(MaterialTheme.spacing.medium)
     ) {

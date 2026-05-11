@@ -39,12 +39,11 @@ val InterFontFamily
 
 val Typography
     @Composable get() = Typography(
-        displaySmall = TextStyle(
-            fontFamily = RobotoFontFamily,
+        headlineLarge = TextStyle(
+            fontFamily = InterFontFamily,
             fontWeight = FontWeight.Bold,
-            fontSize = 26.sp
+            fontSize = 32.sp
         ),
-
         headlineSmall = TextStyle(
             fontFamily = InterFontFamily,
             fontWeight = FontWeight.Medium,

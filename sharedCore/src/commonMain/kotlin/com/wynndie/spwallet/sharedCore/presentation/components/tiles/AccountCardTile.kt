@@ -1,6 +1,7 @@
 package com.wynndie.spwallet.sharedCore.presentation.components.tiles
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
@@ -33,7 +35,6 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
-import com.wynndie.spwallet.sharedCore.presentation.extensions.tileShadow
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -53,8 +54,12 @@ fun AccountCardTile(
     Row(
         modifier = modifier
             .height(IntrinsicSize.Min)
-            .tileShadow(MaterialTheme.shapes.large, color)
             .clip(MaterialTheme.shapes.medium)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                shape = MaterialTheme.shapes.medium
+            )
             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
     ) {

@@ -159,12 +159,6 @@ private fun CustomCardScreen(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
         modifier = modifier
     ) {
-
-        BalanceComponent(
-            title = stringResource(Res.string.balance),
-            balance = state.card.balance.asDisplayableOre()
-        )
-
         CustomizableTile(
             color = state.card.color.asColor(),
             icon = state.card.icon.asPainter(),

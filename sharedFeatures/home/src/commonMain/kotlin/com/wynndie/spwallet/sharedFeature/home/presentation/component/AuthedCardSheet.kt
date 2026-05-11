@@ -22,16 +22,18 @@ import com.wynndie.spwallet.sharedCore.ic_delete
 import com.wynndie.spwallet.sharedCore.ic_people
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalIconButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
+import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.transfer_between_cards
 import com.wynndie.spwallet.sharedCore.transfer_by_number
+import com.wynndie.spwallet.sharedCore.x_of_ore
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -63,8 +65,10 @@ fun AuthedCardSheet(
                 pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
                 TransferCardTile(
-                    title = card.balance.asDisplayableOre().formatted,
-                    text = "${card.number} • ${card.name}",
+                    headline = "${card.number} • ${card.name}",
+                    title = stringResource(Res.string.x_of_ore, card.balance)
+                        .asFormattedAmount().uppercase(),
+                    text = card.balance.asDisplayableOre().formatted,
                     icon = card.icon.asPainter(),
                     color = card.color.asColor(),
                     modifier = Modifier.fillMaxWidth()
@@ -90,7 +94,7 @@ fun AuthedCardSheet(
                 )
             }
 
-            OutlinedButton(
+            TextButton(
                 text = stringResource(Res.string.deactivate),
                 icon = painterResource(Res.drawable.ic_delete),
                 destructive = true,

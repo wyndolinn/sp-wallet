@@ -1,13 +1,14 @@
 package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,14 +23,11 @@ import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.edit
-import com.wynndie.spwallet.sharedCore.ic_edit
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColorGradient
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -39,47 +37,32 @@ fun CustomizableTile(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.Bottom,
-        modifier = modifier
-            .clip(MaterialTheme.shapes.medium)
-            .cardColorGradient(color)
-            .clickable(onClick = onClick)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxWidth()
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
+            modifier = Modifier
+                .size(MaterialTheme.sizes.extraLarge)
+                .clip(MaterialTheme.shapes.medium)
+                .background(color)
+                .clickable(onClick = onClick)
         ) {
             Image(
                 painter = icon,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                modifier = Modifier.size(MaterialTheme.sizes.extraLarge)
+                modifier = Modifier.size(MaterialTheme.sizes.small)
             )
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                space = MaterialTheme.spacing.small,
-                alignment = Alignment.End
-            ),
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-                .weight(1f)
-                .padding(MaterialTheme.spacing.medium)
-        ) {
-            Text(
-                text = stringResource(Res.string.edit),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-
-            Icon(
-                painter = painterResource(Res.drawable.ic_edit),
-                contentDescription = stringResource(Res.string.edit),
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+        Text(
+            text = stringResource(Res.string.edit),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.outline
+        )
     }
 }
 

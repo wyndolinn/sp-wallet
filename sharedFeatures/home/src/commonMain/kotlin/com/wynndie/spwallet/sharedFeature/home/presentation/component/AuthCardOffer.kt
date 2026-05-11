@@ -33,7 +33,7 @@ internal fun AuthCardOffer(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         modifier = modifier
             .clip(MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(MaterialTheme.spacing.medium)
     ) {
         Column(
@@ -52,8 +52,6 @@ internal fun AuthCardOffer(
 
         Button(
             text = stringResource(Res.string.activate),
-            icon = painterResource(Res.drawable.ic_add_card),
-            color = MaterialTheme.colorScheme.tertiary,
             onClick = onClickAuthCard,
             modifier = Modifier.fillMaxWidth()
         )

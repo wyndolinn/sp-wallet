@@ -31,7 +31,7 @@ fun TonalIconButton(
     loading: Boolean = false
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {

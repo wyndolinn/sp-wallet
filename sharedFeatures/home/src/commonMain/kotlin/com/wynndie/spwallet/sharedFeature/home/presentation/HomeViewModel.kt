@@ -153,9 +153,11 @@ class HomeViewModel(
 
     private fun authCard(id: String, token: String) {
         viewModelScope.launch {
-
             _state.update {
-                it.copy(authLoadingState = LoadingState.Loading)
+                it.copy(
+                    authLoadingState = LoadingState.Loading,
+                    authErrorMessage = UiText.DynamicString("")
+                )
             }
 
             authCardUseCase(
@@ -163,9 +165,11 @@ class HomeViewModel(
                 id = id,
                 token = token
             ).getOrElse { error ->
-                snackbarController.send(Snackbar(error.asUiText()))
                 _state.update {
-                    it.copy(authLoadingState = LoadingState.Finished)
+                    it.copy(
+                        authLoadingState = LoadingState.Finished,
+                        authErrorMessage = error.asUiText()
+                    )
                 }
                 return@launch
             }

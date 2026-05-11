@@ -1,12 +1,15 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,12 +22,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.activate
@@ -41,12 +46,11 @@ import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.ic_add
 import com.wynndie.spwallet.sharedCore.ic_add_card
-import com.wynndie.spwallet.sharedCore.ic_reload
 import com.wynndie.spwallet.sharedCore.no_authed_cards
 import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.IconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalButton
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
@@ -91,6 +95,7 @@ fun HomeScreenRoot(
             onChangeTokenValue = { viewModel.onAction(HomeAction.ChangeTokenValue(it)) },
             onToggleCardTokenFocus = { viewModel.onAction(HomeAction.ClearCardTokenFocus) },
             onClickAuthButton = { id, token -> viewModel.onAction(HomeAction.AuthCard(id, token)) },
+            errorMessage = state.authErrorMessage.asString(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.medium)
@@ -141,13 +146,24 @@ fun HomeScreenRoot(
                     )
                 },
                 actions = {
-                    if (state.authedUser.name.isNotBlank()) {
-                        IconButton(
-                            icon = painterResource(Res.drawable.ic_reload),
-                            onClick = { viewModel.onAction(HomeAction.Refresh) },
-                            color = MaterialTheme.colorScheme.onSurface,
-                            loading = state.screenLoadingState == LoadingState.Loading
-                        )
+                    MultiChoiceSegmentedButtonRow(
+                        modifier = Modifier
+                            .padding(horizontal = MaterialTheme.spacing.medium)
+                            .clip(MaterialTheme.shapes.medium)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.secondary,
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .height(MaterialTheme.sizes.small)
+                    ) {
+                        SpServers.entries.forEach { server ->
+                            SegmentedButton(
+                                label = server.label,
+                                selected = server == state.selectedServer,
+                                onClick = { viewModel.onAction(HomeAction.SelectServer(server)) },
+                            )
+                        }
                     }
                 },
                 scrollBehavior = scrollBehavior
@@ -162,9 +178,7 @@ fun HomeScreenRoot(
                 )
             }
     ) { innerPadding ->
-
         Crossfade(state.screenLoadingState) { screenState ->
-
             when (screenState) {
                 LoadingState.Loading -> {
                     LoadingScreen(
@@ -179,14 +193,19 @@ fun HomeScreenRoot(
                 }
 
                 LoadingState.Finished -> {
-                    HomeScreenContent(
-                        state = state,
-                        onAction = viewModel::onAction,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(innerPadding)
-                    )
+                    Crossfade(
+                        targetState = state.selectedServer,
+                        animationSpec = tween(500)
+                    ) {
+                        HomeScreenContent(
+                            state = state,
+                            onAction = viewModel::onAction,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                                .padding(innerPadding)
+                        )
+                    }
                 }
             }
         }
@@ -206,27 +225,14 @@ private fun HomeScreenContent(
     ) {
         BalanceComponent(
             balance = state.totalBalance.asDisplayableOre(),
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-        )
-
-        MultiChoiceSegmentedButtonRow(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.spacing.medium)
-                .clip(MaterialTheme.shapes.medium)
-        ) {
-            SpServers.entries.forEach { server ->
-                SegmentedButton(
-                    label = server.label,
-                    selected = server == state.selectedServer,
-                    onClick = { onAction(HomeAction.SelectServer(server)) }
-                )
-            }
-        }
+        )
 
         if (isUserAuthed) {
             ActionButtons(
-                onAuthCardClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                 onTransferBetweenCardsClick = { onAction(HomeAction.TransferBetweenCards("")) },
                 onTransferByNumberClick = { onAction(HomeAction.TransferByCard("")) },
                 modifier = Modifier
@@ -240,7 +246,7 @@ private fun HomeScreenContent(
         ) {
             if (state.authedCards.isNotEmpty()) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
                 ) {
                     state.authedCards.forEach { card ->
                         AccountCardTile(
@@ -257,9 +263,8 @@ private fun HomeScreenContent(
                         )
                     }
 
-                    TonalButton(
+                    OutlinedButton(
                         text = stringResource(Res.string.activate),
-                        icon = painterResource(Res.drawable.ic_add_card),
                         onClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -282,7 +287,7 @@ private fun HomeScreenContent(
             title = stringResource(Res.string.custom_cards)
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
             ) {
                 state.customCards.forEach { card ->
                     AccountCardTile(
@@ -299,9 +304,8 @@ private fun HomeScreenContent(
                     )
                 }
 
-                TonalButton(
+                OutlinedButton(
                     text = stringResource(Res.string.create),
-                    icon = painterResource(Res.drawable.ic_add),
                     onClick = { onAction(HomeAction.SelectCustomCard("")) },
                     modifier = Modifier
                         .fillMaxWidth()

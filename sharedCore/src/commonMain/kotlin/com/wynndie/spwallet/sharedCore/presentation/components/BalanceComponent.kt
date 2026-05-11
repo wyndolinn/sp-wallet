@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.Res
@@ -22,21 +23,16 @@ import org.jetbrains.compose.resources.stringResource
 fun BalanceComponent(
     balance: DisplayableOreValue,
     modifier: Modifier = Modifier,
-    title: String = stringResource(Res.string.total_balance)
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start
 ) {
-    Column(modifier = modifier) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(Modifier.height(MaterialTheme.spacing.extraExtraSmall))
-
+    Column(
+        horizontalAlignment = horizontalAlignment,
+        modifier = modifier
+    ) {
         Text(
             text = stringResource(Res.string.x_of_ore, balance.value)
                 .asFormattedAmount().uppercase(),
-            style = MaterialTheme.typography.displaySmall,
+            style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
 

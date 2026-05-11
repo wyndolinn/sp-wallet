@@ -19,7 +19,6 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ActionButtons(
-    onAuthCardClick: () -> Unit,
     onTransferBetweenCardsClick: () -> Unit,
     onTransferByNumberClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -28,13 +27,6 @@ fun ActionButtons(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
     ) {
-        TonalIconButton(
-            icon = painterResource(Res.drawable.ic_add_card),
-            label = stringResource(Res.string.activate_card),
-            onClick = onAuthCardClick,
-            modifier = Modifier.weight(1f)
-        )
-
         TonalIconButton(
             icon = painterResource(Res.drawable.ic_transaction),
             label = stringResource(Res.string.transfer_between_cards),
