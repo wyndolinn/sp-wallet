@@ -56,17 +56,17 @@ class TransferByCardViewModel(
     private val _state = MutableStateFlow(TransferByCardState())
     val state = _state.asStateFlow()
 
-    private var commentPrefix = ""
 
     init {
         userRepository.getAuthedUsers().onEach { users ->
             val user = users.firstOrNull() ?: return@onEach
-            commentPrefix = "${user.name}: "
+            val prefix = "${user.name}: "
             _state.update { state ->
                 state.copy(
                     user = user,
+                    commentPrefix = prefix,
                     commentInputFieldState = state.commentInputFieldState.copy(
-                        maxLength = state.commentInputFieldState.maxLength - commentPrefix.length
+                        maxLength = state.commentInputFieldState.maxLength - prefix.length
                     )
                 )
             }
@@ -152,7 +152,8 @@ class TransferByCardViewModel(
             val sourceCard = _state.value.sourceCards[sourceCardIndex]
 
             val commentValue = _state.value.commentInputFieldState.value.text
-            val comment = "$commentPrefix${commentValue.ifBlank { "Без комментария" }}"
+            val prefix = _state.value.commentPrefix
+            val comment = "$prefix${commentValue.ifBlank { "Без комментария" }}"
 
             transferByCardUseCase(
                 card = sourceCard,

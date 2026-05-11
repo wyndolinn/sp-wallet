@@ -178,6 +178,8 @@ private fun TransferByNumberScreen(
                 value = state.commentInputFieldState.value,
                 onValueChange = { onAction(TransferByCardAction.ChangeCommentValue(it)) },
                 label = stringResource(Res.string.comment),
+                prefix = state.commentPrefix,
+                placeholder = "Без комментария",
                 supportingText = state.commentInputFieldState.supportingText?.asString(),
                 hasError = state.commentInputFieldState.hasError,
                 singleLine = false,
