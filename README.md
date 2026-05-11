@@ -1,18 +1,15 @@
-
 # СП Кошелёк
-
-С этим приложением вы можете переводите деньги другим игрокам и между своими счетами, а также создавать отдельные наличные счета и всегда видеть свой общий баланс.
+С этим приложением вы можете переводить деньги другим игрокам и между своими счетами, а также создавать отдельные наличные счета и всегда видеть свой общий баланс.<br/>
 
 ### Основные возможности
+- Создание профиля для СП и СПм
 - Денежные переводы другим игрокам
 - Денежные переводы между своими счетами
 - Создание счетов для учёта наличных средств
-- Подсчёт общего баланса со всех счетов
-
+- Подсчёт общего баланса со всех счетов отдельного сервера
 
 ### Безопасность
-Данные активированных карт храняться исключительно на вашем устройстве.<br/>
-
+Данные активированных карт храняться исключительно на вашем устройстве.
 
 ### Регистрация
 1. Необходимо приобрести проходку на один из серверов [СП](https://spworlds.ru/)
@@ -20,12 +17,11 @@
 3. Зайдите на сервер, для которого хотите активировать карту, и сгенерируйте для неё новый token
 4. Введите данные карты в приложение (их можно временно сохранить в любом мессенджере для удобного копирования с компьютера на телефон)
 
-
 ### [Посмотреть последний релиз](https://github.com/wyndolinn/sp-wallet/releases/latest)
 
 
 # Скриншоты
-<img width="180px" height="410px" alt="Screenshot_Home" src="https://github.com/user-attachments/assets/00a9023a-e2d6-45a4-a80f-2dcb745e8254" />
-<img width="180px" height="410px" alt="Screenshot_ByNumber" src="https://github.com/user-attachments/assets/97e68fe2-badc-499f-b767-a807d1fdab15" />
-<img width="180px" height="410px" alt="Screenshot_Between" src="https://github.com/user-attachments/assets/1254cb48-d45e-4f01-bc55-24937cf7902a" />
-<img width="180px" height="410px" alt="Screenshot_Cash" src="https://github.com/user-attachments/assets/748f1764-8be6-47f1-8126-e5ce8dd11192" />
+<img width="180px" height="410px" alt="Screenshot_Home" src="https://github.com/user-attachments/assets/67d1025e-3bf8-488e-9251-6f17ed21fd03" />
+<img width="180px" height="410px" alt="Screenshot_TransferByCard" src="https://github.com/user-attachments/assets/c9878821-efd1-4fca-a29d-01dab9bf1752" />
+<img width="180px" height="410px" alt="Screenshot_TransferBetween" src="https://github.com/user-attachments/assets/7259ad61-fb39-4f6f-bfcb-e9cd1ff64a26" />
+<img width="180px" height="410px" alt="Screenshot_CustomCard" src="https://github.com/user-attachments/assets/838af7a0-7d68-47cc-b9ae-5b84ff9de4e3" />
