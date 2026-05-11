@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -194,18 +195,23 @@ fun HomeScreenRoot(
                 }
 
                 LoadingState.Finished -> {
-                    Crossfade(
-                        targetState = state.selectedServer,
-                        animationSpec = tween(500)
+                    PullToRefreshBox(
+                        isRefreshing = state.screenLoadingState is LoadingState.Loading,
+                        onRefresh = { viewModel.onAction(HomeAction.Refresh) },
+                        modifier = Modifier.padding(innerPadding)
                     ) {
-                        HomeScreenContent(
-                            state = state,
-                            onAction = viewModel::onAction,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScroll(rememberScrollState())
-                                .padding(innerPadding)
-                        )
+                        Crossfade(
+                            targetState = state.selectedServer,
+                            animationSpec = tween(500)
+                        ) {
+                            HomeScreenContent(
+                                state = state,
+                                onAction = viewModel::onAction,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                            )
+                        }
                     }
                 }
             }

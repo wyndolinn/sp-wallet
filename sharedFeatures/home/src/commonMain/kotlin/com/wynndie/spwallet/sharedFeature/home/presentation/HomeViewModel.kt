@@ -32,6 +32,7 @@ import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardU
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -56,9 +57,10 @@ class HomeViewModel(
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
+    private var loadingJob: Job? = null
+
     init {
         syncWithRemote()
-
 
         preferencesRepository.getSelectedSpServer().onEach { server ->
             _state.update { state ->
@@ -114,7 +116,7 @@ class HomeViewModel(
 
     fun onAction(action: HomeAction) {
         when (action) {
-            HomeAction.Refresh -> syncWithRemote()
+            is HomeAction.Refresh -> syncWithRemote()
             is HomeAction.SelectServer -> selectServer(action.server)
             is HomeAction.ToggleAuthCardSheet -> toggleAuthCardSheet(action.open)
             is HomeAction.ToggleAuthedCardSheet -> toggleAuthedCardSheet(action.open)
@@ -135,18 +137,15 @@ class HomeViewModel(
 
     private fun syncWithRemote() {
         closeOverlays()
-        viewModelScope.launch {
-            _state.update {
-                it.copy(screenLoadingState = LoadingState.Loading)
+        loadingJob?.cancel()
+        loadingJob = viewModelScope.launch {
+            _state.update { it.copy(screenLoadingState = LoadingState.Loading) }
+
+            syncWithRemoteUseCase().onError { error ->
+                snackbarController.send(Snackbar(error.asUiText()))
             }
 
-            syncWithRemoteUseCase()
-                .onError { error ->
-                    snackbarController.send(Snackbar(error.asUiText()))
-                }
-
-            _state.update {
-                it.copy(screenLoadingState = LoadingState.Finished)
+            _state.update { it.copy(screenLoadingState = LoadingState.Finished)
             }
         }
     }
