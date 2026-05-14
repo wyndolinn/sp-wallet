@@ -2,10 +2,12 @@ package com.wynndie.spwallet.sharedFeature.home.presentation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -144,13 +147,15 @@ fun HomeScreenRoot(
                 },
                 actions = {
                     MultiChoiceSegmentedButtonRow(
+                        space = 0.dp,
                         modifier = Modifier
                             .padding(horizontal = MaterialTheme.spacing.medium)
-                            .clip(MaterialTheme.shapes.medium)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                             .border(
                                 width = 1.dp,
-                                color = MaterialTheme.colorScheme.secondary,
-                                shape = MaterialTheme.shapes.medium
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = CircleShape
                             )
                             .height(MaterialTheme.sizes.small)
                     ) {
@@ -159,7 +164,8 @@ fun HomeScreenRoot(
                                 label = server.label,
                                 selected = server == state.selectedServer,
                                 onClick = { viewModel.onAction(HomeAction.SelectServer(server)) },
-                                enabled = state.screenLoadingState != LoadingState.Loading
+                                enabled = state.screenLoadingState != LoadingState.Loading,
+                                modifier = Modifier.fillMaxHeight()
                             )
                         }
                     }
@@ -230,6 +236,7 @@ private fun HomeScreenContent(
                 .fillMaxWidth()
                 .padding(top = MaterialTheme.spacing.medium)
                 .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(vertical = MaterialTheme.spacing.medium)
         )
 
         if (isUserAuthed) {

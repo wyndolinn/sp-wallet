@@ -71,7 +71,7 @@ fun CustomizableTile(
 private fun CustomizableTilePreview() {
     AppTheme {
         CustomizableTile(
-            color = CardColors.LIGHT_BLUE.asColor(),
+            color = CardColors.TEAL.asColor(),
             icon = CardIcons.CASH.asPainter(),
             onClick = {},
             modifier = Modifier.padding(MaterialTheme.spacing.medium)

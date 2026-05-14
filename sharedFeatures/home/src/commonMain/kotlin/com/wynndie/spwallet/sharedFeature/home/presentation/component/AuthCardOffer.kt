@@ -17,6 +17,7 @@ import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedCore.ic_add_card
 import com.wynndie.spwallet.sharedCore.no_authed_cards
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.painterResource
@@ -33,7 +34,7 @@ internal fun AuthCardOffer(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         modifier = modifier
             .clip(MaterialTheme.shapes.extraLarge)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(MaterialTheme.spacing.medium)
     ) {
         Column(
@@ -50,7 +51,7 @@ internal fun AuthCardOffer(
             )
         }
 
-        Button(
+        OutlinedButton(
             text = stringResource(Res.string.activate),
             onClick = onClickAuthCard,
             modifier = Modifier.fillMaxWidth()

@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRowScope
@@ -33,10 +34,9 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
         checked = selected,
         onCheckedChange = onClick,
         enabled = enabled,
-        shape = RectangleShape,
+        shape = CircleShape,
         border = BorderStroke(0.dp, Color.Transparent),
         contentPadding = PaddingValues(
-            horizontal = MaterialTheme.spacing.extraExtraSmall,
             vertical = MaterialTheme.spacing.extraExtraSmall
         ),
         colors = SegmentedButtonDefaults.colors().copy(
@@ -62,6 +62,5 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
             )
         },
         modifier = modifier
-            .height(MaterialTheme.sizes.large)
     )
 }

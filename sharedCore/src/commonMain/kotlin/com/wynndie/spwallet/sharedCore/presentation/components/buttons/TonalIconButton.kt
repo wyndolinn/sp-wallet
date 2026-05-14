@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.components.buttons
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
@@ -35,20 +38,19 @@ fun TonalIconButton(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        FilledTonalButton(
+        OutlinedButton(
             onClick = onClick,
             enabled = enabled && !loading,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             contentPadding = PaddingValues(
                 horizontal = MaterialTheme.spacing.small,
                 vertical = MaterialTheme.spacing.extraExtraSmall
             ),
-            colors = ButtonDefaults.filledTonalButtonColors().copy(
+            colors = ButtonDefaults.outlinedButtonColors().copy(
                 contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
-                } else MaterialTheme.colorScheme.onPrimaryContainer,
-                containerColor = if (destructive) {
-                    MaterialTheme.colorScheme.errorContainer
-                } else MaterialTheme.colorScheme.primaryContainer
+                } else MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
             ),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
