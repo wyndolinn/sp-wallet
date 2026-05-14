@@ -11,8 +11,8 @@ android {
         applicationId = "com.wynndie.spwallet"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 5
-        versionName = "1.2.0"
+        versionCode = 6
+        versionName = "1.2.1"
         versionNameSuffix = ""
     }
     packaging {
