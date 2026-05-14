@@ -56,12 +56,12 @@ val Typography
         ),
         headlineMedium = TextStyle(
             fontFamily = UbuntuFontFamily,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Normal,
             fontSize = 22.sp
         ),
         headlineSmall = TextStyle(
             fontFamily = UbuntuFontFamily,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Normal,
             fontSize = 18.sp
         ),
 
