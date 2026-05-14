@@ -51,12 +51,12 @@ fun InputField(
         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
         disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
 
-        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-        errorContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        errorContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
 
-        unfocusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
         disabledIndicatorColor = Color.Transparent
     )
 

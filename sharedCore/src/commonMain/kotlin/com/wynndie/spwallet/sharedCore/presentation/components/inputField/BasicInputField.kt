@@ -89,7 +89,8 @@ internal fun BasicInputField(
                         interactionSource = interactionSource,
                         colors = colors,
                         shape = MaterialTheme.shapes.medium,
-                        focusedBorderThickness = 2.dp
+                        focusedBorderThickness = 2.dp,
+                        unfocusedBorderThickness = 1.dp
                     )
                 },
                 contentPadding = PaddingValues(
