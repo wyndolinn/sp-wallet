@@ -96,7 +96,6 @@ fun AuthedCardSheet(
 
             TextButton(
                 text = stringResource(Res.string.deactivate),
-                icon = painterResource(Res.drawable.ic_delete),
                 destructive = true,
                 onClick = onDeleteButtonClick,
                 modifier = Modifier

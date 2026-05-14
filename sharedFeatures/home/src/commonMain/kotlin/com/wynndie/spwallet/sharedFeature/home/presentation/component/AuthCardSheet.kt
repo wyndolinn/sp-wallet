@@ -176,7 +176,6 @@ fun AuthCardSheet(
 
                 Button(
                     text = stringResource(Res.string.activate),
-                    icon = painterResource(Res.drawable.ic_add_card),
                     onClick = {
                         val cardId = if (cards.isEmpty()) {
                             idInputState.value.text
