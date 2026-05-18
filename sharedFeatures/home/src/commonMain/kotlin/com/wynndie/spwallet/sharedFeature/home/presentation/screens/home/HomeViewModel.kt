@@ -1,6 +1,5 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation
+package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
@@ -8,7 +7,6 @@ import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
-import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
@@ -18,20 +16,11 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEv
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
-import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.server_changed
-import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
-import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
-import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,9 +37,6 @@ class HomeViewModel(
     private val preferencesRepository: PreferencesRepository,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
-    private val authCardUseCase: AuthCardUseCase,
-    private val uuidValidator: UuidValidator,
-    private val tokenValidator: TokenValidator,
     private val navEventController: NavEventController,
     private val snackbarController: SnackbarController
 ) : ViewModel() {
@@ -97,22 +83,6 @@ class HomeViewModel(
             }
             updateBalance()
         }.launchIn(viewModelScope)
-
-
-        observeValidationStates(
-            _state.observeInputField(
-                inputField = { it.idInputFieldState },
-                validation = { uuidValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
-            ),
-            _state.observeInputField(
-                inputField = { it.tokenInputFieldState },
-                validation = { tokenValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
-            )
-        ).onEach { isAllValid ->
-            _state.update { it.copy(isAuthButtonEnabled = isAllValid) }
-        }.launchIn(viewModelScope)
     }
 
 
@@ -120,20 +90,15 @@ class HomeViewModel(
         when (action) {
             is HomeAction.Refresh -> syncWithRemote()
             is HomeAction.SelectServer -> selectServer(action.server)
-            is HomeAction.ToggleAuthCardSheet -> toggleAuthCardSheet(action.open)
+            is HomeAction.AuthCard -> authCard()
             is HomeAction.ToggleAuthedCardSheet -> toggleAuthedCardSheet(action.open)
             is HomeAction.ToggleDeleteCardDialog -> toggleDeleteCardDialog(action.open)
             is HomeAction.TransferBetweenCards -> transferBetweenCard(action.id)
             is HomeAction.TransferByCard -> transferByCard(action.id)
-            is HomeAction.AuthCard -> authCard(action.id, action.token)
             is HomeAction.DeactivateCard -> deactivateCard(action.card)
             is HomeAction.SelectAuthedCard -> selectAuthedCard(action.id)
             is HomeAction.SelectUnauthedCard -> selectUnauthedCard(action.id)
             is HomeAction.SelectCustomCard -> selectCustomCard(action.id)
-            is HomeAction.ChangeCardIdValue -> changeIdValue(action.value)
-            is HomeAction.ChangeTokenValue -> changeTokenValue(action.value)
-            HomeAction.ClearIdFocus -> clearIdFocus()
-            HomeAction.ClearCardTokenFocus -> clearTokenFocus()
         }
     }
 
@@ -147,50 +112,8 @@ class HomeViewModel(
                 snackbarController.send(Snackbar(error.asUiText()))
             }
 
-            _state.update { it.copy(screenLoadingState = LoadingState.Finished)
-            }
-        }
-    }
-
-    private fun authCard(id: String, token: String) {
-        viewModelScope.launch {
             _state.update {
-                it.copy(
-                    authLoadingState = LoadingState.Loading,
-                    authErrorMessage = UiText.DynamicString("")
-                )
-            }
-
-            authCardUseCase(
-                server = _state.value.selectedServer,
-                id = id,
-                token = token
-            ).getOrElse { error ->
-                _state.update {
-                    it.copy(
-                        authLoadingState = LoadingState.Finished,
-                        authErrorMessage = error.asUiText()
-                    )
-                }
-                return@launch
-            }
-
-            syncWithRemoteUseCase()
-
-            _state.update { state ->
-                state.copy(
-                    idInputFieldState = state.idInputFieldState.copy(
-                        value = TextFieldValue("")
-                    ),
-                    tokenInputFieldState = state.tokenInputFieldState.copy(
-                        value = TextFieldValue("")
-                    ),
-                    isAuthCardSheetVisible = false
-                )
-            }
-
-            _state.update {
-                it.copy(authLoadingState = LoadingState.Finished)
+                it.copy(screenLoadingState = LoadingState.Finished)
             }
         }
     }
@@ -210,49 +133,6 @@ class HomeViewModel(
         }
     }
 
-    private fun changeIdValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Uuid.predicate)
-            .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
-
-        _state.update { state ->
-            state.copy(
-                idInputFieldState = state.idInputFieldState.copy(
-                    value = value
-                )
-            )
-        }
-    }
-
-    private fun changeTokenValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Base64.predicate)
-            .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
-
-        _state.update { state ->
-            state.copy(
-                tokenInputFieldState = state.tokenInputFieldState.copy(
-                    value = value
-                )
-            )
-        }
-    }
-
-    private fun clearIdFocus() {
-        _state.validateInputField(
-            inputField = { it.idInputFieldState },
-            validation = { uuidValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
-        )
-    }
-
-    private fun clearTokenFocus() {
-        _state.validateInputField(
-            inputField = { it.tokenInputFieldState },
-            validation = { tokenValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
-        )
-    }
 
     private fun selectServer(server: SpServers) {
         viewModelScope.launch {
@@ -263,20 +143,15 @@ class HomeViewModel(
         }
     }
 
-    private fun toggleAuthCardSheet(open: Boolean) {
-        _state.update { state ->
-            state.copy(
-                isAuthCardSheetVisible = open,
-                isAuthedCardSheetVisible = false,
-                isDeactivateCardDialogVisible = false
-            )
+    private fun authCard() {
+        viewModelScope.launch {
+            navEventController.navigate(HomeNavEvent.NavigateToAuthCard)
         }
     }
 
     private fun toggleAuthedCardSheet(open: Boolean) {
         _state.update { state ->
             state.copy(
-                isAuthCardSheetVisible = false,
                 isAuthedCardSheetVisible = open,
                 isDeactivateCardDialogVisible = false
             )
@@ -286,7 +161,6 @@ class HomeViewModel(
     private fun toggleDeleteCardDialog(open: Boolean) {
         _state.update { state ->
             state.copy(
-                isAuthCardSheetVisible = false,
                 isAuthedCardSheetVisible = true,
                 isDeactivateCardDialogVisible = open
             )
@@ -328,12 +202,7 @@ class HomeViewModel(
     private fun selectUnauthedCard(id: String) {
         closeOverlays()
         val cardIndex = state.value.unauthedCards.indexOfFirst { it.id == id }
-        _state.update { state ->
-            state.copy(
-                isAuthCardSheetVisible = true,
-                carouselPage = cardIndex
-            )
-        }
+        _state.update { it.copy(carouselPage = cardIndex) }
     }
 
     private fun selectCustomCard(id: String) {
@@ -353,7 +222,6 @@ class HomeViewModel(
     private fun closeOverlays() {
         _state.update {
             it.copy(
-                isAuthCardSheetVisible = false,
                 isAuthedCardSheetVisible = false,
                 isDeactivateCardDialogVisible = false
             )

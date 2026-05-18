@@ -10,6 +10,9 @@ sealed interface Route {
 
         @Serializable
         data object Home
+
+        @Serializable
+        data object Auth
     }
 
     @Serializable

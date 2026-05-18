@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.component
+package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,10 +1,10 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.component
+package com.wynndie.spwallet.sharedFeature.home.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,28 +12,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.activate
 import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
-import com.wynndie.spwallet.sharedCore.ic_add_card
 import com.wynndie.spwallet.sharedCore.no_authed_cards
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun AuthCardOffer(
     title: String,
     description: String,
-    onClickAuthCard: () -> Unit,
+    content: @Composable (() -> Unit)? = null,
+    shape: CornerBasedShape = MaterialTheme.shapes.medium,
     modifier: Modifier = Modifier
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         modifier = modifier
-            .clip(MaterialTheme.shapes.extraLarge)
+            .clip(shape)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(MaterialTheme.spacing.medium)
     ) {
@@ -51,11 +47,7 @@ internal fun AuthCardOffer(
             )
         }
 
-        OutlinedButton(
-            text = stringResource(Res.string.activate),
-            onClick = onClickAuthCard,
-            modifier = Modifier.fillMaxWidth()
-        )
+        content?.let {it ()}
     }
 }
 
@@ -66,7 +58,7 @@ private fun AuthCardOfferPreview() {
         AuthCardOffer(
             title = stringResource(Res.string.no_authed_cards),
             description = stringResource(Res.string.auth_card_to_get_benefits),
-            onClickAuthCard = { },
+            content = { },
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }

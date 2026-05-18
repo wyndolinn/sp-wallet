@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation
+package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
@@ -65,10 +65,9 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.x_of_ore
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.ActionButtons
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardOffer
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthCardSheet
-import com.wynndie.spwallet.sharedFeature.home.presentation.component.AuthedCardSheet
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
+import com.wynndie.spwallet.sharedFeature.home.presentation.components.AuthCardOffer
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthedCardSheet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -80,27 +79,6 @@ fun HomeScreenRoot(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
-
-    if (state.isAuthCardSheetVisible) {
-        AuthCardSheet(
-            onDismiss = { viewModel.onAction(HomeAction.ToggleAuthCardSheet(false)) },
-            loadingState = state.authLoadingState,
-            isAuthButtonEnabled = state.isAuthButtonEnabled,
-            cards = state.unauthedCards,
-            initialPage = state.carouselPage,
-            idInputState = state.idInputFieldState,
-            onChangeIdValue = { viewModel.onAction(HomeAction.ChangeCardIdValue(it)) },
-            onToggleCardIdFocus = { viewModel.onAction(HomeAction.ClearIdFocus) },
-            tokenInputState = state.tokenInputFieldState,
-            onChangeTokenValue = { viewModel.onAction(HomeAction.ChangeTokenValue(it)) },
-            onToggleCardTokenFocus = { viewModel.onAction(HomeAction.ClearCardTokenFocus) },
-            onClickAuthButton = { id, token -> viewModel.onAction(HomeAction.AuthCard(id, token)) },
-            errorMessage = state.authErrorMessage.asString(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = MaterialTheme.spacing.medium)
-        )
-    }
 
     if (state.isAuthedCardSheetVisible) {
         AuthedCardSheet(
@@ -273,7 +251,7 @@ private fun HomeScreenContent(
 
                     OutlinedButton(
                         text = stringResource(Res.string.activate),
-                        onClick = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
+                        onClick = { onAction(HomeAction.AuthCard) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = MaterialTheme.spacing.medium)
@@ -283,7 +261,14 @@ private fun HomeScreenContent(
                 AuthCardOffer(
                     title = stringResource(Res.string.nothing_found),
                     description = stringResource(Res.string.auth_card_to_get_benefits),
-                    onClickAuthCard = { onAction(HomeAction.ToggleAuthCardSheet(true)) },
+                    content = {
+                        OutlinedButton(
+                            text = stringResource(Res.string.activate),
+                            onClick = { onAction(HomeAction.AuthCard) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    shape = MaterialTheme.shapes.extraLarge,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = MaterialTheme.spacing.medium)
