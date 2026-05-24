@@ -8,7 +8,7 @@ enum class CardColors(val id: Int) {
     ORANGE(id = 4),
     YELLOW(id = 5),
     GREEN(id = 6),
-    LIGHT_BLUE(id = 7);
+    TEAL(id = 7);
 
     companion object {
         fun of(id: Int) = entries.find { it.id == id } ?: BLUE

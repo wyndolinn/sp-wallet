@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.Res
@@ -36,6 +37,7 @@ fun RecipientTile(
     label: String,
     title: String,
     modifier: Modifier = Modifier,
+    actionIcon: Painter = painterResource(Res.drawable.ic_arrow_right),
     onClick: (() -> Unit)? = null
 ) {
     Row(
@@ -83,7 +85,7 @@ fun RecipientTile(
         }
 
         Icon(
-            painter = painterResource(Res.drawable.ic_arrow_right),
+            painter = actionIcon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )

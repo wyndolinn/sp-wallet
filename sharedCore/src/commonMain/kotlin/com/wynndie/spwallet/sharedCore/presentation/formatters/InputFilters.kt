@@ -1,8 +1,8 @@
 package com.wynndie.spwallet.sharedCore.presentation.formatters
 
 enum class InputFilters(val predicate: (Char) -> Boolean) {
-    PlainText({ it.isAlphabet() || it.isDigit() || it.isWhitespace() }),
-    Decimals({ it.isDigit() }),
+    Text({ it.isAlphabet() || it.isDigit() || it.isWhitespace() }),
+    Numbers({ it.isDigit() }),
     Uuid({ it.isHexadecimal() || it == '-' }),
     Base64({ it.isDigit() || it.isLatin() || it == '+' || it == '/' || it == '=' })
 }

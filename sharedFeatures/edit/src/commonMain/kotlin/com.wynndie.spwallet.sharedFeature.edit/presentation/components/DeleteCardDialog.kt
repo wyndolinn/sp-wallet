@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.delete
-import com.wynndie.spwallet.sharedCore.delete_card_description
-import com.wynndie.spwallet.sharedCore.delete_card_title
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeleteCardDialog(
+    title: String,
+    description: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
@@ -18,8 +18,8 @@ fun DeleteCardDialog(
     Dialog(
         onDismiss = onDismiss,
         onConfirm = onConfirm,
-        title = stringResource(Res.string.delete_card_title),
-        description = stringResource(Res.string.delete_card_description),
+        title = title,
+        description = description,
         confirmButtonText = stringResource(Res.string.delete),
         destructive = true,
         modifier = modifier

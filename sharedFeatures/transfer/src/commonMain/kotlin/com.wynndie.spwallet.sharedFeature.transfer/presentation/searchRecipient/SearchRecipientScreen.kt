@@ -106,7 +106,9 @@ private fun SearchRecipientScreenContent(
                 ) {
                     items(state.recipients) { recipient ->
                         RecipientTile(
-                            label = stringResource(Res.string.recipient),
+                            label = recipient.name.ifBlank {
+                                stringResource(Res.string.recipient)
+                            },
                             title = recipient.number,
                             onClick = {
                                 onAction(SearchRecipientAction.SelectRecipient(recipient.number))

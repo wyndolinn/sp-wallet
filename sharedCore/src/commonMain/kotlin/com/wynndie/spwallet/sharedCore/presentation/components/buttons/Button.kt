@@ -36,7 +36,9 @@ fun Button(
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = if (destructive) {
                 MaterialTheme.colorScheme.error
-            } else color
+            } else color,
+            disabledContentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContainerColor = MaterialTheme.colorScheme.outline
         ),
         shape = MaterialTheme.shapes.medium,
         modifier = modifier.height(MaterialTheme.sizes.extraLarge)

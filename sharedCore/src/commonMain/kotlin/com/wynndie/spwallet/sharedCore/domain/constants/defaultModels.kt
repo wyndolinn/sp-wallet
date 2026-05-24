@@ -6,10 +6,20 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
+import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 
 val emptyAuthedUser = AuthedUser(
     id = "",
     name = "",
+    server = SpServers.SP
+)
+
+val emptyUnauthedCard = UnauthedCard(
+    id = "",
+    name = "",
+    number = "",
+    color = CardColors.BLUE,
+    icon = CardIcons.PERSON,
     server = SpServers.SP
 )
 

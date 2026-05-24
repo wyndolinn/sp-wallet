@@ -7,10 +7,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.inter_medium
 import com.wynndie.spwallet.sharedCore.roboto_bold
 import com.wynndie.spwallet.sharedCore.roboto_medium
 import com.wynndie.spwallet.sharedCore.roboto_regular
+import com.wynndie.spwallet.sharedCore.roboto_semi_bold
+import com.wynndie.spwallet.sharedCore.ubuntu_bold
+import com.wynndie.spwallet.sharedCore.ubuntu_medium
+import com.wynndie.spwallet.sharedCore.ubuntu_regular
 import org.jetbrains.compose.resources.Font
 
 val RobotoFontFamily
@@ -24,34 +27,46 @@ val RobotoFontFamily
             weight = FontWeight.Medium
         ),
         Font(
+            resource = Res.font.roboto_semi_bold,
+            weight = FontWeight.SemiBold
+        ),
+        Font(
             resource = Res.font.roboto_bold,
             weight = FontWeight.Bold
         )
     )
 
-val InterFontFamily
+val UbuntuFontFamily
     @Composable get() = FontFamily(
         Font(
-            resource = Res.font.inter_medium,
+            resource = Res.font.ubuntu_regular,
+            weight = FontWeight.Normal
+        ),
+        Font(
+            resource = Res.font.ubuntu_medium,
             weight = FontWeight.Medium
+        ),
+        Font(
+            resource = Res.font.ubuntu_bold,
+            weight = FontWeight.Bold
         )
     )
 
 val Typography
     @Composable get() = Typography(
         headlineLarge = TextStyle(
-            fontFamily = InterFontFamily,
+            fontFamily = UbuntuFontFamily,
             fontWeight = FontWeight.Bold,
             fontSize = 32.sp
         ),
         headlineMedium = TextStyle(
-            fontFamily = InterFontFamily,
-            fontWeight = FontWeight.Medium,
+            fontFamily = UbuntuFontFamily,
+            fontWeight = FontWeight.Normal,
             fontSize = 22.sp
         ),
         headlineSmall = TextStyle(
-            fontFamily = InterFontFamily,
-            fontWeight = FontWeight.Medium,
+            fontFamily = UbuntuFontFamily,
+            fontWeight = FontWeight.Normal,
             fontSize = 18.sp
         ),
 
@@ -87,7 +102,7 @@ val Typography
 
         labelLarge = TextStyle(
             fontFamily = RobotoFontFamily,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         ),
         labelMedium = TextStyle(

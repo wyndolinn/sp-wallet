@@ -13,7 +13,9 @@
     <string name="clear">Очистить</string>
     <string name="delete">Удалить</string>
     <string name="deactivate">Деактивировать</string>
-    <string name="edit">Сменить цвет</string>
+    <string name="edit_color">Сменить цвет</string>
+    <string name="edit">Изменить</string>
+    <string name="understood">Понятно</string>
 
     <!--  COMMON NETWORK ERRORS  -->
     <string name="error_bad_request">Неправильный идентификатор или токен</string>
@@ -35,8 +37,10 @@
     <string name="error_empty_field">*обязательно</string>
     <string name="error_below_minimum_length">Слишком коротко</string>
     <string name="error_above_maximum_length">Слишком длинно</string>
+    <string name="error_exact_length">Неверная длина</string>
     <string name="error_below_minimum_value">Слишком мало</string>
     <string name="error_above_maximum_value">Слишком много</string>
+    <string name="error_exact_value">Неверное значение</string>
     <string name="error_invalid_characters">Недопустимые символы</string>
 
 
@@ -49,16 +53,25 @@
     <string name="error_cannot_be_zero">Значение не может быть нулевым</string>
 
     <!--  APP SPECIFIC ACTIONS  -->
-    <string name="make_transfer_by_number">Перевести по номеру</string>
-    <string name="activate_first_card">Активируйте карту</string>
+    <string name="empty_profile">Пустой профиль</string>
 
-    <string name="auth_card_to_get_benefits">Активируйте карту, чтобы совершать с неё переводы</string>
-    <string name="auth_instruction">Получить ID и токен карты можно на сайте во вкладке «Кошелёк». Выберите карту, нажмите «Поделиться» и сгенерируйте новый API токен.\nДанные карты храняться исключительно на вашем устройстве.</string>
+    <string name="auth_card">Активируйте карту</string>
+    <string name="auth_card_info">Для доступа к большинству функций приложения, необходимо иметь хотя бы одну активную карту.</string>
+
+    <string name="auth_steps_title">Для активации карты</string>
+    <string name="auth_step_1">1. На сайте sp worlds зайдите во вкладку "Кошелёк", выберете карту и нажмите иконку "Поделится".</string>
+    <string name="auth_step_2">2. Зайдите на сервер и сгенерируйте для карты новый token.</string>
+    <string name="auth_step_3">3. На сервере, в чат, вам придут данные карты. Введите их в приложение любым удобным способом.</string>
+
+    <string name="safe_auth">Это безопасно</string>
+    <string name="safe_auth_storage">Данные карт остаются на вашем устройстве, и никуда не отправляются.</string>
+    <string name="safe_auth_reset">Вы можете поменять эти данные в любой момент, тогда с карты будет нельзя совершать сторонние операции.</string>
 
     <string name="bank_card_label">%1$s • %2$s</string>
     <string name="id">ID</string>
     <string name="token">Токен</string>
     <string name="card_number">Номер карты</string>
+    <string name="number">Номер карты</string>
     <string name="transfer_amount">Сумма перевода</string>
     <string name="amount">Сумма</string>
     <string name="comment">Комментарий</string>
@@ -75,11 +88,14 @@
     <string name="server_changed">Сервер сменён на %1$s</string>
 
     <string name="deactivate_card_title">Деактивировать карту?</string>
-    <string name="deactivate_card_description">Карта удалится из приложения, но останется доступной на сайте. При необходимости, её можно снова активировать</string>
+    <string name="deactivate_card_description">Приложение не сможет пользоваться картой, но она всё ещё будет доступна на сайте</string>
 
 
     <string name="delete_card_title">Удалить карту?</string>
-    <string name="delete_card_description">Это действие безвозвратно стерёт все данные о карте</string>
+    <string name="delete_card_description">Это действие безвозвратно сотрёт все данные о карте</string>
+
+    <string name="delete_recipient_title">Удалить получателя?</string>
+    <string name="delete_recipient_description">Это действие безвозвратно сотрёт все данные о получателе</string>
 
 
     <string name="total_balance">Общий баланс</string>
@@ -91,11 +107,12 @@
     <string name="no_comment">Без комментария</string>
     <string name="comment_form">от %1$s</string>
     <string name="recipient">Получатель</string>
+    <string name="recipients">Получатели</string>
     <string name="activate_card">Активировать карту</string>
     <string name="transfer_by_number">Перевести по номеру</string>
-    <string name="transfer_between_cards">Перевести между счетами</string>
+    <string name="transfer_between_cards">Между счетами</string>
     <string name="custom_cards">Наличные</string>
-    <string name="bank_cards">Банковские карты</string>
+    <string name="bank_cards">Карты</string>
     <string name="transfer_from">Со счёта</string>
     <string name="transfer_to">На счёт</string>
     <string name="no_cards_to_activate">Нет карт для активации!</string>
@@ -103,6 +120,7 @@
     <string name="no_authed_cards">Нет активных карт!</string>
     <string name="not_enough_cards">У вас только одна карта для перевода</string>
 
+    <string name="activation">Активация</string>
     <string name="activate_cards">Активируйте карты</string>
     <string name="cash_account">Наличный счёт</string>
     <string name="by_number">По номеру</string>

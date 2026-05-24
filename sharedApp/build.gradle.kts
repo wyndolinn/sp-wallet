@@ -37,7 +37,6 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(projects.sharedCore)
             implementation(projects.sharedFeatures.home)
             implementation(projects.sharedFeatures.transfer)
             implementation(projects.sharedFeatures.edit)

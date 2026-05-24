@@ -20,20 +20,13 @@ kotlin {
         androidResources.enable = true
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "TransferFeature"
-            isStatic = true
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.sharedCore)
+            api(projects.sharedCore)
         }
     }
 }

@@ -34,17 +34,12 @@ fun OutlinedButton(
             horizontal = MaterialTheme.spacing.medium,
             vertical = MaterialTheme.spacing.small
         ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         colors = ButtonDefaults.outlinedButtonColors().copy(
             contentColor = if (destructive) {
                 MaterialTheme.colorScheme.error
             } else MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-        ),
-        border = BorderStroke(
-            width = 2.dp,
-            color = if (destructive) {
-                MaterialTheme.colorScheme.errorContainer
-            } else MaterialTheme.colorScheme.primaryContainer
         ),
         shape = MaterialTheme.shapes.medium,
         modifier = modifier.height(MaterialTheme.sizes.extraLarge)

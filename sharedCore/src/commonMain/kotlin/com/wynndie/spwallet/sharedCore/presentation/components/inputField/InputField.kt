@@ -51,12 +51,12 @@ fun InputField(
         unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
         disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
 
-        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-        errorContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        errorContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
 
-        unfocusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
         disabledIndicatorColor = Color.Transparent
     )
 
@@ -67,10 +67,7 @@ fun InputField(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = it,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
-                )
+                style = MaterialTheme.typography.labelMedium
             )
         }
 

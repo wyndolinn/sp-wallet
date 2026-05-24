@@ -29,19 +29,13 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.transferNavGraph(
     navController: NavController
 ) {
-
     navigation<Route.TransferNavGraph>(
         startDestination = Route.TransferNavGraph.SearchRecipient()
     ) {
-
         composable<Route.TransferNavGraph.SearchRecipient> { navBackStackEntry ->
-
             val args = navBackStackEntry.toRoute<Route.TransferNavGraph.SearchRecipient>()
-
-            val recipientViewModel =
-                navBackStackEntry.sharedKoinViewModel<RecipientViewModel>(navController)
-
-            val viewModel = koinViewModel<SearchRecipientViewModel>()
+            val recipientViewModel = navBackStackEntry
+                .sharedKoinViewModel<RecipientViewModel>(navController)
 
             ObserveNavEvent<SearchRecipientNavEvent> { navEvent ->
                 when (navEvent) {
@@ -62,16 +56,13 @@ fun NavGraphBuilder.transferNavGraph(
             }
 
             SearchRecipientScreenRoot(
-                viewModel = viewModel
+                viewModel = koinViewModel<SearchRecipientViewModel>()
             )
         }
 
         composable<Route.TransferNavGraph.EditRecipient> { navBackStackEntry ->
-
-            val recipientViewModel =
-                navBackStackEntry.sharedKoinViewModel<RecipientViewModel>(navController)
-
-            val viewModel = koinViewModel<SearchRecipientViewModel>()
+            val recipientViewModel = navBackStackEntry
+                .sharedKoinViewModel<RecipientViewModel>(navController)
 
             ObserveNavEvent<SearchRecipientNavEvent> { navEvent ->
                 when (navEvent) {
@@ -87,19 +78,20 @@ fun NavGraphBuilder.transferNavGraph(
             }
 
             SearchRecipientScreenRoot(
-                viewModel = viewModel
+                viewModel = koinViewModel<SearchRecipientViewModel>()
             )
         }
 
         composable<Route.TransferNavGraph.TransferByCardNumber> { navBackStackEntry ->
-
             val args = navBackStackEntry.toRoute<Route.TransferNavGraph.TransferByCardNumber>()
-
-            val recipientViewModel =
-                navBackStackEntry.sharedKoinViewModel<RecipientViewModel>(navController)
-
+            val recipientViewModel = navBackStackEntry
+                .sharedKoinViewModel<RecipientViewModel>(navController)
             val viewModel = koinViewModel<TransferByCardViewModel> {
-                parametersOf(TransferByCardParams(args.cardId))
+                parametersOf(
+                    TransferByCardParams(
+                        cardId = args.cardId
+                    )
+                )
             }
 
             ObserveNavEvent<TransferByCardNavEvent> { navEvent ->
@@ -125,6 +117,9 @@ fun NavGraphBuilder.transferNavGraph(
 
             val recipientCardNumber by recipientViewModel.recipientCardNumber.collectAsStateWithLifecycle()
             LaunchedEffect(recipientCardNumber) {
+                if (recipientCardNumber.isBlank() && args.recipientNumber.isNotBlank()) {
+                    recipientViewModel.setRecipientCardNumber(args.recipientNumber)
+                }
                 viewModel.updateRecipient(recipientCardNumber)
             }
 
@@ -134,13 +129,6 @@ fun NavGraphBuilder.transferNavGraph(
         }
 
         composable<Route.TransferNavGraph.TransferBetweenCards> { navBackStackEntry ->
-
-            val args = navBackStackEntry.toRoute<Route.TransferNavGraph.TransferBetweenCards>()
-
-            val viewModel = koinViewModel<TransferBetweenCardsViewModel> {
-                parametersOf(TransferBetweenCardsParams(args.cardId))
-            }
-
             ObserveNavEvent<TransferBetweenCardsNavEvent> { navEvent ->
                 when (navEvent) {
                     TransferBetweenCardsNavEvent.NavigateBack -> {
@@ -156,8 +144,11 @@ fun NavGraphBuilder.transferNavGraph(
                 }
             }
 
+            val args = navBackStackEntry.toRoute<Route.TransferNavGraph.TransferBetweenCards>()
             TransferBetweenCardsScreenRoot(
-                viewModel = viewModel
+                viewModel = koinViewModel<TransferBetweenCardsViewModel> {
+                    parametersOf(TransferBetweenCardsParams(args.cardId))
+                }
             )
         }
     }

@@ -88,7 +88,7 @@ fun AccountCardTile(
             if (label.isNotBlank()) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
@@ -105,7 +105,7 @@ fun AccountCardTile(
             if (text.isNotBlank()) {
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
