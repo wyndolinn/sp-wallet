@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.delete
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
+import com.wynndie.spwallet.sharedCore.edit
+import com.wynndie.spwallet.sharedCore.ic_arrow_back
+import com.wynndie.spwallet.sharedCore.ic_arrow_front
 import com.wynndie.spwallet.sharedCore.ic_edit
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.LabeledIconButton
@@ -22,6 +25,7 @@ import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCar
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.recipient
+import com.wynndie.spwallet.sharedCore.transfer
 import com.wynndie.spwallet.sharedCore.transfer_between_cards
 import com.wynndie.spwallet.sharedCore.transfer_by_number
 import org.jetbrains.compose.resources.painterResource
@@ -55,19 +59,18 @@ fun RecipientSheet(
             )
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
             ) {
                 LabeledIconButton(
                     icon = painterResource(Res.drawable.ic_edit),
-                    label = stringResource(Res.string.transfer_between_cards),
+                    label = stringResource(Res.string.edit),
                     onClick = onEditRecipientClick,
                     modifier = Modifier.weight(1f)
                 )
 
                 LabeledIconButton(
-                    icon = painterResource(Res.drawable.ic_transaction),
-                    label = stringResource(Res.string.transfer_by_number),
+                    icon = painterResource(Res.drawable.ic_arrow_front),
+                    label = stringResource(Res.string.transfer),
                     onClick = onTransferClick,
                     modifier = Modifier.weight(1f)
                 )
@@ -76,10 +79,7 @@ fun RecipientSheet(
             TextButton(
                 text = stringResource(Res.string.delete),
                 destructive = true,
-                onClick = onDeleteButtonClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
+                onClick = onDeleteButtonClick
             )
         }
     }

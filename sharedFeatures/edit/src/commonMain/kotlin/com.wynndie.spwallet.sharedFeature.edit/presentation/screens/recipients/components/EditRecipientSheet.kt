@@ -20,6 +20,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.card_name
+import com.wynndie.spwallet.sharedCore.card_number
+import com.wynndie.spwallet.sharedCore.number
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
@@ -39,6 +41,7 @@ fun EditRecipientSheet(
     numberFieldState: InputFieldState,
     onNumberChange: (TextFieldValue) -> Unit,
     onClearNumberFocus: () -> Unit,
+    isSaveButtonEnabled: Boolean,
     onSaveRecipient: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -80,7 +83,7 @@ fun EditRecipientSheet(
                 InputField(
                     value = numberFieldState.value,
                     onValueChange = onNumberChange,
-                    label = stringResource(Res.string.token),
+                    label = stringResource(Res.string.number),
                     supportingText = numberFieldState.supportingText?.asString(),
                     hasError = numberFieldState.hasError,
                     keyboardOptions = KeyboardOptions(
@@ -99,6 +102,7 @@ fun EditRecipientSheet(
             Button(
                 text = stringResource(Res.string.save),
                 onClick = onSaveRecipient,
+                enabled = isSaveButtonEnabled,
                 modifier = Modifier.fillMaxWidth()
             )
         }

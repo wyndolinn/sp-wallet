@@ -2,10 +2,14 @@ package com.wynndie.spwallet.sharedCore.presentation.extensions
 
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.error_above_maximum_length
 import com.wynndie.spwallet.sharedCore.error_above_maximum_value
 import com.wynndie.spwallet.sharedCore.error_bad_request
+import com.wynndie.spwallet.sharedCore.error_below_minimum_length
 import com.wynndie.spwallet.sharedCore.error_below_minimum_value
 import com.wynndie.spwallet.sharedCore.error_empty_field
+import com.wynndie.spwallet.sharedCore.error_exact_length
+import com.wynndie.spwallet.sharedCore.error_exact_value
 import com.wynndie.spwallet.sharedCore.error_forbidden
 import com.wynndie.spwallet.sharedCore.error_internal_server_error
 import com.wynndie.spwallet.sharedCore.error_invalid_characters
@@ -33,11 +37,11 @@ fun Error.asUiText(): UiText {
         Error.Validation.EMPTY_FIELD -> UiText.ResourceString(Res.string.error_empty_field)
         Error.Validation.BELOW_MINIMUM_VALUE -> UiText.ResourceString(Res.string.error_below_minimum_value)
         Error.Validation.ABOVE_MAXIMUM_VALUE -> UiText.ResourceString(Res.string.error_above_maximum_value)
-        Error.Validation.EXACT_VALUE_REQUIRED -> UiText.ResourceString(Res.string.error_above_maximum_value)
+        Error.Validation.EXACT_VALUE_REQUIRED -> UiText.ResourceString(Res.string.error_exact_value)
         Error.Validation.INVALID_CHARACTERS -> UiText.ResourceString(Res.string.error_invalid_characters)
         Error.Validation.INVALID_FORMAT -> UiText.ResourceString(Res.string.error_unknown)
-        Error.Validation.BELOW_MINIMUM_LENGTH -> UiText.ResourceString(Res.string.error_unknown)
-        Error.Validation.ABOVE_MAXIMUM_LENGTH -> UiText.ResourceString(Res.string.error_unknown)
-        Error.Validation.EXACT_LENGTH_REQUIRED -> UiText.ResourceString(Res.string.error_unknown)
+        Error.Validation.BELOW_MINIMUM_LENGTH -> UiText.ResourceString(Res.string.error_below_minimum_length)
+        Error.Validation.ABOVE_MAXIMUM_LENGTH -> UiText.ResourceString(Res.string.error_above_maximum_length)
+        Error.Validation.EXACT_LENGTH_REQUIRED -> UiText.ResourceString(Res.string.error_exact_length)
     }
 }

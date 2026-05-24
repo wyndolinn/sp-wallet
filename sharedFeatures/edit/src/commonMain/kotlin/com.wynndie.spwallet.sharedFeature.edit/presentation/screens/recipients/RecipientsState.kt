@@ -23,5 +23,6 @@ data class RecipientsState(
     ),
 
     val isEditRecipientSheetOpen: Boolean = false,
-    val isDeleteDialogOpen: Boolean = false
+    val isDeleteDialogOpen: Boolean = false,
+    val isSaveButtonEnabled: Boolean = false
 )

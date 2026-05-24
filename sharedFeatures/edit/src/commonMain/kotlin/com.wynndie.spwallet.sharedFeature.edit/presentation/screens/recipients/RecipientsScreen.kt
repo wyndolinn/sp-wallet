@@ -31,8 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.add
 import com.wynndie.spwallet.sharedCore.card_number
-import com.wynndie.spwallet.sharedCore.delete_card_description
-import com.wynndie.spwallet.sharedCore.delete_card_title
+import com.wynndie.spwallet.sharedCore.delete_recipient_description
+import com.wynndie.spwallet.sharedCore.delete_recipient_title
 import com.wynndie.spwallet.sharedCore.enter_recipient_card_number
 import com.wynndie.spwallet.sharedCore.ic_edit
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
@@ -41,7 +41,6 @@ import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputF
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.RecipientTile
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.recipient
 import com.wynndie.spwallet.sharedCore.recipient_history_empty
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.recipients.components.EditRecipientSheet
@@ -82,6 +81,7 @@ fun RecipientsScreenRoot(
             numberFieldState = state.cardNumberInputFieldState,
             onNumberChange = { viewModel.onAction(RecipientsAction.ChangeCardNumberValue(it)) },
             onClearNumberFocus = { viewModel.onAction(RecipientsAction.ClearCardNumberFocus) },
+            isSaveButtonEnabled = state.isSaveButtonEnabled,
             onSaveRecipient = { viewModel.onAction(RecipientsAction.SaveRecipient) },
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
@@ -89,8 +89,8 @@ fun RecipientsScreenRoot(
 
     if (state.isDeleteDialogOpen) {
         DeleteCardDialog(
-            title = stringResource(Res.string.delete_card_title),
-            description = stringResource(Res.string.delete_card_description),
+            title = stringResource(Res.string.delete_recipient_title),
+            description = stringResource(Res.string.delete_recipient_description),
             onConfirm = { viewModel.onAction(RecipientsAction.DeleteRecipient) },
             onDismiss = { viewModel.onAction(RecipientsAction.ToggleDeleteRecipientDialog(false)) },
             modifier = Modifier
@@ -156,7 +156,7 @@ private fun RecipientsScreen(
                 ) {
                     items(state.recipients) { recipient ->
                         RecipientTile(
-                            label = stringResource(Res.string.recipient),
+                            label = recipient.name,
                             title = recipient.number,
                             actionIcon = painterResource(Res.drawable.ic_edit),
                             onClick = { onAction(RecipientsAction.SelectRecipient(recipient)) },

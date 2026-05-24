@@ -1,5 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.recipients
 
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,21 +8,25 @@ import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
+import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.CardNumberValidator
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
+import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -29,7 +34,9 @@ class RecipientsViewModel(
     private val preferencesRepository: PreferencesRepository,
     private val recipientRepository: RecipientRepository,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
+    private val cardNameValidator: CardNameValidator,
+    private val cardNumberValidator: CardNumberValidator
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RecipientsState())
@@ -61,6 +68,21 @@ class RecipientsViewModel(
                 state.copy(recipients = recipients)
             }
         }.launchIn(viewModelScope)
+
+        observeValidationStates(
+            _state.observeInputField(
+                inputField = { it.cardNameInputFieldState },
+                validation = { cardNameValidator.validate(it) },
+                updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } }
+            ),
+            _state.observeInputField(
+                inputField = { it.cardNumberInputFieldState },
+                validation = { cardNumberValidator.validate(it) },
+                updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } }
+            )
+        ).onEach { isAllValid ->
+            _state.update { it.copy(isSaveButtonEnabled = isAllValid) }
+        }.launchIn(viewModelScope)
     }
 
 
@@ -80,7 +102,6 @@ class RecipientsViewModel(
             is RecipientsAction.ToggleDeleteRecipientDialog -> toggleDeleteRecipientDialog(action.isOpen)
         }
     }
-
 
 
     private fun changeRecipientValue(value: TextFieldValue) {
@@ -132,6 +153,7 @@ class RecipientsViewModel(
         viewModelScope.launch {
             val recipient = _state.value.selectedRecipient ?: return@launch
             navEventController.navigate(RecipientsNavEvent.NavigateToTransfer(recipient.number))
+            closeOverlays()
         }
     }
 
@@ -144,6 +166,7 @@ class RecipientsViewModel(
                 server = preferencesRepository.getSelectedSpServer().first()
             )
             recipientRepository.insertRecipient(modifiedRecipient)
+            closeOverlays()
         }
     }
 
@@ -152,15 +175,24 @@ class RecipientsViewModel(
             val recipient = _state.value.selectedRecipient ?: return@launch
             recipientRepository.deleteRecipient(recipient)
             snackbarController.send(Snackbar(UiText.DynamicString("Получатель удалён")))
+            closeOverlays()
         }
     }
 
     private fun clearCardNumberFocus() {
-
+        _state.validateInputField(
+            inputField = { it.cardNumberInputFieldState },
+            validation = { cardNumberValidator.validate(it) },
+            updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } }
+        )
     }
 
     private fun clearCardNameFocus() {
-
+        _state.validateInputField(
+            inputField = { it.cardNameInputFieldState },
+            validation = { cardNameValidator.validate(it) },
+            updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } }
+        )
     }
 
     private fun navigateBack() {
@@ -170,7 +202,19 @@ class RecipientsViewModel(
     }
 
     private fun selectRecipient(recipient: RecipientCard?) {
-        _state.update { it.copy(selectedRecipient = recipient) }
+        _state.update { state ->
+            val name = recipient?.name ?: ""
+            val number = recipient?.number ?: ""
+            state.copy(
+                selectedRecipient = recipient,
+                cardNameInputFieldState = state.cardNameInputFieldState.copy(
+                    value = TextFieldValue(name, TextRange(name.length))
+                ),
+                cardNumberInputFieldState = state.cardNumberInputFieldState.copy(
+                    value = TextFieldValue(number, TextRange(number.length))
+                )
+            )
+        }
     }
 
     private fun toggleDeleteRecipientDialog(open: Boolean) {
@@ -179,5 +223,15 @@ class RecipientsViewModel(
 
     private fun toggleEditRecipientSheet(open: Boolean) {
         _state.update { it.copy(isEditRecipientSheetOpen = open) }
+    }
+
+    private fun closeOverlays() {
+        _state.update {
+            it.copy(
+                selectedRecipient = null,
+                isEditRecipientSheetOpen = false,
+                isDeleteDialogOpen = false
+            )
+        }
     }
 }

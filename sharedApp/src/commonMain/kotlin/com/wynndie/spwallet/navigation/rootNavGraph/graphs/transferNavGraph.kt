@@ -87,7 +87,11 @@ fun NavGraphBuilder.transferNavGraph(
             val recipientViewModel = navBackStackEntry
                 .sharedKoinViewModel<RecipientViewModel>(navController)
             val viewModel = koinViewModel<TransferByCardViewModel> {
-                parametersOf(TransferByCardParams(args.cardId))
+                parametersOf(
+                    TransferByCardParams(
+                        cardId = args.cardId
+                    )
+                )
             }
 
             ObserveNavEvent<TransferByCardNavEvent> { navEvent ->
@@ -113,6 +117,9 @@ fun NavGraphBuilder.transferNavGraph(
 
             val recipientCardNumber by recipientViewModel.recipientCardNumber.collectAsStateWithLifecycle()
             LaunchedEffect(recipientCardNumber) {
+                if (recipientCardNumber.isBlank() && args.recipientNumber.isNotBlank()) {
+                    recipientViewModel.setRecipientCardNumber(args.recipientNumber)
+                }
                 viewModel.updateRecipient(recipientCardNumber)
             }
 

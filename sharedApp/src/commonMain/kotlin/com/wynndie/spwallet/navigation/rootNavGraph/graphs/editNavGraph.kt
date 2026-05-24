@@ -49,7 +49,9 @@ fun NavGraphBuilder.editNavGraph(
 
                     is RecipientsNavEvent.NavigateToTransfer -> {
                         navController.navigate(
-                            Route.TransferNavGraph.SearchRecipient(navEvent.number)
+                            Route.TransferNavGraph.TransferByCardNumber(
+                                recipientNumber = navEvent.number
+                            )
                         )
                     }
                 }
