@@ -23,6 +23,14 @@ inline fun Modifier.thenIf(condition: Boolean, block: Modifier.() -> Modifier): 
     return if (condition) then(this.block()) else then(this)
 }
 
+inline fun Modifier.thenIfElse(
+    condition: Boolean,
+    onTrue: Modifier.() -> Modifier,
+    onFalse: Modifier.() -> Modifier
+): Modifier {
+    return if (condition) then(this.onTrue()) else then(this.onFalse())
+}
+
 inline fun <T> Modifier.thenIfNull(value: T?, block: Modifier.() -> Modifier): Modifier {
     return if (value == null) then(this.block()) else then(this)
 }

@@ -40,10 +40,11 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
             vertical = MaterialTheme.spacing.extraExtraSmall
         ),
         colors = SegmentedButtonDefaults.colors().copy(
-            activeContainerColor = MaterialTheme.colorScheme.secondary,
-            activeContentColor = MaterialTheme.colorScheme.onSecondary,
+            activeContainerColor = MaterialTheme.colorScheme.primary,
+            activeContentColor = MaterialTheme.colorScheme.onPrimary,
             inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            inactiveContentColor = MaterialTheme.colorScheme.onSurface
+            inactiveContentColor = MaterialTheme.colorScheme.onSurface,
+            disabledActiveContainerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         icon = icon?.let {
             {

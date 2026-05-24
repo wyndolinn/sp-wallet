@@ -65,6 +65,8 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.img_logo
 import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
+import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIf
+import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
 import com.wynndie.spwallet.sharedCore.x_of_ore
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.components.AuthCardOffer
@@ -141,10 +143,22 @@ fun HomeScreenRoot(
                             .padding(horizontal = MaterialTheme.spacing.medium)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = CircleShape
+                            .thenIfElse(
+                                condition = state.screenLoadingState == LoadingState.Loading,
+                                onTrue = {
+                                    Modifier.border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.primaryContainer,
+                                        shape = CircleShape
+                                    )
+                                },
+                                onFalse = {
+                                    Modifier.border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape = CircleShape
+                                    )
+                                }
                             )
                             .height(MaterialTheme.sizes.small)
                     ) {
