@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
-import com.wynndie.spwallet.sharedCore.edit
+import com.wynndie.spwallet.sharedCore.edit_color
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
@@ -59,7 +59,7 @@ fun CustomizableTile(
         }
 
         Text(
-            text = stringResource(Res.string.edit),
+            text = stringResource(Res.string.edit_color),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.outline
         )

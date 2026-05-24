@@ -9,7 +9,7 @@ data class AuthState(
     val carouselPage: Int = 0,
     val isAuthButtonEnabled: Boolean = false,
 
-    val unauthedCards: List<UnauthedCard> = emptyList(),
+    val cards: List<UnauthedCard> = emptyList(),
     val isHelpSheetOpen: Boolean = false,
 
     val idInputFieldState: InputFieldState = InputFieldState(

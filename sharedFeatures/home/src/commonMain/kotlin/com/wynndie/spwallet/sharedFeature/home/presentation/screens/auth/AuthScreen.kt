@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,8 +36,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.activate
+import com.wynndie.spwallet.sharedCore.activation
 import com.wynndie.spwallet.sharedCore.id
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
+import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
@@ -47,11 +51,10 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.token
-import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
 import com.wynndie.spwallet.sharedCore.safe_auth
 import com.wynndie.spwallet.sharedCore.safe_auth_reset
 import com.wynndie.spwallet.sharedCore.safe_auth_storage
+import com.wynndie.spwallet.sharedCore.token
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.auth.components.AuthHelpSheet
 import org.jetbrains.compose.resources.stringResource
 
@@ -79,7 +82,7 @@ fun AuthScreenRoot(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = "Активация",
+                title = stringResource(Res.string.activation),
                 onClickBack = { viewModel.onAction(AuthAction.NavigateBack) },
                 scrollBehavior = scrollBehavior
             )
@@ -97,7 +100,7 @@ fun AuthScreenRoot(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(MaterialTheme.spacing.medium)
+                .verticalScroll(rememberScrollState())
         )
     }
 }
@@ -123,7 +126,9 @@ private fun AuthScreen(
                 Text(text = stringResource(Res.string.safe_auth_storage))
                 Text(text = stringResource(Res.string.safe_auth_reset))
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
         )
 
         Column(
@@ -131,13 +136,13 @@ private fun AuthScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
         ) {
-            if (state.unauthedCards.isNotEmpty()) {
+            if (state.cards.isNotEmpty()) {
                 BaseCarousel(
-                    items = state.unauthedCards,
+                    items = state.cards,
                     page = currentPage,
                     onSwipePage = {
                         currentPage = it
-                        val id = TextFieldValue(state.unauthedCards[it].id)
+                        val id = TextFieldValue(state.cards[it].id)
                         onAction(AuthAction.ChangeIdValue(id))
                     },
                     contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
@@ -166,9 +171,11 @@ private fun AuthScreen(
                     keyboardActions = KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     ),
-                    modifier = Modifier.onFocusChanged {
-                        if (!it.isFocused) onAction(AuthAction.ClearIdFocus)
-                    }
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                        .onFocusChanged {
+                            if (!it.isFocused) onAction(AuthAction.ClearIdFocus)
+                        }
                 )
             }
 
@@ -185,17 +192,19 @@ private fun AuthScreen(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                        val cardId = if (state.unauthedCards.isEmpty()) {
+                        val cardId = if (state.cards.isEmpty()) {
                             state.idInputFieldState.value.text
-                        } else state.unauthedCards[currentPage].id
+                        } else state.cards[currentPage].id
                         val token = state.tokenInputFieldState.value.text
 
                         onAction(AuthAction.AuthCard(cardId, token))
                     }
                 ),
-                modifier = Modifier.onFocusChanged {
-                    if (!it.isFocused) onAction(AuthAction.ClearTokenFocus)
-                }
+                modifier = Modifier
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .onFocusChanged {
+                        if (!it.isFocused) onAction(AuthAction.ClearTokenFocus)
+                    }
             )
 
             TextButton(
@@ -207,9 +216,9 @@ private fun AuthScreen(
         Button(
             text = stringResource(Res.string.activate),
             onClick = {
-                val cardId = if (state.unauthedCards.isEmpty()) {
+                val cardId = if (state.cards.isEmpty()) {
                     state.idInputFieldState.value.text
-                } else state.unauthedCards[currentPage].id
+                } else state.cards[currentPage].id
                 val token = state.tokenInputFieldState.value.text
 
                 onAction(AuthAction.AuthCard(cardId, token))
@@ -217,6 +226,7 @@ private fun AuthScreen(
             enabled = state.isAuthButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
         )
     }
 }

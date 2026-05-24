@@ -13,7 +13,9 @@
     <string name="clear">Очистить</string>
     <string name="delete">Удалить</string>
     <string name="deactivate">Деактивировать</string>
-    <string name="edit">Сменить цвет</string>
+    <string name="edit_color">Сменить цвет</string>
+    <string name="edit">Изменить</string>
+    <string name="understood">Понятно</string>
 
     <!--  COMMON NETWORK ERRORS  -->
     <string name="error_bad_request">Неправильный идентификатор или токен</string>
@@ -52,16 +54,16 @@
     <string name="empty_profile">Пустой профиль</string>
 
     <string name="auth_card">Активируйте карту</string>
-    <string name="auth_card_info">Для доступа к большинству функций приложения, необходимо иметь хотя бы одну активную карту</string>
+    <string name="auth_card_info">Для доступа к большинству функций приложения, необходимо иметь хотя бы одну активную карту.</string>
 
     <string name="auth_steps_title">Для активации карты</string>
-    <string name="auth_step_1">1. На сайте sp worlds зайдите во вкладку "Кошелёк", выберете карту и нажмите иконку "Поделится"</string>
-    <string name="auth_step_2">2. Зайдите на сервер и сгенерируйте для карты новый token</string>
-    <string name="auth_step_3">3. На сервере, в чат, вам придут данные карты. Введите их в приложение любым удобным способом</string>
+    <string name="auth_step_1">1. На сайте sp worlds зайдите во вкладку "Кошелёк", выберете карту и нажмите иконку "Поделится".</string>
+    <string name="auth_step_2">2. Зайдите на сервер и сгенерируйте для карты новый token.</string>
+    <string name="auth_step_3">3. На сервере, в чат, вам придут данные карты. Введите их в приложение любым удобным способом.</string>
 
     <string name="safe_auth">Это безопасно</string>
-    <string name="safe_auth_storage">Данные карт остаются на вашем устройстве, и никуда не отправляются</string>
-    <string name="safe_auth_reset">Вы можете поменять эти данные в любой момент, тогда с карты будет нельзя совершать сторонние операции</string>
+    <string name="safe_auth_storage">Данные карт остаются на вашем устройстве, и никуда не отправляются.</string>
+    <string name="safe_auth_reset">Вы можете поменять эти данные в любой момент, тогда с карты будет нельзя совершать сторонние операции.</string>
 
     <string name="bank_card_label">%1$s • %2$s</string>
     <string name="id">ID</string>
@@ -112,6 +114,7 @@
     <string name="no_authed_cards">Нет активных карт!</string>
     <string name="not_enough_cards">У вас только одна карта для перевода</string>
 
+    <string name="activation">Активация</string>
     <string name="activate_cards">Активируйте карты</string>
     <string name="cash_account">Наличный счёт</string>
     <string name="by_number">По номеру</string>

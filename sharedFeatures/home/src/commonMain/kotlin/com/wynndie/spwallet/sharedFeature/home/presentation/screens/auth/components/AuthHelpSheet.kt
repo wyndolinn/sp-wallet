@@ -9,9 +9,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.auth_step_1
+import com.wynndie.spwallet.sharedCore.auth_step_2
+import com.wynndie.spwallet.sharedCore.auth_step_3
+import com.wynndie.spwallet.sharedCore.auth_steps_title
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.understood
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +38,7 @@ fun AuthHelpSheet(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
             ) {
                 Text(
-                    text = "Для активации карты",
+                    text = stringResource(Res.string.auth_steps_title),
                     style = MaterialTheme.typography.titleMedium
                 )
 
@@ -39,17 +46,17 @@ fun AuthHelpSheet(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
                 ) {
                     Text(
-                        text = "1. На сайте sp worlds зайдите во вкладку \"Кошелёк\", выберете карту и нажмите иконку \"Поделится\"",
+                        text = stringResource(Res.string.auth_step_1),
                         style = MaterialTheme.typography.bodyMedium
                     )
 
                     Text(
-                        text = "2. Зайдите на сервер и сгенерируйте для карты новый token",
+                        text = stringResource(Res.string.auth_step_2),
                         style = MaterialTheme.typography.bodyMedium
                     )
 
                     Text(
-                        text = "3. На сервере, в чат, вам придут данные карты. Введите их в приложение любым удобным способом",
+                        text = stringResource(Res.string.auth_step_3),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -57,7 +64,7 @@ fun AuthHelpSheet(
             }
 
             OutlinedButton(
-                text = "Понятно",
+                text = stringResource(Res.string.understood),
                 onClick = onDismiss,
                 modifier = Modifier.fillMaxWidth()
             )

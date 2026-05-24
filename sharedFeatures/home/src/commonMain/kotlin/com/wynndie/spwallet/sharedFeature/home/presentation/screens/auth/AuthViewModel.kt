@@ -3,8 +3,8 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.auth
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
+import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
@@ -23,13 +23,16 @@ import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.UuidValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    preferencesRepository: PreferencesRepository,
+    cardsRepository: CardsRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val authCardUseCase: AuthCardUseCase,
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val uuidValidator: UuidValidator,
@@ -41,12 +44,15 @@ class AuthViewModel(
     private val _state = MutableStateFlow(AuthState())
     val state = _state.asStateFlow()
 
-    private lateinit var selectedServer: SpServers
-
 
     init {
-        preferencesRepository.getSelectedSpServer().onEach { server ->
-            selectedServer = server
+        combine(
+            cardsRepository.getUnauthedCards(),
+            preferencesRepository.getSelectedSpServer()
+        ) { cards, selectedSever ->
+            _state.update { state ->
+                state.copy(cards = cards.filter { it.server == selectedSever })
+            }
         }.launchIn(viewModelScope)
 
         observeValidationStates(
@@ -84,7 +90,7 @@ class AuthViewModel(
             _state.update { it.copy(loadingState = LoadingState.Loading) }
 
             authCardUseCase(
-                server = selectedServer,
+                server = preferencesRepository.getSelectedSpServer().first(),
                 id = id,
                 token = token
             ).getOrElse { error ->

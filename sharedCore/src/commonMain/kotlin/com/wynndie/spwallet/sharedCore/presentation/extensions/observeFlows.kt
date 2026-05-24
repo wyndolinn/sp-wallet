@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.transform
 
 fun <T> MutableStateFlow<T>.observeInputField(
     inputField: (T) -> InputFieldState,
@@ -18,15 +17,12 @@ fun <T> MutableStateFlow<T>.observeInputField(
     return this
         .map { inputField(it) }
         .distinctUntilChanged()
-        .onEach { inputField ->
-            val (isValid, _) = validation(inputField.value.text)
+        .onEach {
+            val (isValid, _) = validation(it.value.text)
             if (!isValid) return@onEach
-            updateState(inputField.copy(supportingText = null, hasError = false))
+            updateState(it.copy(supportingText = null, hasError = false))
         }
-        .transform { inputField ->
-            val (isValid, _) = validation(inputField.value.text)
-            emit(isValid)
-        }
+        .map { validation(it.value.text).first }
 }
 
 fun <T> MutableStateFlow<T>.validateInputField(
