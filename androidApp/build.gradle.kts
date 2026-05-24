@@ -12,7 +12,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 6
-        versionName = "1.2.1"
+        versionName = "1.3.0"
         versionNameSuffix = ""
     }
     packaging {
