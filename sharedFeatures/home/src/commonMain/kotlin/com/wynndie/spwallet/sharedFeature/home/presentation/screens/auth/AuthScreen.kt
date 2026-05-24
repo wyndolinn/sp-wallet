@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.activate
-import com.wynndie.spwallet.sharedCore.cash_account
 import com.wynndie.spwallet.sharedCore.id
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
@@ -48,7 +48,10 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.token
-import com.wynndie.spwallet.sharedFeature.home.presentation.components.AuthCardOffer
+import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
+import com.wynndie.spwallet.sharedCore.safe_auth
+import com.wynndie.spwallet.sharedCore.safe_auth_reset
+import com.wynndie.spwallet.sharedCore.safe_auth_storage
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.auth.components.AuthHelpSheet
 import org.jetbrains.compose.resources.stringResource
 
@@ -81,7 +84,7 @@ fun AuthScreenRoot(
                 scrollBehavior = scrollBehavior
             )
         },
-        modifier = Modifier
+        modifier = modifier
             .imePadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .pointerInput(Unit) {
@@ -114,10 +117,12 @@ private fun AuthScreen(
             detectTapGestures { focusManager.clearFocus(true) }
         }
     ) {
-        // TODO
-        AuthCardOffer(
-            title = "Это безопасно",
-            description = "Данные карт остаются на вашем устройстве, и никуда не отправляются\nВы можете поменять эти данные в любой момент, тогда с карты будет нельзя совершать сторонние операции",
+        InformationCard(
+            title = stringResource(Res.string.safe_auth),
+            content = {
+                Text(text = stringResource(Res.string.safe_auth_storage))
+                Text(text = stringResource(Res.string.safe_auth_reset))
+            },
             modifier = Modifier.fillMaxWidth()
         )
 

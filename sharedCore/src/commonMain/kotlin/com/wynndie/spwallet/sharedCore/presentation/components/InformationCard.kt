@@ -1,8 +1,9 @@
-package com.wynndie.spwallet.sharedFeature.home.presentation.components
+package com.wynndie.spwallet.sharedCore.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.MaterialTheme
@@ -12,17 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
-import com.wynndie.spwallet.sharedCore.no_authed_cards
+import com.wynndie.spwallet.sharedCore.auth_card
+import com.wynndie.spwallet.sharedCore.auth_card_info
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun AuthCardOffer(
+fun InformationCard(
     title: String,
-    description: String,
-    content: @Composable (() -> Unit)? = null,
+    content: @Composable (ColumnScope.() -> Unit)? = null,
+    actions: @Composable (() -> Unit)? = null,
     shape: CornerBasedShape = MaterialTheme.shapes.medium,
     modifier: Modifier = Modifier
 ) {
@@ -34,31 +35,36 @@ internal fun AuthCardOffer(
             .padding(MaterialTheme.spacing.medium)
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
         ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge
             )
 
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall
-            )
+            content?.let {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
+                    content = it
+                )
+            }
         }
 
-        content?.let {it ()}
+        actions?.let { it() }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun AuthCardOfferPreview() {
+private fun InformationCardPreview() {
     AppTheme {
-        AuthCardOffer(
-            title = stringResource(Res.string.no_authed_cards),
-            description = stringResource(Res.string.auth_card_to_get_benefits),
-            content = { },
+        InformationCard(
+            title = stringResource(Res.string.auth_card),
+            content = {
+                Text(
+                    text = stringResource(Res.string.auth_card_info)
+                )
+            },
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }

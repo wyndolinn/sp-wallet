@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -37,7 +38,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.activate
 import com.wynndie.spwallet.sharedCore.app_name
-import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
+import com.wynndie.spwallet.sharedCore.auth_card
+import com.wynndie.spwallet.sharedCore.auth_card_info
 import com.wynndie.spwallet.sharedCore.bank_cards
 import com.wynndie.spwallet.sharedCore.create
 import com.wynndie.spwallet.sharedCore.custom_cards
@@ -46,8 +48,9 @@ import com.wynndie.spwallet.sharedCore.deactivate_card_description
 import com.wynndie.spwallet.sharedCore.deactivate_card_title
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
-import com.wynndie.spwallet.sharedCore.nothing_found
-import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
+import com.wynndie.spwallet.sharedCore.img_logo
+import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
+import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
@@ -59,18 +62,15 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.img_logo
-import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
-import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIf
-import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
 import com.wynndie.spwallet.sharedCore.x_of_ore
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
-import com.wynndie.spwallet.sharedFeature.home.presentation.components.AuthCardOffer
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthedCardSheet
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.BalanceComponent
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -234,6 +234,7 @@ private fun HomeScreenContent(
     ) {
         BalanceComponent(
             balance = state.totalBalance.asDisplayableOre(),
+            hasCards = state.authedCards.isNotEmpty() || state.customCards.isNotEmpty(),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
@@ -284,10 +285,14 @@ private fun HomeScreenContent(
                     )
                 }
             } else {
-                AuthCardOffer(
-                    title = stringResource(Res.string.nothing_found),
-                    description = stringResource(Res.string.auth_card_to_get_benefits),
+                InformationCard(
+                    title = stringResource(Res.string.auth_card),
                     content = {
+                        Text(
+                            text = stringResource(Res.string.auth_card_info)
+                        )
+                    },
+                    actions = {
                         OutlinedButton(
                             text = stringResource(Res.string.activate),
                             onClick = { onAction(HomeAction.AuthCard) },

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
+import com.wynndie.spwallet.sharedCore.ic_arrow_front
 import com.wynndie.spwallet.sharedCore.ic_people
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
@@ -79,16 +80,16 @@ fun AuthedCardSheet(
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             ) {
                 LabeledIconButton(
-                    icon = painterResource(Res.drawable.ic_transaction),
-                    label = stringResource(Res.string.transfer_between_cards),
-                    onClick = { onTransferBetweenCardsClick(cards[currentPage].id) },
+                    icon = painterResource(Res.drawable.ic_arrow_front),
+                    label = stringResource(Res.string.transfer_by_number),
+                    onClick = { onTransferButtonClick(cards[currentPage].id) },
                     modifier = Modifier.weight(1f)
                 )
 
                 LabeledIconButton(
-                    icon = painterResource(Res.drawable.ic_people),
-                    label = stringResource(Res.string.transfer_by_number),
-                    onClick = { onTransferButtonClick(cards[currentPage].id) },
+                    icon = painterResource(Res.drawable.ic_transaction),
+                    label = stringResource(Res.string.transfer_between_cards),
+                    onClick = { onTransferBetweenCardsClick(cards[currentPage].id) },
                     modifier = Modifier.weight(1f)
                 )
             }
