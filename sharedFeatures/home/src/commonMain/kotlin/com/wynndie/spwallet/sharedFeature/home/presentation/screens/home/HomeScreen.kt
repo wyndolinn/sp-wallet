@@ -64,6 +64,7 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.img_logo
+import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
 import com.wynndie.spwallet.sharedCore.x_of_ore
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.components.AuthCardOffer
@@ -110,18 +111,28 @@ fun HomeScreenRoot(
 
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val username = state.authedUser.name
     Scaffold(
         topBar = {
             TopAppBar(
-                title = state.authedUser.name.ifBlank {
+                title = username.ifBlank {
                     stringResource(Res.string.app_name)
                 },
                 titleSlots = {
-                    Image(
-                        painter = painterResource(Res.drawable.img_logo),
-                        contentDescription = null,
-                        modifier = Modifier.size(MaterialTheme.sizes.small)
-                    )
+                    if (username.isNotBlank()) {
+                        AsyncImage(
+                            url = "https://avatars.spworlds.ru/face/$username?w=32",
+                            contentDescription = null,
+                            error = painterResource(Res.drawable.img_logo),
+                            modifier = Modifier.size(MaterialTheme.sizes.small)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(Res.drawable.img_logo),
+                            contentDescription = null,
+                            modifier = Modifier.size(MaterialTheme.sizes.small)
+                        )
+                    }
                 },
                 actions = {
                     MultiChoiceSegmentedButtonRow(
