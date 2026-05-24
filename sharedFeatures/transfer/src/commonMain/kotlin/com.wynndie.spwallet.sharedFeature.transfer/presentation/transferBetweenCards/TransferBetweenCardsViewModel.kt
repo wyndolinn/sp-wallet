@@ -138,7 +138,7 @@ class TransferBetweenCardsViewModel(
 
     private fun changeAmountValue(value: TextFieldValue) {
         val value = value
-            .filter(InputFilters.Decimals.predicate)
+            .filter(InputFilters.Numbers.predicate)
             .dropFirst('0') { it.length > 1 }
             .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 

@@ -91,9 +91,10 @@
     <string name="no_comment">Без комментария</string>
     <string name="comment_form">от %1$s</string>
     <string name="recipient">Получатель</string>
+    <string name="recipients">Получатели</string>
     <string name="activate_card">Активировать карту</string>
     <string name="transfer_by_number">Перевести по номеру</string>
-    <string name="transfer_between_cards">Перевести между счетами</string>
+    <string name="transfer_between_cards">Между счетами</string>
     <string name="custom_cards">Наличные</string>
     <string name="bank_cards">Банковские карты</string>
     <string name="transfer_from">Со счёта</string>

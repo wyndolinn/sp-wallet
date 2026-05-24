@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -158,7 +158,7 @@ class CustomCardViewModel(
 
     private fun changeNameValue(value: TextFieldValue) {
         val value = value
-            .filter(InputFilters.PlainText.predicate)
+            .filter(InputFilters.Text.predicate)
             .trimSpaces()
             .cutOffAt(_state.value.nameInputFieldState.maxLength) ?: return
 
@@ -172,7 +172,7 @@ class CustomCardViewModel(
 
     private fun changeBalanceValue(value: TextFieldValue) {
         val value = value
-            .filter(InputFilters.Decimals.predicate)
+            .filter(InputFilters.Numbers.predicate)
             .dropFirst('0') { it.length > 1 }
             .cutOffAt(_state.value.balanceInputFieldState.maxLength) ?: return
 

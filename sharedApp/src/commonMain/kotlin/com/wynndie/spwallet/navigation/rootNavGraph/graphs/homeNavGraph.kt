@@ -24,9 +24,13 @@ fun NavGraphBuilder.homeNavGraph(
             ObserveNavEvent<HomeNavEvent> { event ->
                 when (event) {
                     HomeNavEvent.NavigateToAuthCard -> {
-                        navController.navigate(
-                            Route.HomeNavGraph.Auth
-                        ) {
+                        navController.navigate(Route.HomeNavGraph.Auth) {
+                            launchSingleTop = true
+                        }
+                    }
+
+                    HomeNavEvent.NavigateToRecipients -> {
+                        navController.navigate(Route.EditNavGraph.Recipients) {
                             launchSingleTop = true
                         }
                     }

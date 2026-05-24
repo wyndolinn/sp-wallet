@@ -67,10 +67,7 @@ fun InputField(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = it,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
-                )
+                style = MaterialTheme.typography.labelMedium
             )
         }
 

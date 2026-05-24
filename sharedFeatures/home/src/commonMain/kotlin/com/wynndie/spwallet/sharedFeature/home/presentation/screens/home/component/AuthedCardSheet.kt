@@ -18,12 +18,11 @@ import androidx.compose.ui.Modifier
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
-import com.wynndie.spwallet.sharedCore.ic_delete
 import com.wynndie.spwallet.sharedCore.ic_people
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TonalIconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.LabeledIconButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
@@ -79,14 +78,14 @@ fun AuthedCardSheet(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
             ) {
-                TonalIconButton(
+                LabeledIconButton(
                     icon = painterResource(Res.drawable.ic_transaction),
                     label = stringResource(Res.string.transfer_between_cards),
                     onClick = { onTransferBetweenCardsClick(cards[currentPage].id) },
                     modifier = Modifier.weight(1f)
                 )
 
-                TonalIconButton(
+                LabeledIconButton(
                     icon = painterResource(Res.drawable.ic_people),
                     label = stringResource(Res.string.transfer_by_number),
                     onClick = { onTransferButtonClick(cards[currentPage].id) },

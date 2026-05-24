@@ -10,6 +10,7 @@ import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.noto_sans_bold
 import com.wynndie.spwallet.sharedCore.noto_sans_medium
 import com.wynndie.spwallet.sharedCore.noto_sans_regular
+import com.wynndie.spwallet.sharedCore.noto_sans_semi_bold
 import com.wynndie.spwallet.sharedCore.ubuntu_bold
 import com.wynndie.spwallet.sharedCore.ubuntu_medium
 import com.wynndie.spwallet.sharedCore.ubuntu_regular
@@ -24,6 +25,10 @@ val NotoSansFontFamily
         Font(
             resource = Res.font.noto_sans_medium,
             weight = FontWeight.Medium
+        ),
+        Font(
+            resource = Res.font.noto_sans_semi_bold,
+            weight = FontWeight.SemiBold
         ),
         Font(
             resource = Res.font.noto_sans_bold,
@@ -97,7 +102,7 @@ val Typography
 
         labelLarge = TextStyle(
             fontFamily = NotoSansFontFamily,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         ),
         labelMedium = TextStyle(

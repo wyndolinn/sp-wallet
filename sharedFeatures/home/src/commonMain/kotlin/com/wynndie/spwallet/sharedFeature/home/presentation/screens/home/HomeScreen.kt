@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.activate
-import com.wynndie.spwallet.sharedCore.app_logo_foreground
 import com.wynndie.spwallet.sharedCore.app_name
 import com.wynndie.spwallet.sharedCore.auth_card_to_get_benefits
 import com.wynndie.spwallet.sharedCore.bank_cards
@@ -64,6 +63,7 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.img_logo
 import com.wynndie.spwallet.sharedCore.x_of_ore
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.components.AuthCardOffer
@@ -118,7 +118,7 @@ fun HomeScreenRoot(
                 },
                 titleSlots = {
                     Image(
-                        painter = painterResource(Res.drawable.app_logo_foreground),
+                        painter = painterResource(Res.drawable.img_logo),
                         contentDescription = null,
                         modifier = Modifier.size(MaterialTheme.sizes.small)
                     )
@@ -219,6 +219,7 @@ private fun HomeScreenContent(
 
         if (isUserAuthed) {
             ActionButtons(
+                onRecipientsClick = { onAction(HomeAction.EditRecipients) },
                 onTransferBetweenCardsClick = { onAction(HomeAction.TransferBetweenCards("")) },
                 onTransferByNumberClick = { onAction(HomeAction.TransferByCard("")) },
                 modifier = Modifier

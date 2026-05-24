@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.transform
 
 fun <T> MutableStateFlow<T>.observeInputField(
     inputField: (T) -> InputFieldState,
-    validation: (String) -> Pair<Boolean, Error.Validation?>,
+    validation: (String) -> Pair<Boolean, Error.Validation?> = { true to null },
     updateState: (InputFieldState) -> Unit
 ): Flow<Boolean> {
     return this

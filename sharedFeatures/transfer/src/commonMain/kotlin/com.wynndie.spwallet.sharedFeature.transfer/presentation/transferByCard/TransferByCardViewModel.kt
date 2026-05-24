@@ -180,7 +180,7 @@ class TransferByCardViewModel(
 
     private fun changeAmountValue(value: TextFieldValue) {
         val value = value
-            .filter(InputFilters.Decimals.predicate)
+            .filter(InputFilters.Numbers.predicate)
             .dropFirst('0') { it.length > 1 }
             .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
@@ -195,7 +195,7 @@ class TransferByCardViewModel(
 
     private fun changeCommentValue(value: TextFieldValue) {
         val value = value
-            .filter(InputFilters.PlainText.predicate)
+            .filter(InputFilters.Text.predicate)
             .trimSpaces()
             .cutOffAt(CoreConstants.MAX_COMMENT_LENGTH) ?: return
 

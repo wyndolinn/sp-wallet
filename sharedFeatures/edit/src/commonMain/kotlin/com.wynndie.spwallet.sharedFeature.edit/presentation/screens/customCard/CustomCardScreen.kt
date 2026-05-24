@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -36,14 +36,14 @@ import com.wynndie.spwallet.sharedCore.balance
 import com.wynndie.spwallet.sharedCore.card_name
 import com.wynndie.spwallet.sharedCore.cash_account
 import com.wynndie.spwallet.sharedCore.delete
+import com.wynndie.spwallet.sharedCore.delete_card_description
+import com.wynndie.spwallet.sharedCore.delete_card_title
 import com.wynndie.spwallet.sharedCore.ic_delete
-import com.wynndie.spwallet.sharedCore.presentation.components.BalanceComponent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
@@ -77,6 +77,8 @@ fun CustomCardScreenRoot(
 
     if (state.isDeleteDialogVisible) {
         DeleteCardDialog(
+            title = stringResource(Res.string.delete_card_title),
+            description = stringResource(Res.string.delete_card_description),
             onConfirm = { viewModel.onAction(CustomCardAction.DeleteCard) },
             onDismiss = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(false)) },
             modifier = Modifier

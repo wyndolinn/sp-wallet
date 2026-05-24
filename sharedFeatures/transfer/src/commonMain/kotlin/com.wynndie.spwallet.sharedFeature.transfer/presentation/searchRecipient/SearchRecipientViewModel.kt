@@ -87,7 +87,7 @@ class SearchRecipientViewModel(
 
     private fun changeRecipientValue(value: TextFieldValue) {
         val value = value
-            .filter(InputFilters.PlainText.predicate)
+            .filter(InputFilters.Text.predicate)
             .trimSpaces()
             .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
 

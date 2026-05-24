@@ -15,6 +15,7 @@ sealed interface Route {
         data object Auth
     }
 
+    
     @Serializable
     data object TransferNavGraph : Route {
 
@@ -36,5 +37,8 @@ sealed interface Route {
 
         @Serializable
         data class CustomCard(val cardId: String = "")
+
+        @Serializable
+        data object Recipients
     }
 }

@@ -12,6 +12,7 @@ sealed interface HomeAction {
     data class ToggleAuthedCardSheet(val open: Boolean) : HomeAction
     data class ToggleDeleteCardDialog(val open: Boolean) : HomeAction
 
+    data object EditRecipients : HomeAction
     data class TransferBetweenCards(val id: String) : HomeAction
     data class TransferByCard(val id: String) : HomeAction
     data class DeactivateCard(val card: AuthedCard) : HomeAction

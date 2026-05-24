@@ -7,4 +7,5 @@ sealed interface HomeNavEvent : NavEvent {
     data class NavigateToCustomCard(val cardId: String) : HomeNavEvent
     data class NavigateToTransferByCard(val cardId: String) : HomeNavEvent
     data object NavigateToAuthCard : HomeNavEvent
+    data object NavigateToRecipients : HomeNavEvent
 }

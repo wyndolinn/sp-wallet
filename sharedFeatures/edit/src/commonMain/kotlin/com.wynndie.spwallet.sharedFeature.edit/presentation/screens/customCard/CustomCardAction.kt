@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
 import androidx.compose.ui.text.input.TextFieldValue
 

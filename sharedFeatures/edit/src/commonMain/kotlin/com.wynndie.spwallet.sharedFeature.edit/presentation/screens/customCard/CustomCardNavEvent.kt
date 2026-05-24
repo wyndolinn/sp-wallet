@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEvent
 

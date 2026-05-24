@@ -99,6 +99,7 @@ class HomeViewModel(
             is HomeAction.SelectAuthedCard -> selectAuthedCard(action.id)
             is HomeAction.SelectUnauthedCard -> selectUnauthedCard(action.id)
             is HomeAction.SelectCustomCard -> selectCustomCard(action.id)
+            HomeAction.EditRecipients -> editRecipients()
         }
     }
 
@@ -209,6 +210,12 @@ class HomeViewModel(
         viewModelScope.launch {
             navEventController.navigate(HomeNavEvent.NavigateToCustomCard(id))
             closeOverlays()
+        }
+    }
+
+    private fun editRecipients() {
+        viewModelScope.launch {
+            navEventController.navigate(HomeNavEvent.NavigateToRecipients)
         }
     }
 

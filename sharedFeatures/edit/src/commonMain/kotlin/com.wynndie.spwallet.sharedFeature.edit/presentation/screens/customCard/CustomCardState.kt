@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedFeature.edit.presentation
+package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
