@@ -3,6 +3,8 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.auth
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.cash_creation_succeed
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
@@ -17,6 +19,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidation
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
@@ -112,6 +115,7 @@ class AuthViewModel(
                 )
             }
 
+            snackbarController.send(Snackbar(UiText.ResourceString(Res.string.cash_creation_succeed)))
             _state.update { it.copy(loadingState = LoadingState.Finished) }
         }
     }

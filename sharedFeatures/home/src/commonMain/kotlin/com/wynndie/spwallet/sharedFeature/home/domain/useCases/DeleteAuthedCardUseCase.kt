@@ -11,7 +11,6 @@ class DeleteAuthedCardUseCase(
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository
 ) {
-
     suspend operator fun invoke(card: AuthedCard) {
         cardsRepository.deleteAuthedCard(card)
 
