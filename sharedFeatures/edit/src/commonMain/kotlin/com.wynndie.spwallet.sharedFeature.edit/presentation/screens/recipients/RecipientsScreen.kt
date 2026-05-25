@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -111,12 +113,15 @@ fun RecipientsScreenRoot(
         ScreenLayout(
             contentPadding = innerPadding.add(MaterialTheme.spacing.medium)
         ) {
-            RecipientsScreen(
-                state = state,
-                onAction = viewModel::onAction,
-                focusManager = focusManager,
-                modifier = Modifier.fillMaxSize()
-            )
+            Column {
+                RecipientsScreen(
+                    state = state,
+                    onAction = viewModel::onAction,
+                    focusManager = focusManager,
+                    contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }
@@ -126,6 +131,7 @@ private fun RecipientsScreen(
     state: RecipientsState,
     onAction: (RecipientsAction) -> Unit,
     focusManager: FocusManager,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -198,7 +204,7 @@ private fun RecipientsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.spacing.medium)
-                .padding(bottom = MaterialTheme.spacing.medium)
+                .padding(bottom = contentPadding.calculateBottomPadding())
         )
     }
 }
@@ -211,6 +217,7 @@ private fun RecipientsScreenPreview() {
             state = RecipientsState(),
             onAction = { },
             focusManager = LocalFocusManager.current,
+            contentPadding = PaddingValues(),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(MaterialTheme.spacing.medium)
