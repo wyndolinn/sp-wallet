@@ -63,8 +63,7 @@ fun SearchRecipientScreenRoot(
         modifier = modifier
     ) { innerPadding ->
         ScreenLayout(
-            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium)
         ) {
             SearchRecipientScreenContent(
                 state = state,
