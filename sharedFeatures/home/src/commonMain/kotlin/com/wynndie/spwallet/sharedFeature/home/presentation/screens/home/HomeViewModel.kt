@@ -67,7 +67,6 @@ class HomeViewModel(
             cardsRepository.getCustomCards(),
             preferencesRepository.getSelectedSpServer()
         ) { authedCards, unauthedCard, customCards, selectedSever ->
-//            delay(150)
             HomeCardsData(
                 authedCards = authedCards.filter { it.server == selectedSever },
                 unauthedCards = unauthedCard.filter { it.server == selectedSever },
