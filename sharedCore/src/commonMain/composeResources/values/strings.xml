@@ -96,6 +96,7 @@
 
     <string name="delete_recipient_title">Удалить получателя?</string>
     <string name="delete_recipient_description">Это действие безвозвратно сотрёт все данные о получателе</string>
+    <string name="recipient_deleted">Получатель удалён</string>
 
 
     <string name="total_balance">Общий баланс</string>

@@ -161,7 +161,7 @@ class TransferByCardViewModel(
                 amount = _state.value.amountInputFieldState.value.text,
                 comment = comment
             ).onError {
-                snackbarController.send(Snackbar(it.asUiText()))
+                snackbarController.send(it.asUiText())
             }.onSuccess {
                 recipientRepository.insertRecipient(
                     recipientCard = emptyRecipientCard.copy(
@@ -170,7 +170,7 @@ class TransferByCardViewModel(
                     )
                 )
 
-                snackbarController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+                snackbarController.send(ResourceString(Res.string.transaction_succeed))
                 navEventController.navigate(TransferByCardNavEvent.NavigateBack)
             }
 

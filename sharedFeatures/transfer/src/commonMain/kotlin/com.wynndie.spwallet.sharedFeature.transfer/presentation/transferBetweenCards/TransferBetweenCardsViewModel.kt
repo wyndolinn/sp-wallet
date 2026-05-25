@@ -124,12 +124,12 @@ class TransferBetweenCardsViewModel(
                 amount = transferAmount,
                 comment = "Перевод между счетами"
             ).getOrElse { error ->
-                snackbarController.send(Snackbar(error.asUiText()))
+                snackbarController.send(error.asUiText())
                 _state.update { it.copy(loadingState = LoadingState.Finished) }
                 return@launch
             }
 
-            snackbarController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+            snackbarController.send(ResourceString(Res.string.transaction_succeed))
             navEventController.navigate(TransferBetweenCardsNavEvent.NavigateToResult)
 
             _state.update { it.copy(loadingState = LoadingState.Finished) }

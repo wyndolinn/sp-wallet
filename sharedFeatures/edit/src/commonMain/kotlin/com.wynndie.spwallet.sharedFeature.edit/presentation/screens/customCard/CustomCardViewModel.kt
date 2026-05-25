@@ -142,7 +142,7 @@ class CustomCardViewModel(
             cardsRepository.insertCustomCard(state.value.card)
 
             _state.update { it.copy(saveLoadingState = Finished) }
-            snackbarController.send(Snackbar(ResourceString(Res.string.cash_creation_succeed)))
+            snackbarController.send(ResourceString(Res.string.cash_creation_succeed))
             navEventController.navigate(CustomCardNavEvent.NavigateBack)
         }
     }

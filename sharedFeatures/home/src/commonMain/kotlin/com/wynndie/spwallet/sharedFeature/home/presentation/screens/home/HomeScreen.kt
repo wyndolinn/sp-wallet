@@ -173,7 +173,7 @@ fun HomeScreenRoot(
                         }
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
             )
         },
         modifier = Modifier
