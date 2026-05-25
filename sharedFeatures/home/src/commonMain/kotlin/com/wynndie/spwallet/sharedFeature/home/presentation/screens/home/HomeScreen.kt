@@ -1,6 +1,12 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,19 +26,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,12 +63,12 @@ import com.wynndie.spwallet.sharedCore.ic_arrow_front
 import com.wynndie.spwallet.sharedCore.img_logo
 import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
 import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
-import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
@@ -84,11 +93,20 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenRoot(
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    modifier: Modifier = Modifier
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val focusManager = LocalFocusManager.current
+
+    val scrollState = rememberScrollState()
+    var lastScrollValue by remember { mutableIntStateOf(0) }
+    val isExpanded by remember {
+        derivedStateOf {
+            val expanded = scrollState.value <= lastScrollValue
+            lastScrollValue = scrollState.value
+            expanded
+        }
+    }
 
     if (state.isAuthedCardSheetVisible) {
         AuthedCardSheet(
@@ -119,7 +137,6 @@ fun HomeScreenRoot(
     }
 
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val username = state.authedUser.name
     Scaffold(
         topBar = {
@@ -179,12 +196,17 @@ fun HomeScreenRoot(
                             )
                         }
                     }
-                },
-                scrollBehavior = scrollBehavior,
+                }
             )
         },
         floatingActionButton = {
-            if (state.authedCards.isNotEmpty()) {
+            val hasCards by derivedStateOf { state.authedCards.isNotEmpty() }
+            val finishedLoading by derivedStateOf { state.screenLoadingState == LoadingState.Finished }
+            AnimatedVisibility(
+                visible = hasCards && finishedLoading,
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally()
+            ) {
                 ExtendedFloatingActionButton(
                     onClick = { viewModel.onAction(HomeAction.TransferByCard("")) },
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -196,14 +218,18 @@ fun HomeScreenRoot(
                         hoveredElevation = 0.dp
                     )
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.transfer),
-                            style = MaterialTheme.typography.titleSmall
-                        )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        AnimatedVisibility(
+                            visible = isExpanded,
+                            enter = fadeIn() + expandHorizontally(),
+                            exit = fadeOut() + shrinkHorizontally()
+                        ) {
+                            Text(
+                                text = stringResource(Res.string.transfer),
+                                style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier.padding(end = MaterialTheme.spacing.medium)
+                            )
+                        }
 
                         Icon(
                             painter = painterResource(Res.drawable.ic_arrow_front),
@@ -214,8 +240,7 @@ fun HomeScreenRoot(
             }
         },
         loadingState = state.screenLoadingState,
-        nestedScrollConnection = scrollBehavior.nestedScrollConnection,
-        focusManager = focusManager
+        modifier = modifier
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
         PullToRefreshBox(
@@ -232,7 +257,7 @@ fun HomeScreenRoot(
                 contentPadding = innerPadding
                     .remove(top = innerPadding.calculateTopPadding())
                     .add(MaterialTheme.spacing.medium),
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(scrollState)
             ) {
                 Crossfade(state.selectedServer) {
                     HomeScreenContent(

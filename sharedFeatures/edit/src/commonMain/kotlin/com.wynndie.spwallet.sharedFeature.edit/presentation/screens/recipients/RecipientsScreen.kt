@@ -1,12 +1,10 @@
 package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.recipients
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,14 +12,12 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,10 +34,14 @@ import com.wynndie.spwallet.sharedCore.ic_edit
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.RecipientTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.recipient_history_empty
+import com.wynndie.spwallet.sharedCore.recipients
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.recipients.components.EditRecipientSheet
 import com.wynndie.spwallet.sharedFeature.edit.presentation.screens.recipients.components.RecipientSheet
@@ -54,7 +54,6 @@ fun RecipientsScreenRoot(
     viewModel: RecipientsViewModel,
     modifier: Modifier = Modifier
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
 
@@ -101,24 +100,24 @@ fun RecipientsScreenRoot(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = "Получатели",
+                title = stringResource(Res.string.recipients),
                 onClickBack = { viewModel.onAction(RecipientsAction.NavigateBack) }
             )
         },
+        loadingState = state.loadingState,
+        focusManager = focusManager,
         modifier = modifier
-            .imePadding()
-            .pointerInput(Unit) {
-                detectTapGestures { focusManager.clearFocus(true) }
-            }
     ) { innerPadding ->
-        RecipientsScreen(
-            state = state,
-            onAction = viewModel::onAction,
-            focusManager = focusManager,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        )
+        ScreenLayout(
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium)
+        ) {
+            RecipientsScreen(
+                state = state,
+                onAction = viewModel::onAction,
+                focusManager = focusManager,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 

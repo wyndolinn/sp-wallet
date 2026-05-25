@@ -13,9 +13,7 @@ fun ScreenLayout(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Column(
-        modifier = modifier
-    ) {
+    Column(modifier = modifier) {
         Spacer(Modifier.height(contentPadding.calculateTopPadding()))
         content()
         Spacer(Modifier.height(contentPadding.calculateBottomPadding()))

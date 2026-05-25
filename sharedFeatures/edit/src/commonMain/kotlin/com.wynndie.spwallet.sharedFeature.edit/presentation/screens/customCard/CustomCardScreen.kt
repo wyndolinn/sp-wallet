@@ -1,14 +1,12 @@
 package com.wynndie.spwallet.sharedFeature.edit.presentation.screens.customCard
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -18,14 +16,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,10 +37,11 @@ import com.wynndie.spwallet.sharedCore.ic_delete
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
+import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.save
@@ -58,9 +54,9 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomCardScreenRoot(
-    viewModel: CustomCardViewModel
+    viewModel: CustomCardViewModel,
+    modifier: Modifier = Modifier
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
 
@@ -80,12 +76,10 @@ fun CustomCardScreenRoot(
             title = stringResource(Res.string.delete_card_title),
             description = stringResource(Res.string.delete_card_description),
             onConfirm = { viewModel.onAction(CustomCardAction.DeleteCard) },
-            onDismiss = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(false)) },
-            modifier = Modifier
+            onDismiss = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(false)) }
         )
     }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -103,47 +97,23 @@ fun CustomCardScreenRoot(
                             )
                         }
                     }
-                },
-                scrollBehavior = scrollBehavior
+                }
             )
         },
-        modifier = Modifier
-            .imePadding()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
-                )
-            }
+        loadingState = state.screenLoadingState,
+        focusManager = focusManager,
+        modifier = modifier
     ) { innerPadding ->
-
-        Crossfade(
-            targetState = state.screenLoadingState,
-            animationSpec = tween(500),
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(MaterialTheme.spacing.medium)
-        ) { screenState ->
-
-            when (screenState) {
-                LoadingState.Loading -> {
-                    LoadingScreen(modifier = Modifier.fillMaxSize())
-                }
-
-                is LoadingState.Failed -> {
-
-                }
-
-                LoadingState.Finished -> {
-                    CustomCardScreen(
-                        state = state,
-                        onAction = viewModel::onAction,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    )
-                }
-            }
+        ScreenLayout(
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            CustomCardScreen(
+                state = state,
+                onAction = viewModel::onAction,
+                focusManager = focusManager,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
@@ -152,11 +122,9 @@ fun CustomCardScreenRoot(
 private fun CustomCardScreen(
     state: CustomCardState,
     onAction: (CustomCardAction) -> Unit,
+    focusManager: FocusManager,
     modifier: Modifier = Modifier
 ) {
-
-    val focusManager = LocalFocusManager.current
-
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
         modifier = modifier
@@ -164,12 +132,18 @@ private fun CustomCardScreen(
         CustomizableTile(
             color = state.card.color.asColor(),
             icon = state.card.icon.asPainter(),
-            onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                    onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) }
+                )
         )
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         ) {
             InputField(
                 value = state.nameInputFieldState.value,
@@ -210,7 +184,9 @@ private fun CustomCardScreen(
             text = stringResource(Res.string.save),
             onClick = { onAction(CustomCardAction.SaveCard) },
             enabled = state.isSaveButtonEnabled,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing.medium)
         )
     }
 }
@@ -221,7 +197,8 @@ fun CustomCardScreenPreview() {
     AppTheme {
         CustomCardScreen(
             state = CustomCardState(),
-            onAction = { _ -> },
+            onAction = { },
+            focusManager = LocalFocusManager.current,
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(MaterialTheme.spacing.medium)
