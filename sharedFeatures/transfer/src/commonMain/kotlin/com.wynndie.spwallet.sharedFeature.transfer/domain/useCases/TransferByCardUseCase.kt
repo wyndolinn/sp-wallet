@@ -7,6 +7,7 @@ import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedFeature.transfer.domain.repositories.TransferRepository
+import kotlinx.coroutines.flow.first
 
 class TransferByCardUseCase(
     private val transferRepository: TransferRepository,
@@ -19,15 +20,23 @@ class TransferByCardUseCase(
         amount: String,
         comment: String
     ): EmptyOutcome<Error.Network> {
-        
+
         val cardBalance = transferRepository.makeTransaction(
             authKey = card.authKey,
             receiver = receiver,
             amount = amount.toLong(),
             comment = comment
         ).getOrElse { return Outcome.Error(it) }
-
         cardsRepository.insertAuthedCard(card.copy(balance = cardBalance))
+
+        val destinationCard = cardsRepository.getAuthedCards().first()
+            .find { it.number == receiver }
+            ?: return Outcome.Success(Unit)
+        cardsRepository.insertAuthedCard(
+            card = destinationCard.copy(
+                balance = destinationCard.balance + amount.toLong()
+            )
+        )
 
         return Outcome.Success(Unit)
     }
