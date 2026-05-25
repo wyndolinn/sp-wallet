@@ -4,23 +4,26 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -29,9 +32,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,25 +50,30 @@ import com.wynndie.spwallet.sharedCore.deactivate_card_description
 import com.wynndie.spwallet.sharedCore.deactivate_card_title
 import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.ic_arrow_front
 import com.wynndie.spwallet.sharedCore.img_logo
 import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
 import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.extensions.remove
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.transfer
 import com.wynndie.spwallet.sharedCore.x_of_ore
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthedCardSheet
@@ -176,45 +183,63 @@ fun HomeScreenRoot(
                 scrollBehavior = scrollBehavior,
             )
         },
-        modifier = Modifier
-            .imePadding()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
-                )
-            }
-    ) { innerPadding ->
-        Crossfade(state.screenLoadingState) { screenState ->
-            when (screenState) {
-                LoadingState.Loading -> {
-                    LoadingScreen(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
+        floatingActionButton = {
+            if (state.authedCards.isNotEmpty()) {
+                ExtendedFloatingActionButton(
+                    onClick = { viewModel.onAction(HomeAction.TransferByCard("")) },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp,
+                        pressedElevation = 0.dp,
+                        focusedElevation = 0.dp,
+                        hoveredElevation = 0.dp
                     )
-                }
-
-                is LoadingState.Failed -> {
-
-                }
-
-                LoadingState.Finished -> {
-                    PullToRefreshBox(
-                        isRefreshing = state.screenLoadingState is LoadingState.Loading,
-                        onRefresh = { viewModel.onAction(HomeAction.Refresh) },
-                        modifier = Modifier.padding(innerPadding)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Crossfade(state.selectedServer) {
-                            HomeScreenContent(
-                                state = state,
-                                onAction = viewModel::onAction,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
-                            )
-                        }
+                        Text(
+                            text = stringResource(Res.string.transfer),
+                            style = MaterialTheme.typography.titleSmall
+                        )
+
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_arrow_front),
+                            contentDescription = null
+                        )
                     }
+                }
+            }
+        },
+        loadingState = state.screenLoadingState,
+        nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+        focusManager = focusManager
+    ) { innerPadding ->
+        val layoutDirection = LocalLayoutDirection.current
+        PullToRefreshBox(
+            isRefreshing = state.screenLoadingState is LoadingState.Loading,
+            onRefresh = { viewModel.onAction(HomeAction.Refresh) },
+            modifier = Modifier
+                .padding(
+                    start = innerPadding.calculateStartPadding(layoutDirection),
+                    top = innerPadding.calculateTopPadding(),
+                    end = innerPadding.calculateEndPadding(layoutDirection)
+                )
+        ) {
+            ScreenLayout(
+                contentPadding = innerPadding
+                    .remove(top = innerPadding.calculateTopPadding())
+                    .add(MaterialTheme.spacing.medium),
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                Crossfade(state.selectedServer) {
+                    HomeScreenContent(
+                        state = state,
+                        onAction = viewModel::onAction,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }
@@ -238,9 +263,7 @@ private fun HomeScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = MaterialTheme.spacing.medium)
-                .padding(horizontal = MaterialTheme.spacing.medium)
-                .padding(vertical = MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium)
         )
 
         if (isUserAuthed) {
