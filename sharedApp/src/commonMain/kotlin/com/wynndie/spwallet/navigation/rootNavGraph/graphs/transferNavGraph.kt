@@ -89,7 +89,7 @@ fun NavGraphBuilder.transferNavGraph(
             val viewModel = koinViewModel<TransferByCardViewModel> {
                 parametersOf(
                     TransferByCardParams(
-                        cardId = args.cardId
+                        sourceCardId = args.cardId
                     )
                 )
             }

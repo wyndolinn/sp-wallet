@@ -67,7 +67,6 @@ class HomeViewModel(
             cardsRepository.getCustomCards(),
             preferencesRepository.getSelectedSpServer()
         ) { authedCards, unauthedCard, customCards, selectedSever ->
-            delay(150)
             HomeCardsData(
                 authedCards = authedCards.filter { it.server == selectedSever },
                 unauthedCards = unauthedCard.filter { it.server == selectedSever },
@@ -110,7 +109,7 @@ class HomeViewModel(
             _state.update { it.copy(screenLoadingState = LoadingState.Loading) }
 
             syncWithRemoteUseCase().onError { error ->
-                snackbarController.send(Snackbar(error.asUiText()))
+                snackbarController.send(error.asUiText())
             }
 
             _state.update {
@@ -138,8 +137,7 @@ class HomeViewModel(
     private fun selectServer(server: SpServers) {
         viewModelScope.launch {
             preferencesRepository.setSelectedSpServer(server)
-            snackbarController.send(
-                Snackbar(UiText.ResourceString(Res.string.server_changed, server.label))
+            snackbarController.send(UiText.ResourceString(Res.string.server_changed, server.label)
             )
         }
     }
@@ -173,11 +171,12 @@ class HomeViewModel(
             val authedCardsSize = _state.value.authedCards.size
             val unauthedCardsSize = _state.value.unauthedCards.size
             if (authedCardsSize + unauthedCardsSize <= 1) {
-                snackbarController.send(Snackbar(UiText.ResourceString(Res.string.not_enough_cards)))
+                snackbarController.send(UiText.ResourceString(Res.string.not_enough_cards))
                 return@launch
             }
 
             navEventController.navigate(HomeNavEvent.NavigateToTransferBetweenCards(id))
+            closeOverlays()
         }
     }
 

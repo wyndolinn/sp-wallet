@@ -1,14 +1,10 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferByCard
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,14 +12,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,12 +28,13 @@ import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
-import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
-import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.recipient
 import com.wynndie.spwallet.sharedCore.transfer
@@ -53,68 +47,44 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferByCardScreenRoot(
-    viewModel: TransferByCardViewModel
+    viewModel: TransferByCardViewModel,
+    modifier: Modifier = Modifier
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.by_number),
-                onClickBack = { viewModel.onAction(TransferByCardAction.NavigateBack) },
-                scrollBehavior = scrollBehavior
+                onClickBack = { viewModel.onAction(TransferByCardAction.NavigateBack) }
             )
         },
-        modifier = Modifier
-            .imePadding()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
-                )
-            }
+        loadingState = state.loadingState,
+        focusManager = focusManager,
+        modifier = modifier
     ) { innerPadding ->
-
-        Crossfade(
-            targetState = state.loadingState,
-            animationSpec = tween(500),
-            modifier = Modifier.padding(innerPadding)
-        ) { screenState ->
-
-            when (screenState) {
-                LoadingState.Loading -> {
-                    LoadingScreen(modifier = Modifier.fillMaxSize())
-                }
-
-                is LoadingState.Failed -> {
-
-                }
-
-                LoadingState.Finished -> {
-                    TransferByNumberScreen(
-                        state = state,
-                        onAction = viewModel::onAction,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    )
-                }
-            }
+        ScreenLayout(
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            TransferByNumberScreen(
+                state = state,
+                onAction = viewModel::onAction,
+                focusManager = focusManager,
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
-
 }
 
 @Composable
 private fun TransferByNumberScreen(
     state: TransferByCardState,
     onAction: (TransferByCardAction) -> Unit,
+    focusManager: FocusManager,
     modifier: Modifier = Modifier
 ) {
-    val focusManager = LocalFocusManager.current
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
         modifier = modifier

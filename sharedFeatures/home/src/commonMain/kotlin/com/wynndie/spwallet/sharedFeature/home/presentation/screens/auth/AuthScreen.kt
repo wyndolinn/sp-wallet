@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,9 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,8 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -45,7 +42,10 @@ import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingDialog
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
@@ -78,30 +78,27 @@ fun AuthScreenRoot(
         )
     }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.activation),
-                onClickBack = { viewModel.onAction(AuthAction.NavigateBack) },
-                scrollBehavior = scrollBehavior
+                onClickBack = { viewModel.onAction(AuthAction.NavigateBack) }
             )
         },
+        focusManager = focusManager,
         modifier = modifier
-            .imePadding()
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .pointerInput(Unit) {
-                detectTapGestures { focusManager.clearFocus(true) }
-            }
     ) { innerPadding ->
-        AuthScreen(
-            state = state,
-            onAction = viewModel::onAction,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-        )
+        ScreenLayout(
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            AuthScreen(
+                state = state,
+                onAction = viewModel::onAction,
+                focusManager = focusManager,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 
@@ -109,9 +106,9 @@ fun AuthScreenRoot(
 private fun AuthScreen(
     state: AuthState,
     onAction: (AuthAction) -> Unit,
+    focusManager: FocusManager,
     modifier: Modifier = Modifier
 ) {
-    val focusManager = LocalFocusManager.current
     var currentPage by remember { mutableStateOf(0) }
 
     Column(
@@ -238,6 +235,7 @@ private fun AuthScreenPreview() {
         AuthScreen(
             state = AuthState(),
             onAction = { },
+            focusManager = LocalFocusManager.current,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(MaterialTheme.spacing.medium)

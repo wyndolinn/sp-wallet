@@ -15,7 +15,6 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
@@ -75,17 +74,12 @@ class TransferByCardViewModel(
         combine(
             cardsRepository.getAuthedCards(),
             preferencesRepository.getSelectedSpServer()
-        ) { cards, server ->
-            cards.filter { it.server == server }
-        }.onEach { cards ->
-            val card = cards.find { it.id == args.cardId }
-                ?: cards.firstOrNull()
-                ?: return@onEach
-
+        ) { authedCards, server ->
+            val sourceCards = authedCards.filter { it.server == server }
+            val selectedCard = authedCards.find { it.id == args.sourceCardId }
             _state.update { state ->
                 state.copy(
-                    sourceCards = cards,
-                    selectedSourceCard = cards.indexOf(card)
+                    sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards
                 )
             }
         }.launchIn(viewModelScope)
@@ -161,7 +155,7 @@ class TransferByCardViewModel(
                 amount = _state.value.amountInputFieldState.value.text,
                 comment = comment
             ).onError {
-                snackbarController.send(Snackbar(it.asUiText()))
+                snackbarController.send(it.asUiText())
             }.onSuccess {
                 recipientRepository.insertRecipient(
                     recipientCard = emptyRecipientCard.copy(
@@ -170,7 +164,7 @@ class TransferByCardViewModel(
                     )
                 )
 
-                snackbarController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+                snackbarController.send(ResourceString(Res.string.transaction_succeed))
                 navEventController.navigate(TransferByCardNavEvent.NavigateBack)
             }
 

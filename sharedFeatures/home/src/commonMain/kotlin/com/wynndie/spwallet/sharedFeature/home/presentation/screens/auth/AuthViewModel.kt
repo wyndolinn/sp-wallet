@@ -97,7 +97,7 @@ class AuthViewModel(
                 id = id,
                 token = token
             ).getOrElse { error ->
-                snackbarController.send(Snackbar(error.asUiText()))
+                snackbarController.send(error.asUiText())
                 _state.update { it.copy(loadingState = LoadingState.Finished) }
                 return@launch
             }
@@ -115,7 +115,7 @@ class AuthViewModel(
                 )
             }
 
-            snackbarController.send(Snackbar(UiText.ResourceString(Res.string.cash_creation_succeed)))
+            snackbarController.send(UiText.ResourceString(Res.string.cash_creation_succeed))
             _state.update { it.copy(loadingState = LoadingState.Finished) }
         }
     }

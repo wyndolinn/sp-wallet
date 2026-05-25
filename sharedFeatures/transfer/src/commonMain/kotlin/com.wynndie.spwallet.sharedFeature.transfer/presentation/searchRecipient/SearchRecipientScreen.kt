@@ -4,17 +4,19 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +34,10 @@ import com.wynndie.spwallet.sharedCore.card_number
 import com.wynndie.spwallet.sharedCore.enter_recipient_card_number
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
+import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.RecipientTile
+import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.recipient
 import com.wynndie.spwallet.sharedCore.recipient_history_empty
@@ -41,9 +46,9 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchRecipientScreenRoot(
-    viewModel: SearchRecipientViewModel
+    viewModel: SearchRecipientViewModel,
+    modifier: Modifier = Modifier
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
 
@@ -54,22 +59,20 @@ fun SearchRecipientScreenRoot(
                 onClickBack = { viewModel.onAction(SearchRecipientAction.NavigateBack) }
             )
         },
-        modifier = Modifier
-            .systemBarsPadding()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { focusManager.clearFocus(true) }
-                )
-            }
+        focusManager = focusManager,
+        modifier = modifier
     ) { innerPadding ->
-        SearchRecipientScreenContent(
-            state = state,
-            onAction = viewModel::onAction,
-            focusManager = focusManager,
-            modifier = Modifier
-                .padding(innerPadding)
-                .imePadding()
-        )
+        ScreenLayout(
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            SearchRecipientScreenContent(
+                state = state,
+                onAction = viewModel::onAction,
+                focusManager = focusManager,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 

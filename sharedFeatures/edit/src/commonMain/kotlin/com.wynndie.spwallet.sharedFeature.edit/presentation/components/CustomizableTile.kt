@@ -34,7 +34,7 @@ import org.jetbrains.compose.resources.stringResource
 fun CustomizableTile(
     color: Color,
     icon: Painter,
-    onClick: () -> Unit,
+//    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -48,7 +48,7 @@ fun CustomizableTile(
                 .size(MaterialTheme.sizes.extraLarge)
                 .clip(MaterialTheme.shapes.medium)
                 .background(color)
-                .clickable(onClick = onClick)
+//                .clickable(onClick = onClick)
         ) {
             Image(
                 painter = icon,
@@ -73,7 +73,7 @@ private fun CustomizableTilePreview() {
         CustomizableTile(
             color = CardColors.TEAL.asColor(),
             icon = CardIcons.CASH.asPainter(),
-            onClick = {},
+//            onClick = {},
             modifier = Modifier.padding(MaterialTheme.spacing.medium)
         )
     }

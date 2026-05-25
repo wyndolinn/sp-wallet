@@ -68,16 +68,17 @@ class TransferBetweenCardsViewModel(
             preferencesRepository.getSelectedSpServer()
         ) { authedCards, unauthedCards, selectedServer ->
 
+            val authedCards = authedCards.filter { it.server == selectedServer }
             val destinationsCards = buildList {
-                addAll(authedCards.filter { it.server == selectedServer }.map(TransferCard::of))
+                addAll(authedCards.map(TransferCard::of))
                 addAll(unauthedCards.filter { it.server == selectedServer }.map(TransferCard::of))
             }
-            val destinationCard = destinationsCards.find { it.id == args.destinationCardId }
 
+            val sourceCard = authedCards.find { it.id == args.sourceCardId }
             _state.update { state ->
                 state.copy(
-                    sourceCards = authedCards.filter { it.server == selectedServer },
-                    destinationCards = destinationCard?.let { listOf(it) } ?: destinationsCards
+                    sourceCards = sourceCard?.let { listOf(it) } ?: authedCards,
+                    destinationCards =  destinationsCards
                 )
             }
         }.launchIn(viewModelScope)
@@ -124,12 +125,12 @@ class TransferBetweenCardsViewModel(
                 amount = transferAmount,
                 comment = "Перевод между счетами"
             ).getOrElse { error ->
-                snackbarController.send(Snackbar(error.asUiText()))
+                snackbarController.send(error.asUiText())
                 _state.update { it.copy(loadingState = LoadingState.Finished) }
                 return@launch
             }
 
-            snackbarController.send(Snackbar(ResourceString(Res.string.transaction_succeed)))
+            snackbarController.send(ResourceString(Res.string.transaction_succeed))
             navEventController.navigate(TransferBetweenCardsNavEvent.NavigateToResult)
 
             _state.update { it.copy(loadingState = LoadingState.Finished) }
