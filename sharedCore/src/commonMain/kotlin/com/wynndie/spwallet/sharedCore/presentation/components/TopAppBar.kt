@@ -9,11 +9,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.ic_arrow_back
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -29,6 +33,9 @@ fun TopAppBar(
     actions: @Composable RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
+
+    val borderColor = MaterialTheme.colorScheme.outlineVariant
+
     TopAppBar(
         navigationIcon = {
             onClickBack?.let {
@@ -57,6 +64,17 @@ fun TopAppBar(
         },
         actions = actions,
         scrollBehavior = scrollBehavior,
-        modifier = modifier
+        colors = TopAppBarDefaults.topAppBarColors().copy(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        modifier = modifier.drawBehind {
+            drawLine(
+                color = borderColor,
+                start = Offset(0f, size.height),
+                end = Offset(size.width, size.height),
+                strokeWidth = 2.dp.toPx()
+            )
+        }
     )
 }
