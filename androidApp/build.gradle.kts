@@ -22,36 +22,16 @@ android {
     }
     buildTypes {
         getByName("debug") {
-            isMinifyEnabled = false
-
+            isDebuggable = true
 
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "_debug"
+            versionNameSuffix = "-debug"
 
             manifestPlaceholders["usesCleartextTraffic"] = true
-            resValue("string", "app_name", "SpWallet (debug)")
+            resValue("string", "app_name", "СП Кошелёк (debug)")
         }
-
-        create("staging") {
-            initWith(getByName("debug"))
-
-            isDebuggable = false
-            isMinifyEnabled = true
-            isShrinkResources = true
-
-            applicationIdSuffix = ".staging"
-            versionNameSuffix = "_staging"
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-
-            manifestPlaceholders["usesCleartextTraffic"] = true
-            resValue("string", "app_name", "SpWallet (staging)")
-        }
-
         getByName("release") {
+            isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
 
