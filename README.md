@@ -17,7 +17,7 @@
 
 
 # Скриншоты
-<img width="180px" height="410px" alt="Screenshot_Home" src="https://github.com/user-attachments/assets/92933a7e-37c3-4004-944c-596decdd2501" />
-<img width="180px" height="410px" alt="Screenshot_TransferByNumber" src="https://github.com/user-attachments/assets/2bf01355-d6f4-45ca-a7f5-dd7aaee74ae9" />
-<img width="180px" height="410px" alt="Screenshot_TransferBetween" src="https://github.com/user-attachments/assets/90e8f7f8-ae6a-47b7-94f7-f7ae4c30dd39" />
-<img width="180px" height="410px" alt="Screenshot_CustomCard" src="https://github.com/user-attachments/assets/8bfb55de-928b-444f-a2a7-2ef0ffcd4141" />
+<img width="180px" height="410px" alt="Screenshot_2026-06-13-17-00-13-172_com wynndie spwallet" src="https://github.com/user-attachments/assets/713147ab-1913-44c8-9efe-7e3de5d16577" />
+<img width="180px" height="410px" alt="Screenshot_2026-06-13-17-00-32-878_com wynndie spwallet" src="https://github.com/user-attachments/assets/809f5305-a06f-4693-a51b-68db791d9919" />
+<img width="180px" height="410px" alt="Screenshot_2026-06-13-17-00-50-660_com wynndie spwallet" src="https://github.com/user-attachments/assets/6bfebb55-8d6d-4d89-9bd2-300827c239dd" />
+<img width="180px" height="410px" alt="Screenshot_2026-06-13-17-01-02-745_com wynndie spwallet" src="https://github.com/user-attachments/assets/e01583b2-a560-402f-9a57-ed4d52e9e79e" />
