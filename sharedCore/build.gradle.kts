@@ -21,9 +21,11 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         androidResources.enable = true
-    }
 
-    jvm()
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+    }
 
     iosX64()
     iosArm64()
