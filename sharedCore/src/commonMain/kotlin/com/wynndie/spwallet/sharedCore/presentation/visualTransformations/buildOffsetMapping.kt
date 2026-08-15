@@ -2,6 +2,21 @@ package com.wynndie.spwallet.sharedCore.presentation.visualTransformations
 
 import androidx.compose.ui.text.input.OffsetMapping
 
+/**
+ * Строит [OffsetMapping] между исходным текстом и его отформатированной версией
+ *
+ * Сопоставляет символы [rawText] с их позициями в [formattedText] путём
+ * последовательного посимвольного сравнения, учитывая добавленные символы
+ *
+ * Функция предполагает, что [rawText] является подпоследовательностью
+ * [formattedText] - то есть форматирование только добавляет символы и не
+ * переставляет и не удаляет символы исходного текста. Если это условие не
+ * выполняется, результат сопоставления не гарантируется
+ *
+ * @param rawText исходный текст до форматирования
+ * @param formattedText результат форматирования [rawText]
+ * @return [OffsetMapping], преобразующий смещения курсора между [rawText] и [formattedText] в обе стороны
+ */
 fun buildOffsetMapping(rawText: String, formattedText: String): OffsetMapping {
 
     val originalToTransformedOffsets = mutableListOf<Int>()
