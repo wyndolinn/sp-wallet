@@ -15,20 +15,20 @@ import io.ktor.http.HttpHeaders
 import kotlinx.serialization.Serializable
 
 class TransferRepositoryImpl(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
 ) : TransferRepository {
 
     override suspend fun makeTransaction(
         authKey: String,
         receiver: String,
         amount: Long,
-        comment: String
+        comment: String,
     ): Outcome<Long, Error.Network> {
 
         val transfer = TransferDto(
             receiver = receiver,
             amount = amount,
-            comment = comment
+            comment = comment,
         )
 
         return safeCall<CardBalanceDto> {
@@ -44,7 +44,7 @@ class TransferRepositoryImpl(
         private data class TransferDto(
             val receiver: String,
             val amount: Long,
-            val comment: String
+            val comment: String,
         )
     }
 }

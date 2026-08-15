@@ -9,17 +9,17 @@ import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.resetValidationState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.select
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.models.UiText
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator
@@ -41,7 +41,7 @@ class AuthViewModel(
     private val uuidValidator: UuidValidator,
     private val tokenValidator: TokenValidator,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
@@ -51,27 +51,35 @@ class AuthViewModel(
     init {
         combine(
             cardsRepository.getUnauthedCards(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { cards, selectedSever ->
             _state.update { state ->
                 state.copy(cards = cards.filter { it.server == selectedSever })
             }
         }.launchIn(viewModelScope)
 
-        observeValidationStates(
-            _state.observeInputField(
-                inputField = { it.idInputFieldState },
-                validation = { uuidValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
-            ),
-            _state.observeInputField(
-                inputField = { it.tokenInputFieldState },
-                validation = { tokenValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
-            )
-        ).onEach { isAllValid ->
-            _state.update { it.copy(isAuthButtonEnabled = isAllValid) }
-        }.launchIn(viewModelScope)
+        _state
+            .select { it.idInputFieldState.value }
+            .onEach {
+                _state.resetValidationState(
+                    inputField = { it.idInputFieldState },
+                    validator = uuidValidator::validate,
+                ) { copy(idInputFieldState = it) }
+            }.launchIn(viewModelScope)
+
+        _state
+            .select { it.tokenInputFieldState.value }
+            .onEach {
+                _state.resetValidationState(
+                    inputField = { it.tokenInputFieldState },
+                    validator = tokenValidator::validate,
+                ) { copy(tokenInputFieldState = it) }
+            }.launchIn(viewModelScope)
+
+        _state.observeValidStates(
+            _state.select { it.idInputFieldState.hasError },
+            _state.select { it.tokenInputFieldState.hasError },
+        ) { copy(isAuthButtonEnabled = it) }.launchIn(viewModelScope)
     }
 
 
@@ -93,9 +101,9 @@ class AuthViewModel(
             _state.update { it.copy(loadingState = LoadingState.Loading) }
 
             authCardUseCase(
-                server = preferencesRepository.getSelectedSpServer().first(),
+                server = preferencesRepository.getSelectedServer().first(),
                 id = id,
-                token = token
+                token = token,
             ).getOrElse { error ->
                 snackbarController.send(error.asUiText())
                 _state.update { it.copy(loadingState = LoadingState.Finished) }
@@ -107,11 +115,11 @@ class AuthViewModel(
             _state.update { state ->
                 state.copy(
                     idInputFieldState = state.idInputFieldState.copy(
-                        value = TextFieldValue("")
+                        value = TextFieldValue(""),
                     ),
                     tokenInputFieldState = state.tokenInputFieldState.copy(
-                        value = TextFieldValue("")
-                    )
+                        value = TextFieldValue(""),
+                    ),
                 )
             }
 
@@ -121,29 +129,29 @@ class AuthViewModel(
     }
 
     private fun changeIdValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Uuid.predicate)
-            .cutOffAt(state.value.idInputFieldState.maxLength) ?: return
-
         _state.update { state ->
+            val filteredValue = value
+                .filter(InputFilters.Uuid)
+                .cutOffAt(state.idInputFieldState.maxLength) ?: return@update state
+
             state.copy(
                 idInputFieldState = state.idInputFieldState.copy(
-                    value = value
-                )
+                    value = filteredValue,
+                ),
             )
         }
     }
 
     private fun changeTokenValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Base64.predicate)
-            .cutOffAt(state.value.tokenInputFieldState.maxLength) ?: return
-
         _state.update { state ->
+            val filteredValue = value
+                .filter(InputFilters.Base64)
+                .cutOffAt(state.tokenInputFieldState.maxLength) ?: return@update state
+
             state.copy(
                 tokenInputFieldState = state.tokenInputFieldState.copy(
-                    value = value
-                )
+                    value = filteredValue,
+                ),
             )
         }
     }
@@ -151,17 +159,15 @@ class AuthViewModel(
     private fun clearIdFocus() {
         _state.validateInputField(
             inputField = { it.idInputFieldState },
-            validation = { uuidValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
-        )
+            validator = uuidValidator::validate,
+        ) { copy(idInputFieldState = it) }
     }
 
     private fun clearTokenFocus() {
         _state.validateInputField(
             inputField = { it.tokenInputFieldState },
-            validation = { tokenValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
-        )
+            validator = tokenValidator::validate,
+        ) { copy(tokenInputFieldState = it) }
     }
 
     private fun toggleHelpSheet(isOpen: Boolean) {

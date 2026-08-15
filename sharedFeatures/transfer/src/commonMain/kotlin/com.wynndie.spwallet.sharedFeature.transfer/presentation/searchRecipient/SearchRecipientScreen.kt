@@ -41,7 +41,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SearchRecipientScreenRoot(
     viewModel: SearchRecipientViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
@@ -50,20 +50,20 @@ fun SearchRecipientScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.recipient),
-                onClickBack = { viewModel.onAction(SearchRecipientAction.NavigateBack) }
+                onClickBack = { viewModel.onAction(SearchRecipientAction.NavigateBack) },
             )
         },
         focusManager = focusManager,
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         ScreenLayout(
-            contentPadding = innerPadding.add(MaterialTheme.spacing.medium)
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
         ) {
             SearchRecipientScreenContent(
                 state = state,
                 onAction = viewModel::onAction,
                 focusManager = focusManager,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
@@ -74,10 +74,10 @@ private fun SearchRecipientScreenContent(
     state: SearchRecipientState,
     onAction: (SearchRecipientAction) -> Unit,
     focusManager: FocusManager,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         InputField(
             value = state.recipientInputFieldState.value,
@@ -85,20 +85,20 @@ private fun SearchRecipientScreenContent(
             placeholder = stringResource(Res.string.card_number),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus(true) }
+                onDone = { focusManager.clearFocus(true) },
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium),
         )
 
         when {
             state.recipients.isNotEmpty() -> {
                 LazyColumn(
-                    contentPadding = PaddingValues(vertical = MaterialTheme.spacing.extraLarge)
+                    contentPadding = PaddingValues(vertical = MaterialTheme.spacing.extraLarge),
                 ) {
                     items(state.recipients) { recipient ->
                         RecipientTile(
@@ -109,7 +109,7 @@ private fun SearchRecipientScreenContent(
                             onClick = {
                                 onAction(SearchRecipientAction.SelectRecipient(recipient.number))
                             },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
@@ -125,7 +125,7 @@ private fun SearchRecipientScreenContent(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = MaterialTheme.spacing.extraLarge)
+                        .padding(vertical = MaterialTheme.spacing.extraLarge),
                 )
             }
 
@@ -137,19 +137,19 @@ private fun SearchRecipientScreenContent(
                         .fillMaxWidth()
                         .padding(
                             horizontal = MaterialTheme.spacing.medium,
-                            vertical = MaterialTheme.spacing.extraLarge
-                        )
+                            vertical = MaterialTheme.spacing.extraLarge,
+                        ),
                 ) {
                     Text(
                         text = stringResource(Res.string.enter_recipient_card_number),
                         style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
 
                     Text(
                         text = stringResource(Res.string.recipient_history_empty),
                         style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }

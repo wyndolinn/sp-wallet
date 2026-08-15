@@ -16,8 +16,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
@@ -40,14 +46,16 @@ import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputF
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.presentation.visualTransformations.AmountVisualTransformation
 import com.wynndie.spwallet.sharedCore.save
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizableTile
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.CustomizationSheet
 import com.wynndie.spwallet.sharedFeature.edit.presentation.components.DeleteCardDialog
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -55,28 +63,48 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CustomCardScreenRoot(
     viewModel: CustomCardViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
 
-    if (state.isCustomizationSheetVisible) {
+    val customizationSheetState = rememberModalBottomSheetState()
+    var isSheetVisible by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(state.isCustomizationSheetVisible) {
+        if (!state.isCustomizationSheetVisible) {
+            scope
+                .launch { customizationSheetState.hide() }
+                .invokeOnCompletion {
+                    if (!customizationSheetState.isVisible) {
+                        isSheetVisible = false
+                    }
+                }
+        } else isSheetVisible = true
+    }
+
+    if (isSheetVisible) {
         CustomizationSheet(
-            onDismiss = { viewModel.onAction(CustomCardAction.ToggleCustomizationSheet(false)) },
+            sheetState = customizationSheetState,
+            onDismiss = {
+                viewModel.onAction(CustomCardAction.ToggleCustomizationSheet(false))
+            },
             selectedColor = state.selectedColorChip,
             onColorClick = { viewModel.onAction(CustomCardAction.SelectColor(it)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
+
 
     if (state.isDeleteDialogVisible) {
         DeleteCardDialog(
             title = stringResource(Res.string.delete_card_title),
             description = stringResource(Res.string.delete_card_description),
-            onConfirm = { viewModel.onAction(CustomCardAction.DeleteCard) },
-            onDismiss = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(false)) }
+            onConfirm = { viewModel.onAction(CustomCardAction.DeleteCard(state.card)) },
+            onDismiss = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(false)) },
         )
     }
 
@@ -88,31 +116,31 @@ fun CustomCardScreenRoot(
                 actions = {
                     if (state.card.id.isNotBlank()) {
                         IconButton(
-                            onClick = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(true)) }
+                            onClick = { viewModel.onAction(CustomCardAction.ToggleDeleteDialog(true)) },
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_delete),
                                 contentDescription = stringResource(Res.string.delete),
-                                tint = MaterialTheme.colorScheme.error
+                                tint = MaterialTheme.colorScheme.error,
                             )
                         }
                     }
-                }
+                },
             )
         },
         loadingState = state.screenLoadingState,
         focusManager = focusManager,
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         ScreenLayout(
             contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
             CustomCardScreen(
                 state = state,
                 onAction = viewModel::onAction,
                 focusManager = focusManager,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
@@ -123,11 +151,11 @@ private fun CustomCardScreen(
     state: CustomCardState,
     onAction: (CustomCardAction) -> Unit,
     focusManager: FocusManager,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
-        modifier = modifier
+        modifier = modifier,
     ) {
         CustomizableTile(
             color = state.card.color.asColor(),
@@ -137,13 +165,13 @@ private fun CustomCardScreen(
                 .clickable(
                     interactionSource = MutableInteractionSource(),
                     indication = null,
-                    onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) }
-                )
+                    onClick = { onAction(CustomCardAction.ToggleCustomizationSheet(true)) },
+                ),
         )
 
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
         ) {
             InputField(
                 value = state.nameInputFieldState.value,
@@ -153,13 +181,13 @@ private fun CustomCardScreen(
                 hasError = state.nameInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.moveFocus(FocusDirection.Down)
-                    }
-                )
+                    },
+                ),
             )
 
             InputField(
@@ -168,25 +196,26 @@ private fun CustomCardScreen(
                 label = stringResource(Res.string.balance),
                 supportingText = state.balanceInputFieldState.supportingText?.asString(),
                 hasError = state.balanceInputFieldState.hasError,
+                visualTransformation = AmountVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                    }
-                )
+                    },
+                ),
             )
         }
 
         Button(
             text = stringResource(Res.string.save),
-            onClick = { onAction(CustomCardAction.SaveCard) },
+            onClick = { onAction(CustomCardAction.SaveCard(state.card)) },
             enabled = state.isSaveButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium),
         )
     }
 }
@@ -201,7 +230,7 @@ fun CustomCardScreenPreview() {
             focusManager = LocalFocusManager.current,
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
 }

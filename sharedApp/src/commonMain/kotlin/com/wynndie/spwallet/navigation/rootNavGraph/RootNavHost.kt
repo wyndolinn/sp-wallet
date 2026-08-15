@@ -10,14 +10,14 @@ import com.wynndie.spwallet.navigation.rootNavGraph.graphs.transferNavGraph
 
 @Composable
 fun RootNavHost(
-    startDestination: Route
+    startDestination: Route,
 ) {
 
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ) {
         homeNavGraph(navController)
         transferNavGraph(navController)

@@ -7,5 +7,5 @@ data class UnauthedCardDto(
     val id: String,
     val name: String,
     val number: String,
-    val color: Int
+    val color: Int,
 )

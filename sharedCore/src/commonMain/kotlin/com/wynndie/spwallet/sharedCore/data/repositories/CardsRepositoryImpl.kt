@@ -22,11 +22,11 @@ import kotlinx.coroutines.flow.map
 
 class CardsRepositoryImpl(
     private val httpClient: HttpClient,
-    private val database: WalletDatabase
+    private val database: WalletDatabase,
 ) : CardsRepository {
 
     override suspend fun getCardBalance(
-        authKey: String
+        authKey: String,
     ): Outcome<Long, Error.Network> {
         return safeCall<CardBalanceDto> {
             httpClient.get(urlString = "$SP_WORLDS_URL/card") {
@@ -37,7 +37,7 @@ class CardsRepositoryImpl(
 
 
     override suspend fun insertCustomCard(
-        card: CustomCard
+        card: CustomCard,
     ) {
         database.cardsDao.insertCustomCard(card.toEntity())
     }
@@ -54,14 +54,14 @@ class CardsRepositoryImpl(
 
 
     override suspend fun insertAuthedCard(
-        card: AuthedCard
+        card: AuthedCard,
     ) {
         database.cardsDao.insertAuthedCard(card.toEntity())
     }
 
     override fun getAuthedCards(): Flow<List<AuthedCard>> {
-        return database.cardsDao.getAuthedCards().map {
-            entities -> entities.map { it.toDomain() }
+        return database.cardsDao.getAuthedCards().map { entities ->
+            entities.map { it.toDomain() }
         }
     }
 
@@ -71,7 +71,7 @@ class CardsRepositoryImpl(
 
 
     override suspend fun insertUnauthedCard(
-        card: UnauthedCard
+        card: UnauthedCard,
     ) {
         database.cardsDao.insertUnauthedCard(card.toEntity())
     }

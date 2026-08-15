@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {
@@ -18,15 +19,24 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         androidResources.enable = true
+
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
     }
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
             api(projects.sharedCore)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlin.coroutines.test)
+            implementation(libs.assertk)
         }
     }
 }

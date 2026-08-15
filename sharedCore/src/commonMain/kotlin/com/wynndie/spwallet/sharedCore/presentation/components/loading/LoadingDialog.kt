@@ -16,16 +16,16 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 @Composable
 fun LoadingDialog() {
     BasicAlertDialog(
-        onDismissRequest = {}
+        onDismissRequest = {},
     ) {
         Box(
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             LoadingIndicator(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraLarge)
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(MaterialTheme.spacing.large)
+                    .padding(MaterialTheme.spacing.large),
             )
         }
     }

@@ -12,7 +12,7 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
-import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.AmountValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNumberValidator
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
@@ -31,7 +31,7 @@ val coreSharedModule = module {
     singleOf(::RecipientRepositoryImpl).bind<RecipientRepository>()
     singleOf(::PreferencesRepositoryImpl).bind<PreferencesRepository>()
 
-    singleOf(::BalanceValidator)
+    singleOf(::AmountValidator)
     singleOf(::CardNameValidator)
     singleOf(::CardNumberValidator)
 

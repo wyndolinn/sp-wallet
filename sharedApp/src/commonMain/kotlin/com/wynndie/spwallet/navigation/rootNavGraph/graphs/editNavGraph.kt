@@ -18,10 +18,10 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.editNavGraph(
-    navController: NavController
+    navController: NavController,
 ) {
     navigation<Route.EditNavGraph>(
-        startDestination = Route.EditNavGraph.CustomCard()
+        startDestination = Route.EditNavGraph.CustomCard(),
     ) {
         composable<Route.EditNavGraph.CustomCard> { navBackStackEntry ->
             ObserveNavEvent<CustomCardNavEvent> { navEvent ->
@@ -36,7 +36,7 @@ fun NavGraphBuilder.editNavGraph(
             CustomCardScreenRoot(
                 viewModel = koinViewModel<CustomCardViewModel> {
                     parametersOf(CustomCardParams(args.cardId))
-                }
+                },
             )
         }
 
@@ -50,15 +50,15 @@ fun NavGraphBuilder.editNavGraph(
                     is RecipientsNavEvent.NavigateToTransfer -> {
                         navController.navigate(
                             Route.TransferNavGraph.TransferByCardNumber(
-                                recipientNumber = navEvent.number
-                            )
+                                recipientNumber = navEvent.number,
+                            ),
                         )
                     }
                 }
             }
 
             RecipientsScreenRoot(
-                viewModel = koinViewModel<RecipientsViewModel>()
+                viewModel = koinViewModel<RecipientsViewModel>(),
             )
         }
     }

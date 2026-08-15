@@ -1,10 +1,10 @@
 package com.wynndie.spwallet.sharedCore.domain.repositories
 
-import com.wynndie.spwallet.sharedCore.domain.outcome.Error
-import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
+import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import kotlinx.coroutines.flow.Flow
 
 interface CardsRepository {

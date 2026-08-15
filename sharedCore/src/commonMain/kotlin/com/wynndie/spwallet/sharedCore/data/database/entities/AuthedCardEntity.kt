@@ -13,5 +13,5 @@ data class AuthedCardEntity(
     val number: String,
     val balance: Long,
     val color: Int,
-    val icon: Int
+    val icon: Int,
 )

@@ -38,7 +38,7 @@ fun RecipientTile(
     title: String,
     modifier: Modifier = Modifier,
     actionIcon: Painter = painterResource(Res.drawable.ic_arrow_right),
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -47,8 +47,8 @@ fun RecipientTile(
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
             .padding(
                 horizontal = MaterialTheme.spacing.medium,
-                vertical = MaterialTheme.spacing.extraSmall
-            )
+                vertical = MaterialTheme.spacing.extraSmall,
+            ),
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -56,12 +56,12 @@ fun RecipientTile(
                 .size(MaterialTheme.sizes.medium)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .border(2.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
+                .border(2.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape),
         ) {
             Icon(
                 painter = painterResource(Res.drawable.ic_person),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
@@ -69,25 +69,25 @@ fun RecipientTile(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium),
         ) {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
 
         Icon(
             painter = actionIcon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

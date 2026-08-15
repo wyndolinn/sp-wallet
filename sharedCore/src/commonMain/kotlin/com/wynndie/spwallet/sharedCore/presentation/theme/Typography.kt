@@ -20,36 +20,36 @@ val RobotoFontFamily
     @Composable get() = FontFamily(
         Font(
             resource = Res.font.roboto_regular,
-            weight = FontWeight.Normal
+            weight = FontWeight.Normal,
         ),
         Font(
             resource = Res.font.roboto_medium,
-            weight = FontWeight.Medium
+            weight = FontWeight.Medium,
         ),
         Font(
             resource = Res.font.roboto_semi_bold,
-            weight = FontWeight.SemiBold
+            weight = FontWeight.SemiBold,
         ),
         Font(
             resource = Res.font.roboto_bold,
-            weight = FontWeight.Bold
-        )
+            weight = FontWeight.Bold,
+        ),
     )
 
 val UbuntuFontFamily
     @Composable get() = FontFamily(
         Font(
             resource = Res.font.ubuntu_regular,
-            weight = FontWeight.Normal
+            weight = FontWeight.Normal,
         ),
         Font(
             resource = Res.font.ubuntu_medium,
-            weight = FontWeight.Medium
+            weight = FontWeight.Medium,
         ),
         Font(
             resource = Res.font.ubuntu_bold,
-            weight = FontWeight.Bold
-        )
+            weight = FontWeight.Bold,
+        ),
     )
 
 val Typography
@@ -57,24 +57,24 @@ val Typography
         headlineLarge = TextStyle(
             fontFamily = UbuntuFontFamily,
             fontWeight = FontWeight.Bold,
-            fontSize = 32.sp
+            fontSize = 32.sp,
         ),
         headlineMedium = TextStyle(
             fontFamily = UbuntuFontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 22.sp
+            fontSize = 22.sp,
         ),
         headlineSmall = TextStyle(
             fontFamily = UbuntuFontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 18.sp
+            fontSize = 18.sp,
         ),
 
 
         titleLarge = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            fontSize = 18.sp,
         ),
         titleMedium = TextStyle(
             fontFamily = RobotoFontFamily,
@@ -84,35 +84,35 @@ val Typography
         titleSmall = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         ),
 
 
         bodyMedium = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         ),
         bodySmall = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 14.sp
+            fontSize = 14.sp,
         ),
 
 
         labelLarge = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp
+            fontSize = 14.sp,
         ),
         labelMedium = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 12.sp
+            fontSize = 12.sp,
         ),
         labelSmall = TextStyle(
             fontFamily = RobotoFontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
-        )
+            fontSize = 12.sp,
+        ),
     )

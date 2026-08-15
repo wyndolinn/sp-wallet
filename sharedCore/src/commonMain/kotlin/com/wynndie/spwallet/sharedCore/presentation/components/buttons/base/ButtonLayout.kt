@@ -9,33 +9,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.font.FontWeight
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
 @Composable
 internal fun ButtonLayout(
     text: String,
     leadingIcon: Painter? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(
             space = MaterialTheme.spacing.extraSmall,
-            alignment = Alignment.CenterHorizontally
+            alignment = Alignment.CenterHorizontally,
         ),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         leadingIcon?.let {
             Icon(
                 painter = it,
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
         Text(
             text = text,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge,
         )
     }
 }

@@ -4,30 +4,32 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.outcome.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
-import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
-import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
+import com.wynndie.spwallet.sharedCore.domain.validators.AmountValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.extensions.dropWhile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.resetValidationState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.select
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.models.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.transaction_succeed
+import com.wynndie.spwallet.sharedFeature.transfer.domain.constants.TransferConstants
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,16 +42,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransferByCardViewModel(
-    userRepository: UserRepository,
-    cardsRepository: CardsRepository,
     private val args: TransferByCardParams,
+    private val userRepository: UserRepository,
+    private val cardsRepository: CardsRepository,
     private val recipientRepository: RecipientRepository,
     private val preferencesRepository: PreferencesRepository,
     private val transferByCardUseCase: TransferByCardUseCase,
-    private val transferAmountValidator: BalanceValidator,
+    private val amountValidator: AmountValidator,
     private val commentValidator: TransferCommentValidator,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TransferByCardState())
@@ -57,53 +59,11 @@ class TransferByCardViewModel(
 
 
     init {
-        userRepository.getAuthedUsers().onEach { users ->
-            val user = users.firstOrNull() ?: return@onEach
-            val prefix = "${user.name}: "
-            _state.update { state ->
-                state.copy(
-                    user = user,
-                    commentPrefix = prefix,
-                    commentInputFieldState = state.commentInputFieldState.copy(
-                        maxLength = state.commentInputFieldState.maxLength - prefix.length
-                    )
-                )
-            }
-        }.launchIn(viewModelScope)
-
-        combine(
-            cardsRepository.getAuthedCards(),
-            preferencesRepository.getSelectedSpServer()
-        ) { authedCards, server ->
-            val sourceCards = authedCards.filter { it.server == server }
-            val selectedCard = authedCards.find { it.id == args.sourceCardId }
-            _state.update { state ->
-                state.copy(
-                    sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards
-                )
-            }
-        }.launchIn(viewModelScope)
-
-        observeValidationStates(
-            _state.observeInputField(
-                inputField = { it.amountInputFieldState },
-                validation = {
-                    val validationValues = BalanceValidationValues(
-                        value = _state.value.amountInputFieldState.value.text
-                    )
-                    transferAmountValidator.validate(validationValues)
-                },
-                updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
-            ),
-            _state.observeInputField(
-                inputField = { it.commentInputFieldState },
-                validation = { commentValidator.validate(it) },
-                updateState = { value -> _state.update { it.copy(commentInputFieldState = value) } }
-            )
-        ).onEach { isAllValid ->
-            _state.update { it.copy(isTransferButtonEnabled = isAllValid) }
-        }.launchIn(viewModelScope)
+        observeUser()
+        observerCards()
+        observeInputValidation()
     }
+
 
     fun onAction(action: TransferByCardAction) {
         when (action) {
@@ -120,108 +80,87 @@ class TransferByCardViewModel(
 
     fun updateRecipient(cardNumber: String) {
         viewModelScope.launch {
-            _state.update {
-                it.copy(loadingState = LoadingState.Loading)
-            }
-
-            _state.update { state ->
-                state.copy(
-                    recipient = state.recipient.copy(
-                        number = cardNumber
-                    )
-                )
-            }
-
-            _state.update {
-                it.copy(loadingState = LoadingState.Finished)
-            }
-        }
-    }
-
-    private fun makeTransfer() {
-        viewModelScope.launch {
             _state.update { it.copy(loadingState = LoadingState.Loading) }
 
-            val sourceCardIndex = _state.value.selectedSourceCard
-            val sourceCard = _state.value.sourceCards[sourceCardIndex]
-
-            val commentValue = _state.value.commentInputFieldState.value.text
-            val prefix = _state.value.commentPrefix
-            val comment = "$prefix${commentValue.ifBlank { "Без комментария" }}"
-
-            transferByCardUseCase(
-                card = sourceCard,
-                receiver = _state.value.recipient.number,
-                amount = _state.value.amountInputFieldState.value.text,
-                comment = comment
-            ).onError {
-                snackbarController.send(it.asUiText())
-            }.onSuccess {
-                recipientRepository.insertRecipient(
-                    recipientCard = emptyRecipientCard.copy(
-                        server = preferencesRepository.getSelectedSpServer().first(),
-                        number = _state.value.recipient.number
-                    )
-                )
-
-                snackbarController.send(ResourceString(Res.string.transaction_succeed))
-                navEventController.navigate(TransferByCardNavEvent.NavigateBack)
+            _state.update { state ->
+                state.copy(recipient = state.recipient.copy(number = cardNumber))
             }
 
             _state.update { it.copy(loadingState = LoadingState.Finished) }
         }
     }
 
-    private fun changeAmountValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Numbers.predicate)
-            .dropFirst('0') { it.length > 1 }
-            .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
 
-        _state.update { state ->
-            state.copy(
-                amountInputFieldState = state.amountInputFieldState.copy(
-                    value = value
+    private fun makeTransfer() {
+        viewModelScope.launch {
+            _state.update { it.copy(loadingState = LoadingState.Loading) }
+            val currentState = _state.value
+
+            val commentValue = currentState.commentInputFieldState.value.text
+            val prefix = currentState.commentPrefix
+            val comment = "$prefix${commentValue.ifBlank { "Без комментария" }}"
+
+            transferByCardUseCase(
+                card = currentState.sourceCards[currentState.selectedSourceCardIndex],
+                receiver = currentState.recipient.number,
+                amount = currentState.amountInputFieldState.value.text,
+                comment = comment,
+            ).onSuccess {
+                recipientRepository.insertRecipient(
+                    recipientCard = emptyRecipientCard.copy(
+                        server = preferencesRepository.getSelectedServer().first(),
+                        number = currentState.recipient.number,
+                    ),
                 )
-            )
+
+                snackbarController.send(ResourceString(Res.string.transaction_succeed))
+                navEventController.navigate(TransferByCardNavEvent.NavigateBack)
+            }.onError { snackbarController.send(it.asUiText()) }
+
+            _state.update { it.copy(loadingState = LoadingState.Finished) }
+        }
+    }
+
+    private fun changeAmountValue(value: TextFieldValue) {
+        _state.update { state ->
+            val filteredValue = value
+                .filter(InputFilters.Numbers)
+                .dropWhile('0') { it.length > 1 }
+                .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return@update state
+
+            state.copy(amountInputFieldState = state.amountInputFieldState.copy(value = filteredValue))
         }
     }
 
     private fun changeCommentValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Text.predicate)
-            .trimSpaces()
-            .cutOffAt(CoreConstants.MAX_COMMENT_LENGTH) ?: return
-
         _state.update { state ->
-            state.copy(
-                commentInputFieldState = state.commentInputFieldState.copy(
-                    value = value
-                )
-            )
+            val filteredValue = value
+                .filter(InputFilters.Text)
+                .trimSpaces()
+                .cutOffAt(TransferConstants.MAX_COMMENT_LENGTH) ?: return@update state
+
+            state.copy(commentInputFieldState = state.commentInputFieldState.copy(value = filteredValue))
         }
     }
 
     private fun clearAmountFocus() {
+        val value = _state.value.amountInputFieldState.value.text
+        val maxValue = _state.value.sourceCards[_state.value.selectedSourceCardIndex].balance
+
         _state.validateInputField(
             inputField = { it.amountInputFieldState },
-            validation = {
-                val validationValues = BalanceValidationValues(
-                    value = _state.value.amountInputFieldState.value.text,
-                    maxValue = _state.value.sourceCards[_state.value.selectedSourceCard].balance
-                )
-                transferAmountValidator.validate(validationValues)
+            validator = {
+                val validationValues = ValidationValues(value = value, maxValue = maxValue)
+                amountValidator.validate(validationValues)
             },
-            updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
-        )
+        ) { copy(amountInputFieldState = it) }
     }
 
     private fun clearCommentFocus() {
         _state.validateInputField(
             inputField = { it.commentInputFieldState },
-            validation = { commentValidator.validate(it) },
-            updateState = { value -> _state.update { it.copy(commentInputFieldState = value) } }
-        )
+            validator = commentValidator::validate,
+        ) { copy(commentInputFieldState = it) }
     }
 
     private fun goBack() {
@@ -237,6 +176,66 @@ class TransferByCardViewModel(
     }
 
     private fun selectSourceCard(index: Int) {
-        _state.update { it.copy(selectedSourceCard = index) }
+        _state.update { it.copy(selectedSourceCardIndex = index) }
+    }
+
+
+    private fun observeInputValidation() {
+        combine(
+            _state.select { it.amountInputFieldState.value },
+            _state.select { it.sourceCards },
+            _state.select { it.selectedSourceCardIndex }
+        ) { _, cards, cardIndex ->
+            val maxValue = cards[cardIndex].balance
+            _state.resetValidationState(
+                inputField = { it.amountInputFieldState },
+                validator = { amountValidator.validate(it.copy(maxValue = maxValue)) }
+            ) { copy(amountInputFieldState = it) }
+        }.launchIn(viewModelScope)
+
+        _state
+            .select { it.commentInputFieldState.value }
+            .onEach {
+                _state.resetValidationState(
+                    inputField = { it.commentInputFieldState },
+                    validator = commentValidator::validate
+                ) { copy(commentInputFieldState = it) }
+            }.launchIn(viewModelScope)
+
+        _state.observeValidStates(
+            _state.select { it.amountInputFieldState.hasError },
+            _state.select { it.commentInputFieldState.hasError },
+        ) { copy(isTransferButtonEnabled = it) }.launchIn(viewModelScope)
+    }
+
+    private fun observerCards() {
+        combine(
+            cardsRepository.getAuthedCards(),
+            preferencesRepository.getSelectedServer(),
+        ) { authedCards, server ->
+            val sourceCards = authedCards.filter { it.server == server }
+            val selectedCard = authedCards.find { it.id == args.sourceCardId }
+            _state.update { state ->
+                state.copy(
+                    sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards,
+                )
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun observeUser() {
+        userRepository.getAuthedUsers().onEach { users ->
+            val user = users.firstOrNull() ?: return@onEach
+            val prefix = "${user.name}: "
+            _state.update { state ->
+                state.copy(
+                    user = user,
+                    commentPrefix = prefix,
+                    commentInputFieldState = state.commentInputFieldState.copy(
+                        maxLength = state.commentInputFieldState.maxLength - prefix.length,
+                    ),
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 }

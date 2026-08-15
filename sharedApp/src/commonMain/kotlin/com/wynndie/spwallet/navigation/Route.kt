@@ -28,7 +28,7 @@ sealed interface Route {
         @Serializable
         data class TransferByCardNumber(
             val cardId: String = "",
-            val recipientNumber: String = ""
+            val recipientNumber: String = "",
         )
 
         @Serializable

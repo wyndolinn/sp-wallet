@@ -32,7 +32,7 @@ fun TopAppBar(
     onClickBack: (() -> Unit)? = null,
     titleSlots: @Composable RowScope.() -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    scrollBehavior: TopAppBarScrollBehavior? = null
+    scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
 
     val borderColor = MaterialTheme.colorScheme.outlineVariant
@@ -43,7 +43,7 @@ fun TopAppBar(
                 IconButton(onClick = it) {
                     Icon(
                         painter = painterResource(Res.drawable.ic_arrow_back),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
@@ -61,7 +61,7 @@ fun TopAppBar(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         },
@@ -69,15 +69,15 @@ fun TopAppBar(
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors().copy(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         ),
         modifier = modifier.drawBehind {
             drawLine(
                 color = borderColor,
                 start = Offset(0f, size.height),
                 end = Offset(size.width, size.height),
-                strokeWidth = 2.dp.toPx()
+                strokeWidth = 2.dp.toPx(),
             )
-        }
+        },
     )
 }

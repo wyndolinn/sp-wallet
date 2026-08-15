@@ -1,7 +1,6 @@
 package com.wynndie.spwallet
 
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -34,7 +33,7 @@ fun App() {
                 message = snackbar.message.asStringAsync(),
                 actionLabel = snackbar.actionLabel?.asStringAsync(),
                 withDismissAction = snackbar.withDismissAction,
-                duration = snackbar.duration
+                duration = snackbar.duration,
             )
         }
     }
@@ -45,15 +44,15 @@ fun App() {
             snackbarHost = {
                 SnackbarHost(
                     hostState = snackbarHostState,
-                    modifier = Modifier.safeDrawingPadding()
+                    modifier = Modifier.safeDrawingPadding(),
                 ) {
                     Snackbar(snackbarData = it)
                 }
             },
-            contentWindowInsets = WindowInsets(0.dp)
+            contentWindowInsets = WindowInsets(0.dp),
         ) { _ ->
             RootNavHost(
-                startDestination = Route.HomeNavGraph
+                startDestination = Route.HomeNavGraph,
             )
         }
     }

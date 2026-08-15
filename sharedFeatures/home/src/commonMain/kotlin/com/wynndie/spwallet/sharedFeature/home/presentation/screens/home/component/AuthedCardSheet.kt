@@ -19,17 +19,16 @@ import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.ic_arrow_front
-import com.wynndie.spwallet.sharedCore.ic_people
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.LabeledIconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.transfer_between_cards
 import com.wynndie.spwallet.sharedCore.transfer_by_number
@@ -46,51 +45,52 @@ fun AuthedCardSheet(
     onDeleteButtonClick: () -> Unit,
     onTransferBetweenCardsClick: (String) -> Unit,
     onTransferButtonClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BottomSheet(
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
     ) {
         var currentPage by remember { mutableStateOf(page) }
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
+            modifier = modifier,
         ) {
             BaseCarousel(
                 items = cards,
                 page = page,
                 onSwipePage = { currentPage = it },
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
-                pageSpacing = MaterialTheme.spacing.medium
+                pageSpacing = MaterialTheme.spacing.medium,
             ) { card ->
+                val balance = remember { DisplayableOreValue.of(card.balance) }
                 TransferCardTile(
                     headline = "${card.number} • ${card.name}",
                     title = stringResource(Res.string.x_of_ore, card.balance)
                         .asFormattedAmount().uppercase(),
-                    text = card.balance.asDisplayableOre().formatted,
+                    text = balance.asString(),
                     icon = card.icon.asPainter(),
                     color = card.color.asColor(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
             ) {
                 LabeledIconButton(
                     icon = painterResource(Res.drawable.ic_arrow_front),
                     label = stringResource(Res.string.transfer_by_number),
                     onClick = { onTransferButtonClick(cards[currentPage].id) },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
 
                 LabeledIconButton(
                     icon = painterResource(Res.drawable.ic_transaction),
                     label = stringResource(Res.string.transfer_between_cards),
                     onClick = { onTransferBetweenCardsClick(cards[currentPage].id) },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
 
@@ -100,7 +100,7 @@ fun AuthedCardSheet(
                 onClick = onDeleteButtonClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .padding(horizontal = MaterialTheme.spacing.medium),
             )
         }
     }

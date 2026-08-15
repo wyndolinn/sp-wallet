@@ -7,10 +7,10 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class SearchRecipientViewModel(
     recipientRepository: RecipientRepository,
     preferencesRepository: PreferencesRepository,
-    private val navEventController: NavEventController
+    private val navEventController: NavEventController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchRecipientState())
@@ -35,7 +35,7 @@ class SearchRecipientViewModel(
     init {
         combine(
             recipientRepository.getRecipients(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { recipients, server ->
             cachedRecipients = recipients.filter { it.server == server }
             _state.update { it.copy(recipients = cachedRecipients) }
@@ -55,7 +55,7 @@ class SearchRecipientViewModel(
                     val cardEntered = query.length == 5 && query.all { it.isDigit() }
                     state.copy(
                         recipients = recipients,
-                        isNewRecipient = cardEntered && recipients.isEmpty()
+                        isNewRecipient = cardEntered && recipients.isEmpty(),
                     )
                 }
             }
@@ -80,22 +80,22 @@ class SearchRecipientViewModel(
     private fun selectRecipient(card: String) {
         viewModelScope.launch {
             navEventController.navigate(
-                SearchRecipientNavEvent.NavigateToTransfer(card)
+                SearchRecipientNavEvent.NavigateToTransfer(card),
             )
         }
     }
 
     private fun changeRecipientValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Text.predicate)
-            .trimSpaces()
-            .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
-
         _state.update { state ->
+            val filteredValue = value
+                .filter(InputFilters.Text)
+                .trimSpaces()
+                .cutOffAt(state.recipientInputFieldState.maxLength) ?: return@update state
+
             state.copy(
                 recipientInputFieldState = state.recipientInputFieldState.copy(
-                    value = value
-                )
+                    value = filteredValue,
+                ),
             )
         }
     }

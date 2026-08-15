@@ -3,7 +3,6 @@ package com.wynndie.spwallet.sharedCore.data.datastore
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import com.wynndie.spwallet.sharedCore.data.datastore.DATA_STORE_FILE_NAME
 import kotlinx.cinterop.ExperimentalForeignApi
 import okio.Path.Companion.toPath
 import platform.Foundation.NSDocumentDirectory

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {
@@ -20,9 +21,12 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         androidResources.enable = true
+
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
     }
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
@@ -67,6 +71,12 @@ kotlin {
             api(libs.datastore)
         }
 
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlin.coroutines.test)
+            implementation(libs.assertk)
+        }
+
         iosMain.dependencies {
             api(libs.ktor.client.darwin)
         }
@@ -82,7 +92,6 @@ compose.resources {
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
     add("kspAndroid", libs.androidx.room.compiler)
-    add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
 }

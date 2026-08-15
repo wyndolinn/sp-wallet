@@ -2,7 +2,6 @@ package com.wynndie.spwallet.sharedCore.presentation.components.buttons
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.wynndie.spwallet.sharedCore.presentation.theme.RectangleShape
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
@@ -28,7 +26,7 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
     onClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     icon: Painter? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     SegmentedButton(
         checked = selected,
@@ -37,20 +35,20 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
         shape = CircleShape,
         border = BorderStroke(0.dp, Color.Transparent),
         contentPadding = PaddingValues(
-            vertical = MaterialTheme.spacing.extraExtraSmall
+            vertical = MaterialTheme.spacing.extraExtraSmall,
         ),
         colors = SegmentedButtonDefaults.colors().copy(
             activeContainerColor = MaterialTheme.colorScheme.primary,
             activeContentColor = MaterialTheme.colorScheme.onPrimary,
             inactiveContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             inactiveContentColor = MaterialTheme.colorScheme.onSurface,
-            disabledActiveContainerColor = MaterialTheme.colorScheme.primaryContainer
+            disabledActiveContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
         icon = icon?.let {
             {
                 Icon(
                     painter = icon,
-                    contentDescription = label
+                    contentDescription = label,
                 )
             }
         } ?: {},
@@ -59,9 +57,9 @@ fun MultiChoiceSegmentedButtonRowScope.SegmentedButton(
                 text = label,
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.width(MaterialTheme.sizes.small)
+                modifier = Modifier.width(MaterialTheme.sizes.small),
             )
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }

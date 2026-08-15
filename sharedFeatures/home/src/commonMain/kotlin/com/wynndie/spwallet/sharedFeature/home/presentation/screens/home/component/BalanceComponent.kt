@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.empty_profile
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.x_of_ore
@@ -22,28 +22,26 @@ fun BalanceComponent(
     balance: DisplayableOreValue,
     hasCards: Boolean,
     modifier: Modifier = Modifier,
-    horizontalAlignment: Alignment.Horizontal = Alignment.Start
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
 ) {
     Column(
         horizontalAlignment = horizontalAlignment,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = if (hasCards) {
                 stringResource(Res.string.x_of_ore, balance.value)
                     .asFormattedAmount().uppercase()
-            } else {
-                stringResource(Res.string.empty_profile)
-            },
+            } else stringResource(Res.string.empty_profile),
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
-        if (balance.formatted.isNotBlank()) {
+        if (balance.formatted.isNotEmpty()) {
             Text(
-                text = balance.formatted.asFormattedAmount(),
+                text = balance.asString().asFormattedAmount(),
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -56,7 +54,7 @@ private fun BalanceComponentPreview() {
         BalanceComponent(
             balance = DisplayableOreValue.of(10),
             hasCards = true,
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 }

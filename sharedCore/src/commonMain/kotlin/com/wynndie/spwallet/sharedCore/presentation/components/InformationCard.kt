@@ -25,27 +25,27 @@ fun InformationCard(
     content: @Composable (ColumnScope.() -> Unit)? = null,
     actions: @Composable (() -> Unit)? = null,
     shape: CornerBasedShape = MaterialTheme.shapes.medium,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         modifier = modifier
             .clip(shape)
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(MaterialTheme.spacing.medium)
+            .padding(MaterialTheme.spacing.medium),
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
 
             content?.let {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
-                    content = it
+                    content = it,
                 )
             }
         }
@@ -62,10 +62,10 @@ private fun InformationCardPreview() {
             title = stringResource(Res.string.auth_card),
             content = {
                 Text(
-                    text = stringResource(Res.string.auth_card_info)
+                    text = stringResource(Res.string.auth_card_info),
                 )
             },
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 }

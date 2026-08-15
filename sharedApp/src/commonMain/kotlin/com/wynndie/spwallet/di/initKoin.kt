@@ -16,7 +16,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             corePlatformModule,
             homeSharedModule,
             transferSharedModule,
-            editSharedModule
+            editSharedModule,
         )
     }
 }

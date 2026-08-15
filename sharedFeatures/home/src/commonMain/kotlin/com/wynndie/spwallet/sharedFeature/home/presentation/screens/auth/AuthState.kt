@@ -13,9 +13,9 @@ data class AuthState(
     val isHelpSheetOpen: Boolean = false,
 
     val idInputFieldState: InputFieldState = InputFieldState(
-        maxLength = 36
+        maxLength = 36,
     ),
     val tokenInputFieldState: InputFieldState = InputFieldState(
-        maxLength = 32
-    )
+        maxLength = 32,
+    ),
 )

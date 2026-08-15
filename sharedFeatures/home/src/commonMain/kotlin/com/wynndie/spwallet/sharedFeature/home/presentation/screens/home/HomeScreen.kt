@@ -55,8 +55,10 @@ import com.wynndie.spwallet.sharedCore.custom_cards
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.deactivate_card_description
 import com.wynndie.spwallet.sharedCore.deactivate_card_title
-import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyAuthedCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyCustomCard
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
+import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.ic_arrow_front
 import com.wynndie.spwallet.sharedCore.img_logo
 import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
@@ -70,13 +72,13 @@ import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.remove
-import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
+import com.wynndie.spwallet.sharedCore.presentation.extensions.then
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -92,7 +94,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun HomeScreenRoot(
     viewModel: HomeViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -116,7 +118,7 @@ fun HomeScreenRoot(
             onTransferButtonClick = { viewModel.onAction(HomeAction.TransferByCard(it)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = MaterialTheme.spacing.medium)
+                .padding(vertical = MaterialTheme.spacing.medium),
         )
     }
 
@@ -130,7 +132,7 @@ fun HomeScreenRoot(
             title = stringResource(Res.string.deactivate_card_title),
             description = stringResource(Res.string.deactivate_card_description),
             confirmButtonText = stringResource(Res.string.deactivate),
-            destructive = true
+            destructive = true,
         )
     }
 
@@ -148,13 +150,13 @@ fun HomeScreenRoot(
                             url = "https://avatars.spworlds.ru/face/$username?w=32",
                             contentDescription = null,
                             error = painterResource(Res.drawable.img_logo),
-                            modifier = Modifier.size(MaterialTheme.sizes.small)
+                            modifier = Modifier.size(MaterialTheme.sizes.small),
                         )
                     } else {
                         Image(
                             painter = painterResource(Res.drawable.img_logo),
                             contentDescription = null,
-                            modifier = Modifier.size(MaterialTheme.sizes.small)
+                            modifier = Modifier.size(MaterialTheme.sizes.small),
                         )
                     }
                 },
@@ -162,39 +164,33 @@ fun HomeScreenRoot(
                     MultiChoiceSegmentedButtonRow(
                         space = 0.dp,
                         modifier = Modifier
+                            .height(MaterialTheme.sizes.small)
                             .padding(horizontal = MaterialTheme.spacing.medium)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .thenIfElse(
-                                condition = state.screenLoadingState == LoadingState.Loading,
-                                onTrue = {
-                                    Modifier.border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.primaryContainer,
-                                        shape = CircleShape
-                                    )
-                                },
-                                onFalse = {
-                                    Modifier.border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape = CircleShape
-                                    )
-                                }
-                            )
-                            .height(MaterialTheme.sizes.small)
+                            .then {
+                                val color = if (state.screenLoadingState == LoadingState.Loading) {
+                                    MaterialTheme.colorScheme.primaryContainer
+                                } else MaterialTheme.colorScheme.primary
+
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = color,
+                                    shape = CircleShape,
+                                )
+                            },
                     ) {
-                        SpServers.entries.forEach { server ->
+                        Servers.entries.forEach { server ->
                             SegmentedButton(
                                 label = server.label,
                                 selected = server == state.selectedServer,
                                 onClick = { viewModel.onAction(HomeAction.SelectServer(server)) },
                                 enabled = state.screenLoadingState != LoadingState.Loading,
-                                modifier = Modifier.fillMaxHeight()
+                                modifier = Modifier.fillMaxHeight(),
                             )
                         }
                     }
-                }
+                },
             )
         },
         floatingActionButton = {
@@ -203,7 +199,7 @@ fun HomeScreenRoot(
             AnimatedVisibility(
                 visible = hasCards && finishedLoading,
                 enter = fadeIn() + expandHorizontally(),
-                exit = fadeOut() + shrinkHorizontally()
+                exit = fadeOut() + shrinkHorizontally(),
             ) {
                 ExtendedFloatingActionButton(
                     onClick = { viewModel.onAction(HomeAction.TransferByCard("")) },
@@ -213,32 +209,32 @@ fun HomeScreenRoot(
                         defaultElevation = 0.dp,
                         pressedElevation = 0.dp,
                         focusedElevation = 0.dp,
-                        hoveredElevation = 0.dp
-                    )
+                        hoveredElevation = 0.dp,
+                    ),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AnimatedVisibility(
                             visible = isExpanded,
                             enter = fadeIn() + expandHorizontally(),
-                            exit = fadeOut() + shrinkHorizontally()
+                            exit = fadeOut() + shrinkHorizontally(),
                         ) {
                             Text(
                                 text = stringResource(Res.string.transfer),
                                 style = MaterialTheme.typography.titleSmall,
-                                modifier = Modifier.padding(end = MaterialTheme.spacing.medium)
+                                modifier = Modifier.padding(end = MaterialTheme.spacing.medium),
                             )
                         }
 
                         Icon(
                             painter = painterResource(Res.drawable.ic_arrow_front),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }
             }
         },
         loadingState = state.screenLoadingState,
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         val layoutDirection = LocalLayoutDirection.current
         PullToRefreshBox(
@@ -248,20 +244,20 @@ fun HomeScreenRoot(
                 .padding(
                     start = innerPadding.calculateStartPadding(layoutDirection),
                     top = innerPadding.calculateTopPadding(),
-                    end = innerPadding.calculateEndPadding(layoutDirection)
-                )
+                    end = innerPadding.calculateEndPadding(layoutDirection),
+                ),
         ) {
             ScreenLayout(
                 contentPadding = innerPadding
                     .remove(top = innerPadding.calculateTopPadding())
                     .add(MaterialTheme.spacing.medium),
-                modifier = Modifier.verticalScroll(scrollState)
+                modifier = Modifier.verticalScroll(scrollState),
             ) {
                 Crossfade(state.selectedServer) {
                     HomeScreenContent(
                         state = state,
                         onAction = viewModel::onAction,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
@@ -273,20 +269,20 @@ fun HomeScreenRoot(
 private fun HomeScreenContent(
     state: HomeState,
     onAction: (HomeAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val isUserAuthed = state.authedCards.isNotEmpty()
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
-        modifier = modifier
+        modifier = modifier,
     ) {
         BalanceComponent(
-            balance = state.totalBalance.asDisplayableOre(),
+            balance = state.totalBalance,
             hasCards = state.authedCards.isNotEmpty() || state.customCards.isNotEmpty(),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
 
         if (isUserAuthed) {
@@ -296,29 +292,30 @@ private fun HomeScreenContent(
                 onTransferByNumberClick = { onAction(HomeAction.TransferByCard("")) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .padding(horizontal = MaterialTheme.spacing.medium),
             )
         }
 
         TitledContent(
-            title = stringResource(Res.string.bank_cards)
+            title = stringResource(Res.string.bank_cards),
         ) {
             if (state.authedCards.isNotEmpty()) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                 ) {
                     state.authedCards.forEach { card ->
+                        val balance = remember { DisplayableOreValue.of(card.balance) }
                         AccountCardTile(
                             label = "${card.number} • ${card.name}",
                             title = stringResource(Res.string.x_of_ore, card.balance)
                                 .asFormattedAmount().uppercase(),
-                            text = card.balance.asDisplayableOre().formatted,
+                            text = balance.asString(),
                             icon = card.icon.asPainter(),
                             color = card.color.asColor(),
                             onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = MaterialTheme.spacing.medium)
+                                .padding(horizontal = MaterialTheme.spacing.medium),
                         )
                     }
 
@@ -327,7 +324,7 @@ private fun HomeScreenContent(
                         onClick = { onAction(HomeAction.AuthCard) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.spacing.medium)
+                            .padding(horizontal = MaterialTheme.spacing.medium),
                     )
                 }
             } else {
@@ -335,42 +332,43 @@ private fun HomeScreenContent(
                     title = stringResource(Res.string.auth_card),
                     content = {
                         Text(
-                            text = stringResource(Res.string.auth_card_info)
+                            text = stringResource(Res.string.auth_card_info),
                         )
                     },
                     actions = {
                         OutlinedButton(
                             text = stringResource(Res.string.activate),
                             onClick = { onAction(HomeAction.AuthCard) },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     },
                     shape = MaterialTheme.shapes.extraLarge,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium)
+                        .padding(horizontal = MaterialTheme.spacing.medium),
                 )
             }
         }
 
         TitledContent(
-            title = stringResource(Res.string.custom_cards)
+            title = stringResource(Res.string.custom_cards),
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             ) {
                 state.customCards.forEach { card ->
+                    val balance = remember { DisplayableOreValue.of(card.balance) }
                     AccountCardTile(
                         label = card.name,
                         title = stringResource(Res.string.x_of_ore, card.balance)
                             .asFormattedAmount().uppercase(),
-                        text = card.balance.asDisplayableOre().formatted,
+                        text = balance.asString(),
                         icon = card.icon.asPainter(),
                         color = card.color.asColor(),
                         onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.spacing.medium)
+                            .padding(horizontal = MaterialTheme.spacing.medium),
                     )
                 }
 
@@ -379,7 +377,7 @@ private fun HomeScreenContent(
                     onClick = { onAction(HomeAction.SelectCustomCard("")) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium)
+                        .padding(horizontal = MaterialTheme.spacing.medium),
                 )
             }
         }
@@ -390,20 +388,45 @@ private fun HomeScreenContent(
 @Composable
 fun HomeScreenContentPreview() {
     AppTheme {
+        val authedCards = List(3) {
+            val number = ((it + 2) * (it + 2) * (it + 2)).toLong() * 111
+            val newModel = emptyAuthedCard.copy(
+                name = "cardName $it",
+                number = "$number".padStart(5, '0'),
+                balance = number,
+            )
+
+            when (it) {
+                0 -> newModel.copy(color = CardColors.BLUE)
+                1 -> newModel.copy(color = CardColors.RED)
+                2 -> newModel.copy(color = CardColors.PINK)
+                else -> newModel
+            }
+        }
+
+        val customCards = List(3) {
+            val newModel = emptyCustomCard.copy(
+                name = "cardName $it",
+                balance = ((it + 4) * (it + 4) * (it + 4)).toLong() * 444,
+            )
+
+            when (it) {
+                0 -> newModel.copy(color = CardColors.TEAL)
+                1 -> newModel.copy(color = CardColors.GREEN)
+                2 -> newModel.copy(color = CardColors.ORANGE)
+                else -> newModel
+            }
+        }
+
         HomeScreenContent(
             state = HomeState(
-                authedCards = listOf(
-                    createAuthedCard(
-                        name = "asdf",
-                        number = "3245",
-                        balance = 1234
-                    )
-                )
+                authedCards = authedCards,
+                customCards = customCards,
             ),
             onAction = { },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
 }

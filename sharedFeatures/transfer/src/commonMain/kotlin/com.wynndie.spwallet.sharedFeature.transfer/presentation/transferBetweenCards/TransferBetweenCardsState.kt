@@ -1,8 +1,8 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferBetweenCards
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
+import com.wynndie.spwallet.sharedCore.domain.helpers.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyAuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
@@ -23,6 +23,6 @@ data class TransferBetweenCardsState(
 
     val amountInputFieldState: InputFieldState = InputFieldState(
         value = TextFieldValue("0"),
-        maxLength = CoreConstants.MAX_BALANCE_LENGTH
-    )
+        maxLength = CoreConstants.MAX_BALANCE_LENGTH,
+    ),
 )

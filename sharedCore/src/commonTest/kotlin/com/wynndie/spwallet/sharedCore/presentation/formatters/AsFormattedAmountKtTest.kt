@@ -1,0 +1,32 @@
+package com.wynndie.spwallet.sharedCore.presentation.formatters
+
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import kotlin.test.Test
+
+class AsFormattedAmountKtTest {
+
+    @Test
+    fun `asFormattedAmount should format different strings`() {
+        assertThat("".asFormattedAmount()).isEqualTo("")
+        assertThat("1000".asFormattedAmount()).isEqualTo("1000")
+        assertThat("10000".asFormattedAmount()).isEqualTo("10 000")
+        assertThat("-10000".asFormattedAmount()).isEqualTo("-10 000")
+        assertThat("0,123456".asFormattedAmount()).isEqualTo("0.123456")
+        assertThat(".123456".asFormattedAmount()).isEqualTo("0.123456")
+    }
+
+    @Test
+    fun `asFormattedAmount should format multiple numbers in a string`() {
+        val subject = "10000 шлк 37777 ст 4000000 ар"
+        val expected = "10 000 шлк 37 777 ст 4 000 000 ар"
+        assertThat(subject.asFormattedAmount()).isEqualTo(expected)
+    }
+
+    @Test
+    fun `asFormattedAmount should format multiple numbers in a string with punctuations`() {
+        val subject = "10000 шлк, 37777 ст. 4000000 ар"
+        val expected = "10 000 шлк, 37 777 ст. 4 000 000 ар"
+        assertThat(subject.asFormattedAmount()).isEqualTo(expected)
+    }
+}

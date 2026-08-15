@@ -1,14 +1,15 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferByCard
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyAuthedUser
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedFeature.transfer.domain.constants.TransferConstants
 
 data class TransferByCardState(
     val loadingState: LoadingState = LoadingState.Finished,
@@ -17,13 +18,13 @@ data class TransferByCardState(
     val user: AuthedUser = emptyAuthedUser,
     val recipient: RecipientCard = emptyRecipientCard,
     val sourceCards: List<AuthedCard> = emptyList(),
-    val selectedSourceCard: Int = 0,
+    val selectedSourceCardIndex: Int = 0,
     val commentPrefix: String = "",
     val amountInputFieldState: InputFieldState = InputFieldState(
         value = TextFieldValue("0"),
-        maxLength = CoreConstants.MAX_BALANCE_LENGTH
+        maxLength = CoreConstants.MAX_BALANCE_LENGTH,
     ),
     val commentInputFieldState: InputFieldState = InputFieldState(
-        maxLength = CoreConstants.MAX_COMMENT_LENGTH
-    )
+        maxLength = TransferConstants.MAX_COMMENT_LENGTH,
+    ),
 )

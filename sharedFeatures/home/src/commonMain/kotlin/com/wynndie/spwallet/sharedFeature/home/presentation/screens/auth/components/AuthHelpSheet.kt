@@ -24,40 +24,40 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun AuthHelpSheet(
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BottomSheet(
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
+            modifier = modifier,
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 Text(
                     text = stringResource(Res.string.auth_steps_title),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                 ) {
                     Text(
                         text = stringResource(Res.string.auth_step_1),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
 
                     Text(
                         text = stringResource(Res.string.auth_step_2),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
 
                     Text(
                         text = stringResource(Res.string.auth_step_3),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
 
@@ -66,7 +66,7 @@ fun AuthHelpSheet(
             OutlinedButton(
                 text = stringResource(Res.string.understood),
                 onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

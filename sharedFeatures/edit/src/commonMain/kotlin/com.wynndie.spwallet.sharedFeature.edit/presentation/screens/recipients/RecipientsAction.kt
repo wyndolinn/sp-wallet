@@ -18,5 +18,5 @@ sealed interface RecipientsAction {
     data class ToggleDeleteRecipientDialog(val isOpen: Boolean) : RecipientsAction
     data object SaveRecipient : RecipientsAction
     data object MakeTransfer : RecipientsAction
-    data object DeleteRecipient : RecipientsAction
+    data class DeleteRecipient(val recipient: RecipientCard) : RecipientsAction
 }

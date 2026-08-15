@@ -11,5 +11,5 @@ data class CustomCardEntity(
     val name: String,
     val balance: Long,
     val color: Int,
-    val icon: Int
+    val icon: Int,
 )

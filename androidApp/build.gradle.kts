@@ -44,7 +44,7 @@ android {
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
 
             manifestPlaceholders["usesCleartextTraffic"] = true
@@ -57,7 +57,7 @@ android {
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
 
             manifestPlaceholders["usesCleartextTraffic"] = false

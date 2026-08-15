@@ -100,9 +100,9 @@
 
 
     <string name="total_balance">Общий баланс</string>
-    <string name="x_of_shulkers">%1$s шлк</string>
-    <string name="x_of_stacks">%1$s ст</string>
-    <string name="x_of_ore">%1$s ар</string>
+    <string name="x_of_shulkers">%1$s шлк</string>
+    <string name="x_of_stacks">%1$s ст</string>
+    <string name="x_of_ore">%1$s ар</string>
 
     <string name="no_name">Без названия</string>
     <string name="no_comment">Без комментария</string>

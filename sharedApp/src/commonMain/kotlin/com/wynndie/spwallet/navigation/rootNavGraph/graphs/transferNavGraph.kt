@@ -27,10 +27,10 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.transferNavGraph(
-    navController: NavController
+    navController: NavController,
 ) {
     navigation<Route.TransferNavGraph>(
-        startDestination = Route.TransferNavGraph.SearchRecipient()
+        startDestination = Route.TransferNavGraph.SearchRecipient(),
     ) {
         composable<Route.TransferNavGraph.SearchRecipient> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Route.TransferNavGraph.SearchRecipient>()
@@ -47,7 +47,7 @@ fun NavGraphBuilder.transferNavGraph(
                         recipientViewModel.setRecipientCardNumber(navEvent.cardNumber)
 
                         navController.navigate(
-                            Route.TransferNavGraph.TransferByCardNumber(args.cardId)
+                            Route.TransferNavGraph.TransferByCardNumber(args.cardId),
                         ) {
                             launchSingleTop = true
                         }
@@ -56,7 +56,7 @@ fun NavGraphBuilder.transferNavGraph(
             }
 
             SearchRecipientScreenRoot(
-                viewModel = koinViewModel<SearchRecipientViewModel>()
+                viewModel = koinViewModel<SearchRecipientViewModel>(),
             )
         }
 
@@ -78,7 +78,7 @@ fun NavGraphBuilder.transferNavGraph(
             }
 
             SearchRecipientScreenRoot(
-                viewModel = koinViewModel<SearchRecipientViewModel>()
+                viewModel = koinViewModel<SearchRecipientViewModel>(),
             )
         }
 
@@ -89,8 +89,8 @@ fun NavGraphBuilder.transferNavGraph(
             val viewModel = koinViewModel<TransferByCardViewModel> {
                 parametersOf(
                     TransferByCardParams(
-                        sourceCardId = args.cardId
-                    )
+                        sourceCardId = args.cardId,
+                    ),
                 )
             }
 
@@ -109,7 +109,7 @@ fun NavGraphBuilder.transferNavGraph(
                     TransferByCardNavEvent.NavigateToResult -> {
                         navController.popBackStack(
                             route = Route.TransferNavGraph,
-                            inclusive = true
+                            inclusive = true,
                         )
                     }
                 }
@@ -124,7 +124,7 @@ fun NavGraphBuilder.transferNavGraph(
             }
 
             TransferByCardScreenRoot(
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
 
@@ -138,7 +138,7 @@ fun NavGraphBuilder.transferNavGraph(
                     TransferBetweenCardsNavEvent.NavigateToResult -> {
                         navController.popBackStack(
                             route = Route.TransferNavGraph,
-                            inclusive = true
+                            inclusive = true,
                         )
                     }
                 }
@@ -148,7 +148,7 @@ fun NavGraphBuilder.transferNavGraph(
             TransferBetweenCardsScreenRoot(
                 viewModel = koinViewModel<TransferBetweenCardsViewModel> {
                     parametersOf(TransferBetweenCardsParams(args.cardId))
-                }
+                },
             )
         }
     }

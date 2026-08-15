@@ -12,7 +12,7 @@ data class Sizes(
     val small: Dp = 32.dp,
     val medium: Dp = 40.dp,
     val large: Dp = 48.dp,
-    val extraLarge: Dp = 56.dp
+    val extraLarge: Dp = 56.dp,
 )
 
 val LocalSizes = compositionLocalOf { Sizes() }

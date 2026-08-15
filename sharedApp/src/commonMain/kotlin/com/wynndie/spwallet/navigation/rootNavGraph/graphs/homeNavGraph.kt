@@ -15,10 +15,10 @@ import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.HomeVie
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.homeNavGraph(
-    navController: NavController
+    navController: NavController,
 ) {
     navigation<Route.HomeNavGraph>(
-        startDestination = Route.HomeNavGraph.Home
+        startDestination = Route.HomeNavGraph.Home,
     ) {
         composable<Route.HomeNavGraph.Home> {
             ObserveNavEvent<HomeNavEvent> { event ->
@@ -37,7 +37,7 @@ fun NavGraphBuilder.homeNavGraph(
 
                     is HomeNavEvent.NavigateToCustomCard -> {
                         navController.navigate(
-                            Route.EditNavGraph.CustomCard(event.cardId)
+                            Route.EditNavGraph.CustomCard(event.cardId),
                         ) {
                             launchSingleTop = true
                         }
@@ -45,7 +45,7 @@ fun NavGraphBuilder.homeNavGraph(
 
                     is HomeNavEvent.NavigateToTransferByCard -> {
                         navController.navigate(
-                            Route.TransferNavGraph.SearchRecipient(event.cardId)
+                            Route.TransferNavGraph.SearchRecipient(event.cardId),
                         ) {
                             launchSingleTop = true
                         }
@@ -53,7 +53,7 @@ fun NavGraphBuilder.homeNavGraph(
 
                     is HomeNavEvent.NavigateToTransferBetweenCards -> {
                         navController.navigate(
-                            Route.TransferNavGraph.TransferBetweenCards(event.cardId)
+                            Route.TransferNavGraph.TransferBetweenCards(event.cardId),
                         ) {
                             launchSingleTop = true
                         }
@@ -62,7 +62,7 @@ fun NavGraphBuilder.homeNavGraph(
             }
 
             HomeScreenRoot(
-                viewModel = koinViewModel<HomeViewModel>()
+                viewModel = koinViewModel<HomeViewModel>(),
             )
         }
 
@@ -76,7 +76,7 @@ fun NavGraphBuilder.homeNavGraph(
             }
 
             AuthScreenRoot(
-                viewModel = koinViewModel<AuthViewModel>()
+                viewModel = koinViewModel<AuthViewModel>(),
             )
         }
     }

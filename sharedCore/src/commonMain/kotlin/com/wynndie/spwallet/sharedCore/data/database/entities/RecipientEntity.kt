@@ -11,5 +11,5 @@ data class RecipientEntity(
     val name: String,
     val number: String,
     val color: Int,
-    val icon: Int
+    val icon: Int,
 )

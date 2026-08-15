@@ -4,25 +4,25 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.helpers.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
-import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
-import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
+import com.wynndie.spwallet.sharedCore.domain.validators.AmountValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
-import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
+import com.wynndie.spwallet.sharedCore.presentation.extensions.dropWhile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.resetValidationState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.select
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.models.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.transaction_succeed
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.TransferCard
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -41,9 +40,9 @@ class TransferBetweenCardsViewModel(
     preferencesRepository: PreferencesRepository,
     private val args: TransferBetweenCardsParams,
     private val transferByCardUseCase: TransferByCardUseCase,
-    private val transferAmountValidator: BalanceValidator,
+    private val transferAmountValidator: AmountValidator,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TransferBetweenCardsState())
@@ -52,20 +51,20 @@ class TransferBetweenCardsViewModel(
             state.copy(
                 destinationCards = state.destinationCards.filter {
                     it.id != sourceCard.id
-                }
+                },
             )
         } ?: state
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = _state.value
+        initialValue = _state.value,
     )
 
     init {
         combine(
             cardsRepository.getAuthedCards(),
             cardsRepository.getUnauthedCards(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { authedCards, unauthedCards, selectedServer ->
 
             val authedCards = authedCards.filter { it.server == selectedServer }
@@ -78,25 +77,27 @@ class TransferBetweenCardsViewModel(
             _state.update { state ->
                 state.copy(
                     sourceCards = sourceCard?.let { listOf(it) } ?: authedCards,
-                    destinationCards =  destinationsCards
+                    destinationCards = destinationsCards,
                 )
             }
         }.launchIn(viewModelScope)
 
-        observeValidationStates(
-            _state.observeInputField(
+        combine(
+            _state.select { it.amountInputFieldState.value },
+            _state.select { it.sourceCards },
+            _state.select { it.selectedSourceCard }
+        ) { _, cards, cardIndex ->
+            _state.resetValidationState(
                 inputField = { it.amountInputFieldState },
-                validation = {
-                    val validationValues = BalanceValidationValues(
-                        value = _state.value.amountInputFieldState.value.text
-                    )
-                    transferAmountValidator.validate(validationValues)
-                },
-                updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
-            )
-        ).onEach { isAllValid ->
-            _state.update { it.copy(isTransferButtonEnabled = isAllValid) }
+                validator = {
+                    transferAmountValidator.validate(it.copy(maxValue = cards[cardIndex].balance))
+                }
+            ) { copy(amountInputFieldState = it) }
         }.launchIn(viewModelScope)
+
+        _state.observeValidStates(
+            _state.select { it.amountInputFieldState.hasError },
+        ) { copy(isTransferButtonEnabled = it) }.launchIn(viewModelScope)
     }
 
     fun onAction(action: TransferBetweenCardsAction) {
@@ -123,7 +124,7 @@ class TransferBetweenCardsViewModel(
                 card = sourceCard,
                 receiver = targetCard.number,
                 amount = transferAmount,
-                comment = "Перевод между счетами"
+                comment = "Перевод между счетами",
             ).getOrElse { error ->
                 snackbarController.send(error.asUiText())
                 _state.update { it.copy(loadingState = LoadingState.Finished) }
@@ -138,32 +139,31 @@ class TransferBetweenCardsViewModel(
     }
 
     private fun changeAmountValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Numbers.predicate)
-            .dropFirst('0') { it.length > 1 }
-            .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return
-
         _state.update { state ->
+            val filteredValue = value
+                .filter(InputFilters.Numbers)
+                .dropWhile('0') { it.length > 1 }
+                .cutOffAt(CoreConstants.MAX_BALANCE_LENGTH) ?: return@update state
+
             state.copy(
                 amountInputFieldState = state.amountInputFieldState.copy(
-                    value = value
-                )
+                    value = filteredValue,
+                ),
             )
         }
     }
 
     private fun clearAmountFocus() {
+        val value = _state.value.amountInputFieldState.value.text
+        val maxValue = _state.value.sourceCards[_state.value.selectedSourceCard].balance
+
         _state.validateInputField(
             inputField = { it.amountInputFieldState },
-            validation = {
-                val validationValues = BalanceValidationValues(
-                    value = _state.value.amountInputFieldState.value.text,
-                    maxValue = _state.value.sourceCards[_state.value.selectedSourceCard].balance
-                )
+            validator = {
+                val validationValues = ValidationValues(value = value, maxValue = maxValue)
                 transferAmountValidator.validate(validationValues)
-            },
-            updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
-        )
+            }
+        ) { copy(amountInputFieldState = it) }
     }
 
     private fun goBack() {

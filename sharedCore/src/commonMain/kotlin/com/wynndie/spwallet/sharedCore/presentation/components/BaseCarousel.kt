@@ -29,7 +29,7 @@ fun <T> BaseCarousel(
     pageSpacing: Dp = 0.dp,
     enabled: Boolean = true,
     onSwipePage: (Int) -> Unit = {},
-    content: @Composable (T) -> Unit
+    content: @Composable (T) -> Unit,
 ) {
 
     val pagerState = rememberPagerState(initialPage = page) { items.size }
@@ -41,20 +41,20 @@ fun <T> BaseCarousel(
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         HorizontalPager(
             state = pagerState,
             userScrollEnabled = enabled,
             contentPadding = contentPadding,
-            pageSpacing = pageSpacing
+            pageSpacing = pageSpacing,
         ) {
             content(items[it])
         }
 
         if (items.size > 1) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
             ) {
                 items.forEachIndexed { index, _ ->
                     Box(
@@ -64,8 +64,8 @@ fun <T> BaseCarousel(
                             .background(
                                 color = if (pagerState.currentPage == index) {
                                     MaterialTheme.colorScheme.secondary
-                                } else MaterialTheme.colorScheme.secondaryContainer
-                            )
+                                } else MaterialTheme.colorScheme.secondaryContainer,
+                            ),
                     )
                 }
             }

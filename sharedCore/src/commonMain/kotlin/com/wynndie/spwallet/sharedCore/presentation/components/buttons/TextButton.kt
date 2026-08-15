@@ -22,22 +22,22 @@ fun TextButton(
     icon: Painter? = null,
     destructive: Boolean = false,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     TextButton(
         onClick = onClick,
         enabled = enabled && !loading,
         contentPadding = PaddingValues(
             horizontal = MaterialTheme.spacing.medium,
-            vertical = MaterialTheme.spacing.small
+            vertical = MaterialTheme.spacing.small,
         ),
         colors = ButtonDefaults.textButtonColors().copy(
             contentColor = if (destructive) {
                 MaterialTheme.colorScheme.error
-            } else MaterialTheme.colorScheme.primary
+            } else MaterialTheme.colorScheme.primary,
         ),
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.height(MaterialTheme.sizes.medium)
+        modifier = modifier.height(MaterialTheme.sizes.medium),
     ) {
         Crossfade(targetState = loading) { isLoading ->
             if (isLoading) {
@@ -46,7 +46,7 @@ fun TextButton(
                 ButtonLayout(
                     text = text,
                     leadingIcon = icon,
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
             }
         }

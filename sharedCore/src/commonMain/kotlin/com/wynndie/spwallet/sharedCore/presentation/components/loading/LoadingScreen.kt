@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier,
     ) {
         LoadingIndicator()
     }

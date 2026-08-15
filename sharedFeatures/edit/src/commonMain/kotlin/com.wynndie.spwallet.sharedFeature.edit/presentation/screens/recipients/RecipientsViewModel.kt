@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
@@ -15,12 +15,13 @@ import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEv
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
-import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidStates
+import com.wynndie.spwallet.sharedCore.presentation.extensions.resetValidationState
+import com.wynndie.spwallet.sharedCore.presentation.extensions.select
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
+import com.wynndie.spwallet.sharedCore.presentation.models.UiText
 import com.wynndie.spwallet.sharedCore.recipient_deleted
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +38,7 @@ class RecipientsViewModel(
     private val navEventController: NavEventController,
     private val snackbarController: SnackbarController,
     private val cardNameValidator: CardNameValidator,
-    private val cardNumberValidator: CardNumberValidator
+    private val cardNumberValidator: CardNumberValidator,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RecipientsState())
@@ -47,43 +48,8 @@ class RecipientsViewModel(
 
 
     init {
-        combine(
-            recipientRepository.getRecipients(),
-            preferencesRepository.getSelectedSpServer()
-        ) { recipients, server ->
-            cachedRecipients = recipients.filter { it.server == server }
-            _state.update { it.copy(recipients = cachedRecipients) }
-        }.launchIn(viewModelScope)
-
-        _state.observeInputField(
-            inputField = { it.recipientInputFieldState }
-        ) { inputFieldState ->
-            val query = inputFieldState.value.text
-            _state.update { state ->
-                val recipients = if (query.isNotBlank()) {
-                    cachedRecipients.filter {
-                        it.number.contains(query) || it.name.contains(query)
-                    }
-                } else cachedRecipients
-
-                state.copy(recipients = recipients)
-            }
-        }.launchIn(viewModelScope)
-
-        observeValidationStates(
-            _state.observeInputField(
-                inputField = { it.cardNameInputFieldState },
-                validation = { cardNameValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } }
-            ),
-            _state.observeInputField(
-                inputField = { it.cardNumberInputFieldState },
-                validation = { cardNumberValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } }
-            )
-        ).onEach { isAllValid ->
-            _state.update { it.copy(isSaveButtonEnabled = isAllValid) }
-        }.launchIn(viewModelScope)
+        observerRecipients()
+        observeSaveRecipientValidationStates()
     }
 
 
@@ -96,7 +62,7 @@ class RecipientsViewModel(
             is RecipientsAction.ChangeCardNumberValue -> changeCardNumberValue(action.value)
             RecipientsAction.ClearCardNameFocus -> clearCardNameFocus()
             RecipientsAction.ClearCardNumberFocus -> clearCardNumberFocus()
-            RecipientsAction.DeleteRecipient -> deleteRecipient()
+            is RecipientsAction.DeleteRecipient -> deleteRecipient(action.recipient)
             RecipientsAction.SaveRecipient -> saveRecipient()
             RecipientsAction.MakeTransfer -> makeTransfer()
             is RecipientsAction.ToggleEditRecipientSheet -> toggleEditRecipientSheet(action.isOpen)
@@ -106,47 +72,39 @@ class RecipientsViewModel(
 
 
     private fun changeRecipientValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Text.predicate)
-            .trimSpaces()
-            .cutOffAt(state.value.recipientInputFieldState.maxLength) ?: return
-
         _state.update { state ->
+            val filteredValue = value
+                .filter(InputFilters.Text)
+                .trimSpaces()
+                .cutOffAt(state.recipientInputFieldState.maxLength) ?: return@update state
+
             state.copy(
                 recipientInputFieldState = state.recipientInputFieldState.copy(
-                    value = value
-                )
+                    value = filteredValue,
+                ),
             )
         }
     }
 
     private fun changeCardNameValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Text.predicate)
-            .trimSpaces()
-            .cutOffAt(state.value.cardNameInputFieldState.maxLength) ?: return
-
         _state.update { state ->
-            state.copy(
-                cardNameInputFieldState = state.cardNameInputFieldState.copy(
-                    value = value
-                )
-            )
+            val filteredValue = value
+                .filter(InputFilters.Text)
+                .trimSpaces()
+                .cutOffAt(state.nameInputFieldState.maxLength) ?: return@update state
+
+            state.copy(nameInputFieldState = state.nameInputFieldState.copy(value = filteredValue))
         }
     }
 
     private fun changeCardNumberValue(value: TextFieldValue) {
-        val value = value
-            .filter(InputFilters.Numbers.predicate)
-            .trimSpaces()
-            .cutOffAt(state.value.cardNumberInputFieldState.maxLength) ?: return
-
         _state.update { state ->
-            state.copy(
-                cardNumberInputFieldState = state.cardNumberInputFieldState.copy(
-                    value = value
-                )
-            )
+            val filteredValue = value
+                .filter(InputFilters.Numbers)
+                .trimSpaces()
+                .cutOffAt(state.numberInputFieldState.maxLength) ?: return@update state
+
+            state.copy(numberInputFieldState = state.numberInputFieldState.copy(value = filteredValue))
         }
     }
 
@@ -162,18 +120,17 @@ class RecipientsViewModel(
         viewModelScope.launch {
             val recipient = _state.value.selectedRecipient ?: emptyRecipientCard
             val modifiedRecipient = recipient.copy(
-                name = _state.value.cardNameInputFieldState.value.text,
-                number = _state.value.cardNumberInputFieldState.value.text,
-                server = preferencesRepository.getSelectedSpServer().first()
+                name = _state.value.nameInputFieldState.value.text,
+                number = _state.value.numberInputFieldState.value.text,
+                server = preferencesRepository.getSelectedServer().first(),
             )
             recipientRepository.insertRecipient(modifiedRecipient)
             closeOverlays()
         }
     }
 
-    private fun deleteRecipient() {
+    private fun deleteRecipient(recipient: RecipientCard) {
         viewModelScope.launch {
-            val recipient = _state.value.selectedRecipient ?: return@launch
             recipientRepository.deleteRecipient(recipient)
             snackbarController.send(UiText.ResourceString(Res.string.recipient_deleted))
             closeOverlays()
@@ -182,18 +139,18 @@ class RecipientsViewModel(
 
     private fun clearCardNumberFocus() {
         _state.validateInputField(
-            inputField = { it.cardNumberInputFieldState },
-            validation = { cardNumberValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } }
+            inputField = { it.numberInputFieldState },
+            validator = cardNumberValidator::validate
         )
+        { copy(numberInputFieldState = it) }
     }
 
     private fun clearCardNameFocus() {
         _state.validateInputField(
-            inputField = { it.cardNameInputFieldState },
-            validation = { cardNameValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } }
+            inputField = { it.numberInputFieldState },
+            validator = cardNameValidator::validate
         )
+        { copy(nameInputFieldState = it) }
     }
 
     private fun navigateBack() {
@@ -208,12 +165,12 @@ class RecipientsViewModel(
             val number = recipient?.number ?: ""
             state.copy(
                 selectedRecipient = recipient,
-                cardNameInputFieldState = state.cardNameInputFieldState.copy(
-                    value = TextFieldValue(name, TextRange(name.length))
+                nameInputFieldState = state.nameInputFieldState.copy(
+                    value = TextFieldValue(name, TextRange(name.length)),
                 ),
-                cardNumberInputFieldState = state.cardNumberInputFieldState.copy(
-                    value = TextFieldValue(number, TextRange(number.length))
-                )
+                numberInputFieldState = state.numberInputFieldState.copy(
+                    value = TextFieldValue(number, TextRange(number.length)),
+                ),
             )
         }
     }
@@ -231,8 +188,58 @@ class RecipientsViewModel(
             it.copy(
                 selectedRecipient = null,
                 isEditRecipientSheetOpen = false,
-                isDeleteDialogOpen = false
+                isDeleteDialogOpen = false,
             )
         }
+    }
+
+    private fun observeSaveRecipientValidationStates() {
+        _state
+            .select { it.nameInputFieldState.value }
+            .onEach {
+                _state.resetValidationState(
+                    inputField = { it.nameInputFieldState },
+                    validator = cardNameValidator::validate,
+                ) { copy(nameInputFieldState = it) }
+            }.launchIn(viewModelScope)
+
+        _state
+            .select { it.numberInputFieldState.value }
+            .onEach {
+                _state.resetValidationState(
+                    inputField = { it.numberInputFieldState },
+                    validator = cardNumberValidator::validate,
+                ) { copy(numberInputFieldState = it) }
+            }.launchIn(viewModelScope)
+
+        _state.observeValidStates(
+            _state.select { it.nameInputFieldState.hasError },
+            _state.select { it.numberInputFieldState.hasError },
+        ) { copy(isSaveButtonEnabled = it) }.launchIn(viewModelScope)
+    }
+
+    private fun observerRecipients() {
+        combine(
+            recipientRepository.getRecipients(),
+            preferencesRepository.getSelectedServer(),
+        ) { recipients, server ->
+            cachedRecipients = recipients.filter { it.server == server }
+            _state.update { it.copy(recipients = cachedRecipients) }
+        }.launchIn(viewModelScope)
+
+        _state
+            .select { it.recipientInputFieldState }
+            .onEach { recipient ->
+                val query = recipient.value.text
+                _state.update { state ->
+                    val recipients = if (query.isNotBlank()) {
+                        cachedRecipients.filter {
+                            it.number.contains(query) || it.name.contains(query)
+                        }
+                    } else cachedRecipients
+
+                    state.copy(recipients = recipients)
+                }
+            }.launchIn(viewModelScope)
     }
 }

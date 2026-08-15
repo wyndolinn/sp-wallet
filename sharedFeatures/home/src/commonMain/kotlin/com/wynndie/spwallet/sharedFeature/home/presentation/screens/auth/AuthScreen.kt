@@ -46,9 +46,9 @@ import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.safe_auth
@@ -62,7 +62,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun AuthScreenRoot(
     viewModel: AuthViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
@@ -74,7 +74,7 @@ fun AuthScreenRoot(
     if (state.isHelpSheetOpen) {
         AuthHelpSheet(
             onDismiss = { viewModel.onAction(AuthAction.ToggleHelpSheet(false)) },
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 
@@ -82,21 +82,21 @@ fun AuthScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.activation),
-                onClickBack = { viewModel.onAction(AuthAction.NavigateBack) }
+                onClickBack = { viewModel.onAction(AuthAction.NavigateBack) },
             )
         },
         focusManager = focusManager,
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         ScreenLayout(
             contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
             AuthScreen(
                 state = state,
                 onAction = viewModel::onAction,
                 focusManager = focusManager,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
@@ -107,7 +107,7 @@ private fun AuthScreen(
     state: AuthState,
     onAction: (AuthAction) -> Unit,
     focusManager: FocusManager,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var currentPage by remember { mutableStateOf(0) }
 
@@ -115,7 +115,7 @@ private fun AuthScreen(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
         modifier = modifier.pointerInput(Unit) {
             detectTapGestures { focusManager.clearFocus(true) }
-        }
+        },
     ) {
         InformationCard(
             title = stringResource(Res.string.safe_auth),
@@ -125,13 +125,13 @@ private fun AuthScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium),
         )
 
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
+            modifier = Modifier,
         ) {
             if (state.cards.isNotEmpty()) {
                 BaseCarousel(
@@ -143,7 +143,7 @@ private fun AuthScreen(
                         onAction(AuthAction.ChangeIdValue(id))
                     },
                     contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
-                    pageSpacing = MaterialTheme.spacing.medium
+                    pageSpacing = MaterialTheme.spacing.medium,
                 ) { card ->
                     TransferCardTile(
                         headline = stringResource(Res.string.activate),
@@ -151,7 +151,7 @@ private fun AuthScreen(
                         text = card.number,
                         icon = card.icon.asPainter(),
                         color = card.color.asColor(),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             } else {
@@ -163,16 +163,16 @@ private fun AuthScreen(
                     hasError = state.idInputFieldState.hasError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Next,
                     ),
                     keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) },
                     ),
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.medium)
                         .onFocusChanged {
                             if (!it.isFocused) onAction(AuthAction.ClearIdFocus)
-                        }
+                        },
                 )
             }
 
@@ -184,7 +184,7 @@ private fun AuthScreen(
                 hasError = state.tokenInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -195,18 +195,18 @@ private fun AuthScreen(
                         val token = state.tokenInputFieldState.value.text
 
                         onAction(AuthAction.AuthCard(cardId, token))
-                    }
+                    },
                 ),
                 modifier = Modifier
                     .padding(horizontal = MaterialTheme.spacing.medium)
                     .onFocusChanged {
                         if (!it.isFocused) onAction(AuthAction.ClearTokenFocus)
-                    }
+                    },
             )
 
             TextButton(
                 text = "Показать инструкцию",
-                onClick = { onAction(AuthAction.ToggleHelpSheet(true)) }
+                onClick = { onAction(AuthAction.ToggleHelpSheet(true)) },
             )
         }
 
@@ -223,7 +223,7 @@ private fun AuthScreen(
             enabled = state.isAuthButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium),
         )
     }
 }
@@ -238,7 +238,7 @@ private fun AuthScreenPreview() {
             focusManager = LocalFocusManager.current,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
 }

@@ -42,7 +42,7 @@ internal fun BasicInputField(
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
     readOnly: Boolean = false,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     BasicTextField(
         value = value,
@@ -67,7 +67,7 @@ internal fun BasicInputField(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.outline
+                            color = MaterialTheme.colorScheme.outline,
                         )
                     }
                 },
@@ -90,13 +90,13 @@ internal fun BasicInputField(
                         colors = colors,
                         shape = MaterialTheme.shapes.medium,
                         focusedBorderThickness = 2.dp,
-                        unfocusedBorderThickness = 1.dp
+                        unfocusedBorderThickness = 1.dp,
                     )
                 },
                 contentPadding = PaddingValues(
                     horizontal = MaterialTheme.spacing.medium,
-                    vertical = MaterialTheme.spacing.small
-                )
+                    vertical = MaterialTheme.spacing.small,
+                ),
             )
         },
         modifier = modifier,
