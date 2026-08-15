@@ -28,6 +28,11 @@ kotlin {
         commonMain.dependencies {
             api(projects.sharedCore)
         }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.assertk)
+        }
     }
 }
 

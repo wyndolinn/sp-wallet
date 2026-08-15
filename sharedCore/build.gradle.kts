@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {
@@ -65,6 +66,11 @@ kotlin {
 
             api(libs.datastore.preferences)
             api(libs.datastore)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.assertk)
         }
 
         iosMain.dependencies {
