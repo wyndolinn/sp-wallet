@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedCore.presentation.controllers.overlay
 
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.models.UiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 

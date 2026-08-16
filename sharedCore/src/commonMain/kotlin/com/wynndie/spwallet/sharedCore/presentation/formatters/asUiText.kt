@@ -19,7 +19,7 @@ import com.wynndie.spwallet.sharedCore.error_request_timeout
 import com.wynndie.spwallet.sharedCore.error_serialization
 import com.wynndie.spwallet.sharedCore.error_unauthorized
 import com.wynndie.spwallet.sharedCore.error_unknown
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.models.UiText
 
 fun Error.asUiText(): UiText {
     return when (this) {

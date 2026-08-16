@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.formatters
+package com.wynndie.spwallet.sharedCore.presentation.models
 
 import androidx.compose.runtime.Composable
 import kotlinx.serialization.Serializable
