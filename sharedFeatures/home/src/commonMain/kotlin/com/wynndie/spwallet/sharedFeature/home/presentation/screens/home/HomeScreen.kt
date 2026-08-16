@@ -55,7 +55,7 @@ import com.wynndie.spwallet.sharedCore.custom_cards
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.deactivate_card_description
 import com.wynndie.spwallet.sharedCore.deactivate_card_title
-import com.wynndie.spwallet.sharedCore.domain.constructors.createAuthedCard
+import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.ic_arrow_front
 import com.wynndie.spwallet.sharedCore.img_logo
@@ -395,7 +395,7 @@ fun HomeScreenContentPreview() {
         HomeScreenContent(
             state = HomeState(
                 authedCards = listOf(
-                    createAuthedCard(
+                    emptyAuthedCard.copy(
                         name = "asdf",
                         number = "3245",
                         balance = 1234

@@ -2,6 +2,7 @@ package com.wynndie.spwallet.sharedCore.domain.constants
 
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
@@ -12,6 +13,17 @@ val emptyAuthedUser = AuthedUser(
     id = "",
     name = "",
     server = SpServers.SP
+)
+
+val emptyAuthedCard = AuthedCard(
+    id = "",
+    name = "",
+    number = "",
+    color = CardColors.BLUE,
+    icon = CardIcons.PERSON,
+    server = SpServers.SP,
+    authKey = "",
+    balance = 0
 )
 
 val emptyUnauthedCard = UnauthedCard(
@@ -35,7 +47,7 @@ val emptyRecipientCard = RecipientCard(
 val emptyCustomCard = CustomCard(
     id = "",
     name = "",
-    balance = 0L,
+    balance = 0,
     color = CardColors.BLUE,
     icon = CardIcons.CASH,
     server = SpServers.SP
