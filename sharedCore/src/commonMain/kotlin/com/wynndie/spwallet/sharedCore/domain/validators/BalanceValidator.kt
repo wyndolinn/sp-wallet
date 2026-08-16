@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedCore.domain.validators
 
+import com.wynndie.spwallet.sharedCore.domain.models.validation.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
-import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 
 class BalanceValidator : Validator<BalanceValidationValues> {
 

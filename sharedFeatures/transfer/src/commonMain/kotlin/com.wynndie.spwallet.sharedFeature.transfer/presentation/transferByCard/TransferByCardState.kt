@@ -9,6 +9,7 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedFeature.transfer.domain.constants.TransferConstants
 
 data class TransferByCardState(
     val loadingState: LoadingState = LoadingState.Finished,
@@ -24,6 +25,6 @@ data class TransferByCardState(
         maxLength = CoreConstants.MAX_BALANCE_LENGTH
     ),
     val commentInputFieldState: InputFieldState = InputFieldState(
-        maxLength = CoreConstants.MAX_COMMENT_LENGTH
+        maxLength = TransferConstants.MAX_COMMENT_LENGTH
     )
 )

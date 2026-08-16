@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
 import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.models.validation.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.outcome.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
@@ -13,7 +14,6 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
-import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
@@ -28,6 +28,7 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.models.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.transaction_succeed
+import com.wynndie.spwallet.sharedFeature.transfer.domain.constants.TransferConstants
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
 import com.wynndie.spwallet.sharedFeature.transfer.domain.validators.TransferCommentValidator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -191,7 +192,7 @@ class TransferByCardViewModel(
         val value = value
             .filter(InputFilters.Text.predicate)
             .trimSpaces()
-            .cutOffAt(CoreConstants.MAX_COMMENT_LENGTH) ?: return
+            .cutOffAt(TransferConstants.MAX_COMMENT_LENGTH) ?: return
 
         _state.update { state ->
             state.copy(

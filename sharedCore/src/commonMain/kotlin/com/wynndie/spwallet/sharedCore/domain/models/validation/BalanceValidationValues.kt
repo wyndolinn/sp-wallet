@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.domain.validators.models
+package com.wynndie.spwallet.sharedCore.domain.models.validation
 
 data class BalanceValidationValues(
     val value: String,
