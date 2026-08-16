@@ -71,12 +71,12 @@ import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayo
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.remove
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -281,7 +281,7 @@ private fun HomeScreenContent(
         modifier = modifier
     ) {
         BalanceComponent(
-            balance = state.totalBalance.asDisplayableOre(),
+            balance = state.totalBalance.asString(),
             hasCards = state.authedCards.isNotEmpty() || state.customCards.isNotEmpty(),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -312,7 +312,7 @@ private fun HomeScreenContent(
                             label = "${card.number} • ${card.name}",
                             title = stringResource(Res.string.x_of_ore, card.balance)
                                 .asFormattedAmount().uppercase(),
-                            text = card.balance.asDisplayableOre().formatted,
+                            text = card.balance.asString().formatted,
                             icon = card.icon.asPainter(),
                             color = card.color.asColor(),
                             onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
@@ -364,7 +364,7 @@ private fun HomeScreenContent(
                         label = card.name,
                         title = stringResource(Res.string.x_of_ore, card.balance)
                             .asFormattedAmount().uppercase(),
-                        text = card.balance.asDisplayableOre().formatted,
+                        text = card.balance.asString().formatted,
                         icon = card.icon.asPainter(),
                         color = card.color.asColor(),
                         onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },

@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.empty_profile
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.x_of_ore

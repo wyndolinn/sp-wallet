@@ -31,10 +31,10 @@ import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -117,7 +117,7 @@ fun AccountCardTile(
 @Composable
 private fun AccountCardTilePreview() {
     AppTheme {
-        val ore = 989898L.asDisplayableOre()
+        val ore = 989898L.asString()
         AccountCardTile(
             icon = CardIcons.BANK_CARD.asPainter(),
             color = CardColors.GREEN.asColor(),

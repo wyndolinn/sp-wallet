@@ -19,17 +19,16 @@ import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.ic_arrow_front
-import com.wynndie.spwallet.sharedCore.ic_people
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.LabeledIconButton
+import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asDisplayableOre
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asFormattedAmount
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.transfer_between_cards
 import com.wynndie.spwallet.sharedCore.transfer_by_number
@@ -68,7 +67,7 @@ fun AuthedCardSheet(
                     headline = "${card.number} • ${card.name}",
                     title = stringResource(Res.string.x_of_ore, card.balance)
                         .asFormattedAmount().uppercase(),
-                    text = card.balance.asDisplayableOre().formatted,
+                    text = card.balance.asString().formatted,
                     icon = card.icon.asPainter(),
                     color = card.color.asColor(),
                     modifier = Modifier.fillMaxWidth()

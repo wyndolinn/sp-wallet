@@ -168,6 +168,7 @@ private fun CustomCardScreen(
                 label = stringResource(Res.string.balance),
                 supportingText = state.balanceInputFieldState.supportingText?.asString(),
                 hasError = state.balanceInputFieldState.hasError,
+//                visualTransformation = AmountVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
