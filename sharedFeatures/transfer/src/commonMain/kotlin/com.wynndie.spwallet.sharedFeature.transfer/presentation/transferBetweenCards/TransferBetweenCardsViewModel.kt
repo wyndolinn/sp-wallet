@@ -11,7 +11,6 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
@@ -20,9 +19,9 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import com.wynndie.spwallet.sharedCore.transaction_succeed
 import com.wynndie.spwallet.sharedFeature.transfer.domain.models.TransferCard
 import com.wynndie.spwallet.sharedFeature.transfer.domain.useCases.TransferByCardUseCase
@@ -78,7 +77,7 @@ class TransferBetweenCardsViewModel(
             _state.update { state ->
                 state.copy(
                     sourceCards = sourceCard?.let { listOf(it) } ?: authedCards,
-                    destinationCards =  destinationsCards
+                    destinationCards = destinationsCards
                 )
             }
         }.launchIn(viewModelScope)

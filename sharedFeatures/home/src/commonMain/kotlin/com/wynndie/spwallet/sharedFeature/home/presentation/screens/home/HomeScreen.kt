@@ -74,9 +74,9 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.remove
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfElse
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -281,7 +281,7 @@ private fun HomeScreenContent(
         modifier = modifier
     ) {
         BalanceComponent(
-            balance = state.totalBalance.asString(),
+            balance = state.totalBalance,
             hasCards = state.authedCards.isNotEmpty() || state.customCards.isNotEmpty(),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -308,11 +308,12 @@ private fun HomeScreenContent(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
                 ) {
                     state.authedCards.forEach { card ->
+                        val balance = remember { DisplayableOreValue.of(card.balance) }
                         AccountCardTile(
                             label = "${card.number} • ${card.name}",
                             title = stringResource(Res.string.x_of_ore, card.balance)
                                 .asFormattedAmount().uppercase(),
-                            text = card.balance.asString().formatted,
+                            text = balance.asString(),
                             icon = card.icon.asPainter(),
                             color = card.color.asColor(),
                             onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
@@ -360,11 +361,12 @@ private fun HomeScreenContent(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
             ) {
                 state.customCards.forEach { card ->
+                    val balance = remember { DisplayableOreValue.of(card.balance) }
                     AccountCardTile(
                         label = card.name,
                         title = stringResource(Res.string.x_of_ore, card.balance)
                             .asFormattedAmount().uppercase(),
-                        text = card.balance.asString().formatted,
+                        text = balance.asString(),
                         icon = card.icon.asPainter(),
                         color = card.color.asColor(),
                         onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },

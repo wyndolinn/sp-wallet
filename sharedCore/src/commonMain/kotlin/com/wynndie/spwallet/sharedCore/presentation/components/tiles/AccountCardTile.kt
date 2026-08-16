@@ -33,8 +33,8 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -117,13 +117,13 @@ fun AccountCardTile(
 @Composable
 private fun AccountCardTilePreview() {
     AppTheme {
-        val ore = 989898L.asString()
+        val ore = DisplayableOreValue.of(989898)
         AccountCardTile(
             icon = CardIcons.BANK_CARD.asPainter(),
             color = CardColors.GREEN.asColor(),
             label = "12345 • pipipupu",
             title = stringResource(Res.string.x_of_ore, ore.value).uppercase().asFormattedAmount(),
-            text = ore.formatted,
+            text = ore.asString(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium)

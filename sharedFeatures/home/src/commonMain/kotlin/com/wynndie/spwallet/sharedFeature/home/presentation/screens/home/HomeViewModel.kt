@@ -13,16 +13,15 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.not_enough_cards
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 import com.wynndie.spwallet.sharedCore.server_changed
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -137,8 +136,7 @@ class HomeViewModel(
     private fun selectServer(server: SpServers) {
         viewModelScope.launch {
             preferencesRepository.setSelectedSpServer(server)
-            snackbarController.send(UiText.ResourceString(Res.string.server_changed, server.label)
-            )
+            snackbarController.send(UiText.ResourceString(Res.string.server_changed, server.label))
         }
     }
 
@@ -222,7 +220,7 @@ class HomeViewModel(
         val authedCardsBalance = state.value.authedCards.sumOf { it.balance }
         val customCardsBalance = state.value.customCards.sumOf { it.balance }
         val totalBalance = authedCardsBalance + customCardsBalance
-        _state.update { it.copy(totalBalance = totalBalance) }
+        _state.update { it.copy(totalBalance = DisplayableOreValue.of(totalBalance)) }
     }
 
     private fun closeOverlays() {

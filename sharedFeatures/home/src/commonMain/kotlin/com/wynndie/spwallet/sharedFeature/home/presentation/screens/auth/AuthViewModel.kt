@@ -9,7 +9,6 @@ import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
@@ -17,9 +16,9 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.SyncWithRemoteUseCase
 import com.wynndie.spwallet.sharedFeature.home.domain.validators.TokenValidator

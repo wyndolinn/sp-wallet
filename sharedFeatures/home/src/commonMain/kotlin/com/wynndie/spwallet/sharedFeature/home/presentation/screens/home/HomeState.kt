@@ -6,9 +6,8 @@ import com.wynndie.spwallet.sharedCore.domain.models.SpServers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
-import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText
 
 data class HomeState(
     val screenLoadingState: LoadingState = LoadingState.Finished,
@@ -20,7 +19,7 @@ data class HomeState(
     val isDeactivateCardDialogVisible: Boolean = false,
 
     val authedUser: AuthedUser = emptyAuthedUser,
-    val totalBalance: Long = 0,
+    val totalBalance: DisplayableOreValue = DisplayableOreValue.of(0),
 
     val customCards: List<CustomCard> = emptyList(),
     val authedCards: List<AuthedCard> = emptyList(),

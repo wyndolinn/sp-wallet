@@ -27,8 +27,8 @@ import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSh
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.transfer_between_cards
 import com.wynndie.spwallet.sharedCore.transfer_by_number
@@ -63,11 +63,12 @@ fun AuthedCardSheet(
                 contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
                 pageSpacing = MaterialTheme.spacing.medium
             ) { card ->
+                val balance = remember { DisplayableOreValue.of(card.balance) }
                 TransferCardTile(
                     headline = "${card.number} • ${card.name}",
                     title = stringResource(Res.string.x_of_ore, card.balance)
                         .asFormattedAmount().uppercase(),
-                    text = card.balance.asString().formatted,
+                    text = balance.asString(),
                     icon = card.icon.asPainter(),
                     color = card.color.asColor(),
                     modifier = Modifier.fillMaxWidth()

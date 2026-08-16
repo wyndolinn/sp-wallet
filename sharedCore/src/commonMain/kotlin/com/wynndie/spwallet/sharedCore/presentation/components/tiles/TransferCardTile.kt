@@ -27,8 +27,8 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
+import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
-import com.wynndie.spwallet.sharedCore.presentation.formatters.asString
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -98,7 +98,7 @@ fun TransferCardTile(
 @Composable
 private fun TransferCardTilePreview() {
     AppTheme {
-        val ore = 989898L.asString()
+        val ore = DisplayableOreValue.of(989898)
         TransferCardTile(
             headline = "Со счёта",
             title = stringResource(Res.string.x_of_ore, ore.value).uppercase().asFormattedAmount(),

@@ -13,7 +13,6 @@ import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.models.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.Snackbar
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
@@ -22,10 +21,10 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Finished
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState.Loading
 import com.wynndie.spwallet.sharedCore.presentation.formatters.UiText.ResourceString
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first

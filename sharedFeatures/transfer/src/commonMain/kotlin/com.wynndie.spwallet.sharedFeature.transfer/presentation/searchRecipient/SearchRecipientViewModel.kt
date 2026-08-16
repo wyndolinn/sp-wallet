@@ -7,10 +7,10 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
-import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
+import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine

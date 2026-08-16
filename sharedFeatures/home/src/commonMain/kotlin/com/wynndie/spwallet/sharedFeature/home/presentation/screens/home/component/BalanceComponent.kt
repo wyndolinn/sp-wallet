@@ -32,16 +32,14 @@ fun BalanceComponent(
             text = if (hasCards) {
                 stringResource(Res.string.x_of_ore, balance.value)
                     .asFormattedAmount().uppercase()
-            } else {
-                stringResource(Res.string.empty_profile)
-            },
+            } else stringResource(Res.string.empty_profile),
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        if (balance.formatted.isNotBlank()) {
+        if (balance.formatted.isNotEmpty()) {
             Text(
-                text = balance.formatted.asFormattedAmount(),
+                text = balance.asString().asFormattedAmount(),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )
