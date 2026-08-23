@@ -17,14 +17,14 @@ class DeleteAuthedCardUseCase(
         val authedCards = cardsRepository.getAuthedCards().first()
         if (authedCards.isNotEmpty()) return
 
-        val server = preferencesRepository.getSelectedSpServer().first()
+        val selectedServer = preferencesRepository.getSelectedSpServer().first()
         val unauthedCards = cardsRepository.getUnauthedCards().first()
         val users = userRepository.getAuthedUsers().first()
         users.forEach {
-            if (it.server == server) userRepository.deleteAuthedUser(it)
+            if (it.server == selectedServer) userRepository.deleteAuthedUser(it)
         }
         unauthedCards.forEach {
-            if (it.server == server) cardsRepository.deleteUnauthedCard(it)
+            if (it.server == selectedServer) cardsRepository.deleteUnauthedCard(it)
         }
     }
 }

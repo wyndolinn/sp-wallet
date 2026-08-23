@@ -64,7 +64,9 @@ class SyncWithRemoteUseCase(
             cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 
-        val cardBalance = cardsRepository.getCardBalance(authedCard.authKey).onError {
+        val cardBalance = cardsRepository.getCardBalance(
+            authKey = authedCard.authKey
+        ).onError {
             if (it != Error.Network.UNAUTHORIZED) return Outcome.Error(it)
             cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)

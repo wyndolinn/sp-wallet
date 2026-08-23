@@ -10,7 +10,7 @@ data class UnauthedCard(
     val color: CardColors,
     val icon: CardIcons
 ) {
-    fun asAuthedCard(authKey: String, balance: Long): AuthedCard {
+    fun toAuthedCard(authKey: String, balance: Long): AuthedCard {
         return AuthedCard(
             id = id,
             authKey = authKey,
