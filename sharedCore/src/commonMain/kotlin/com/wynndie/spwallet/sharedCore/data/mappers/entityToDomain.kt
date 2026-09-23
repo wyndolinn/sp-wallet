@@ -6,7 +6,7 @@ import com.wynndie.spwallet.sharedCore.data.database.entities.CustomCardEntity
 import com.wynndie.spwallet.sharedCore.data.database.entities.RecipientEntity
 import com.wynndie.spwallet.sharedCore.data.database.entities.UnauthedCardEntity
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
@@ -18,52 +18,52 @@ fun AuthedCardEntity.toDomain(): AuthedCard {
     return AuthedCard(
         id = id,
         authKey = authKey,
-        server = SpServers.valueOf(server),
+        server = Servers.valueOf(server),
         name = name,
         number = number,
         balance = balance,
         color = CardColors.of(color),
-        icon = CardIcons.of(icon)
+        icon = CardIcons.of(icon),
     )
 }
 
 fun AuthedUserEntity.toDomain(): AuthedUser {
     return AuthedUser(
         id = id,
-        server = SpServers.valueOf(server),
-        name = name
+        server = Servers.valueOf(server),
+        name = name,
     )
 }
 
 fun CustomCardEntity.toDomain(): CustomCard {
     return CustomCard(
         id = id.toString(),
-        server = SpServers.valueOf(server),
+        server = Servers.valueOf(server),
         name = name,
         balance = balance,
         color = CardColors.of(color),
-        icon = CardIcons.of(icon)
+        icon = CardIcons.of(icon),
     )
 }
 
 fun RecipientEntity.toDomain(): RecipientCard {
     return RecipientCard(
         id = id.toString(),
-        server = SpServers.valueOf(server),
+        server = Servers.valueOf(server),
         name = name,
         number = number,
         color = CardColors.of(color),
-        icon = CardIcons.of(icon)
+        icon = CardIcons.of(icon),
     )
 }
 
 fun UnauthedCardEntity.toDomain(): UnauthedCard {
     return UnauthedCard(
         id = id,
-        server = SpServers.valueOf(server),
+        server = Servers.valueOf(server),
         name = name,
         number = number,
         color = CardColors.of(color),
-        icon = CardIcons.of(icon)
+        icon = CardIcons.of(icon),
     )
 }

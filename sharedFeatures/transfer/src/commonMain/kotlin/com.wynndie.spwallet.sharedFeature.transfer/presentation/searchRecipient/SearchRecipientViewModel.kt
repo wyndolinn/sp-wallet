@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class SearchRecipientViewModel(
     recipientRepository: RecipientRepository,
     preferencesRepository: PreferencesRepository,
-    private val navEventController: NavEventController
+    private val navEventController: NavEventController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SearchRecipientState())
@@ -35,7 +35,7 @@ class SearchRecipientViewModel(
     init {
         combine(
             recipientRepository.getRecipients(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { recipients, server ->
             cachedRecipients = recipients.filter { it.server == server }
             _state.update { it.copy(recipients = cachedRecipients) }
@@ -55,7 +55,7 @@ class SearchRecipientViewModel(
                     val cardEntered = query.length == 5 && query.all { it.isDigit() }
                     state.copy(
                         recipients = recipients,
-                        isNewRecipient = cardEntered && recipients.isEmpty()
+                        isNewRecipient = cardEntered && recipients.isEmpty(),
                     )
                 }
             }
@@ -80,7 +80,7 @@ class SearchRecipientViewModel(
     private fun selectRecipient(card: String) {
         viewModelScope.launch {
             navEventController.navigate(
-                SearchRecipientNavEvent.NavigateToTransfer(card)
+                SearchRecipientNavEvent.NavigateToTransfer(card),
             )
         }
     }
@@ -94,8 +94,8 @@ class SearchRecipientViewModel(
         _state.update { state ->
             state.copy(
                 recipientInputFieldState = state.recipientInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }

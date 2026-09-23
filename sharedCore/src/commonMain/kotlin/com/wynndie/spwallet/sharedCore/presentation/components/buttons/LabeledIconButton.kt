@@ -28,12 +28,12 @@ fun LabeledIconButton(
     label: String? = null,
     destructive: Boolean = false,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         OutlinedButton(
             onClick = onClick,
@@ -41,22 +41,22 @@ fun LabeledIconButton(
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             contentPadding = PaddingValues(
                 horizontal = MaterialTheme.spacing.small,
-                vertical = MaterialTheme.spacing.extraExtraSmall
+                vertical = MaterialTheme.spacing.extraExtraSmall,
             ),
             colors = ButtonDefaults.outlinedButtonColors().copy(
                 contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
                 } else MaterialTheme.colorScheme.primary,
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
             shape = MaterialTheme.shapes.medium,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(MaterialTheme.sizes.medium)
+                .height(MaterialTheme.sizes.medium),
         ) {
             Icon(
                 painter = icon,
-                contentDescription = label
+                contentDescription = label,
             )
         }
 
@@ -65,7 +65,7 @@ fun LabeledIconButton(
                 text = it,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }

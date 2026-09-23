@@ -1,14 +1,14 @@
 package com.wynndie.spwallet.sharedCore.domain.models.cards
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 
 data class UnauthedCard(
     val id: String,
-    val server: SpServers,
+    val server: Servers,
     val name: String,
     val number: String,
     val color: CardColors,
-    val icon: CardIcons
+    val icon: CardIcons,
 ) {
     fun toAuthedCard(authKey: String, balance: Long): AuthedCard {
         return AuthedCard(
@@ -19,7 +19,7 @@ data class UnauthedCard(
             number = number,
             balance = balance,
             color = color,
-            icon = CardIcons.BANK_CARD
+            icon = CardIcons.BANK_CARD,
         )
     }
 }

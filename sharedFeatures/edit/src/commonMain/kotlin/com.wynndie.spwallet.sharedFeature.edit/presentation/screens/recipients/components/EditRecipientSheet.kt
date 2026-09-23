@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.card_name
-import com.wynndie.spwallet.sharedCore.card_number
 import com.wynndie.spwallet.sharedCore.number
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.inputField.InputField
@@ -28,7 +27,6 @@ import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSh
 import com.wynndie.spwallet.sharedCore.presentation.formatters.InputFieldState
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.save
-import com.wynndie.spwallet.sharedCore.token
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,11 +41,11 @@ fun EditRecipientSheet(
     onClearNumberFocus: () -> Unit,
     isSaveButtonEnabled: Boolean,
     onSaveRecipient: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BottomSheet(
         onDismiss = onDismiss,
-        modifier = Modifier
+        modifier = Modifier,
     ) {
         val focusManager = LocalFocusManager.current
         Column(
@@ -55,12 +53,12 @@ fun EditRecipientSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.pointerInput(Unit) {
                 detectTapGestures { focusManager.clearFocus(true) }
-            }.then(modifier)
+            }.then(modifier),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
+                modifier = Modifier,
             ) {
                 InputField(
                     value = nameFieldState.value,
@@ -70,14 +68,14 @@ fun EditRecipientSheet(
                     hasError = nameFieldState.hasError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Next,
                     ),
                     keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) },
                     ),
                     modifier = Modifier.onFocusChanged {
                         if (!it.isFocused) onClearNameFocus()
-                    }
+                    },
                 )
 
                 InputField(
@@ -88,14 +86,14 @@ fun EditRecipientSheet(
                     hasError = numberFieldState.hasError,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
                     ),
                     keyboardActions = KeyboardActions(
-                        onDone = { focusManager.clearFocus(true) }
+                        onDone = { focusManager.clearFocus(true) },
                     ),
                     modifier = Modifier.onFocusChanged {
                         if (!it.isFocused) onClearNumberFocus()
-                    }
+                    },
                 )
             }
 
@@ -103,7 +101,7 @@ fun EditRecipientSheet(
                 text = stringResource(Res.string.save),
                 onClick = onSaveRecipient,
                 enabled = isSaveButtonEnabled,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

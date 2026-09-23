@@ -14,16 +14,16 @@ import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 fun TitledContent(
     title: String,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
         )
 
         Box {

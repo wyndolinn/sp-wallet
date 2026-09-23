@@ -8,5 +8,5 @@ data class InputFieldState(
     val supportingText: UiText? = null,
     val hasError: Boolean = false,
     val minLength: Int = 0,
-    val maxLength: Int = 256
+    val maxLength: Int = 256,
 )

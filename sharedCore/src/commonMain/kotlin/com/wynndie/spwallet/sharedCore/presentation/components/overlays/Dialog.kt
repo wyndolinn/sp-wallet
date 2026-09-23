@@ -19,7 +19,7 @@ fun Dialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier,
-    destructive: Boolean = false
+    destructive: Boolean = false,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -33,25 +33,25 @@ fun Dialog(
         dismissButton = {
             TextButton(
                 text = stringResource(Res.string.cancel),
-                onClick = onDismiss
+                onClick = onDismiss,
             )
         },
         title = {
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         },
         text = {
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         },
         shape = MaterialTheme.shapes.medium,
         containerColor = MaterialTheme.colorScheme.surface,
-        modifier = modifier
+        modifier = modifier,
     )
 }

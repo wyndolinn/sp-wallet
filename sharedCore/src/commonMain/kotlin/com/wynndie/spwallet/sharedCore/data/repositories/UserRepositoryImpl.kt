@@ -8,7 +8,7 @@ import com.wynndie.spwallet.sharedCore.data.network.dto.CardholderDto
 import com.wynndie.spwallet.sharedCore.data.network.safeCall
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
 import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.map
@@ -22,12 +22,12 @@ import kotlinx.coroutines.flow.map
 
 class UserRepositoryImpl(
     private val httpClient: HttpClient,
-    private val database: WalletDatabase
+    private val database: WalletDatabase,
 ) : UserRepository {
 
     override suspend fun getUnauthedUser(
         authKey: String,
-        server: SpServers
+        server: Servers,
     ): Outcome<Cardholder, Error.Network> {
         return safeCall<CardholderDto> {
             httpClient.get(urlString = "$SP_WORLDS_URL/accounts/me") {
@@ -37,7 +37,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun insertAuthedUser(
-        user: AuthedUser
+        user: AuthedUser,
     ) {
         database.userDao.insertAuthedUser(user.toEntity())
     }

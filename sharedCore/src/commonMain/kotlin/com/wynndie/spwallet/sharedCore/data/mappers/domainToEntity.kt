@@ -20,7 +20,7 @@ fun AuthedCard.toEntity(): AuthedCardEntity {
         number = number,
         balance = balance,
         color = color.id,
-        icon = icon.id
+        icon = icon.id,
     )
 }
 
@@ -28,7 +28,7 @@ fun AuthedUser.toEntity(): AuthedUserEntity {
     return AuthedUserEntity(
         id = id,
         server = server.name,
-        name = name
+        name = name,
     )
 }
 
@@ -39,7 +39,7 @@ fun CustomCard.toEntity(): CustomCardEntity {
         name = name,
         balance = balance,
         color = color.id,
-        icon = icon.id
+        icon = icon.id,
     )
 }
 
@@ -50,7 +50,7 @@ fun RecipientCard.toEntity(): RecipientEntity {
         name = name,
         number = number,
         color = color.id,
-        icon = icon.id
+        icon = icon.id,
     )
 }
 
@@ -61,6 +61,6 @@ fun UnauthedCard.toEntity(): UnauthedCardEntity {
         name = name,
         number = number,
         color = color.id,
-        icon = icon.id
+        icon = icon.id,
     )
 }

@@ -14,7 +14,7 @@ import org.koin.compose.koinInject
 
 @Composable
 inline fun <reified T : NavEvent> ObserveNavEvent(
-    noinline onEvent: (T) -> Unit
+    noinline onEvent: (T) -> Unit,
 ) {
     val navEventController = koinInject<NavEventController>()
     val lifecycleOwner = LocalLifecycleOwner.current

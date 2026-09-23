@@ -10,19 +10,19 @@ data class RecipientsState(
     val recipients: List<RecipientCard> = emptyList(),
     val selectedRecipient: RecipientCard? = null,
     val recipientInputFieldState: InputFieldState = InputFieldState(
-        maxLength = 24
+        maxLength = 24,
     ),
 
     val cardNameInputFieldState: InputFieldState = InputFieldState(
         minLength = 1,
-        maxLength = 24
+        maxLength = 24,
     ),
     val cardNumberInputFieldState: InputFieldState = InputFieldState(
         minLength = 5,
-        maxLength = 5
+        maxLength = 5,
     ),
 
     val isEditRecipientSheetOpen: Boolean = false,
     val isDeleteDialogOpen: Boolean = false,
-    val isSaveButtonEnabled: Boolean = false
+    val isSaveButtonEnabled: Boolean = false,
 )

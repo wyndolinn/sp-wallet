@@ -21,7 +21,7 @@ fun DynamicText(
     style: TextStyle = MaterialTheme.typography.bodySmall,
     color: Color = style.color,
     textAlign: TextAlign = style.textAlign,
-    maxLines: Int = Int.MAX_VALUE
+    maxLines: Int = Int.MAX_VALUE,
 ) {
 
     val defaultFontSize = MaterialTheme.typography.bodyMedium.fontSize
@@ -46,6 +46,6 @@ fun DynamicText(
         },
         modifier = modifier.drawWithContent {
             if (shouldDraw) drawContent()
-        }
+        },
     )
 }

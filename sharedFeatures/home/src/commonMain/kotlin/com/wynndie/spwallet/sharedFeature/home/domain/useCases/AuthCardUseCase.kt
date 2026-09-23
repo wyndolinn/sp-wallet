@@ -1,6 +1,6 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
 import com.wynndie.spwallet.sharedCore.domain.outcome.Outcome
@@ -12,19 +12,19 @@ import com.wynndie.spwallet.sharedFeature.home.domain.encoders.AuthKeyEncoder
 class AuthCardUseCase(
     private val userRepository: UserRepository,
     private val cardsRepository: CardsRepository,
-    private val authKeyEncoder: AuthKeyEncoder
+    private val authKeyEncoder: AuthKeyEncoder,
 ) {
 
     suspend operator fun invoke(
-        server: SpServers,
+        server: Servers,
         id: String,
-        token: String
+        token: String,
     ): EmptyOutcome<Error.Network> {
         val authKey = authKeyEncoder.encode(id, token)
 
         val user = userRepository.getUnauthedUser(
             authKey = authKey,
-            server = server
+            server = server,
         ).getOrElse { return Outcome.Error(it) }
 
         val cardBalance = cardsRepository.getCardBalance(authKey)

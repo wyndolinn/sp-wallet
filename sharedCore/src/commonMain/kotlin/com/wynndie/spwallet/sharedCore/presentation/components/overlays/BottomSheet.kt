@@ -14,13 +14,13 @@ fun BottomSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     ModalBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismiss,
         containerColor = MaterialTheme.colorScheme.surface,
-        modifier = modifier
+        modifier = modifier,
     ) {
         content()
     }

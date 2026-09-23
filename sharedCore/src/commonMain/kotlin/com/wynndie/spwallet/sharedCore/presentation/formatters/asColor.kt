@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.extensions
+package com.wynndie.spwallet.sharedCore.presentation.formatters
 
 import androidx.compose.ui.graphics.Color
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors

@@ -32,9 +32,9 @@ import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.TransferCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 import com.wynndie.spwallet.sharedCore.recipient
 import com.wynndie.spwallet.sharedCore.transfer
@@ -48,7 +48,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun TransferByCardScreenRoot(
     viewModel: TransferByCardViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
@@ -57,22 +57,22 @@ fun TransferByCardScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.by_number),
-                onClickBack = { viewModel.onAction(TransferByCardAction.NavigateBack) }
+                onClickBack = { viewModel.onAction(TransferByCardAction.NavigateBack) },
             )
         },
         loadingState = state.loadingState,
         focusManager = focusManager,
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         ScreenLayout(
             contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
             TransferByNumberScreen(
                 state = state,
                 onAction = viewModel::onAction,
                 focusManager = focusManager,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }
@@ -83,14 +83,14 @@ private fun TransferByNumberScreen(
     state: TransferByCardState,
     onAction: (TransferByCardAction) -> Unit,
     focusManager: FocusManager,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
-        modifier = modifier
+        modifier = modifier,
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         ) {
             BaseCarousel(
                 items = state.sourceCards,
@@ -106,7 +106,7 @@ private fun TransferByNumberScreen(
                     text = "${card.number} • ${card.name}",
                     icon = card.icon.asPainter(),
                     color = card.color.asColor(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -121,12 +121,12 @@ private fun TransferByNumberScreen(
                 onClick = { onAction(TransferByCardAction.EditRecipient) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .padding(horizontal = MaterialTheme.spacing.medium),
             )
         }
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
         ) {
             InputField(
                 value = state.amountInputFieldState.value,
@@ -136,12 +136,12 @@ private fun TransferByNumberScreen(
                 hasError = state.amountInputFieldState.hasError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) },
                 ),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
             )
 
             InputField(
@@ -156,14 +156,14 @@ private fun TransferByNumberScreen(
                 minLines = 3,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus(true)
-                    }
+                    },
                 ),
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
             )
         }
 
@@ -173,7 +173,7 @@ private fun TransferByNumberScreen(
             enabled = state.isTransferButtonEnabled,
             modifier = Modifier
                 .padding(MaterialTheme.spacing.medium)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
     }
 }

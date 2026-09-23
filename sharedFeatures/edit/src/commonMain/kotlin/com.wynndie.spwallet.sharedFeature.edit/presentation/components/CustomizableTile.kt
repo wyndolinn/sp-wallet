@@ -2,7 +2,6 @@ package com.wynndie.spwallet.sharedFeature.edit.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,8 +22,8 @@ import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
 import com.wynndie.spwallet.sharedCore.edit_color
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -35,33 +34,33 @@ fun CustomizableTile(
     color: Color,
     icon: Painter,
 //    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(MaterialTheme.sizes.extraLarge)
                 .clip(MaterialTheme.shapes.medium)
-                .background(color)
+                .background(color),
 //                .clickable(onClick = onClick)
         ) {
             Image(
                 painter = icon,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                modifier = Modifier.size(MaterialTheme.sizes.small)
+                modifier = Modifier.size(MaterialTheme.sizes.small),
             )
         }
 
         Text(
             text = stringResource(Res.string.edit_color),
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.outline
+            color = MaterialTheme.colorScheme.outline,
         )
     }
 }
@@ -74,7 +73,7 @@ private fun CustomizableTilePreview() {
             color = CardColors.TEAL.asColor(),
             icon = CardIcons.CASH.asPainter(),
 //            onClick = {},
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 }

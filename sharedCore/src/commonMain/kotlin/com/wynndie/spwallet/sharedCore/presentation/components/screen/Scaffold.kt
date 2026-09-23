@@ -29,7 +29,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.presentation.components.loading.LoadingScreen
@@ -69,7 +68,7 @@ fun Scaffold(
                         it.positionInRoot().y.toDp() + it.size.height.toDp()
                     }
                     fabHeight = screenHeightDp - fabRootHeight
-                }
+                },
             )
         },
         floatingActionButtonPosition = floatingActionButtonPosition,
@@ -81,7 +80,7 @@ fun Scaffold(
             .imePadding()
             .thenIfNotNull(nestedScrollConnection) { Modifier.nestedScroll(it) }
             .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus(true) } }
-            .then(modifier)
+            .then(modifier),
     ) { innerPadding ->
         Crossfade(loadingState) { state ->
             when (state) {
@@ -89,7 +88,7 @@ fun Scaffold(
                     LoadingScreen(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding)
+                            .padding(innerPadding),
                     )
                 }
 

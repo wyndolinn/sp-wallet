@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class RecipientRepositoryImpl(
-    private val database: WalletDatabase
+    private val database: WalletDatabase,
 ) : RecipientRepository {
 
     override suspend fun insertRecipient(
-        recipientCard: RecipientCard
+        recipientCard: RecipientCard,
     ) {
         database.recipientDao.insertRecipient(recipientCard.toEntity())
     }

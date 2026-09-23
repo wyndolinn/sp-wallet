@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
 
@@ -25,12 +24,12 @@ fun IconButton(
     color: Color = MaterialTheme.colorScheme.primary,
     destructive: Boolean = false,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         IconButton(
             onClick = onClick,
@@ -38,8 +37,8 @@ fun IconButton(
             colors = IconButtonDefaults.iconButtonColors().copy(
                 contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
-                } else color
-            )
+                } else color,
+            ),
         ) {
             Icon(
                 painter = icon,
@@ -52,7 +51,7 @@ fun IconButton(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }

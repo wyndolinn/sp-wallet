@@ -1,9 +1,9 @@
 package com.wynndie.spwallet.sharedFeature.transfer.presentation.transferByCard
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyAuthedUser
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyAuthedUser
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.models.AuthedUser
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
@@ -22,9 +22,9 @@ data class TransferByCardState(
     val commentPrefix: String = "",
     val amountInputFieldState: InputFieldState = InputFieldState(
         value = TextFieldValue("0"),
-        maxLength = CoreConstants.MAX_BALANCE_LENGTH
+        maxLength = CoreConstants.MAX_BALANCE_LENGTH,
     ),
     val commentInputFieldState: InputFieldState = InputFieldState(
-        maxLength = TransferConstants.MAX_COMMENT_LENGTH
-    )
+        maxLength = TransferConstants.MAX_COMMENT_LENGTH,
+    ),
 )

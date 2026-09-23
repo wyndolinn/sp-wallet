@@ -1,12 +1,12 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 
 sealed interface HomeAction {
     data object Refresh : HomeAction
 
-    data class SelectServer(val server: SpServers) : HomeAction
+    data class SelectServer(val server: Servers) : HomeAction
 
     data object AuthCard : HomeAction
     data class ToggleAuthedCardSheet(val open: Boolean) : HomeAction

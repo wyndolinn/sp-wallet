@@ -14,7 +14,10 @@ fun TextFieldValue.replace(oldChar: String, newChar: String): TextFieldValue {
     return this.copy(text = this.text.replace(oldChar, newChar))
 }
 
-fun TextFieldValue.dropFirst(char: Char, condition: (String) -> Boolean = { true }): TextFieldValue {
+fun TextFieldValue.dropFirst(
+    char: Char,
+    condition: (String) -> Boolean = { true },
+): TextFieldValue {
     if (!this.text.startsWith(char)) return this
     if (!condition(this.text)) return this
     return this.copy(text = this.text.dropWhile { it == char })

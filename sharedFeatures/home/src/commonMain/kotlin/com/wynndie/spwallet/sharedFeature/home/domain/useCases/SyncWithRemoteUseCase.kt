@@ -1,7 +1,7 @@
 package com.wynndie.spwallet.sharedFeature.home.domain.useCases
 
 import com.wynndie.spwallet.sharedCore.domain.models.Cardholder
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.outcome.EmptyOutcome
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.first
 
 class SyncWithRemoteUseCase(
     private val userRepository: UserRepository,
-    private val cardsRepository: CardsRepository
+    private val cardsRepository: CardsRepository,
 ) {
 
     suspend operator fun invoke(): EmptyOutcome<Error.Network> {
-        SpServers.entries.forEach { server ->
+        Servers.entries.forEach { server ->
             var authedCards = cardsRepository.getAuthedCards().first()
             var cardholder: Cardholder? = null
             authedCards
@@ -53,19 +53,19 @@ class SyncWithRemoteUseCase(
     }
 
     private suspend fun updateAuthedCard(
-        authedCard: AuthedCard
+        authedCard: AuthedCard,
     ): Outcome<Cardholder?, Error.Network> {
 
         val user = userRepository.getUnauthedUser(
             authKey = authedCard.authKey,
-            server = authedCard.server
+            server = authedCard.server,
         ).onError {
             if (it != Error.Network.UNAUTHORIZED) return Outcome.Error(it)
             cardsRepository.deleteAuthedCard(authedCard)
         }.getOrNull() ?: return Outcome.Success(null)
 
         val cardBalance = cardsRepository.getCardBalance(
-            authKey = authedCard.authKey
+            authKey = authedCard.authKey,
         ).onError {
             if (it != Error.Network.UNAUTHORIZED) return Outcome.Error(it)
             cardsRepository.deleteAuthedCard(authedCard)

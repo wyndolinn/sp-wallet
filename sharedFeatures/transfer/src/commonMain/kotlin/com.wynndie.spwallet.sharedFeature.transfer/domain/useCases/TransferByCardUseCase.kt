@@ -11,31 +11,32 @@ import kotlinx.coroutines.flow.first
 
 class TransferByCardUseCase(
     private val transferRepository: TransferRepository,
-    private val cardsRepository: CardsRepository
+    private val cardsRepository: CardsRepository,
 ) {
 
     suspend operator fun invoke(
         card: AuthedCard,
         receiver: String,
         amount: String,
-        comment: String
+        comment: String,
     ): EmptyOutcome<Error.Network> {
 
         val cardBalance = transferRepository.makeTransaction(
             authKey = card.authKey,
             receiver = receiver,
             amount = amount.toLong(),
-            comment = comment
+            comment = comment,
         ).getOrElse { return Outcome.Error(it) }
         cardsRepository.insertAuthedCard(card.copy(balance = cardBalance))
 
         val destinationCard = cardsRepository.getAuthedCards().first()
             .find { it.number == receiver }
             ?: return Outcome.Success(Unit)
+
         cardsRepository.insertAuthedCard(
             card = destinationCard.copy(
-                balance = destinationCard.balance + amount.toLong()
-            )
+                balance = destinationCard.balance + amount.toLong(),
+            ),
         )
 
         return Outcome.Success(Unit)

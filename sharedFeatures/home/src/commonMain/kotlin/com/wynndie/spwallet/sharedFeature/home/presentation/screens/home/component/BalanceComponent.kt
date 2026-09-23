@@ -22,11 +22,11 @@ fun BalanceComponent(
     balance: DisplayableOreValue,
     hasCards: Boolean,
     modifier: Modifier = Modifier,
-    horizontalAlignment: Alignment.Horizontal = Alignment.Start
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
 ) {
     Column(
         horizontalAlignment = horizontalAlignment,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = if (hasCards) {
@@ -34,14 +34,14 @@ fun BalanceComponent(
                     .asFormattedAmount().uppercase()
             } else stringResource(Res.string.empty_profile),
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
         if (balance.formatted.isNotEmpty()) {
             Text(
                 text = balance.asString().asFormattedAmount(),
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -54,7 +54,7 @@ private fun BalanceComponentPreview() {
         BalanceComponent(
             balance = DisplayableOreValue.of(10),
             hasCards = true,
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 }

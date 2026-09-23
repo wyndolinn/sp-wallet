@@ -7,35 +7,23 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 
-inline fun Modifier.thenIf(condition: Boolean, block: Modifier.() -> Modifier): Modifier {
-    return if (condition) then(this.block()) else then(this)
+
+inline fun Modifier.then(other: Modifier.() -> Modifier): Modifier {
+    return then(this.other())
 }
 
-inline fun Modifier.thenIfElse(
-    condition: Boolean,
-    onTrue: Modifier.() -> Modifier,
-    onFalse: Modifier.() -> Modifier
-): Modifier {
-    return if (condition) then(this.onTrue()) else then(this.onFalse())
+inline fun Modifier.thenIf(condition: Boolean, other: Modifier.() -> Modifier): Modifier {
+    return if (condition) then(this.other()) else then(this)
 }
 
-inline fun <T> Modifier.thenIfNull(value: T?, block: Modifier.() -> Modifier): Modifier {
-    return if (value == null) then(this.block()) else then(this)
-}
-
-inline fun <T> Modifier.thenIfNotNull(value: T?, block: Modifier.(T) -> Modifier): Modifier {
-    return if (value != null) then(this.block(value)) else then(this)
+inline fun <T> Modifier.thenIfNotNull(value: T?, other: Modifier.(T) -> Modifier): Modifier {
+    return if (value != null) then(this.other(value)) else then(this)
 }
 
 fun Modifier.cardColor(color: Color): Modifier {
@@ -52,23 +40,23 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = 1200,
-                easing = LinearEasing
+                easing = LinearEasing,
             ),
-            repeatMode = RepeatMode.Restart
+            repeatMode = RepeatMode.Restart,
         ),
-        label = "shimmer_translate"
+        label = "shimmer_translate",
     )
 
     val shimmerColors = listOf(
         Color.LightGray.copy(alpha = 0.6f),
         Color.LightGray.copy(alpha = 0.2f),
-        Color.LightGray.copy(alpha = 0.6f)
+        Color.LightGray.copy(alpha = 0.6f),
     )
 
     val brush = Brush.linearGradient(
         colors = shimmerColors,
         start = Offset(translateAnim.value - 200f, 0f),
-        end = Offset(translateAnim.value, 0f)
+        end = Offset(translateAnim.value, 0f),
     )
 
     this.background(brush)

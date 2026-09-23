@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,7 +52,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RecipientsScreenRoot(
     viewModel: RecipientsViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val focusManager = LocalFocusManager.current
@@ -69,7 +67,7 @@ fun RecipientsScreenRoot(
                 viewModel.onAction(RecipientsAction.ToggleEditRecipientSheet(true))
             },
             onTransferClick = { viewModel.onAction(RecipientsAction.MakeTransfer) },
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 
@@ -84,7 +82,7 @@ fun RecipientsScreenRoot(
             onClearNumberFocus = { viewModel.onAction(RecipientsAction.ClearCardNumberFocus) },
             isSaveButtonEnabled = state.isSaveButtonEnabled,
             onSaveRecipient = { viewModel.onAction(RecipientsAction.SaveRecipient) },
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 
@@ -94,7 +92,7 @@ fun RecipientsScreenRoot(
             description = stringResource(Res.string.delete_recipient_description),
             onConfirm = { viewModel.onAction(RecipientsAction.DeleteRecipient) },
             onDismiss = { viewModel.onAction(RecipientsAction.ToggleDeleteRecipientDialog(false)) },
-            modifier = Modifier
+            modifier = Modifier,
         )
     }
 
@@ -103,15 +101,15 @@ fun RecipientsScreenRoot(
         topBar = {
             TopAppBar(
                 title = stringResource(Res.string.recipients),
-                onClickBack = { viewModel.onAction(RecipientsAction.NavigateBack) }
+                onClickBack = { viewModel.onAction(RecipientsAction.NavigateBack) },
             )
         },
         loadingState = state.loadingState,
         focusManager = focusManager,
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         ScreenLayout(
-            contentPadding = innerPadding.add(MaterialTheme.spacing.medium)
+            contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
         ) {
             Column {
                 RecipientsScreen(
@@ -119,7 +117,7 @@ fun RecipientsScreenRoot(
                     onAction = viewModel::onAction,
                     focusManager = focusManager,
                     contentPadding = innerPadding.add(MaterialTheme.spacing.medium),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
@@ -132,10 +130,10 @@ private fun RecipientsScreen(
     onAction: (RecipientsAction) -> Unit,
     focusManager: FocusManager,
     contentPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         InputField(
             value = state.recipientInputFieldState.value,
@@ -143,21 +141,21 @@ private fun RecipientsScreen(
             placeholder = stringResource(Res.string.card_number),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus(true) }
+                onDone = { focusManager.clearFocus(true) },
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium),
         )
 
         when {
             state.recipients.isNotEmpty() -> {
                 LazyColumn(
                     contentPadding = PaddingValues(vertical = MaterialTheme.spacing.extraLarge),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     items(state.recipients) { recipient ->
                         RecipientTile(
@@ -165,7 +163,7 @@ private fun RecipientsScreen(
                             title = recipient.number,
                             actionIcon = painterResource(Res.drawable.ic_edit),
                             onClick = { onAction(RecipientsAction.SelectRecipient(recipient)) },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
@@ -180,19 +178,19 @@ private fun RecipientsScreen(
                         .fillMaxWidth()
                         .padding(
                             horizontal = MaterialTheme.spacing.medium,
-                            vertical = MaterialTheme.spacing.extraLarge
-                        )
+                            vertical = MaterialTheme.spacing.extraLarge,
+                        ),
                 ) {
                     Text(
                         text = stringResource(Res.string.enter_recipient_card_number),
                         style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
 
                     Text(
                         text = stringResource(Res.string.recipient_history_empty),
                         style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -204,7 +202,7 @@ private fun RecipientsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.spacing.medium)
-                .padding(bottom = contentPadding.calculateBottomPadding())
+                .padding(bottom = contentPadding.calculateBottomPadding()),
         )
     }
 }
@@ -220,7 +218,7 @@ private fun RecipientsScreenPreview() {
             contentPadding = PaddingValues(),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
 }

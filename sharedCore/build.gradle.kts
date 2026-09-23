@@ -27,7 +27,6 @@ kotlin {
         }
     }
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
@@ -74,7 +73,9 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlin.coroutines.test)
             implementation(libs.assertk)
+
         }
 
         iosMain.dependencies {
@@ -92,7 +93,6 @@ compose.resources {
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
     add("kspAndroid", libs.androidx.room.compiler)
-    add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
 }

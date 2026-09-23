@@ -30,11 +30,11 @@ import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -49,7 +49,7 @@ fun AccountCardTile(
     icon: Painter,
     color: Color,
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
@@ -58,23 +58,23 @@ fun AccountCardTile(
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
             )
             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-            .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
+            .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) },
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxHeight()
                 .width(MaterialTheme.sizes.large)
-                .background(color)
+                .background(color),
         ) {
             Icon(
                 painter = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(MaterialTheme.sizes.small)
+                modifier = Modifier.size(MaterialTheme.sizes.small),
             )
         }
 
@@ -82,14 +82,14 @@ fun AccountCardTile(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .weight(1f)
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         ) {
 
             if (label.isNotBlank()) {
                 Text(
                     text = label,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
                 Spacer(Modifier.height(MaterialTheme.spacing.extraExtraSmall))
@@ -99,14 +99,14 @@ fun AccountCardTile(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
 
             if (text.isNotBlank()) {
                 Text(
                     text = text,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
@@ -126,7 +126,7 @@ private fun AccountCardTilePreview() {
             text = ore.asString(),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
 }

@@ -6,7 +6,7 @@ import com.wynndie.spwallet.di.initKoin
 fun MainViewController() = ComposeUIViewController(
     configure = {
         initKoin()
-    }
+    },
 ) {
     App()
 }

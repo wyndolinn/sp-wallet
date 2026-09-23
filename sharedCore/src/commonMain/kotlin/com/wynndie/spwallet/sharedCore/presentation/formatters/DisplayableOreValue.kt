@@ -15,14 +15,14 @@ import com.wynndie.spwallet.sharedCore.x_of_stacks
  */
 data class DisplayableOreValue(
     val value: Long,
-    val formatted: List<UiText>
+    val formatted: List<UiText>,
 ) {
 
     @Composable
     fun asString(): String {
-        // Предупреждение игнорируется, потому что map
+        // Предупреждение игнорируется, потому что текущая реализация
         // сохраняет Composable контекст внутри лямбды,
-        // в отличии от .jointToString() { it.asString() }
+        // в отличие от formatted.jointToString() { it.asString() }
         return formatted.map { it.asString() }.joinToString(" ")
     }
 
@@ -45,7 +45,7 @@ data class DisplayableOreValue(
             if (value == 0L) {
                 return DisplayableOreValue(
                     value = value,
-                    formatted = emptyList()
+                    formatted = emptyList(),
                 )
             }
 
@@ -63,7 +63,7 @@ data class DisplayableOreValue(
 
             return DisplayableOreValue(
                 value = value,
-                formatted = formattedValue
+                formatted = formattedValue,
             )
         }
     }

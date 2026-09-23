@@ -1,4 +1,4 @@
-package com.wynndie.spwallet.sharedCore.presentation.extensions
+package com.wynndie.spwallet.sharedCore.presentation.formatters
 
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error

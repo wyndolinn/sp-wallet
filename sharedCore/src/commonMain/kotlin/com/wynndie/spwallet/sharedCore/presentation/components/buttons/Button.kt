@@ -24,24 +24,24 @@ fun Button(
     color: Color = MaterialTheme.colorScheme.primary,
     destructive: Boolean = false,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     Button(
         onClick = onClick,
         enabled = enabled && !loading,
         contentPadding = PaddingValues(
             horizontal = MaterialTheme.spacing.medium,
-            vertical = MaterialTheme.spacing.small
+            vertical = MaterialTheme.spacing.small,
         ),
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = if (destructive) {
                 MaterialTheme.colorScheme.error
             } else color,
             disabledContentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.outline
+            disabledContainerColor = MaterialTheme.colorScheme.outline,
         ),
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.height(MaterialTheme.sizes.extraLarge)
+        modifier = modifier.height(MaterialTheme.sizes.extraLarge),
     ) {
         Crossfade(targetState = loading) { isLoading ->
             if (isLoading) {
@@ -49,7 +49,7 @@ fun Button(
             } else {
                 ButtonLayout(
                     text = text,
-                    leadingIcon = icon
+                    leadingIcon = icon,
                 )
             }
         }

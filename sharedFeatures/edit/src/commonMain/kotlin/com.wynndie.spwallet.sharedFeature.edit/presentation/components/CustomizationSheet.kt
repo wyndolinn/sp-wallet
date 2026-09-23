@@ -26,8 +26,8 @@ import com.wynndie.spwallet.sharedCore.apply
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.BottomSheet
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIf
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -39,33 +39,33 @@ fun CustomizationSheet(
     onDismiss: () -> Unit,
     selectedColor: CardColors,
     onColorClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     BottomSheet(
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.large),
             modifier = modifier
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onTap = { focusManager.clearFocus(true) }
+                        onTap = { focusManager.clearFocus(true) },
                     )
-                }
+                },
         ) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(
                     space = MaterialTheme.spacing.small,
-                    alignment = Alignment.CenterHorizontally
+                    alignment = Alignment.CenterHorizontally,
                 ),
                 verticalArrangement = Arrangement.spacedBy(
                     space = MaterialTheme.spacing.small,
-                    alignment = Alignment.CenterVertically
+                    alignment = Alignment.CenterVertically,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .padding(horizontal = MaterialTheme.spacing.medium),
             ) {
                 CardColors.entries.forEach { color ->
                     Box(
@@ -75,7 +75,7 @@ fun CustomizationSheet(
                             .clip(MaterialTheme.shapes.large)
                             .thenIf(selectedColor == color) {
                                 Modifier.background(color.asColor())
-                            }
+                            },
                     ) {
                         Box(
                             modifier = Modifier
@@ -87,9 +87,9 @@ fun CustomizationSheet(
                                     Modifier.border(
                                         width = 2.dp,
                                         color = MaterialTheme.colorScheme.surface,
-                                        shape = MaterialTheme.shapes.small
+                                        shape = MaterialTheme.shapes.small,
                                     )
-                                }
+                                },
                         )
                     }
                 }
@@ -98,7 +98,7 @@ fun CustomizationSheet(
             Button(
                 text = stringResource(Res.string.apply),
                 onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
@@ -112,7 +112,7 @@ private fun CustomizableSheetPreview() {
             selectedColor = CardColors.BLUE,
             onColorClick = {},
             onDismiss = {},
-            modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(MaterialTheme.spacing.medium),
         )
     }
 }

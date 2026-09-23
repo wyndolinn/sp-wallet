@@ -4,15 +4,15 @@ import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
 
 data class Cardholder(
     val id: String,
-    val server: SpServers,
+    val server: Servers,
     val username: String,
-    val cards: List<UnauthedCard>
+    val cards: List<UnauthedCard>,
 ) {
     fun toAuthedUser(): AuthedUser {
         return AuthedUser(
             id = id,
             server = server,
-            name = username
+            name = username,
         )
     }
 }

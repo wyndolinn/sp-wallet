@@ -11,7 +11,7 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
 suspend inline fun <reified T> safeCall(
-    execute: () -> HttpResponse
+    execute: () -> HttpResponse,
 ): Outcome<T, Error.Network> {
     val response = try {
         execute()

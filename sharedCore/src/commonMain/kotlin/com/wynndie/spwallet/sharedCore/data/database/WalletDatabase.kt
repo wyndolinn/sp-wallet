@@ -18,9 +18,9 @@ import com.wynndie.spwallet.sharedCore.data.database.entities.UnauthedCardEntity
         CustomCardEntity::class,
         AuthedCardEntity::class,
         UnauthedCardEntity::class,
-        RecipientEntity::class
+        RecipientEntity::class,
     ],
-    version = 1
+    version = 1,
 )
 @ConstructedBy(WalletDatabaseConstructor::class)
 abstract class WalletDatabase : RoomDatabase() {

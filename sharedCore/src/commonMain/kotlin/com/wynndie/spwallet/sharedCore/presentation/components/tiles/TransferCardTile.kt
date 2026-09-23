@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asColor
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColor
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asFormattedAmount
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -43,50 +43,50 @@ fun TransferCardTile(
     color: Color,
     modifier: Modifier = Modifier,
     headline: String = "",
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
             .cardColor(color.copy(alpha = 0.05f))
             .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
-            .padding(MaterialTheme.spacing.medium)
+            .padding(MaterialTheme.spacing.medium),
     ) {
         if (headline.isNotBlank()) {
             Text(
                 text = headline,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.offset(x = -(4.dp))
+            modifier = Modifier.offset(x = -(4.dp)),
         ) {
             Image(
                 painter = icon,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(color),
-                modifier = Modifier.size(MaterialTheme.sizes.large)
+                modifier = Modifier.size(MaterialTheme.sizes.large),
             )
 
             Column(
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
 
                 if (text.isNotBlank()) {
                     Text(
                         text = text,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -107,7 +107,7 @@ private fun TransferCardTilePreview() {
             color = CardColors.GREEN.asColor(),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(MaterialTheme.spacing.medium),
         )
     }
 }

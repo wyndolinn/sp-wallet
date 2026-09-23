@@ -6,9 +6,6 @@ package com.wynndie.spwallet.sharedCore.presentation.formatters
  *
  * Группировка целой части применяется только если она длиннее 4 символов.
  * Дробная часть выводится как есть, без группировки.
- *
- * @param delimiter разделитель между целой и дробной частью в результате
- * @return отформатированная строка со сгруппированной целой частью
  */
 fun String.asFormattedAmount(delimiter: String = "."): String {
     val parts = this.split(",", ".", limit = 2)

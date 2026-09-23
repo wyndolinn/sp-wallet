@@ -3,7 +3,7 @@ package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.domain.models.SpServers
+import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.AuthedCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.UnauthedCard
@@ -14,9 +14,9 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.not_enough_cards
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.models.UiText
 import com.wynndie.spwallet.sharedCore.server_changed
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.DeleteAuthedCardUseCase
@@ -37,7 +37,7 @@ class HomeViewModel(
     private val syncWithRemoteUseCase: SyncWithRemoteUseCase,
     private val deleteAuthedCardUseCase: DeleteAuthedCardUseCase,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -48,7 +48,7 @@ class HomeViewModel(
     init {
         syncWithRemote()
 
-        preferencesRepository.getSelectedSpServer().onEach { server ->
+        preferencesRepository.getSelectedServer().onEach { server ->
             _state.update { state ->
                 state.copy(selectedServer = server)
             }
@@ -64,19 +64,19 @@ class HomeViewModel(
             cardsRepository.getAuthedCards(),
             cardsRepository.getUnauthedCards(),
             cardsRepository.getCustomCards(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { authedCards, unauthedCard, customCards, selectedSever ->
             HomeCardsData(
                 authedCards = authedCards.filter { it.server == selectedSever },
                 unauthedCards = unauthedCard.filter { it.server == selectedSever },
-                customCards = customCards.filter { it.server == selectedSever }
+                customCards = customCards.filter { it.server == selectedSever },
             )
         }.onEach { data ->
             _state.update { state ->
                 state.copy(
                     authedCards = data.authedCards,
                     unauthedCards = data.unauthedCards,
-                    customCards = data.customCards
+                    customCards = data.customCards,
                 )
             }
             updateBalance()
@@ -133,9 +133,9 @@ class HomeViewModel(
     }
 
 
-    private fun selectServer(server: SpServers) {
+    private fun selectServer(server: Servers) {
         viewModelScope.launch {
-            preferencesRepository.setSelectedSpServer(server)
+            preferencesRepository.setSelectedServer(server)
             snackbarController.send(UiText.ResourceString(Res.string.server_changed, server.label))
         }
     }
@@ -150,7 +150,7 @@ class HomeViewModel(
         _state.update { state ->
             state.copy(
                 isAuthedCardSheetVisible = open,
-                isDeactivateCardDialogVisible = false
+                isDeactivateCardDialogVisible = false,
             )
         }
     }
@@ -159,7 +159,7 @@ class HomeViewModel(
         _state.update { state ->
             state.copy(
                 isAuthedCardSheetVisible = true,
-                isDeactivateCardDialogVisible = open
+                isDeactivateCardDialogVisible = open,
             )
         }
     }
@@ -192,7 +192,7 @@ class HomeViewModel(
         _state.update { state ->
             state.copy(
                 isAuthedCardSheetVisible = true,
-                carouselPage = cardIndex
+                carouselPage = cardIndex,
             )
         }
     }
@@ -227,7 +227,7 @@ class HomeViewModel(
         _state.update {
             it.copy(
                 isAuthedCardSheetVisible = false,
-                isDeactivateCardDialogVisible = false
+                isDeactivateCardDialogVisible = false,
             )
         }
     }
@@ -236,7 +236,7 @@ class HomeViewModel(
         private data class HomeCardsData(
             val authedCards: List<AuthedCard>,
             val unauthedCards: List<UnauthedCard>,
-            val customCards: List<CustomCard>
+            val customCards: List<CustomCard>,
         )
     }
 }

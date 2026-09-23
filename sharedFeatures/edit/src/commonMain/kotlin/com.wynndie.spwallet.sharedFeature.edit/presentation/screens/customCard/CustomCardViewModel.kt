@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.cash_creation_succeed
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyCustomCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyCustomCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
-import com.wynndie.spwallet.sharedCore.domain.models.validation.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
@@ -40,7 +40,7 @@ class CustomCardViewModel(
     private val cardNameValidator: CardNameValidator,
     private val balanceValidator: BalanceValidator,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CustomCardState())
@@ -52,21 +52,21 @@ class CustomCardViewModel(
         observeValidationStates(
             _state.observeInputField(
                 inputField = { it.nameInputFieldState },
-                validation = { cardNameValidator.validate(it) },
-                updateState = { value -> _state.update { it.copy(nameInputFieldState = value) } }
+                validation = { cardNameValidator.validate(ValidationValues(it)) },
+                updateState = { value -> _state.update { it.copy(nameInputFieldState = value) } },
             ),
             _state.observeInputField(
                 inputField = { it.balanceInputFieldState },
                 validation = {
                     balanceValidator.validate(
-                        BalanceValidationValues(
+                        ValidationValues(
                             value = it,
-                            minValue = 0
-                        )
+                            minValue = 0,
+                        ),
                     )
                 },
-                updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
-            )
+                updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } },
+            ),
         ).onEach { isAllValid ->
             _state.update { it.copy(isSaveButtonEnabled = isAllValid) }
         }.launchIn(viewModelScope)
@@ -96,7 +96,7 @@ class CustomCardViewModel(
             val card = cardsRepository.getCustomCards().first()
                 .find { it.id == args.cardId }
                 ?: emptyCustomCard.copy(
-                    server = preferencesRepository.getSelectedSpServer().first()
+                    server = preferencesRepository.getSelectedServer().first(),
                 )
 
             _state.update { state ->
@@ -104,11 +104,11 @@ class CustomCardViewModel(
                     card = card,
                     selectedColorChip = card.color,
                     nameInputFieldState = state.nameInputFieldState.copy(
-                        value = TextFieldValue(card.name)
+                        value = TextFieldValue(card.name),
                     ),
                     balanceInputFieldState = state.balanceInputFieldState.copy(
-                        value = TextFieldValue(card.balance.toString())
-                    )
+                        value = TextFieldValue(card.balance.toString()),
+                    ),
                 )
             }
 
@@ -150,7 +150,7 @@ class CustomCardViewModel(
         _state.update { state ->
             state.copy(
                 card = state.card.copy(color = CardColors.of(color)),
-                selectedColorChip = CardColors.of(color)
+                selectedColorChip = CardColors.of(color),
             )
         }
     }
@@ -164,7 +164,7 @@ class CustomCardViewModel(
         _state.update { state ->
             state.copy(
                 card = state.card.copy(name = value.text),
-                nameInputFieldState = state.nameInputFieldState.copy(value = value)
+                nameInputFieldState = state.nameInputFieldState.copy(value = value),
             )
         }
     }
@@ -178,11 +178,11 @@ class CustomCardViewModel(
         _state.update { state ->
             state.copy(
                 card = state.card.copy(
-                    balance = value.text.ifBlank { "0" }.toLong()
+                    balance = value.text.ifBlank { "0" }.toLong(),
                 ),
                 balanceInputFieldState = state.balanceInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -190,16 +190,16 @@ class CustomCardViewModel(
     private fun clearNameFocus() {
         _state.validateInputField(
             inputField = { it.nameInputFieldState },
-            validation = { cardNameValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(nameInputFieldState = it) } }
+            validation = { cardNameValidator.validate(ValidationValues(it)) },
+            updateState = { _state.update { state -> state.copy(nameInputFieldState = it) } },
         )
     }
 
     private fun clearBalanceFocus() {
         _state.validateInputField(
             inputField = { it.balanceInputFieldState },
-            validation = { balanceValidator.validate(BalanceValidationValues(it)) },
-            updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } }
+            validation = { balanceValidator.validate(ValidationValues(it)) },
+            updateState = { value -> _state.update { it.copy(balanceInputFieldState = value) } },
         )
     }
 

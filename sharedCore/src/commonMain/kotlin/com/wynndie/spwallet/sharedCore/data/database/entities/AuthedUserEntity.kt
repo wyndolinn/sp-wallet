@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class AuthedUserEntity(
     @PrimaryKey val id: String,
     val server: String,
-    val name: String
+    val name: String,
 )

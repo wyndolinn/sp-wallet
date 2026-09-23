@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.base.ButtonLayout
@@ -25,24 +24,24 @@ fun OutlinedButton(
     icon: Painter? = null,
     destructive: Boolean = false,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     OutlinedButton(
         onClick = onClick,
         enabled = enabled && !loading,
         contentPadding = PaddingValues(
             horizontal = MaterialTheme.spacing.medium,
-            vertical = MaterialTheme.spacing.small
+            vertical = MaterialTheme.spacing.small,
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         colors = ButtonDefaults.outlinedButtonColors().copy(
             contentColor = if (destructive) {
                 MaterialTheme.colorScheme.error
             } else MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
         ),
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.height(MaterialTheme.sizes.extraLarge)
+        modifier = modifier.height(MaterialTheme.sizes.extraLarge),
     ) {
         Crossfade(targetState = loading) { isLoading ->
             if (isLoading) {
@@ -51,7 +50,7 @@ fun OutlinedButton(
                 ButtonLayout(
                     text = text,
                     leadingIcon = icon,
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
             }
         }

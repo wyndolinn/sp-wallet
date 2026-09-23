@@ -5,12 +5,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.models.cards.RecipientCard
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNameValidator
 import com.wynndie.spwallet.sharedCore.domain.validators.CardNumberValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
@@ -37,7 +38,7 @@ class RecipientsViewModel(
     private val navEventController: NavEventController,
     private val snackbarController: SnackbarController,
     private val cardNameValidator: CardNameValidator,
-    private val cardNumberValidator: CardNumberValidator
+    private val cardNumberValidator: CardNumberValidator,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RecipientsState())
@@ -49,14 +50,14 @@ class RecipientsViewModel(
     init {
         combine(
             recipientRepository.getRecipients(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { recipients, server ->
             cachedRecipients = recipients.filter { it.server == server }
             _state.update { it.copy(recipients = cachedRecipients) }
         }.launchIn(viewModelScope)
 
         _state.observeInputField(
-            inputField = { it.recipientInputFieldState }
+            inputField = { it.recipientInputFieldState },
         ) { inputFieldState ->
             val query = inputFieldState.value.text
             _state.update { state ->
@@ -73,14 +74,14 @@ class RecipientsViewModel(
         observeValidationStates(
             _state.observeInputField(
                 inputField = { it.cardNameInputFieldState },
-                validation = { cardNameValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } }
+                validation = { cardNameValidator.validate(ValidationValues(it)) },
+                updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } },
             ),
             _state.observeInputField(
                 inputField = { it.cardNumberInputFieldState },
-                validation = { cardNumberValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } }
-            )
+                validation = { cardNumberValidator.validate(ValidationValues(it)) },
+                updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } },
+            ),
         ).onEach { isAllValid ->
             _state.update { it.copy(isSaveButtonEnabled = isAllValid) }
         }.launchIn(viewModelScope)
@@ -114,8 +115,8 @@ class RecipientsViewModel(
         _state.update { state ->
             state.copy(
                 recipientInputFieldState = state.recipientInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -129,8 +130,8 @@ class RecipientsViewModel(
         _state.update { state ->
             state.copy(
                 cardNameInputFieldState = state.cardNameInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -144,8 +145,8 @@ class RecipientsViewModel(
         _state.update { state ->
             state.copy(
                 cardNumberInputFieldState = state.cardNumberInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -164,7 +165,7 @@ class RecipientsViewModel(
             val modifiedRecipient = recipient.copy(
                 name = _state.value.cardNameInputFieldState.value.text,
                 number = _state.value.cardNumberInputFieldState.value.text,
-                server = preferencesRepository.getSelectedSpServer().first()
+                server = preferencesRepository.getSelectedServer().first(),
             )
             recipientRepository.insertRecipient(modifiedRecipient)
             closeOverlays()
@@ -183,16 +184,16 @@ class RecipientsViewModel(
     private fun clearCardNumberFocus() {
         _state.validateInputField(
             inputField = { it.cardNumberInputFieldState },
-            validation = { cardNumberValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } }
+            validation = { cardNumberValidator.validate(ValidationValues(it)) },
+            updateState = { _state.update { state -> state.copy(cardNumberInputFieldState = it) } },
         )
     }
 
     private fun clearCardNameFocus() {
         _state.validateInputField(
             inputField = { it.cardNameInputFieldState },
-            validation = { cardNameValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } }
+            validation = { cardNameValidator.validate(ValidationValues(it)) },
+            updateState = { _state.update { state -> state.copy(cardNameInputFieldState = it) } },
         )
     }
 
@@ -209,11 +210,11 @@ class RecipientsViewModel(
             state.copy(
                 selectedRecipient = recipient,
                 cardNameInputFieldState = state.cardNameInputFieldState.copy(
-                    value = TextFieldValue(name, TextRange(name.length))
+                    value = TextFieldValue(name, TextRange(name.length)),
                 ),
                 cardNumberInputFieldState = state.cardNumberInputFieldState.copy(
-                    value = TextFieldValue(number, TextRange(number.length))
-                )
+                    value = TextFieldValue(number, TextRange(number.length)),
+                ),
             )
         }
     }
@@ -231,7 +232,7 @@ class RecipientsViewModel(
             it.copy(
                 selectedRecipient = null,
                 isEditRecipientSheetOpen = false,
-                isDeleteDialogOpen = false
+                isDeleteDialogOpen = false,
             )
         }
     }

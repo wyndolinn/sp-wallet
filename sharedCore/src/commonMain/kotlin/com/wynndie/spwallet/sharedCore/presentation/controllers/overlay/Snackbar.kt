@@ -9,5 +9,5 @@ data class Snackbar(
     val actionLabel: UiText? = null,
     val withDismissAction: Boolean = true,
     val duration: SnackbarDuration = SnackbarDuration.Short,
-    val alignment: Alignment.Vertical = Alignment.Bottom
+    val alignment: Alignment.Vertical = Alignment.Bottom,
 )

@@ -4,9 +4,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wynndie.spwallet.sharedCore.Res
-import com.wynndie.spwallet.sharedCore.domain.constants.CoreConstants
-import com.wynndie.spwallet.sharedCore.domain.constants.emptyRecipientCard
-import com.wynndie.spwallet.sharedCore.domain.models.validation.BalanceValidationValues
+import com.wynndie.spwallet.sharedCore.domain.helpers.CoreConstants
+import com.wynndie.spwallet.sharedCore.domain.helpers.emptyRecipientCard
 import com.wynndie.spwallet.sharedCore.domain.outcome.onError
 import com.wynndie.spwallet.sharedCore.domain.outcome.onSuccess
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
@@ -14,9 +13,9 @@ import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.RecipientRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.UserRepository
 import com.wynndie.spwallet.sharedCore.domain.validators.BalanceValidator
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.dropFirst
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
@@ -25,6 +24,7 @@ import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidation
 import com.wynndie.spwallet.sharedCore.presentation.extensions.trimSpaces
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.models.UiText.ResourceString
 import com.wynndie.spwallet.sharedCore.transaction_succeed
@@ -50,7 +50,7 @@ class TransferByCardViewModel(
     private val transferAmountValidator: BalanceValidator,
     private val commentValidator: TransferCommentValidator,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TransferByCardState())
@@ -66,21 +66,21 @@ class TransferByCardViewModel(
                     user = user,
                     commentPrefix = prefix,
                     commentInputFieldState = state.commentInputFieldState.copy(
-                        maxLength = state.commentInputFieldState.maxLength - prefix.length
-                    )
+                        maxLength = state.commentInputFieldState.maxLength - prefix.length,
+                    ),
                 )
             }
         }.launchIn(viewModelScope)
 
         combine(
             cardsRepository.getAuthedCards(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { authedCards, server ->
             val sourceCards = authedCards.filter { it.server == server }
             val selectedCard = authedCards.find { it.id == args.sourceCardId }
             _state.update { state ->
                 state.copy(
-                    sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards
+                    sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards,
                 )
             }
         }.launchIn(viewModelScope)
@@ -89,18 +89,18 @@ class TransferByCardViewModel(
             _state.observeInputField(
                 inputField = { it.amountInputFieldState },
                 validation = {
-                    val validationValues = BalanceValidationValues(
-                        value = _state.value.amountInputFieldState.value.text
+                    val validationValues = ValidationValues(
+                        value = _state.value.amountInputFieldState.value.text,
                     )
                     transferAmountValidator.validate(validationValues)
                 },
-                updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
+                updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } },
             ),
             _state.observeInputField(
                 inputField = { it.commentInputFieldState },
-                validation = { commentValidator.validate(it) },
-                updateState = { value -> _state.update { it.copy(commentInputFieldState = value) } }
-            )
+                validation = { commentValidator.validate(ValidationValues(it)) },
+                updateState = { value -> _state.update { it.copy(commentInputFieldState = value) } },
+            ),
         ).onEach { isAllValid ->
             _state.update { it.copy(isTransferButtonEnabled = isAllValid) }
         }.launchIn(viewModelScope)
@@ -128,8 +128,8 @@ class TransferByCardViewModel(
             _state.update { state ->
                 state.copy(
                     recipient = state.recipient.copy(
-                        number = cardNumber
-                    )
+                        number = cardNumber,
+                    ),
                 )
             }
 
@@ -154,15 +154,15 @@ class TransferByCardViewModel(
                 card = sourceCard,
                 receiver = _state.value.recipient.number,
                 amount = _state.value.amountInputFieldState.value.text,
-                comment = comment
+                comment = comment,
             ).onError {
                 snackbarController.send(it.asUiText())
             }.onSuccess {
                 recipientRepository.insertRecipient(
                     recipientCard = emptyRecipientCard.copy(
-                        server = preferencesRepository.getSelectedSpServer().first(),
-                        number = _state.value.recipient.number
-                    )
+                        server = preferencesRepository.getSelectedServer().first(),
+                        number = _state.value.recipient.number,
+                    ),
                 )
 
                 snackbarController.send(ResourceString(Res.string.transaction_succeed))
@@ -182,8 +182,8 @@ class TransferByCardViewModel(
         _state.update { state ->
             state.copy(
                 amountInputFieldState = state.amountInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -197,8 +197,8 @@ class TransferByCardViewModel(
         _state.update { state ->
             state.copy(
                 commentInputFieldState = state.commentInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -207,21 +207,21 @@ class TransferByCardViewModel(
         _state.validateInputField(
             inputField = { it.amountInputFieldState },
             validation = {
-                val validationValues = BalanceValidationValues(
+                val validationValues = ValidationValues(
                     value = _state.value.amountInputFieldState.value.text,
-                    maxValue = _state.value.sourceCards[_state.value.selectedSourceCard].balance
+                    maxValue = _state.value.sourceCards[_state.value.selectedSourceCard].balance,
                 )
                 transferAmountValidator.validate(validationValues)
             },
-            updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } }
+            updateState = { value -> _state.update { it.copy(amountInputFieldState = value) } },
         )
     }
 
     private fun clearCommentFocus() {
         _state.validateInputField(
             inputField = { it.commentInputFieldState },
-            validation = { commentValidator.validate(it) },
-            updateState = { value -> _state.update { it.copy(commentInputFieldState = value) } }
+            validation = { commentValidator.validate(ValidationValues(it)) },
+            updateState = { value -> _state.update { it.copy(commentInputFieldState = value) } },
         )
     }
 

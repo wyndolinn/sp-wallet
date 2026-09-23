@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 class DeleteAuthedCardUseCase(
     private val cardsRepository: CardsRepository,
     private val userRepository: UserRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
 ) {
     suspend operator fun invoke(card: AuthedCard) {
         cardsRepository.deleteAuthedCard(card)
@@ -17,7 +17,7 @@ class DeleteAuthedCardUseCase(
         val authedCards = cardsRepository.getAuthedCards().first()
         if (authedCards.isNotEmpty()) return
 
-        val selectedServer = preferencesRepository.getSelectedSpServer().first()
+        val selectedServer = preferencesRepository.getSelectedServer().first()
         val unauthedCards = cardsRepository.getUnauthedCards().first()
         val users = userRepository.getAuthedUsers().first()
         users.forEach {

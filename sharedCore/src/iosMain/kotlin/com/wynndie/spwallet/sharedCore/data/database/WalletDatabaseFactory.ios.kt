@@ -2,7 +2,6 @@ package com.wynndie.spwallet.sharedCore.data.database
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.wynndie.spwallet.sharedCore.data.database.WalletDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -23,7 +22,7 @@ actual class WalletDatabaseFactory {
             inDomain = NSUserDomainMask,
             appropriateForURL = null,
             create = false,
-            error = null
+            error = null,
         )
         return requireNotNull(documentDirectory?.path)
     }

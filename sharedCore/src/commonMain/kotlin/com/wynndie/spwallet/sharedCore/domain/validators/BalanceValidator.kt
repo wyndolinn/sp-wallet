@@ -1,23 +1,17 @@
 package com.wynndie.spwallet.sharedCore.domain.validators
 
-import com.wynndie.spwallet.sharedCore.domain.models.validation.BalanceValidationValues
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationChain
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
+import com.wynndie.spwallet.sharedCore.domain.validators.core.Validator
 
-class BalanceValidator : Validator<BalanceValidationValues> {
-
-    override fun validate(value: BalanceValidationValues): Pair<Boolean, Error.Validation?> {
-        if (value.value.isBlank())
-            return false to Error.Validation.EMPTY_FIELD
-
-        if (!value.value.matches(Regex("^[0-9]+$")))
-            return false to Error.Validation.INVALID_CHARACTERS
-
-        if (value.value.toLong() < value.minValue)
-            return false to Error.Validation.BELOW_MINIMUM_VALUE
-
-        if (value.value.toLong() > value.maxValue)
-            return false to Error.Validation.ABOVE_MAXIMUM_VALUE
-
-        return true to null
+class BalanceValidator : Validator {
+    override fun validate(value: ValidationValues): Pair<Boolean, Error.Validation?> {
+        return ValidationChain(value.value)
+            .ensureNotEmpty()
+            .ensureValidCharacters(Regex("^[0-9]+$"))
+            .ensureValueAtMost(value.maxValue)
+            .ensureValueAtLeast(value.minValue)
+            .build()
     }
 }

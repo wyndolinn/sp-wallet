@@ -19,7 +19,7 @@ fun PaddingValues.add(other: PaddingValues): PaddingValues {
         end = this.calculateEndPadding(layoutDirection) +
                 other.calculateEndPadding(layoutDirection),
         bottom = this.calculateBottomPadding() +
-                other.calculateBottomPadding()
+                other.calculateBottomPadding(),
     )
 }
 
@@ -30,7 +30,7 @@ fun PaddingValues.add(all: Dp = 0.dp): PaddingValues {
         start = this.calculateStartPadding(layoutDirection) + all,
         top = this.calculateTopPadding() + all,
         end = this.calculateEndPadding(layoutDirection) + all,
-        bottom = this.calculateBottomPadding() + all
+        bottom = this.calculateBottomPadding() + all,
     )
 }
 
@@ -41,18 +41,23 @@ fun PaddingValues.add(vertical: Dp = 0.dp, horizontal: Dp = 0.dp): PaddingValues
         start = this.calculateStartPadding(layoutDirection) + horizontal,
         top = this.calculateTopPadding() + vertical,
         end = this.calculateEndPadding(layoutDirection) + horizontal,
-        bottom = this.calculateBottomPadding() + vertical
+        bottom = this.calculateBottomPadding() + vertical,
     )
 }
 
 @Composable
-fun PaddingValues.add(start: Dp = 0.dp, top: Dp = 0.dp, end: Dp = 0.dp, bottom: Dp = 0.dp): PaddingValues {
+fun PaddingValues.add(
+    start: Dp = 0.dp,
+    top: Dp = 0.dp,
+    end: Dp = 0.dp,
+    bottom: Dp = 0.dp,
+): PaddingValues {
     val layoutDirection = LocalLayoutDirection.current
     return PaddingValues(
         start = this.calculateStartPadding(layoutDirection) + start,
         top = this.calculateTopPadding() + top,
         end = this.calculateEndPadding(layoutDirection) + end,
-        bottom = this.calculateBottomPadding() + bottom
+        bottom = this.calculateBottomPadding() + bottom,
     )
 }
 
@@ -68,7 +73,7 @@ fun PaddingValues.remove(other: PaddingValues): PaddingValues {
         end = this.calculateEndPadding(layoutDirection) -
                 other.calculateEndPadding(layoutDirection),
         bottom = this.calculateBottomPadding() -
-                other.calculateBottomPadding()
+                other.calculateBottomPadding(),
     )
 }
 
@@ -79,7 +84,7 @@ fun PaddingValues.remove(all: Dp = 0.dp): PaddingValues {
         start = this.calculateStartPadding(layoutDirection) - all,
         top = this.calculateTopPadding() - all,
         end = this.calculateEndPadding(layoutDirection) - all,
-        bottom = this.calculateBottomPadding() - all
+        bottom = this.calculateBottomPadding() - all,
     )
 }
 
@@ -90,17 +95,22 @@ fun PaddingValues.remove(vertical: Dp = 0.dp, horizontal: Dp = 0.dp): PaddingVal
         start = this.calculateStartPadding(layoutDirection) - horizontal,
         top = this.calculateTopPadding() - vertical,
         end = this.calculateEndPadding(layoutDirection) - horizontal,
-        bottom = this.calculateBottomPadding() - vertical
+        bottom = this.calculateBottomPadding() - vertical,
     )
 }
 
 @Composable
-fun PaddingValues.remove(start: Dp = 0.dp, top: Dp = 0.dp, end: Dp = 0.dp, bottom: Dp = 0.dp): PaddingValues {
+fun PaddingValues.remove(
+    start: Dp = 0.dp,
+    top: Dp = 0.dp,
+    end: Dp = 0.dp,
+    bottom: Dp = 0.dp,
+): PaddingValues {
     val layoutDirection = LocalLayoutDirection.current
     return PaddingValues(
         start = this.calculateStartPadding(layoutDirection) - start,
         top = this.calculateTopPadding() - top,
         end = this.calculateEndPadding(layoutDirection) - end,
-        bottom = this.calculateBottomPadding() - bottom
+        bottom = this.calculateBottomPadding() - bottom,
     )
 }

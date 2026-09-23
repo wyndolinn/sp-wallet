@@ -13,7 +13,7 @@ fun DeleteCardDialog(
     description: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Dialog(
         onDismiss = onDismiss,
@@ -22,6 +22,6 @@ fun DeleteCardDialog(
         description = description,
         confirmButtonText = stringResource(Res.string.delete),
         destructive = true,
-        modifier = modifier
+        modifier = modifier,
     )
 }

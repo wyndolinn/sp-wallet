@@ -9,6 +9,6 @@ interface TransferRepository {
         authKey: String,
         receiver: String,
         amount: Long,
-        comment: String
+        comment: String,
     ): Outcome<Long, Error.Network>
 }

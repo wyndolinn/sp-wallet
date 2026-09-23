@@ -25,7 +25,7 @@ fun AsyncImage(
     error: Painter,
     contentScale: ContentScale = ContentScale.Crop,
     contentSpacing: Dp = 0.dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalPlatformContext.current)
@@ -38,7 +38,7 @@ fun AsyncImage(
                 painter = it.painter,
                 contentDescription = null,
                 contentScale = contentScale,
-                modifier = Modifier.padding(contentSpacing)
+                modifier = Modifier.padding(contentSpacing),
             )
         },
         loading = {
@@ -46,7 +46,7 @@ fun AsyncImage(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(MaterialTheme.shapes.small)
-                    .shimmerEffect()
+                    .shimmerEffect(),
             )
         },
         error = {
@@ -54,9 +54,9 @@ fun AsyncImage(
                 painter = error,
                 contentDescription = null,
                 contentScale = contentScale,
-                modifier = Modifier.padding(contentSpacing)
+                modifier = Modifier.padding(contentSpacing),
             )
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }

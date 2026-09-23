@@ -8,15 +8,16 @@ import com.wynndie.spwallet.sharedCore.cash_creation_succeed
 import com.wynndie.spwallet.sharedCore.domain.outcome.getOrElse
 import com.wynndie.spwallet.sharedCore.domain.repositories.CardsRepository
 import com.wynndie.spwallet.sharedCore.domain.repositories.PreferencesRepository
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
 import com.wynndie.spwallet.sharedCore.presentation.controllers.navigation.NavEventController
 import com.wynndie.spwallet.sharedCore.presentation.controllers.overlay.SnackbarController
-import com.wynndie.spwallet.sharedCore.presentation.extensions.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.extensions.cutOffAt
 import com.wynndie.spwallet.sharedCore.presentation.extensions.filter
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeInputField
 import com.wynndie.spwallet.sharedCore.presentation.extensions.observeValidationStates
 import com.wynndie.spwallet.sharedCore.presentation.extensions.validateInputField
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
+import com.wynndie.spwallet.sharedCore.presentation.formatters.asUiText
 import com.wynndie.spwallet.sharedCore.presentation.models.InputFilters
 import com.wynndie.spwallet.sharedCore.presentation.models.UiText
 import com.wynndie.spwallet.sharedFeature.home.domain.useCases.AuthCardUseCase
@@ -40,7 +41,7 @@ class AuthViewModel(
     private val uuidValidator: UuidValidator,
     private val tokenValidator: TokenValidator,
     private val navEventController: NavEventController,
-    private val snackbarController: SnackbarController
+    private val snackbarController: SnackbarController,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
@@ -50,7 +51,7 @@ class AuthViewModel(
     init {
         combine(
             cardsRepository.getUnauthedCards(),
-            preferencesRepository.getSelectedSpServer()
+            preferencesRepository.getSelectedServer(),
         ) { cards, selectedSever ->
             _state.update { state ->
                 state.copy(cards = cards.filter { it.server == selectedSever })
@@ -60,14 +61,14 @@ class AuthViewModel(
         observeValidationStates(
             _state.observeInputField(
                 inputField = { it.idInputFieldState },
-                validation = { uuidValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
+                validation = { uuidValidator.validate(ValidationValues(it)) },
+                updateState = { _state.update { state -> state.copy(idInputFieldState = it) } },
             ),
             _state.observeInputField(
                 inputField = { it.tokenInputFieldState },
-                validation = { tokenValidator.validate(it) },
-                updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
-            )
+                validation = { tokenValidator.validate(ValidationValues(it)) },
+                updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } },
+            ),
         ).onEach { isAllValid ->
             _state.update { it.copy(isAuthButtonEnabled = isAllValid) }
         }.launchIn(viewModelScope)
@@ -92,9 +93,9 @@ class AuthViewModel(
             _state.update { it.copy(loadingState = LoadingState.Loading) }
 
             authCardUseCase(
-                server = preferencesRepository.getSelectedSpServer().first(),
+                server = preferencesRepository.getSelectedServer().first(),
                 id = id,
-                token = token
+                token = token,
             ).getOrElse { error ->
                 snackbarController.send(error.asUiText())
                 _state.update { it.copy(loadingState = LoadingState.Finished) }
@@ -106,11 +107,11 @@ class AuthViewModel(
             _state.update { state ->
                 state.copy(
                     idInputFieldState = state.idInputFieldState.copy(
-                        value = TextFieldValue("")
+                        value = TextFieldValue(""),
                     ),
                     tokenInputFieldState = state.tokenInputFieldState.copy(
-                        value = TextFieldValue("")
-                    )
+                        value = TextFieldValue(""),
+                    ),
                 )
             }
 
@@ -127,8 +128,8 @@ class AuthViewModel(
         _state.update { state ->
             state.copy(
                 idInputFieldState = state.idInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -141,8 +142,8 @@ class AuthViewModel(
         _state.update { state ->
             state.copy(
                 tokenInputFieldState = state.tokenInputFieldState.copy(
-                    value = value
-                )
+                    value = value,
+                ),
             )
         }
     }
@@ -150,16 +151,16 @@ class AuthViewModel(
     private fun clearIdFocus() {
         _state.validateInputField(
             inputField = { it.idInputFieldState },
-            validation = { uuidValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(idInputFieldState = it) } }
+            validation = { uuidValidator.validate(ValidationValues(it)) },
+            updateState = { _state.update { state -> state.copy(idInputFieldState = it) } },
         )
     }
 
     private fun clearTokenFocus() {
         _state.validateInputField(
             inputField = { it.tokenInputFieldState },
-            validation = { tokenValidator.validate(it) },
-            updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } }
+            validation = { tokenValidator.validate(ValidationValues(it)) },
+            updateState = { _state.update { state -> state.copy(tokenInputFieldState = it) } },
         )
     }
 

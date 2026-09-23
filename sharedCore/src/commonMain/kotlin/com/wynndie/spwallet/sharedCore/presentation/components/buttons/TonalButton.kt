@@ -22,14 +22,14 @@ fun TonalButton(
     icon: Painter? = null,
     destructive: Boolean = false,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
 ) {
     FilledTonalButton(
         onClick = onClick,
         enabled = enabled && !loading,
         contentPadding = PaddingValues(
             horizontal = MaterialTheme.spacing.medium,
-            vertical = MaterialTheme.spacing.small
+            vertical = MaterialTheme.spacing.small,
         ),
         colors = ButtonDefaults.filledTonalButtonColors().copy(
             contentColor = if (destructive) {
@@ -37,10 +37,10 @@ fun TonalButton(
             } else MaterialTheme.colorScheme.onSecondaryContainer,
             containerColor = if (destructive) {
                 MaterialTheme.colorScheme.errorContainer
-            } else MaterialTheme.colorScheme.primaryContainer
+            } else MaterialTheme.colorScheme.primaryContainer,
         ),
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.height(MaterialTheme.sizes.extraLarge)
+        modifier = modifier.height(MaterialTheme.sizes.extraLarge),
     ) {
         Crossfade(targetState = loading) { isLoading ->
             if (isLoading) {
@@ -49,7 +49,7 @@ fun TonalButton(
                 ButtonLayout(
                     text = text,
                     leadingIcon = icon,
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
             }
         }

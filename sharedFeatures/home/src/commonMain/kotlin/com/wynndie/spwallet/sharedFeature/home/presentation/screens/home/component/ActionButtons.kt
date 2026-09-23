@@ -11,7 +11,6 @@ import com.wynndie.spwallet.sharedCore.ic_people
 import com.wynndie.spwallet.sharedCore.ic_transaction
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.LabeledIconButton
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.recipient
 import com.wynndie.spwallet.sharedCore.recipients
 import com.wynndie.spwallet.sharedCore.transfer_between_cards
 import com.wynndie.spwallet.sharedCore.transfer_by_number
@@ -23,31 +22,31 @@ fun ActionButtons(
     onRecipientsClick: () -> Unit,
     onTransferBetweenCardsClick: () -> Unit,
     onTransferByNumberClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     ) {
         LabeledIconButton(
             icon = painterResource(Res.drawable.ic_people),
             label = stringResource(Res.string.recipients),
             onClick = onRecipientsClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
 
         LabeledIconButton(
             icon = painterResource(Res.drawable.ic_arrow_front),
             label = stringResource(Res.string.transfer_by_number),
             onClick = onTransferByNumberClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
 
         LabeledIconButton(
             icon = painterResource(Res.drawable.ic_transaction),
             label = stringResource(Res.string.transfer_between_cards),
             onClick = onTransferBetweenCardsClick,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
     }
 }

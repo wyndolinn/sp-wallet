@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {
@@ -24,7 +25,6 @@ kotlin {
         }
     }
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
@@ -35,6 +35,7 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlin.coroutines.test)
             implementation(libs.assertk)
         }
     }

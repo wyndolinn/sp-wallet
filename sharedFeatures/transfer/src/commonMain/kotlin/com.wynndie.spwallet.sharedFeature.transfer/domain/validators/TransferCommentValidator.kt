@@ -1,15 +1,14 @@
 package com.wynndie.spwallet.sharedFeature.transfer.domain.validators
 
 import com.wynndie.spwallet.sharedCore.domain.outcome.Error
-import com.wynndie.spwallet.sharedCore.domain.validators.Validator
-import com.wynndie.spwallet.sharedFeature.transfer.domain.constants.TransferConstants
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationChain
+import com.wynndie.spwallet.sharedCore.domain.validators.core.ValidationValues
+import com.wynndie.spwallet.sharedCore.domain.validators.core.Validator
 
-class TransferCommentValidator : Validator<String> {
-
-    override fun validate(value: String): Pair<Boolean, Error.Validation?> {
-        if (value.length > TransferConstants.MAX_COMMENT_LENGTH)
-            return false to Error.Validation.ABOVE_MAXIMUM_LENGTH
-
-        return true to null
+class TransferCommentValidator : Validator {
+    override fun validate(value: ValidationValues): Pair<Boolean, Error.Validation?> {
+        return ValidationChain(value.value)
+            .ensureNotEmpty()
+            .build()
     }
 }

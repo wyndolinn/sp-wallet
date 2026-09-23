@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -43,7 +42,7 @@ fun InputField(
     singleLine: Boolean = true,
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
 
     val colors = OutlinedTextFieldDefaults.colors().copy(
@@ -57,17 +56,17 @@ fun InputField(
         errorContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
 
         unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-        disabledIndicatorColor = Color.Transparent
+        disabledIndicatorColor = Color.Transparent,
     )
 
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         label?.let {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = it,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
             )
         }
 
@@ -84,7 +83,7 @@ fun InputField(
                     Box(
                         modifier = Modifier.size(24.dp),
                         contentAlignment = Alignment.Center,
-                        content = it
+                        content = it,
                     )
                 }
             },
@@ -93,7 +92,7 @@ fun InputField(
                     Box(
                         modifier = Modifier.size(24.dp),
                         contentAlignment = Alignment.Center,
-                        content = it
+                        content = it,
                     )
                 }
             },
@@ -102,7 +101,7 @@ fun InputField(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             },
@@ -111,7 +110,7 @@ fun InputField(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             },
@@ -122,22 +121,22 @@ fun InputField(
             singleLine = singleLine,
             minLines = minLines,
             maxLines = maxLines,
-            enabled = enabled
+            enabled = enabled,
         )
 
         AnimatedVisibility(
-            visible = supportingText != null
+            visible = supportingText != null,
         ) {
             supportingText?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.labelSmall,
                 )
             }
         }
 
         AnimatedVisibility(
-            visible = additionalContent != null
+            visible = additionalContent != null,
         ) {
             additionalContent?.let { it() }
         }

@@ -10,10 +10,7 @@ import org.jetbrains.compose.resources.stringResource
 sealed interface UiText {
 
     data class DynamicString(val value: String) : UiText
-    class ResourceString(
-        val id: StringResource,
-        vararg formatArgs: Any
-    ) : UiText {
+    class ResourceString(val id: StringResource, vararg formatArgs: Any) : UiText {
         val args: Array<out Any> = formatArgs
     }
 
@@ -21,34 +18,34 @@ sealed interface UiText {
     fun asString(): String {
         return when (this) {
             is DynamicString -> value
-            is ResourceString -> {
-
-                val newArgs = args.map {
-                    when (it) {
-                        is StringResource -> stringResource(it)
-                        else -> it.toString()
-                    }
-                }.toTypedArray()
-
-                stringResource(id, *newArgs)
-            }
+            is ResourceString -> stringResource(id, *getArgsCompose(args))
         }
     }
 
     suspend fun asStringAsync(): String {
         return when (this) {
             is DynamicString -> value
-            is ResourceString -> {
-
-                val newArgs = args.map {
-                    when (it) {
-                        is StringResource -> getString(it)
-                        else -> it.toString()
-                    }
-                }.toTypedArray()
-
-                return getString(id, *newArgs)
-            }
+            is ResourceString -> getString(id, *getArgsAsync(args))
         }
+    }
+
+
+    @Composable
+    private fun getArgsCompose(args: Array<out Any>): Array<String> {
+        return args.map {
+            when (it) {
+                is StringResource -> stringResource(it)
+                else -> it.toString()
+            }
+        }.toTypedArray()
+    }
+
+    private suspend fun getArgsAsync(args: Array<out Any>): Array<String> {
+        return args.map {
+            when (it) {
+                is StringResource -> getString(it)
+                else -> it.toString()
+            }
+        }.toTypedArray()
     }
 }
