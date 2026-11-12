@@ -1,11 +1,15 @@
 package com.wynndie.spwallet.sharedCore.presentation.components.tiles
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,7 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.wynndie.spwallet.sharedCore.Res
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardIcons
-import com.wynndie.spwallet.sharedCore.presentation.extensions.cardColor
+import com.wynndie.spwallet.sharedCore.presentation.components.ColorTriangle
+import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIf
 import com.wynndie.spwallet.sharedCore.presentation.extensions.thenIfNotNull
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
@@ -44,53 +49,65 @@ fun TransferCardTile(
     modifier: Modifier = Modifier,
     headline: String = "",
     onClick: (() -> Unit)? = null,
+    isDarken: Boolean = false,
 ) {
-    Column(
-        modifier = modifier
-            .clip(MaterialTheme.shapes.medium)
-            .cardColor(color.copy(alpha = 0.05f))
-            .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
-            .padding(MaterialTheme.spacing.medium),
-    ) {
-        if (headline.isNotBlank()) {
-            Text(
-                text = headline,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.offset(x = -(4.dp)),
+    Box(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.secondary)
+                .thenIf(isDarken) { Modifier.background(Color(0x99000000)) }
+                .thenIfNotNull(onClick) { Modifier.clickable(onClick = it) }
+                .padding(MaterialTheme.spacing.medium),
         ) {
-            Image(
-                painter = icon,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(color),
-                modifier = Modifier.size(MaterialTheme.sizes.large),
-            )
-
-            Column(
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.weight(1f),
-            ) {
+            if (headline.isNotBlank()) {
                 Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    text = headline,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                )
+            }
+
+            Spacer(Modifier.height(MaterialTheme.spacing.extraSmall))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.offset(x = -(4.dp))
+            ) {
+                Image(
+                    painter = icon,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
+                    modifier = Modifier.size(MaterialTheme.sizes.large),
                 )
 
-                if (text.isNotBlank()) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.weight(1f),
+                ) {
                     Text(
-                        text = text,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSecondary,
                     )
+
+                    if (text.isNotBlank()) {
+                        Text(
+                            text = text,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                        )
+                    }
                 }
             }
         }
+
+        ColorTriangle(
+            color = color,
+            size = 32.dp,
+            modifier = Modifier.align(Alignment.TopEnd)
+        )
     }
 }
 
@@ -105,9 +122,10 @@ private fun TransferCardTilePreview() {
             text = "12345 • pipipupu",
             icon = CardIcons.BANK_CARD.asPainter(),
             color = CardColors.GREEN.asColor(),
+            isDarken = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium),
+                .padding(MaterialTheme.spacing.medium)
         )
     }
 }

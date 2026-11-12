@@ -36,7 +36,7 @@ import com.wynndie.spwallet.sharedCore.activate
 import com.wynndie.spwallet.sharedCore.activation
 import com.wynndie.spwallet.sharedCore.id
 import com.wynndie.spwallet.sharedCore.presentation.components.BaseCarousel
-import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
+import com.wynndie.spwallet.sharedCore.presentation.components.InformationModule
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.Button
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.TextButton
@@ -117,7 +117,7 @@ private fun AuthScreen(
             detectTapGestures { focusManager.clearFocus(true) }
         },
     ) {
-        InformationCard(
+        InformationModule(
             title = stringResource(Res.string.safe_auth),
             content = {
                 Text(text = stringResource(Res.string.safe_auth_storage))

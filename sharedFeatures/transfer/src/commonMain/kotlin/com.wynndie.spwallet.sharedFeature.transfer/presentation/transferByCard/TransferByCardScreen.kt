@@ -118,6 +118,7 @@ private fun TransferByNumberScreen(
                 color = if (state.recipient.name.isNotBlank()) {
                     state.recipient.color.asColor()
                 } else MaterialTheme.colorScheme.tertiary,
+                isDarken = true,
                 onClick = { onAction(TransferByCardAction.EditRecipient) },
                 modifier = Modifier
                     .fillMaxWidth()

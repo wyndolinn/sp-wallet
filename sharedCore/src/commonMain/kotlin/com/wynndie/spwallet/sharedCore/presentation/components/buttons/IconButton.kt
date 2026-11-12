@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
@@ -22,6 +23,8 @@ fun IconButton(
     modifier: Modifier = Modifier,
     label: String = "",
     color: Color = MaterialTheme.colorScheme.primary,
+    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    shape: Shape = IconButtonDefaults.standardShape,
     destructive: Boolean = false,
     enabled: Boolean = true,
     loading: Boolean = false,
@@ -34,11 +37,15 @@ fun IconButton(
         IconButton(
             onClick = onClick,
             enabled = enabled && !loading,
+            shape = shape,
             colors = IconButtonDefaults.iconButtonColors().copy(
                 contentColor = if (destructive) {
                     MaterialTheme.colorScheme.error
                 } else color,
-            ),
+                containerColor = if (destructive) {
+                    MaterialTheme.colorScheme.errorContainer
+                } else containerColor
+            )
         ) {
             Icon(
                 painter = icon,

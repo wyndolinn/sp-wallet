@@ -1,11 +1,12 @@
 package com.wynndie.spwallet.sharedCore.presentation.components.buttons
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,9 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
+import com.wynndie.spwallet.sharedCore.Res
+import com.wynndie.spwallet.sharedCore.ic_people
+import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
+import com.wynndie.spwallet.sharedCore.recipients
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LabeledIconButton(
@@ -31,14 +38,13 @@ fun LabeledIconButton(
     loading: Boolean = false,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraExtraSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
         OutlinedButton(
             onClick = onClick,
             enabled = enabled && !loading,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            border = null,
             contentPadding = PaddingValues(
                 horizontal = MaterialTheme.spacing.small,
                 vertical = MaterialTheme.spacing.extraExtraSmall,
@@ -49,24 +55,43 @@ fun LabeledIconButton(
                 } else MaterialTheme.colorScheme.primary,
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             ),
-            shape = MaterialTheme.shapes.medium,
+            shape = CircleShape,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(MaterialTheme.sizes.medium),
+                .height(48.dp),
         ) {
             Icon(
                 painter = icon,
                 contentDescription = label,
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
 
         label?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+            ) {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LabeledIconButtonPreview() {
+    AppTheme {
+        LabeledIconButton(
+            icon = painterResource(Res.drawable.ic_people),
+            label = stringResource(Res.string.recipients),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }

@@ -1,34 +1,19 @@
 package com.wynndie.spwallet.sharedFeature.home.presentation.screens.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -39,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,30 +34,24 @@ import com.wynndie.spwallet.sharedCore.app_name
 import com.wynndie.spwallet.sharedCore.auth_card
 import com.wynndie.spwallet.sharedCore.auth_card_info
 import com.wynndie.spwallet.sharedCore.bank_cards
-import com.wynndie.spwallet.sharedCore.create
 import com.wynndie.spwallet.sharedCore.custom_cards
 import com.wynndie.spwallet.sharedCore.deactivate
 import com.wynndie.spwallet.sharedCore.deactivate_card_description
 import com.wynndie.spwallet.sharedCore.deactivate_card_title
 import com.wynndie.spwallet.sharedCore.domain.helpers.emptyAuthedCard
 import com.wynndie.spwallet.sharedCore.domain.helpers.emptyCustomCard
-import com.wynndie.spwallet.sharedCore.domain.models.Servers
 import com.wynndie.spwallet.sharedCore.domain.models.cards.CardColors
-import com.wynndie.spwallet.sharedCore.ic_arrow_front
-import com.wynndie.spwallet.sharedCore.img_logo
-import com.wynndie.spwallet.sharedCore.presentation.components.AsyncImage
-import com.wynndie.spwallet.sharedCore.presentation.components.InformationCard
-import com.wynndie.spwallet.sharedCore.presentation.components.TitledContent
+import com.wynndie.spwallet.sharedCore.presentation.components.InformationModule
 import com.wynndie.spwallet.sharedCore.presentation.components.TopAppBar
 import com.wynndie.spwallet.sharedCore.presentation.components.buttons.OutlinedButton
-import com.wynndie.spwallet.sharedCore.presentation.components.buttons.SegmentedButton
 import com.wynndie.spwallet.sharedCore.presentation.components.overlays.Dialog
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.Scaffold
 import com.wynndie.spwallet.sharedCore.presentation.components.screen.ScreenLayout
 import com.wynndie.spwallet.sharedCore.presentation.components.tiles.AccountCardTile
 import com.wynndie.spwallet.sharedCore.presentation.extensions.add
+import com.wynndie.spwallet.sharedCore.presentation.extensions.ifNotEmpty
 import com.wynndie.spwallet.sharedCore.presentation.extensions.remove
-import com.wynndie.spwallet.sharedCore.presentation.extensions.then
+import com.wynndie.spwallet.sharedCore.presentation.extensions.scale
 import com.wynndie.spwallet.sharedCore.presentation.formatters.DisplayableOreValue
 import com.wynndie.spwallet.sharedCore.presentation.formatters.LoadingState
 import com.wynndie.spwallet.sharedCore.presentation.formatters.asColor
@@ -82,12 +60,14 @@ import com.wynndie.spwallet.sharedCore.presentation.formatters.asPainter
 import com.wynndie.spwallet.sharedCore.presentation.theme.AppTheme
 import com.wynndie.spwallet.sharedCore.presentation.theme.sizes
 import com.wynndie.spwallet.sharedCore.presentation.theme.spacing
-import com.wynndie.spwallet.sharedCore.transfer
 import com.wynndie.spwallet.sharedCore.x_of_ore
-import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtons
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ActionButtonsRow
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.AuthedCardSheet
 import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.BalanceComponent
-import org.jetbrains.compose.resources.painterResource
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.CardsModule
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.ServerPicker
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.TransferFabButton
+import com.wynndie.spwallet.sharedFeature.home.presentation.screens.home.component.UserImage
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,7 +80,9 @@ fun HomeScreenRoot(
 
     val scrollState = rememberScrollState()
     var lastScrollValue by remember { mutableIntStateOf(0) }
-    val isExpanded by remember {
+    val hasCards by derivedStateOf { state.authedCards.isNotEmpty() }
+    val finishedLoading by derivedStateOf { state.screenLoadingState == LoadingState.Finished }
+    val isFabExpanded by remember {
         derivedStateOf {
             val expanded = scrollState.value <= lastScrollValue
             lastScrollValue = scrollState.value
@@ -141,97 +123,30 @@ fun HomeScreenRoot(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = username.ifBlank {
-                    stringResource(Res.string.app_name)
-                },
+                title = username.ifBlank { stringResource(Res.string.app_name) },
                 titleSlots = {
-                    if (username.isNotBlank()) {
-                        AsyncImage(
-                            url = "https://avatars.spworlds.ru/face/$username?w=32",
-                            contentDescription = null,
-                            error = painterResource(Res.drawable.img_logo),
-                            modifier = Modifier.size(MaterialTheme.sizes.small),
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(Res.drawable.img_logo),
-                            contentDescription = null,
-                            modifier = Modifier.size(MaterialTheme.sizes.small),
-                        )
-                    }
+                    UserImage(
+                        username = username,
+                        modifier = Modifier.size(MaterialTheme.sizes.small)
+                    )
                 },
                 actions = {
-                    MultiChoiceSegmentedButtonRow(
-                        space = 0.dp,
+                    ServerPicker(
+                        onClick = { viewModel.onAction(HomeAction.SelectServer(it)) },
+                        selectedServer = state.selectedServer,
+                        enabled = state.screenLoadingState != LoadingState.Loading,
                         modifier = Modifier
-                            .height(MaterialTheme.sizes.small)
-                            .padding(horizontal = MaterialTheme.spacing.medium)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .then {
-                                val color = if (state.screenLoadingState == LoadingState.Loading) {
-                                    MaterialTheme.colorScheme.primaryContainer
-                                } else MaterialTheme.colorScheme.primary
-
-                                Modifier.border(
-                                    width = 1.dp,
-                                    color = color,
-                                    shape = CircleShape,
-                                )
-                            },
-                    ) {
-                        Servers.entries.forEach { server ->
-                            SegmentedButton(
-                                label = server.label,
-                                selected = server == state.selectedServer,
-                                onClick = { viewModel.onAction(HomeAction.SelectServer(server)) },
-                                enabled = state.screenLoadingState != LoadingState.Loading,
-                                modifier = Modifier.fillMaxHeight(),
-                            )
-                        }
-                    }
+                    )
                 },
             )
         },
         floatingActionButton = {
-            val hasCards by derivedStateOf { state.authedCards.isNotEmpty() }
-            val finishedLoading by derivedStateOf { state.screenLoadingState == LoadingState.Finished }
-            AnimatedVisibility(
+            TransferFabButton(
+                onClick = { viewModel.onAction(HomeAction.TransferByCard("")) },
                 visible = hasCards && finishedLoading,
-                enter = fadeIn() + expandHorizontally(),
-                exit = fadeOut() + shrinkHorizontally(),
-            ) {
-                ExtendedFloatingActionButton(
-                    onClick = { viewModel.onAction(HomeAction.TransferByCard("")) },
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    elevation = FloatingActionButtonDefaults.elevation(
-                        defaultElevation = 0.dp,
-                        pressedElevation = 0.dp,
-                        focusedElevation = 0.dp,
-                        hoveredElevation = 0.dp,
-                    ),
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        AnimatedVisibility(
-                            visible = isExpanded,
-                            enter = fadeIn() + expandHorizontally(),
-                            exit = fadeOut() + shrinkHorizontally(),
-                        ) {
-                            Text(
-                                text = stringResource(Res.string.transfer),
-                                style = MaterialTheme.typography.titleSmall,
-                                modifier = Modifier.padding(end = MaterialTheme.spacing.medium),
-                            )
-                        }
-
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_front),
-                            contentDescription = null,
-                        )
-                    }
-                }
-            }
+                expanded = isFabExpanded,
+                modifier = Modifier
+            )
         },
         loadingState = state.screenLoadingState,
         modifier = modifier,
@@ -272,112 +187,92 @@ private fun HomeScreenContent(
     modifier: Modifier = Modifier,
 ) {
     val isUserAuthed = state.authedCards.isNotEmpty()
-    Column(
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraLarge),
-        modifier = modifier,
-    ) {
+    Column(modifier = modifier) {
         BalanceComponent(
             balance = state.totalBalance,
             hasCards = state.authedCards.isNotEmpty() || state.customCards.isNotEmpty(),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium),
+                .padding(
+                    horizontal = MaterialTheme.spacing.medium,
+                    vertical = MaterialTheme.spacing.extraLarge.scale(1.75f)
+                )
         )
 
         if (isUserAuthed) {
-            ActionButtons(
+            ActionButtonsRow(
                 onRecipientsClick = { onAction(HomeAction.EditRecipients) },
                 onTransferBetweenCardsClick = { onAction(HomeAction.TransferBetweenCards("")) },
                 onTransferByNumberClick = { onAction(HomeAction.TransferByCard("")) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing.medium),
+                    .padding(horizontal = MaterialTheme.spacing.medium)
             )
-        }
-
-        TitledContent(
-            title = stringResource(Res.string.bank_cards),
-        ) {
-            if (state.authedCards.isNotEmpty()) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-                ) {
-                    state.authedCards.forEach { card ->
-                        val balance = remember { DisplayableOreValue.of(card.balance) }
-                        AccountCardTile(
-                            label = "${card.number} • ${card.name}",
-                            title = stringResource(Res.string.x_of_ore, card.balance)
-                                .asFormattedAmount().uppercase(),
-                            text = balance.asString(),
-                            icon = card.icon.asPainter(),
-                            color = card.color.asColor(),
-                            onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = MaterialTheme.spacing.medium),
-                        )
-                    }
-
+        } else {
+            InformationModule(
+                title = stringResource(Res.string.auth_card),
+                actions = {
                     OutlinedButton(
                         text = stringResource(Res.string.activate),
                         onClick = { onAction(HomeAction.AuthCard) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.spacing.medium),
+                        modifier = Modifier.fillMaxWidth(),
                     )
-                }
-            } else {
-                InformationCard(
-                    title = stringResource(Res.string.auth_card),
-                    content = {
-                        Text(
-                            text = stringResource(Res.string.auth_card_info),
-                        )
-                    },
-                    actions = {
-                        OutlinedButton(
-                            text = stringResource(Res.string.activate),
-                            onClick = { onAction(HomeAction.AuthCard) },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    },
-                    shape = MaterialTheme.shapes.extraLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium),
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+            ) {
+                Text(
+                    text = stringResource(Res.string.auth_card_info),
                 )
             }
         }
 
-        TitledContent(
-            title = stringResource(Res.string.custom_cards),
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
+        Spacer(Modifier.height(MaterialTheme.spacing.extraLarge))
+
+        state.authedCards.ifNotEmpty { cards ->
+            CardsModule(
+                title = stringResource(Res.string.bank_cards),
+                onIconClick = { onAction(HomeAction.AuthCard) },
+                modifier = Modifier.padding(horizontal = 16.dp)
             ) {
-                state.customCards.forEach { card ->
+                cards.forEach { card ->
                     val balance = remember { DisplayableOreValue.of(card.balance) }
                     AccountCardTile(
-                        label = card.name,
+                        label = "${card.number} • ${card.name}",
                         title = stringResource(Res.string.x_of_ore, card.balance)
-                            .asFormattedAmount().uppercase(),
+                            .asFormattedAmount()
+                            .uppercase(),
                         text = balance.asString(),
                         icon = card.icon.asPainter(),
                         color = card.color.asColor(),
-                        onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.spacing.medium),
+                        onClick = { onAction(HomeAction.SelectAuthedCard(card.id)) },
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
+            }
+        }
 
-                OutlinedButton(
-                    text = stringResource(Res.string.create),
-                    onClick = { onAction(HomeAction.SelectCustomCard("")) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.spacing.medium),
+        Spacer(Modifier.height(MaterialTheme.spacing.extraLarge))
+
+        CardsModule(
+            title = stringResource(Res.string.custom_cards),
+            onIconClick = { onAction(HomeAction.SelectCustomCard("")) },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            state.customCards.forEach { card ->
+                val balance = remember { DisplayableOreValue.of(card.balance) }
+                AccountCardTile(
+                    label = card.name,
+                    title = stringResource(Res.string.x_of_ore, card.balance)
+                        .asFormattedAmount()
+                        .uppercase(),
+                    text = balance.asString(),
+                    icon = card.icon.asPainter(),
+                    color = card.color.asColor(),
+                    onClick = { onAction(HomeAction.SelectCustomCard(card.id)) },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

@@ -122,6 +122,7 @@ private fun TransferBetweenCardsScreenContent(
                         text = card.number,
                         icon = card.icon.asPainter(),
                         color = card.color.asColor(),
+                        isDarken = true,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 } else {
