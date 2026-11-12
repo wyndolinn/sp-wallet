@@ -36,8 +36,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransferBetweenCardsViewModel(
-    cardsRepository: CardsRepository,
-    preferencesRepository: PreferencesRepository,
+    private val cardsRepository: CardsRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val args: TransferBetweenCardsParams,
     private val transferByCardUseCase: TransferByCardUseCase,
     private val transferAmountValidator: AmountValidator,
@@ -48,11 +48,7 @@ class TransferBetweenCardsViewModel(
     private val _state = MutableStateFlow(TransferBetweenCardsState())
     val state = _state.map { state ->
         state.sourceCards.getOrNull(state.selectedSourceCard)?.let { sourceCard ->
-            state.copy(
-                destinationCards = state.destinationCards.filter {
-                    it.id != sourceCard.id
-                },
-            )
+            state.copy(destinationCards = state.destinationCards.filter { it.id != sourceCard.id })
         } ?: state
     }.stateIn(
         scope = viewModelScope,
@@ -60,7 +56,14 @@ class TransferBetweenCardsViewModel(
         initialValue = _state.value,
     )
 
+
     init {
+        observeCards()
+        observeInputValidation()
+    }
+
+
+    private fun observeCards() {
         combine(
             cardsRepository.getAuthedCards(),
             cardsRepository.getUnauthedCards(),
@@ -81,12 +84,16 @@ class TransferBetweenCardsViewModel(
                 )
             }
         }.launchIn(viewModelScope)
+    }
 
+    private fun observeInputValidation() {
         combine(
             _state.select { it.amountInputFieldState.value },
             _state.select { it.sourceCards },
             _state.select { it.selectedSourceCard }
         ) { _, cards, cardIndex ->
+            if (cards.isEmpty()) return@combine
+
             _state.resetValidationState(
                 inputField = { it.amountInputFieldState },
                 validator = {

@@ -60,7 +60,7 @@ class TransferByCardViewModel(
 
     init {
         observeUser()
-        observerCards()
+        observeCards()
         observeInputValidation()
     }
 
@@ -186,6 +186,7 @@ class TransferByCardViewModel(
             _state.select { it.sourceCards },
             _state.select { it.selectedSourceCardIndex }
         ) { _, cards, cardIndex ->
+            if (cards.isEmpty()) return@combine
             val maxValue = cards[cardIndex].balance
             _state.resetValidationState(
                 inputField = { it.amountInputFieldState },
@@ -208,7 +209,7 @@ class TransferByCardViewModel(
         ) { copy(isTransferButtonEnabled = it) }.launchIn(viewModelScope)
     }
 
-    private fun observerCards() {
+    private fun observeCards() {
         combine(
             cardsRepository.getAuthedCards(),
             preferencesRepository.getSelectedServer(),
@@ -216,9 +217,7 @@ class TransferByCardViewModel(
             val sourceCards = authedCards.filter { it.server == server }
             val selectedCard = authedCards.find { it.id == args.sourceCardId }
             _state.update { state ->
-                state.copy(
-                    sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards,
-                )
+                state.copy(sourceCards = selectedCard?.let { listOf(it) } ?: sourceCards)
             }
         }.launchIn(viewModelScope)
     }
