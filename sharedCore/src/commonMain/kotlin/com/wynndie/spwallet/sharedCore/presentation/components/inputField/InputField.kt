@@ -11,12 +11,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -44,39 +42,15 @@ fun InputField(
     maxLines: Int = Int.MAX_VALUE,
     enabled: Boolean = true,
 ) {
-
-    val colors = OutlinedTextFieldDefaults.colors().copy(
-        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-        disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-
-        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        errorContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-
-        unfocusedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-        disabledIndicatorColor = Color.Transparent,
-    )
-
     Column(
         modifier = modifier,
     ) {
-        label?.let {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = it,
-                style = MaterialTheme.typography.labelMedium,
-            )
-        }
-
-        Spacer(Modifier.height(MaterialTheme.spacing.extraExtraSmall))
-
         BasicInputField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.height(56.dp).fillMaxWidth(),
             value = value,
             onValueChange = onValueChange,
             placeholder = placeholder,
+            label = label,
             hasError = hasError,
             leadingIcon = leadingIcon?.let {
                 {
@@ -117,7 +91,6 @@ fun InputField(
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
             visualTransformation = visualTransformation,
-            colors = colors,
             singleLine = singleLine,
             minLines = minLines,
             maxLines = maxLines,
@@ -128,9 +101,11 @@ fun InputField(
             visible = supportingText != null,
         ) {
             supportingText?.let {
+                Spacer(Modifier.height(MaterialTheme.spacing.extraExtraSmall))
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelSmall,
+                    color = if (hasError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
